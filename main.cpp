@@ -18,10 +18,12 @@
  *      - csv lib
  *      - Floating/Signed-Bitset
  *      - Auto Mutex lock
+ *      - Log level
  */
 
 int main() {
     utils::Logger::Create("test.log");
+    utils::Logger::SetScreenTitle("C++ Utility library");
 
     utils::Logger::WriteLn("Start");
 
@@ -30,11 +32,19 @@ int main() {
      * 0x10 => 6
      * 0x08 => 5
      */
-    utils::Logger::Writef("0x%02X => %d\n", 6  , utils::bits::bits_needed(6)   );
-    utils::Logger::Writef("0x%02X => %d\n", -16, utils::bits::bits_needed<uint8_t>(16) );
-    utils::Logger::Writef("0x%02X => %d\n", 16 , utils::bits::bits_needed(16)  );
-    utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::bits_needed(8)   );
-    utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::ffs(8)  );
+    utils::Logger::Writef("0x%02X => %d\n", 6  , utils::bits::bits_needed(6));
+    utils::Logger::Writef("0x%02X => %d\n", -16, utils::bits::bits_needed<int8_t>(-16));
+    utils::Logger::Writef("0x%02X => %d\n", 16 , utils::bits::bits_needed(16));
+    utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::bits_needed(8));
+    utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::ffs(8));
+
+
+    utils::Logger::Command(utils::os::Console::BRIGHT | utils::os::Console::CYAN);
+    utils::Logger::WriteLn(utils::string::type2name(std::string()));
+    utils::Logger::Command(utils::os::Console::RESET);
+
+//    utils::algo::Huffman<>::encode("README.md", "enc.txt");
+//    utils::algo::Huffman<>::decode("enc.txt", "dec.txt");
 
     utils::Logger::Destroy();
     return 0;

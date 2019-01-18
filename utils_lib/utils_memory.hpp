@@ -78,7 +78,7 @@ namespace utils::memory {
      */
     template <class T>
     [[maybe_unused]] static void reallocArray(T*& a, size_t& old_size, size_t new_size) {
-        T* new_array = utils::memory::allocArray<uint8_t>(new_size);
+        T* new_array = utils::memory::allocArray<T>(new_size);
         std::copy_n(a, std::min(old_size, new_size), new_array);
         utils::memory::deallocArray(a);
         a = new_array;

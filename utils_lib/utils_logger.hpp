@@ -8,6 +8,7 @@
 #include <ctime>
 
 #include "utils_string.hpp"
+#include "utils_os.hpp"
 
 namespace utils {
     /**
@@ -75,6 +76,10 @@ namespace utils {
              *      The log file to use.
              */
             static void Create(const std::string &fileName = "") {
+                // Console
+                utils::os::EnableVirtualConsole();
+
+                // File
                 if (fileName.length() > 0) {
                     try {
                         utils::Logger::instance.log_file.open(fileName, std::ios_base::app | std::ios_base::out);
@@ -148,8 +153,7 @@ namespace utils {
                                 auto tm = std::localtime(&t);
                             #endif
 
-                            utils::Logger::instance.log_file << std::put_time(tm, "[%Y-%m-%d %H:%M:%S] ")
-                                                             << text;
+                            utils::Logger::instance.log_file << std::put_time(tm, "[%Y-%m-%d %H:%M:%S] ");
                         }
 
                         utils::Logger::instance.log_file << text;
@@ -191,6 +195,16 @@ namespace utils {
                         utils::Logger::instance.screen_output << std::endl;
                     }
                 }
+            }
+
+            static inline void Command(utils::os::Command cmd) {
+                if (utils::Logger::instance.canLogScreen()) {
+                    utils::os::command(cmd, utils::Logger::instance.screen_output);
+                }
+            }
+
+            static inline void SetScreenTitle(const std::string& title) {
+                utils::os::SetScreenTitle(title, utils::Logger::instance.screen_output);
             }
 
             static inline void PauseScreen(void) {

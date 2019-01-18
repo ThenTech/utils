@@ -283,6 +283,8 @@ namespace utils::string {
      *		Convert the given char* to a variable of type T.
      *		Use this method instead of the raw C functions: atoi, atof, atol, atoll.
      *
+     *      Also check for hex number.
+     *
      *	\tparam	T
      *		The type of object to cast to.
      *	\param	buffer

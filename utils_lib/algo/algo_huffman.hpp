@@ -133,14 +133,18 @@ namespace utils::algo {
             utils::io::BitStreamWriter* encode(utils::io::BitStreamReader&);
             utils::io::BitStreamReader* decode(utils::io::BitStreamReader&);
 
+            static bool encode(const std::string& rawfile, const std::string& encfile);
+            static bool decode(const std::string& encfile, const std::string& decfile);
+
             void printDict(void);
             void printTree(void);
 
             static constexpr size_t KEY_BITS = utils::bits::size_of<T>();  ///< Bit length for keys in Huffman dict
+            static constexpr size_t LEN_BITS = 16ull;                      ///< Bit length to store byte length of source (65k max)
 
             static constexpr size_t DICT_HDR_HAS_ITEMS_BITS  = 1u;  ///< Whether there are dictionary items following (bit length)
-            static constexpr size_t DICT_HDR_SEQ_LENGTH_BITS = 7u;  ///< Amunt of bits to represent the length of following items
-            static constexpr size_t DICT_HDR_ITEM_BITS       = 4u;  ///< Amunt of bits to represent the length of following items
+            static constexpr size_t DICT_HDR_SEQ_LENGTH_BITS = 7u;  ///< Amount of bits to represent the length of following items
+            static constexpr size_t DICT_HDR_ITEM_BITS       = 4u;  ///< Amount of bits to represent the length of following items
     };
 
     extern template class algo::Node<uint8_t>;
