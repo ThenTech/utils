@@ -31,7 +31,9 @@
 *.out
 *.app
 
+# Artefacts
 Release
 Debug
 *.qbs
 *.qbs.user
+*.log

@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "utils_lib/utils_exceptions.hpp"
 #include "utils_lib/utils_bits.hpp"
 #include "utils_lib/utils_string.hpp"
@@ -23,7 +21,9 @@
  */
 
 int main() {
-    utils::Logger::Create();
+    utils::Logger::Create("test.log");
+
+    utils::Logger::WriteLn("Start");
 
     /* 0x06 => 4
      * 0xFFFFFFF0 => 5

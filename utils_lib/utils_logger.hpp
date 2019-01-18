@@ -148,8 +148,7 @@ namespace utils {
                                 auto tm = std::localtime(&t);
                             #endif
 
-                            utils::Logger::instance.log_file << "[" << std::put_time(tm, "%Y-%m-%d %H:%M:%S")
-                                                             << "] "
+                            utils::Logger::instance.log_file << std::put_time(tm, "[%Y-%m-%d %H:%M:%S] ")
                                                              << text;
                         }
 
@@ -162,7 +161,7 @@ namespace utils {
             }
 
             static inline void WriteLn(const std::string &text, bool timestamp=true) {
-                utils::Logger::Write(text + "\n", timestamp);
+                utils::Logger::Write(text + utils::Logger::CRLF, timestamp);
             }
 
             static void WriteProgress(const size_t& iteration, const size_t& total) {
