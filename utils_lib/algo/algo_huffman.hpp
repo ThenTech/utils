@@ -2,7 +2,9 @@
 #define HUFFMAN_HPP
 
 #include <cstdint>
+#include <numeric>
 #include <unordered_map>
+#include <queue>
 #include <vector>
 
 #include "../utils_string.hpp"
@@ -115,40 +117,527 @@ namespace utils::algo {
 
             std::unordered_map<T, Codeword> dict;
 
-            static void add_huffman_dict_header(uint32_t, uint32_t, utils::io::BitStreamWriter&);
-            static bool read_huffman_dict_header(utils::io::BitStreamReader&, uint32_t&, uint32_t&);
+            /**
+             *  @brief  Add the given settings to the output stream according to the amount of bits
+             *          specified in the Huffman class.
+             *  @param  length
+             *      The length of the sequence that will follow this header.
+             *      If the length is 0, only one '0' bit will be written.
+             *  @param  bit_length
+             *      The amount of bits needed for every data element in the sequence following this header.
+             *      Keys always use KEY_BITS as length, and values use bit_length, which is different for each group.
+             *      This is done to minimize the amoutn of bits needed to save the Huffman dictionary.
+             *  @param  writer
+             *      The outputstream to write to.
+             */
+            static void add_huffman_dict_header(uint32_t length, uint32_t bit_length, utils::io::BitStreamWriter& writer) {
+                if (length > 0) {
+                    writer.put(algo::Huffman<>::DICT_HDR_HAS_ITEMS_BITS + algo::Huffman<>::DICT_HDR_SEQ_LENGTH_BITS,
+                               0x80 | (length & 0x7F)); // MSB is HAS_ITEMS setting + 7 bits length
+                    writer.put(algo::Huffman<>::DICT_HDR_ITEM_BITS,
+                               bit_length & 0xF);       // 4 bits for bit length of every dict item
+                } else {
+                    writer.put_bit(0);
+                }
+            }
 
-            void buildDict(const algo::Node<> * const, std::vector<bool>);
-            void buildTree(utils::io::BitStreamReader&);
-            void treeAddLeaf(const std::pair<T, Codeword>&);
+            /**
+             *  @brief  Read a dictionary header from the inputstream and set the given variables.
+             *
+             *  @param  reader
+             *      The inputstream to read from.
+             *  @param  length
+             *      The length of the sequence that will follow this header (will be set).
+             *  @param  bit_length
+             *      The amount of bits for every value element in the following sequence (will be set).
+             *
+             *  @return Returns true if there is data after this header. (first bit was set)
+             */
+            static bool read_huffman_dict_header(utils::io::BitStreamReader& reader, uint32_t& length, uint32_t& bit_length) {
+                if (reader.get_bit()) {
+                    length     = reader.get(algo::Huffman<>::DICT_HDR_SEQ_LENGTH_BITS);
+                    bit_length = reader.get(algo::Huffman<>::DICT_HDR_ITEM_BITS);
+                    return true;
+                }
 
-            void decode(utils::io::BitStreamReader&, utils::io::BitStreamWriter&);
+                return false;
+            }
 
-            void deleteTree(algo::Node<>*);
+            /**
+             *  @brief  Traverse Huffman tree starting from node and
+             *          add codes for leafs to the dictionary.
+             *  @param  node
+             *      The starting node.
+             *  @param  stream
+             *      The current stream of bits for a path in the tree.
+             */
+            void buildDict(const algo::Node<> * const node, std::vector<bool> stream) {
+                if (node == nullptr) {
+                    return;
+                }
+
+                // Check if leaf
+                if (node->isLeaf()) {
+                    this->dict[node->data] = Codeword {
+                        // Concatenate the bits in stream to a value
+                        std::accumulate(stream.begin(), stream.end(), uint32_t(0u),
+                                        [=](uint32_t x, uint32_t y) { return (x << 1u) | y; }),
+                        // Get the amount of bits
+                        uint32_t(stream.size())
+                    };
+
+                    return;
+                }
+
+                std::vector<bool> lstream(stream);
+                lstream.push_back(false);   // Go left  => '0'
+                stream.push_back(true);     // Go right => '1'
+
+                this->buildDict(node->left , lstream);
+                this->buildDict(node->right, stream);
+            }
+
+            /**
+             *  @brief  Read the dictionary from the given stream to build a Huffman tree structure.
+             *          Clear the previous tree and overwrite with the data from the dict.
+             *
+             *          Optionally also save dict internally, but only tree is needed for
+             *          proper decoding.
+             *
+             *          If first bit was '0', no key: val sequence follows and reader
+             *          already contains uncompressed data.
+             *
+             *  @param  reader
+             *      The stream to read from.
+             */
+            void buildTree(utils::io::BitStreamReader& reader) {
+                uint32_t dseq_len = 0u, dbit_len = 0u;
+
+                utils::memory::deallocVar(this->tree_root);
+                this->tree_root = utils::memory::allocVar<algo::Node<>>(-1);
+                this->dict.clear();
+
+                // While header is followed by sequence
+                while (this->read_huffman_dict_header(reader, dseq_len, dbit_len)) {
+                    while (dseq_len--) {
+                        // For each element, read {key: val}
+                        const T        key = T(reader.get(algo::Huffman<>::KEY_BITS));
+                        const Codeword val { reader.get(dbit_len), dbit_len };
+
+                        const std::pair<T, algo::Codeword>& entry = std::make_pair(key, val);
+
+                        #if 0  // Optionally add to dict, but not necessary since decoding only needs tree.
+                            dict.insert(entry);
+                            // util::Logger::WriteLn(utils::string::format("%02X: %8X (%d bits)", entry.first, entry.second.word, entry.second.len));
+                        #endif
+                        this->treeAddLeaf(entry);
+                    }
+                }
+            }
+
+            /**
+             *  @brief  Add a single <T, Codeword> leaf to the current tree.
+             *
+             *  @param  pair
+             *      The <T, Codeword> pair to add.
+             *      Follow Codeword.word from MSB to LSB and create new Nodes on the way,
+             *      ending withe a Node that has the data T.
+             */
+            void treeAddLeaf(const std::pair<T, Codeword>& pair) {
+                const size_t mask = (1 << (pair.second.len - 1));  // Mask the pair.second.len'th bit
+                      size_t dirs = pair.second.word;              // The directions to follow in the tree
+
+                algo::Node<> *current = this->tree_root;
+
+                // Grow the tree according to the dirs path, starting from MSB, except for last dir
+                for (size_t bits = pair.second.len; --bits; dirs <<= 1) {
+                    // Follow the direction and create a dummy Node if none exists
+                    if (dirs & mask) {
+                        if (current->right == nullptr)
+                            current->right = utils::memory::allocVar<algo::Node<>>(-1);
+                        current = current->right;
+                    } else {
+                        if (current->left == nullptr)
+                            current->left = utils::memory::allocVar<algo::Node<>>(-1);
+                        current = current->left;
+                    }
+                }
+
+                // Create a new Node at the correct position (the last one in dirs)
+                if (dirs & mask) {
+                    current->right = utils::memory::allocVar<algo::Node<>>(pair.first);
+                } else {
+                    current->left  = utils::memory::allocVar<algo::Node<>>(pair.first);
+                }
+            }
+
+            /**
+             *  @brief  Traverse Huffman tree starting from node and
+             *          decode symbols according to the dictionary.
+             *  @param  node
+             *      The starting node.
+             *  @param  reader
+             *      The bytestream to read from.
+             */
+            void decode(utils::io::BitStreamReader& reader, utils::io::BitStreamWriter& writer) {
+                if (this->tree_root == nullptr) {
+                    return;
+                }
+
+                algo::Node<> *current = this->tree_root;
+
+                while (!current->isLeaf()) {
+                    // Read next bit and go left or right untill a leaf is reached
+                    current = (reader.get_bit() ? current->right : current->left);
+                }
+
+                writer.put(algo::Huffman<>::KEY_BITS, current->data);
+            }
+
+            /**
+             *  @brief  A comparator to sort Codeword pairs by bit length.
+             */
+            struct CodewordComparator {
+                bool operator()(const std::pair<uint8_t, algo::Codeword>& first,
+                                const std::pair<uint8_t, algo::Codeword>& second)
+                {
+                    return first.second.len > second.second.len;
+                }
+            };
 
         public:
-            Huffman(void);
-            ~Huffman(void);
+            /**
+             *  @brief  Default ctor
+             */
+            Huffman(void) : tree_root(nullptr) {
+                // Empty
+            }
 
-            utils::io::BitStreamWriter* encode(utils::io::BitStreamReader&);
-            utils::io::BitStreamReader* decode(utils::io::BitStreamReader&);
+            /**
+             *  @brief  Default dtor
+             */
+            ~Huffman(void) {
+                utils::memory::deallocVar(this->tree_root);
+            }
 
-            static bool encode(const std::string& rawfile, const std::string& encfile);
-            static bool decode(const std::string& encfile, const std::string& decfile);
+            /**
+             *  @brief  Encode bits of length sizeof(T) with Huffman encoding and
+             *          write the Huffman dict and the encoded data to an outputstream.
+             *
+             *  @param  reader
+             *      The bytestream to read from.
+             *  @return Returns a new bitstream with the encoded data.
+             */
+            utils::io::BitStreamWriter* encode(utils::io::BitStreamReader& reader) {
+                const size_t length          = reader.get_size_bits();
+                const size_t original_length = reader.get_size();
 
-            void printDict(void);
-            void printTree(void);
+                // Calculate frequencies
+                std::unordered_map<T, uint32_t> freqs;
+
+                reader.reset();
+                while(reader.get_position() != length) {
+                    const T word = T(reader.get(algo::Huffman<>::KEY_BITS));
+                    freqs[word]++;
+                }
+
+                if (freqs.empty()) {
+                    // Nothing to encode?
+                    return nullptr;
+                }
+
+                // Create priority queue to sort tree with Nodes with data from frequency
+                std::priority_queue<algo::Node<>*, std::vector<algo::Node<>*>, algo::Node<>::comparator> pq;
+
+                for (const auto& pair: freqs) {
+                    pq.push(utils::memory::allocVar<algo::Node<>>(pair.first, pair.second));
+                    // util::Logger::WriteLn(std::string_format("%02X: %d", pair.first, pair.second), false);
+                }
+
+                while (pq.size() > 1) {
+                    // Empty out queue and build leaves, starting with lowest freq
+                    // Result is a single Node with references to other Nodes in tree structure.
+                    algo::Node<> *left  = pq.top(); pq.pop();
+                    algo::Node<> *right = pq.top(); pq.pop();
+
+                    pq.push(utils::memory::allocVar<algo::Node<>>(-1, left->freq + right->freq, left, right));
+                }
+
+                // Huffman tree root
+                this->tree_root = pq.top();
+
+                // Create dictionary by tree traversal
+                this->buildDict(this->tree_root, std::vector<bool>());
+
+                // Create new list with dict elements sorted by bit length for saving to stream
+                std::vector<std::pair<uint8_t, algo::Codeword>> sorted_dict(this->dict.begin(), this->dict.end());
+
+                // Sort the dictionary by value bit length
+                std::sort(sorted_dict.begin(), sorted_dict.end(), algo::Huffman<>::CodewordComparator());
+
+                // Determine frequencies of each bit length with {bit_length: freq}
+                std::unordered_map<uint32_t, uint32_t> bit_freqs;
+                for (const auto& w : sorted_dict) {
+                    bit_freqs[w.second.len]++;
+                }
+
+                // Calculate total needed length for dict
+                size_t h_dict_total_length = (algo::Huffman<>::KEY_BITS * this->dict.size())  // Amount of bits needed for keys
+                                           + ((algo::Huffman<>::DICT_HDR_HAS_ITEMS_BITS + algo::Huffman<>::DICT_HDR_ITEM_BITS + algo::Huffman<>::DICT_HDR_SEQ_LENGTH_BITS)
+                                              * bit_freqs.size())                             // Amount of bits for each header
+                                           + 1;                                               // Stop bit
+                for (const auto& f : bit_freqs) {
+                    h_dict_total_length += f.first * f.second;  // Amount of bits for each header group
+                }
+
+                utils::Logger::Writef("[Huffman] Table overhead with %d entries: %.1f bytes." + utils::Logger::CRLF,
+                                      this->dict.size(), float(h_dict_total_length) / 8.0f);
+
+                // Save the Huffman dictionary to a stream
+                utils::io::BitStreamWriter *writer = utils::memory::allocVar<utils::io::BitStreamWriter>((h_dict_total_length + length) / 8 + 1);
+                uint32_t seq_len = 0u, bit_len = 0u;
+
+                // Add headers for each group of same length key:val pairs
+                // and write them to the stream
+                for (const auto& w : sorted_dict) {
+                    if (seq_len == 0) {
+                        // New group
+                        bit_len = w.second.len;
+                        seq_len = bit_freqs[bit_len];
+                        this->add_huffman_dict_header(seq_len, bit_len, *writer);
+                    }
+
+                    writer->put(algo::Huffman<>::KEY_BITS, w.first);  // Put Key
+                    writer->put(bit_len, w.second.word);              // Put Val
+                    seq_len--;
+                }
+
+                this->add_huffman_dict_header(0, 0, *writer);  // Stop bit
+
+                // Store length in bytes of source
+                // FIXME capped at 65k
+                writer->put(algo::Huffman<>::LEN_BITS, uint16_t(original_length));
+
+                // Encode
+                reader.reset();
+                while(reader.get_position() < length) {
+                    const T word = T(reader.get(algo::Huffman<>::KEY_BITS));
+                    const auto& pair = this->dict[word];
+                    writer->put(pair.len, pair.word);
+                }
+
+                const size_t total_length    = writer->get_last_byte_position();
+
+                utils::Logger::Writef("[Huffman]           Input file size: %8d bytes" + utils::Logger::CRLF, original_length);
+                utils::Logger::Writef("[Huffman]           Compressed size: %8d bytes  => Ratio: %.2f%%" + utils::Logger::CRLF,
+                                      total_length,
+                                      float(total_length) / original_length * 100.0f);
+
+                if (original_length < total_length) {
+                    utils::Logger::WriteLn("[Huffman] No extra compression achieved, reverting stream to encoded.");
+                    utils::memory::deallocVar(writer);
+                    writer = utils::memory::allocVar<utils::io::BitStreamWriter>(original_length);
+                    writer->put_bit(0);
+
+                    reader.reset();
+                    while(reader.get_position() < length) {
+                        writer->put(algo::Huffman<>::KEY_BITS, reader.get(algo::Huffman<>::KEY_BITS));
+                    }
+
+                    return writer;
+                }
+
+                return writer;
+            }
+
+            /**
+             *  @brief  Read the Huffman dict from the stream and
+             *          write the decoded data to an outputstream.
+             *
+             *  @param  reader
+             *      The bytestream to read from.
+             *  @return Returns true if current Node has higher frequency.
+             */
+            utils::io::BitStreamReader* decode(utils::io::BitStreamReader& reader) {
+                if (reader.get_size() == 0) {
+                    // Nothing to decode?
+                    return nullptr;
+                }
+
+                this->buildTree(reader);
+
+                const size_t raw_bits   = reader.get_size_bits();
+                      size_t data_bits  = raw_bits - reader.get_position();
+
+                utils::io::BitStreamReader *result = nullptr;
+
+                if (this->tree_root->isLeaf()) {
+                    // No tree was build => No Huffman used, just use passthrough of buffer by setting pointer
+                    const size_t data_bytes = utils::bits::round_to_byte(data_bits - 8);
+
+                    utils::io::BitStreamWriter *writer = utils::memory::allocVar<utils::io::BitStreamWriter>(data_bytes);
+
+                    while(reader.get_position() < raw_bits-8) {
+                        writer->put(algo::Huffman<>::KEY_BITS, reader.get(algo::Huffman<>::KEY_BITS));
+                    }
+
+                    result = utils::memory::allocVar<utils::io::BitStreamReader>(writer->get_buffer(),
+                                                                                 writer->get_last_byte_position());
+
+                    writer->set_managed(false);
+                    result->set_managed(true);
+                    result->set_position(writer->get_position());
+
+                    utils::Logger::WriteLn("[Huffman] No Huffman table present in file. Skipping decompression.");
+
+                    utils::memory::deallocVar(writer);
+                } else {
+                    // Get length in bytes of source
+                    const size_t data_bytes = reader.get(algo::Huffman<>::LEN_BITS);
+
+                    // Consume all other data, bit by bit and traverse Huffman tree to find word
+                    utils::io::BitStreamWriter *writer = utils::memory::allocVar<utils::io::BitStreamWriter>(data_bytes);
+
+                    while (reader.get_position() < raw_bits && writer->get_last_byte_position() < data_bytes) {
+                        this->decode(reader, *writer);
+
+                        if (writer->get_position() + 16 > data_bits) {
+                            // Resize buffer if decompression reaches buffer size.
+                            data_bits = writer->resize() * 8u;
+                        }
+                    }
+
+                    const size_t original_length = reader.get_size();
+                    const size_t total_length    = writer->get_last_byte_position();
+
+                    result = utils::memory::allocVar<utils::io::BitStreamReader>(writer->get_buffer(), total_length);
+
+                    // Transfer ownership of buffer from writer to result stream
+                    writer->set_managed(false);
+                    result->set_managed(true);
+
+                    utils::Logger::Writef("[Huffman]           Input file size: %8d bytes" + utils::Logger::CRLF, original_length);
+                    utils::Logger::Writef("[Huffman]         Decompressed size: %8d bytes  => Ratio: %.2f%%" + utils::Logger::CRLF,
+                                          total_length,
+                                          float(total_length) / original_length * 100.0f);
+                    utils::memory::deallocVar(writer);
+                }
+
+                return result;
+            }
+
+            /**
+             * @brief encode
+             * @param rawfile
+             * @param encfile
+             * @return
+             */
+            static bool encode(const std::string& rawfile, const std::string& encfile) {
+                std::vector<uint8_t>       *file_buffer = nullptr;
+                utils::io::BitStreamReader *enc         = nullptr;
+
+                try {
+                    file_buffer = utils::io::readBinaryFile(rawfile);
+                } catch (utils::exceptions::FileReadException const& e) {
+                    utils::Logger::WriteLn(e.getMessage());
+                    utils::memory::deallocVar(file_buffer);
+                    file_buffer = nullptr;
+                }
+
+                if (file_buffer) {
+                    enc = utils::memory::allocVar<utils::io::BitStreamReader>(file_buffer->data(), file_buffer->size());
+
+                    algo::Huffman<> hm;
+                    utils::io::BitStreamWriter *writer = hm.encode(*enc);
+
+                    if (writer) {
+                        utils::io::writeBinaryFile(encfile,
+                                                   writer->get_buffer(),
+                                                   writer->get_last_byte_position());
+                        utils::memory::deallocVar(writer);
+                    } else {
+                        utils::Logger::Writef("[Huffman] Nothing to encode! Check contents of '%s'" + utils::Logger::CRLF, rawfile.c_str());
+                        return false;
+                    }
+
+                    utils::memory::deallocVar(file_buffer);
+                    utils::memory::deallocVar(enc);
+                    return true;
+                }
+
+                return false;
+            }
+
+            /**
+             * @brief decode
+             * @param encfile
+             * @param decfile
+             * @return
+             */
+            static bool decode(const std::string& encfile, const std::string& decfile) {
+                std::vector<uint8_t>       *file_buffer = nullptr;
+                utils::io::BitStreamReader *enc         = nullptr;
+
+                try {
+                    file_buffer = utils::io::readBinaryFile(encfile);
+                } catch (utils::exceptions::FileReadException const& e) {
+                    utils::Logger::WriteLn(e.getMessage());
+                    utils::memory::deallocVar(file_buffer);
+                    file_buffer = nullptr;
+                }
+
+                if (file_buffer) {
+                    enc = utils::memory::allocVar<utils::io::BitStreamReader>(file_buffer->data(), file_buffer->size());
+
+                    algo::Huffman<> hm;
+                    utils::io::BitStreamReader *writer = hm.decode(*enc);
+
+                    if (writer) {
+                        utils::io::writeBinaryFile(decfile,
+                                                   writer->get_buffer(),
+                                                   writer->get_size());
+                        utils::memory::deallocVar(writer);
+                    } else {
+                        utils::Logger::Writef("[Huffman] Nothing to decode! Check contents of '%s'" + utils::Logger::CRLF, encfile.c_str());
+                        return false;
+                    }
+
+                    utils::memory::deallocVar(file_buffer);
+                    utils::memory::deallocVar(enc);
+                    return true;
+                }
+
+                return false;
+            }
+
+            void printDict(void)  {
+                utils::Logger::WriteLn("[Huffman] Dictionary:");
+
+                for (const auto& pair : this->dict) {
+                    utils::Logger::Writef("%02X: %8X (%d bits)" + utils::Logger::CRLF,
+                                          pair.first, pair.second.word,pair.second.len);
+                }
+            }
+
+            void printTree(void) {
+                utils::Logger::WriteLn("[Huffman] Tree:");
+                algo::Node<>::printTree(this->tree_root);
+            }
 
             static constexpr size_t KEY_BITS = utils::bits::size_of<T>();  ///< Bit length for keys in Huffman dict
             static constexpr size_t LEN_BITS = 16ull;                      ///< Bit length to store byte length of source (65k max)
 
-            static constexpr size_t DICT_HDR_HAS_ITEMS_BITS  = 1u;  ///< Whether there are dictionary items following (bit length)
-            static constexpr size_t DICT_HDR_SEQ_LENGTH_BITS = 7u;  ///< Amount of bits to represent the length of following items
-            static constexpr size_t DICT_HDR_ITEM_BITS       = 4u;  ///< Amount of bits to represent the length of following items
+            static constexpr size_t DICT_HDR_HAS_ITEMS_BITS  = 1ull;  ///< Whether there are dictionary items following (bit length)
+            static constexpr size_t DICT_HDR_SEQ_LENGTH_BITS = 7ull;  ///< Amount of bits to represent the length of following items
+            static constexpr size_t DICT_HDR_ITEM_BITS       = 4ull;  ///< Amount of bits to represent the length of following items
     };
 
-    extern template class algo::Node<uint8_t>;
-    extern template class algo::Huffman<uint8_t>;
+    /**
+     *  Template specification.
+     *  Specify the template class to use uint8_t as default Type.
+     */
+    template class algo::Node<uint8_t>;
+    template class algo::Huffman<uint8_t>;
 }
 
 #endif // HUFFMAN_HPP
