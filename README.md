@@ -18,4 +18,4 @@ Compile with: `--std=c++17`
 | [utils_os.hpp](utils_lib/utils_os.hpp)                     | OS extensions (console manipulation with colours etc.) |
 | [utils_string.hpp](utils_lib/utils_string.hpp)             | String extensions                                      |
 | [utils_time.hpp](utils_lib/utils_time.hpp)                 | Time measurement                                       |
-| [algo/utils_huffman.hpp](utils_lib/algo/utils_huffman.hpp) | Huffman compress/decompress                            |
+| [algo/utils_huffman.hpp](utils_lib/algo/algo_huffman.hpp)  | Huffman compress/decompress                            |

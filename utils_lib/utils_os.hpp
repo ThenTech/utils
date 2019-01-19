@@ -70,32 +70,32 @@ namespace utils::os {
         return __a = __a ^ __b;
     }
 
-    typedef _Console_commands Command;
+    typedef _Console_commands command_t;
 
     namespace Console {
-        static constexpr Command CLS       = _CC_CLS;       ///< Clear entire screen
-        static constexpr Command CURSOR    = _CC_CURSOR;    ///< Set cursor to start
-        static constexpr Command RESET     = _CC_RESET;     ///< Reset formatting to black bg with gray fg
+        static constexpr command_t CLS       = _CC_CLS;       ///< Clear entire screen
+        static constexpr command_t CURSOR    = _CC_CURSOR;    ///< Set cursor to start
+        static constexpr command_t RESET     = _CC_RESET;     ///< Reset formatting to black bg with gray fg
 
-        static constexpr Command FG        = _CC_FG;        ///< Set foreground colour options
-        static constexpr Command BG        = _CC_BG;        ///< Set background colour options
-        static constexpr Command BRIGHT    = _CC_BRIGHT;    ///< Make text brighter
-        static constexpr Command UNDERLINE = _CC_UNDERLINE; ///< Make text underlined
-        static constexpr Command BOLD      = _CC_BOLD;      ///< Make text bold
-        static constexpr Command REVERSED  = _CC_REVERSED;  ///< Reverse FG/BG colours
+        static constexpr command_t FG        = _CC_FG;        ///< Set foreground colour options
+        static constexpr command_t BG        = _CC_BG;        ///< Set background colour options
+        static constexpr command_t BRIGHT    = _CC_BRIGHT;    ///< Make text brighter
+        static constexpr command_t UNDERLINE = _CC_UNDERLINE; ///< Make text underlined
+        static constexpr command_t BOLD      = _CC_BOLD;      ///< Make text bold
+        static constexpr command_t REVERSED  = _CC_REVERSED;  ///< Reverse FG/BG colours
 
-        static constexpr Command BLACK     = _CC_BLACK;     ///< Set colour
-        static constexpr Command RED       = _CC_RED;       ///< Set colour
-        static constexpr Command GREEN     = _CC_GREEN;     ///< Set colour
-        static constexpr Command YELLOW    = _CC_YELLOW;    ///< Set colour
-        static constexpr Command BLUE      = _CC_BLUE;      ///< Set colour
-        static constexpr Command MAGENTA   = _CC_MAGENTA;   ///< Set colour
-        static constexpr Command CYAN      = _CC_CYAN;      ///< Set colour
-        static constexpr Command WHITE     = _CC_WHITE;     ///< Set colour
+        static constexpr command_t BLACK     = _CC_BLACK;     ///< Set colour
+        static constexpr command_t RED       = _CC_RED;       ///< Set colour
+        static constexpr command_t GREEN     = _CC_GREEN;     ///< Set colour
+        static constexpr command_t YELLOW    = _CC_YELLOW;    ///< Set colour
+        static constexpr command_t BLUE      = _CC_BLUE;      ///< Set colour
+        static constexpr command_t MAGENTA   = _CC_MAGENTA;   ///< Set colour
+        static constexpr command_t CYAN      = _CC_CYAN;      ///< Set colour
+        static constexpr command_t WHITE     = _CC_WHITE;     ///< Set colour
     };
 
     [[maybe_unused]]
-    static void command(Command cmd, std::ostream& out) {
+    static void command(command_t cmd, std::ostream& out) {
         #define BASE_ "\033["
         std::string cmd_str = "";
 

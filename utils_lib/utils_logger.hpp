@@ -26,27 +26,30 @@ namespace utils {
             std::ostream&  screen_output;
             std::ofstream  log_file;
 
-            static Logger instance;
+            static /*inline*/ Logger& get() {
+                static Logger instance;
+                return instance;
+            }
 
-            inline bool canLogScreen(void) {
+            inline bool canLogScreen(void) const {
                 return this->screen_enabled && !this->screen_paused;
             }
-            inline bool canLogFile(void) {
+            inline bool canLogFile(void) const {
                 return this->file_enabled && !this->file_paused;
             }
-            inline bool canLog(void) {
+            inline bool canLog(void) const {
                 return this->canLogScreen() || this->canLogFile();
             }
 
-            inline void write_to_screen(const std::string &text) {
-                if (utils::Logger::instance.canLogScreen()) {
-                    utils::Logger::instance.screen_output << text;
+            inline void write_to_screen(const std::string &text) const {
+                if (utils::Logger::get().canLogScreen()) {
+                    utils::Logger::get().screen_output << text;
                 }
             }
 
-            inline void write_to_file(const std::string &text) {
-                if (utils::Logger::instance.canLogFile()) {
-                    utils::Logger::instance.log_file << text;
+            inline void write_to_file(const std::string &text) const {
+                if (utils::Logger::get().canLogFile()) {
+                    utils::Logger::get().log_file << text;
                 }
             }
 
@@ -62,7 +65,9 @@ namespace utils {
             }
 
             Logger(Logger const&)         = delete;
+            Logger(Logger&&)              = delete;
             void operator=(Logger const&) = delete;
+            Logger& operator=(Logger&&)   = delete;
 
             /**
              *  @brief  Create the Logger instance from a filename.
@@ -82,15 +87,15 @@ namespace utils {
                 // File
                 if (fileName.length() > 0) {
                     try {
-                        utils::Logger::instance.log_file.open(fileName, std::ios_base::app | std::ios_base::out);
-                        utils::Logger::instance.file_enabled = true;
+                        utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
+                        utils::Logger::get().file_enabled = true;
                         return;
                     } catch (std::exception const& e) {
                         std::cerr << "[Logger] " << e.what() << std::endl;
                     }
                 }
 
-                utils::Logger::instance.file_enabled = false;
+                utils::Logger::get().file_enabled = false;
             }
 
             /**
@@ -103,13 +108,13 @@ namespace utils {
                                  + utils::Logger::CRLF
                                  + utils::Logger::CRLF;
 
-                if (utils::Logger::instance.file_enabled) {
-                    utils::Logger::instance.write_to_file(end_line);
-                    utils::Logger::instance.log_file.close();
-                    utils::Logger::instance.file_enabled = false;
+                if (utils::Logger::get().file_enabled) {
+                    utils::Logger::get().write_to_file(end_line);
+                    utils::Logger::get().log_file.close();
+                    utils::Logger::get().file_enabled = false;
                 }
 
-                utils::Logger::instance.write_to_screen(end_line);
+                utils::Logger::get().write_to_screen(end_line);
             }
 
             /**
@@ -121,11 +126,11 @@ namespace utils {
              */
             template<typename ... Type>
             static void Writef(const std::string& format, Type ...args) {
-                if (utils::Logger::instance.canLog()) {
+                if (utils::Logger::get().canLog()) {
                     const std::string text = utils::string::format(format, args...);
 
-                    utils::Logger::instance.write_to_file(text);
-                    utils::Logger::instance.write_to_screen(text);
+                    utils::Logger::get().write_to_file(text);
+                    utils::Logger::get().write_to_screen(text);
                 }
             }
 
@@ -138,10 +143,10 @@ namespace utils {
              *      Whether to include a timestamp (in the file only).
              */
             static void Write(const std::string &text, bool timestamp=true) {
-                utils::Logger::instance.write_to_screen(text);
+                utils::Logger::get().write_to_screen(text);
 
                 try {
-                    if (utils::Logger::instance.canLogFile()) {
+                    if (utils::Logger::get().canLogFile()) {
                         if (timestamp) {
                             auto t  = std::time(nullptr);
 
@@ -153,10 +158,10 @@ namespace utils {
                                 auto tm = std::localtime(&t);
                             #endif
 
-                            utils::Logger::instance.log_file << std::put_time(tm, "[%Y-%m-%d %H:%M:%S] ");
+                            utils::Logger::get().log_file << std::put_time(tm, "[%Y-%m-%d %H:%M:%S] ");
                         }
 
-                        utils::Logger::instance.log_file << text;
+                        utils::Logger::get().log_file << text;
                     }
                 } catch (std::exception const& e) {
                     std::cerr << "[Logger] " << e.what() << std::endl;
@@ -172,7 +177,7 @@ namespace utils {
                 static constexpr size_t LEN = 55u;
                 static size_t stepu = 0u;
 
-                if (!utils::Logger::instance.canLogScreen()) return;
+                if (!utils::Logger::get().canLogScreen()) return;
 
                 const bool done = (iteration == total);
 
@@ -183,7 +188,7 @@ namespace utils {
 
                     const size_t filled_len = std::min(LEN, size_t(LEN * progress));
 
-                    utils::Logger::instance.screen_output
+                    utils::Logger::get().screen_output
                         << "\rProgress |"
                         << std::string(filled_len, utils::Logger::FILL[0])
                         << std::string(LEN - filled_len, '-')
@@ -192,49 +197,56 @@ namespace utils {
                         << std::flush;
 
                     if (done) {
-                        utils::Logger::instance.screen_output << std::endl;
+                        utils::Logger::get().screen_output << std::endl;
                     }
                 }
             }
 
-            static inline void Command(utils::os::Command cmd) {
-                if (utils::Logger::instance.canLogScreen()) {
-                    utils::os::command(cmd, utils::Logger::instance.screen_output);
+            static inline void Command(utils::os::command_t cmd) {
+                if (utils::Logger::get().canLogScreen()) {
+                    utils::os::command(cmd, utils::Logger::get().screen_output);
                 }
             }
 
             static inline void SetScreenTitle(const std::string& title) {
-                utils::os::SetScreenTitle(title, utils::Logger::instance.screen_output);
+                utils::os::SetScreenTitle(title, utils::Logger::get().screen_output);
             }
 
             static inline void PauseScreen(void) {
-                utils::Logger::instance.screen_paused = true;
+                utils::Logger::get().screen_paused = true;
             }
             static inline void PauseFile(void) {
-                utils::Logger::instance.file_paused = true;
+                utils::Logger::get().file_paused = true;
             }
 
             static inline void Pause(void) {
-                utils::Logger::instance.PauseScreen();
-                utils::Logger::instance.PauseFile();
+                utils::Logger::get().PauseScreen();
+                utils::Logger::get().PauseFile();
             }
 
             static inline void ResumeScreen(void) {
-                utils::Logger::instance.screen_paused = false;
+                utils::Logger::get().screen_paused = false;
             }
 
             static inline void ResumeFile(void) {
-                utils::Logger::instance.file_paused = false;
+                utils::Logger::get().file_paused = false;
             }
 
             static inline void Resume(void) {
-                utils::Logger::instance.ResumeScreen();
-                utils::Logger::instance.ResumeFile();
+                utils::Logger::get().ResumeScreen();
+                utils::Logger::get().ResumeFile();
             }
 
-            static const std::string FILL;
-            static const std::string EMPTY;
-            static const std::string CRLF;
+            /**
+             *  Symbols for printing an image to the console.
+             *
+             *  █
+             *  std::string_format("%c", 219)
+             *  219
+             */
+            static inline const std::string FILL  = "#";
+            static inline const std::string EMPTY = " ";
+            static inline const std::string CRLF  = "\r\n";
     };
 }
 
