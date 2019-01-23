@@ -1,14 +1,17 @@
 #ifndef UTILS_LOGGER_HPP
 #define UTILS_LOGGER_HPP
 
+#include "utils_string.hpp"
+#include "utils_print.hpp"
+#include "utils_os.hpp"
+
 #include <iostream>
 #include <ostream>
 #include <fstream>
 #include <iomanip>
 #include <ctime>
 
-#include "utils_string.hpp"
-#include "utils_os.hpp"
+
 
 namespace utils {
     /**
@@ -72,6 +75,25 @@ namespace utils {
             Logger& operator=(Logger&&)   = delete;
 
             /**
+             *  Dtor: write line to outputs and close streams.
+             */
+            ~Logger() {
+                static const std::string
+                        end_line = utils::Logger::CRLF
+                                 + std::string(80, '-')
+                                 + utils::Logger::CRLF
+                                 + utils::Logger::CRLF;
+
+                if (utils::Logger::get().file_enabled) {
+                    utils::Logger::get().write_to_file(end_line);
+                    utils::Logger::get().log_file.close();
+                    utils::Logger::get().file_enabled = false;
+                }
+
+                utils::Logger::get().write_to_screen(end_line);
+            }
+
+            /**
              *  @brief  Create the Logger instance from a filename.
              *          If the file does not exist, it will be created, text will be appended otherwise.
              *
@@ -86,8 +108,11 @@ namespace utils {
                 // Console
                 utils::os::EnableVirtualConsole();
 
+                utils::Logger::Destroy();
+
                 // File
                 if (fileName.length() > 0) {
+
                     try {
                         utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
                         utils::Logger::get().file_enabled = true;
@@ -104,19 +129,11 @@ namespace utils {
              *  @brief  Detroy the Logging instance by closing the output file.
              */
             static void Destroy() {
-                static const std::string
-                        end_line = utils::Logger::CRLF
-                                 + std::string(80, '-')
-                                 + utils::Logger::CRLF
-                                 + utils::Logger::CRLF;
-
                 if (utils::Logger::get().file_enabled) {
-                    utils::Logger::get().write_to_file(end_line);
                     utils::Logger::get().log_file.close();
                     utils::Logger::get().file_enabled = false;
                 }
-
-                utils::Logger::get().write_to_screen(end_line);
+                utils::Logger::Command(utils::os::Console::RESET);
             }
 
             static inline std::ostream& GetConsoleStream() {
@@ -196,7 +213,7 @@ namespace utils {
                     utils::Logger::Write("[Success] ");
 
                     utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + "\n", args...);
+                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
                 }
             }
 
@@ -209,7 +226,7 @@ namespace utils {
                     utils::Logger::Write("[Info] ");
 
                     utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + "\n", args...);
+                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
                 }
             }
 
@@ -222,7 +239,7 @@ namespace utils {
                     utils::Logger::Write("[Warning] ");
 
                     utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + "\n", args...);
+                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
                 }
             }
 
@@ -235,7 +252,7 @@ namespace utils {
                     utils::Logger::Write("[Error] ");
 
                     utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + "\n", args...);
+                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
                 }
             }
 
@@ -265,6 +282,25 @@ namespace utils {
                     if (done) {
                         utils::Logger::get().screen_output << std::endl;
                     }
+                }
+            }
+
+            template<typename T>
+            static void Stream(T arg) {
+                if (utils::Logger::get().canLog()) {
+                    std::stringstream ss;
+                    ss << arg;
+                    utils::Logger::Write(ss.str(), false);
+                }
+            }
+
+            template<typename T, typename ... Type>
+            static void Stream(T arg, Type ...args) {
+                if (utils::Logger::get().canLog()) {
+                    std::stringstream ss;
+                    ss << arg;
+                    utils::Logger::Write(ss.str(), false);
+                    utils::Logger::Stream(args...);
                 }
             }
 

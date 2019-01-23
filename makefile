@@ -13,9 +13,9 @@ CC = g++-7
 
 # Extra flags to strip unused symbols: -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
 # Debug
-CFLAGS = $(ECFLAGS) -std=c++17 -Wall -Og
+# CFLAGS = $(ECFLAGS) -std=c++17 -Wall -Og
 # Release
-# CFLAGS = $(ECFLAGS) -std=c++17 -Wall -O3 -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
+CFLAGS = $(ECFLAGS) -std=c++17 -Wall -O3 -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
 
 # Default target
 TARGET = test_utils

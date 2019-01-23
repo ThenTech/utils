@@ -69,21 +69,18 @@ int main() {
     utils::Logger::WriteLn(utils::misc::type2name(std::string() /*, "std::"*/));
     utils::Logger::Command(utils::os::Console::RESET);
 
-    utils::algo::Huffman<>::encode("README.md", "enc.txt");
-    utils::algo::Huffman<>::decode("enc.txt", "dec.txt");
+//    utils::algo::Huffman<>::encode("README.md", "enc.txt");
+//    utils::algo::Huffman<>::decode("enc.txt", "dec.txt");
 
-    auto vec2 = utils::memory::new_unique_vector<utils::algo::Node<>>();
-    vec2->emplace_back(utils::memory::allocVar<utils::algo::Node<>>(0));
+//    auto vec2 = utils::memory::new_unique_vector<utils::algo::Node<>>();
+//    vec2->emplace_back(utils::memory::allocVar<utils::algo::Node<>>(0));
 
-    auto arr = utils::memory::new_unique_flat_array<int>(10, 10);
-    std::iota(arr.get(), arr.get()+100, 0);
-    utils::Logger::Writef("sum: %d\n", std::accumulate(arr.get(), arr.get() + 100, 0));
+//    auto arr = utils::memory::new_unique_flat_array<int>(10, 10);
+//    std::iota(arr.get(), arr.get()+100, 0);
+//    utils::Logger::Writef("sum: %d\n", std::accumulate(arr.get(), arr.get() + 100, 0));
 
-    utils::Logger::GetConsoleStream() <<
-        utils::printer::print_container_helper(*utils::io::list_contents("./"));
-
+    utils::Logger::Stream("\n\nHello\n", *utils::io::list_contents("./"));
 #endif
 
-    utils::Logger::Destroy();
     return 0;
 }
