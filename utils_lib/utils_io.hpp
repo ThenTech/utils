@@ -4,11 +4,55 @@
 #include <fstream>
 #include <vector>
 
+/**
+ *  Enable FileSystem
+ *  Currently only included when linking with -lstdc++fs.
+ */
+#if __cplusplus <= 201703L
+    #include <experimental/filesystem>
+#else
+    #include <filesystem>
+#endif
+
 #include "utils_exceptions.hpp"
 #include "utils_bits.hpp"
+#include "utils_string.hpp"
 #include "utils_memory.hpp"
 
 namespace utils::io {
+    #ifdef __cpp_lib_experimental_filesystem
+        namespace fs = std::experimental::filesystem;
+    #else
+        namespace fs = std::filesystem;
+    #endif
+
+    [[maybe_unused]]
+    static void safe_filename(std::string& filename) {
+        static constexpr std::string_view invalid_chars = "\"<>?!*|/:\\\n";
+
+        for (const char& c : invalid_chars) {
+            utils::string::strReplaceAll(filename, c);
+        }
+    }
+
+    [[maybe_unused]]
+    static std::string safe_filename(const std::string& filename) {
+        std::string str(filename);
+        utils::io::safe_filename(str);
+        return str;
+    }
+
+    [[maybe_unused]]
+    static auto list_contents(const std::string& folder) {
+        auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
+
+        for (const auto& entry : fs::directory_iterator(folder)) {
+            contents->emplace_back(entry.path().string());
+        }
+
+        return contents;
+    }
+
     /**	\brief	Read the given file and return a pointer to a string containing its contents.
      *
      *	\param	filename
@@ -19,18 +63,18 @@ namespace utils::io {
      *	\exception	FileReadException
      *		Throws FileReadException if the file could not be read properly.
      */
-    [[maybe_unused]] static const std::string* readStringFromFile(const std::string &filename) {
-        std::string *str = new std::string();
+    [[maybe_unused]]
+    static auto readStringFromFile(const std::string& filename) {
+        auto str = utils::memory::new_unique_var<std::string>();
         std::ifstream file(filename, std::fstream::in | std::fstream::ate);
 
         try {
             str->reserve(size_t(file.tellg()));
             file.seekg(0, std::ios::beg);
 
-            str->assign((std::istreambuf_iterator<char>(file)),
-                         std::istreambuf_iterator<char>());
+            str->assign(std::istreambuf_iterator<char>(file),
+                        std::istreambuf_iterator<char>());
         } catch (...) {
-            delete str;
             file.close();
             throw utils::exceptions::FileReadException(filename);
         }
@@ -44,7 +88,7 @@ namespace utils::io {
      *	\param filename
      *	\param str
      */
-    [[maybe_unused]] static void writeStringToFile(const std::string &filename, const std::string& str) {
+    [[maybe_unused]] static void writeStringToFile(const std::string& filename, const std::string& str) {
         std::ofstream file(filename);
 
         try {
@@ -70,7 +114,8 @@ namespace utils::io {
      *	\exception	FileReadException
      *		Throws FileReadException if the file could not be read properly.
      */
-    [[maybe_unused]] static std::vector<uint8_t>* readBinaryFile(const std::string &filename) {
+    [[maybe_unused]]
+    static auto readBinaryFile(const std::string& filename) {
         std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);
 
         if (!file.good()) {
@@ -78,16 +123,15 @@ namespace utils::io {
             throw utils::exceptions::FileReadException(filename);
         }
 
-        std::vector<uint8_t> *v_buff = new std::vector<uint8_t>();
+        auto v_buff = utils::memory::new_unique_var<std::vector<uint8_t>>();
 
         try {
             // Filepointer is already at end due to ::ate option, so tellg() gives filesize
             v_buff->reserve(size_t(file.tellg()));
             file.seekg(0, std::ios::beg);
-            v_buff->assign((std::istreambuf_iterator<char>(file)),
-                            std::istreambuf_iterator<char>());
+            v_buff->assign(std::istreambuf_iterator<char>(file),
+                           std::istreambuf_iterator<char>());
         } catch (...) {
-            delete v_buff;
             file.close();
             throw utils::exceptions::FileReadException(filename);
         }
@@ -109,7 +153,7 @@ namespace utils::io {
      *	\exception	FileWriteException
      *		Throws FileWriteException if the file could not be written properly.
      */
-    [[maybe_unused]] static void writeBinaryFile(const std::string &filename, const uint8_t* buffer, size_t length) {
+    [[maybe_unused]] static void writeBinaryFile(const std::string& filename, const uint8_t* buffer, size_t length) {
         std::ofstream file(filename, std::ofstream::binary);
 
         try {
@@ -226,6 +270,12 @@ namespace utils::io {
                 // Empty
             }
 
+            BitStreamReader(std::vector<uint8_t> const& src)
+                : BitStream(utils::memory::allocArray<uint8_t>(src.size()), src.size(), 0, true)
+            {
+                std::copy(src.begin(), src.end(), this->get_buffer());
+            }
+
             ~BitStreamReader() {}
 
             /**
@@ -267,6 +317,25 @@ namespace utils::io {
                 }
 
                 return value;
+            }
+
+            /**
+             * @brief from_file
+             * @param filename
+             * @return
+             */
+            static auto from_file(const std::string& filename) {
+                utils::memory::unique_t<BitStreamReader> reader;
+
+                try {
+                    auto invec = utils::io::readBinaryFile(filename);
+                    reader.reset(utils::memory::allocVar<BitStreamReader>(*invec));
+                } catch (utils::exceptions::FileReadException const& e) {
+                    reader.reset(nullptr);
+                    throw e;
+                }
+
+                return reader;
             }
     };
 

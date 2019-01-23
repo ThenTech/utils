@@ -190,8 +190,8 @@ namespace utils::algo {
                 }
 
                 std::vector<bool> lstream(stream);
-                lstream.push_back(false);   // Go left  => '0'
-                stream.push_back(true);     // Go right => '1'
+                lstream.emplace_back(false);   // Go left  => '0'
+                stream.emplace_back(true);     // Go right => '1'
 
                 this->buildDict(node->left , lstream);
                 this->buildDict(node->right, stream);
@@ -328,9 +328,11 @@ namespace utils::algo {
              *      The bytestream to read from.
              *  @return Returns a new bitstream with the encoded data.
              */
-            utils::io::BitStreamWriter* encode(utils::io::BitStreamReader& reader) {
+            utils::memory::unique_t<utils::io::BitStreamWriter> encode(utils::io::BitStreamReader& reader) {
                 const size_t length          = reader.get_size_bits();
                 const size_t original_length = reader.get_size();
+
+                utils::memory::unique_t<utils::io::BitStreamWriter> writer;
 
                 // Calculate frequencies
                 std::unordered_map<T, uint32_t> freqs;
@@ -343,15 +345,16 @@ namespace utils::algo {
 
                 if (freqs.empty()) {
                     // Nothing to encode?
-                    return nullptr;
+                    writer.reset(nullptr);
+                    return writer;
                 }
 
                 // Create priority queue to sort tree with Nodes with data from frequency
                 std::priority_queue<algo::Node<>*, std::vector<algo::Node<>*>, algo::Node<>::comparator> pq;
 
                 for (const auto& pair: freqs) {
-                    pq.push(utils::memory::allocVar<algo::Node<>>(pair.first, pair.second));
-                    // util::Logger::WriteLn(std::string_format("%02X: %d", pair.first, pair.second), false);
+                    pq.emplace(utils::memory::allocVar<algo::Node<>>(pair.first, pair.second));
+                    // utils::Logger::Writef("%02X: %d\n", pair.first, pair.second);
                 }
 
                 while (pq.size() > 1) {
@@ -360,7 +363,7 @@ namespace utils::algo {
                     algo::Node<> *left  = pq.top(); pq.pop();
                     algo::Node<> *right = pq.top(); pq.pop();
 
-                    pq.push(utils::memory::allocVar<algo::Node<>>(-1, left->freq + right->freq, left, right));
+                    pq.emplace(utils::memory::allocVar<algo::Node<>>(-1, left->freq + right->freq, left, right));
                 }
 
                 // Huffman tree root
@@ -390,11 +393,11 @@ namespace utils::algo {
                     h_dict_total_length += f.first * f.second;  // Amount of bits for each header group
                 }
 
-                utils::Logger::Writef("[Huffman] Table overhead with %d entries: %.1f bytes." + utils::Logger::CRLF,
-                                      this->dict.size(), float(h_dict_total_length) / 8.0f);
+                utils::Logger::Info("[Huffman] Table overhead with %d entries: %.1f bytes.",
+                                    this->dict.size(), float(h_dict_total_length) / 8.0f);
 
                 // Save the Huffman dictionary to a stream
-                utils::io::BitStreamWriter *writer = utils::memory::allocVar<utils::io::BitStreamWriter>((h_dict_total_length + length) / 8 + 1);
+                writer.reset(utils::memory::allocVar<utils::io::BitStreamWriter>((h_dict_total_length + length) / 8 + 1));
                 uint32_t seq_len = 0u, bit_len = 0u;
 
                 // Add headers for each group of same length key:val pairs
@@ -434,17 +437,15 @@ namespace utils::algo {
                                       float(total_length) / original_length * 100.0f);
 
                 if (original_length < total_length) {
-                    utils::Logger::WriteLn("[Huffman] No extra compression achieved, reverting stream to encoded.");
-                    utils::memory::deallocVar(writer);
-                    writer = utils::memory::allocVar<utils::io::BitStreamWriter>(original_length);
+                    utils::Logger::Warn("[Huffman] No extra compression achieved, reverting stream to encoded.");
+
+                    writer.reset(utils::memory::allocVar<utils::io::BitStreamWriter>(original_length));
                     writer->put_bit(0);
 
                     reader.reset();
                     while(reader.get_position() < length) {
                         writer->put(algo::Huffman<>::KEY_BITS, reader.get(algo::Huffman<>::KEY_BITS));
                     }
-
-                    return writer;
                 }
 
                 return writer;
@@ -458,45 +459,44 @@ namespace utils::algo {
              *      The bytestream to read from.
              *  @return Returns true if current Node has higher frequency.
              */
-            utils::io::BitStreamReader* decode(utils::io::BitStreamReader& reader) {
+            utils::memory::unique_t<utils::io::BitStreamReader> decode(utils::io::BitStreamReader& reader) {
+                utils::memory::unique_t<utils::io::BitStreamReader> result;
+
                 if (reader.get_size() == 0) {
                     // Nothing to decode?
-                    return nullptr;
+                    result.reset(nullptr);
+                    return result;
                 }
 
                 this->buildTree(reader);
 
-                const size_t raw_bits   = reader.get_size_bits();
-                      size_t data_bits  = raw_bits - reader.get_position();
-
-                utils::io::BitStreamReader *result = nullptr;
+                const size_t raw_bits  = reader.get_size_bits();
+                      size_t data_bits = raw_bits - reader.get_position();
 
                 if (this->tree_root->isLeaf()) {
                     // No tree was build => No Huffman used, just use passthrough of buffer by setting pointer
                     const size_t data_bytes = utils::bits::round_to_byte(data_bits - 8);
 
-                    utils::io::BitStreamWriter *writer = utils::memory::allocVar<utils::io::BitStreamWriter>(data_bytes);
+                    auto writer = utils::memory::new_unique_var<utils::io::BitStreamWriter>(data_bytes);
 
-                    while(reader.get_position() < raw_bits-8) {
+                    while (reader.get_position() < raw_bits-8) {
                         writer->put(algo::Huffman<>::KEY_BITS, reader.get(algo::Huffman<>::KEY_BITS));
                     }
 
-                    result = utils::memory::allocVar<utils::io::BitStreamReader>(writer->get_buffer(),
-                                                                                 writer->get_last_byte_position());
+                    result.reset(utils::memory::allocVar<utils::io::BitStreamReader>(writer->get_buffer(),
+                                                                                     writer->get_last_byte_position()));
 
                     writer->set_managed(false);
                     result->set_managed(true);
                     result->set_position(writer->get_position());
 
-                    utils::Logger::WriteLn("[Huffman] No Huffman table present in file. Skipping decompression.");
-
-                    utils::memory::deallocVar(writer);
+                    utils::Logger::Warn("[Huffman] No Huffman table present in file. Skipping decompression.");
                 } else {
                     // Get length in bytes of source
                     const size_t data_bytes = reader.get(algo::Huffman<>::LEN_BITS);
 
                     // Consume all other data, bit by bit and traverse Huffman tree to find word
-                    utils::io::BitStreamWriter *writer = utils::memory::allocVar<utils::io::BitStreamWriter>(data_bytes);
+                    auto writer = utils::memory::new_unique_var<utils::io::BitStreamWriter>(data_bytes);
 
                     while (reader.get_position() < raw_bits && writer->get_last_byte_position() < data_bytes) {
                         this->decode(reader, *writer);
@@ -510,7 +510,8 @@ namespace utils::algo {
                     const size_t original_length = reader.get_size();
                     const size_t total_length    = writer->get_last_byte_position();
 
-                    result = utils::memory::allocVar<utils::io::BitStreamReader>(writer->get_buffer(), total_length);
+                    result.reset(utils::memory::allocVar<utils::io::BitStreamReader>(writer->get_buffer(),
+                                                                                     total_length));
 
                     // Transfer ownership of buffer from writer to result stream
                     writer->set_managed(false);
@@ -520,7 +521,6 @@ namespace utils::algo {
                     utils::Logger::Writef("[Huffman]         Decompressed size: %8d bytes  => Ratio: %.2f%%" + utils::Logger::CRLF,
                                           total_length,
                                           float(total_length) / original_length * 100.0f);
-                    utils::memory::deallocVar(writer);
                 }
 
                 return result;
@@ -533,36 +533,24 @@ namespace utils::algo {
              * @return
              */
             static bool encode(const std::string& rawfile, const std::string& encfile) {
-                std::vector<uint8_t>       *file_buffer = nullptr;
-                utils::io::BitStreamReader *enc         = nullptr;
-
                 try {
-                    file_buffer = utils::io::readBinaryFile(rawfile);
-                } catch (utils::exceptions::FileReadException const& e) {
-                    utils::Logger::WriteLn(e.getMessage());
-                    utils::memory::deallocVar(file_buffer);
-                    file_buffer = nullptr;
-                }
-
-                if (file_buffer) {
-                    enc = utils::memory::allocVar<utils::io::BitStreamReader>(file_buffer->data(), file_buffer->size());
+                    auto enc = utils::io::BitStreamReader::from_file(rawfile);
 
                     algo::Huffman<> hm;
-                    utils::io::BitStreamWriter *writer = hm.encode(*enc);
+                    auto writer = hm.encode(*enc);
 
                     if (writer) {
                         utils::io::writeBinaryFile(encfile,
                                                    writer->get_buffer(),
                                                    writer->get_last_byte_position());
-                        utils::memory::deallocVar(writer);
                     } else {
-                        utils::Logger::Writef("[Huffman] Nothing to encode! Check contents of '%s'" + utils::Logger::CRLF, rawfile.c_str());
+                        utils::Logger::Warn("[Huffman] Nothing to encode! Check contents of '%s'" + utils::Logger::CRLF, rawfile.c_str());
                         return false;
                     }
 
-                    utils::memory::deallocVar(file_buffer);
-                    utils::memory::deallocVar(enc);
                     return true;
+                } catch (utils::exceptions::FileReadException const& e) {
+                    utils::Logger::Error(e.getMessage());
                 }
 
                 return false;
@@ -575,43 +563,31 @@ namespace utils::algo {
              * @return
              */
             static bool decode(const std::string& encfile, const std::string& decfile) {
-                std::vector<uint8_t>       *file_buffer = nullptr;
-                utils::io::BitStreamReader *enc         = nullptr;
-
                 try {
-                    file_buffer = utils::io::readBinaryFile(encfile);
-                } catch (utils::exceptions::FileReadException const& e) {
-                    utils::Logger::WriteLn(e.getMessage());
-                    utils::memory::deallocVar(file_buffer);
-                    file_buffer = nullptr;
-                }
-
-                if (file_buffer) {
-                    enc = utils::memory::allocVar<utils::io::BitStreamReader>(file_buffer->data(), file_buffer->size());
+                    auto enc = utils::io::BitStreamReader::from_file(encfile);
 
                     algo::Huffman<> hm;
-                    utils::io::BitStreamReader *writer = hm.decode(*enc);
+                    auto writer = hm.decode(*enc);
 
                     if (writer) {
                         utils::io::writeBinaryFile(decfile,
                                                    writer->get_buffer(),
                                                    writer->get_size());
-                        utils::memory::deallocVar(writer);
                     } else {
-                        utils::Logger::Writef("[Huffman] Nothing to decode! Check contents of '%s'" + utils::Logger::CRLF, encfile.c_str());
+                        utils::Logger::Warn("[Huffman] Nothing to decode! Check contents of '%s'" + utils::Logger::CRLF, encfile.c_str());
                         return false;
                     }
 
-                    utils::memory::deallocVar(file_buffer);
-                    utils::memory::deallocVar(enc);
                     return true;
+                } catch (utils::exceptions::FileReadException const& e) {
+                    utils::Logger::Error(e.getMessage());
                 }
 
                 return false;
             }
 
             void printDict(void)  {
-                utils::Logger::WriteLn("[Huffman] Dictionary:");
+                utils::Logger::Info("[Huffman] Dictionary:");
 
                 for (const auto& pair : this->dict) {
                     utils::Logger::Writef("%02X: %8X (%d bits)" + utils::Logger::CRLF,
@@ -620,7 +596,7 @@ namespace utils::algo {
             }
 
             void printTree(void) {
-                utils::Logger::WriteLn("[Huffman] Tree:");
+                utils::Logger::Info("[Huffman] Tree:");
                 algo::Node<>::printTree(this->tree_root);
             }
 

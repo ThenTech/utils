@@ -23,16 +23,17 @@ namespace utils::os {
         _CC_BRIGHT    = 1L << 5,
         _CC_UNDERLINE = 1L << 6,
         _CC_BOLD      = 1L << 7,
-        _CC_REVERSED  = 1L << 8,
+        _CC_ITALIC    = 1L << 8,
+        _CC_REVERSED  = 1L << 9,
 
-        _CC_BLACK     = 1L << 9,
-        _CC_RED       = 1L << 10,
-        _CC_GREEN     = 1L << 11,
-        _CC_YELLOW    = 1L << 12,
-        _CC_BLUE      = 1L << 13,
-        _CC_MAGENTA   = 1L << 14,
-        _CC_CYAN      = 1L << 15,
-        _CC_WHITE     = 1L << 16,
+        _CC_BLACK     = 1L << 10,
+        _CC_RED       = 1L << 11,
+        _CC_GREEN     = 1L << 12,
+        _CC_YELLOW    = 1L << 13,
+        _CC_BLUE      = 1L << 14,
+        _CC_MAGENTA   = 1L << 15,
+        _CC_CYAN      = 1L << 16,
+        _CC_WHITE     = 1L << 17,
     };
 
     inline constexpr _Console_commands
@@ -82,6 +83,7 @@ namespace utils::os {
         static constexpr command_t BRIGHT    = _CC_BRIGHT;    ///< Make text brighter
         static constexpr command_t UNDERLINE = _CC_UNDERLINE; ///< Make text underlined
         static constexpr command_t BOLD      = _CC_BOLD;      ///< Make text bold
+        static constexpr command_t ITALIC    = _CC_ITALIC;    ///< Make text italic
         static constexpr command_t REVERSED  = _CC_REVERSED;  ///< Reverse FG/BG colours
 
         static constexpr command_t BLACK     = _CC_BLACK;     ///< Set colour
@@ -111,16 +113,20 @@ namespace utils::os {
             cmd_str += BASE_ "H";
         }
 
-        if (cmd > Console::BOLD) {
+        if (cmd & Console::BOLD) {
+            cmd_str += BASE_ "1m";
+        }
+
+        if (cmd & Console::UNDERLINE) {
+            cmd_str += BASE_ "4m";
+        }
+
+        if (cmd & Console::ITALIC) {
+            cmd_str += BASE_ "3m";
+        }
+
+        if (cmd >= Console::BLACK) {
             // A colour will be set
-            if (cmd & Console::BOLD) {
-                cmd_str += BASE_ "1m";
-            }
-
-            if (cmd & Console::UNDERLINE) {
-                cmd_str += BASE_ "4m";
-            }
-
             if (cmd & Console::BG) {
                 cmd_str += BASE_ "4";
             } else {

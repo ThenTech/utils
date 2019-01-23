@@ -2,6 +2,7 @@
 #define UTILS_BITS_HPP
 
 #include <cstdint>
+#include <type_traits>
 
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
@@ -31,11 +32,17 @@ namespace utils::bits {
      * \retval bitIndex
      *      Index of least significat bit at one
      */
-    template<class T>
-    [[maybe_unused]] static inline uint_fast8_t ffs(T value ) {
+    template<class T> [[maybe_unused]]
+    static inline uint_fast8_t ffs(T value) {
         return value >= 0
              ? uint_fast8_t(64 - UTILS_BITS_CLZ_ULL(uint64_t(value)))
              : utils::bits::size_of<T>();
+    }
+
+    template<class T> [[maybe_unused]]
+    static inline bool is_power_of_2(T value) {
+        static_assert(std::is_integral<T>::value, "utils::bits::is_power_of_2: Integral required.");
+        return value && !(value & (value - 1));
     }
 
     /**
@@ -46,14 +53,45 @@ namespace utils::bits {
      *  @return Returns the next byte if bits has 1-7 surplus bits
      *          or the current byte if no surplus bits.
      */
-    [[maybe_unused]] static inline size_t round_to_byte(size_t bits) {
+    [[maybe_unused]]
+    static inline size_t round_to_byte(size_t bits) {
         return (bits + (8u - (bits % 8u)) % 8u) / 8u;
     }
 
-    template<class T>
-    [[maybe_unused]] static inline T shift_signed(size_t value, size_t src_bits) {
+    /**
+     *  @brief  Create a signed value of type T
+     *          with the given value that is only src_bits long.
+     *  @tparam T
+     *          Target type (signed).
+     *  @param  value
+     *          The value to make signed in the available bits of T.
+     *  @param  src_bits
+     *          The amount of bits that are used in value.
+     *  @return Returns a signed or unsigned number,
+     *          depending on whether value[src_bits : 0] was considered signed.
+     */
+    template<class T> [[maybe_unused]]
+    static inline T shift_signed(const size_t value, size_t src_bits) {
         const size_t bit_length = utils::bits::size_of<T>() - src_bits;
         return T(value << bit_length) >> bit_length;
+    }
+
+    /**
+     *  @brief  Same as shift_signed, but with known bit size
+     *          of value at compile time.
+     *  @tparam T
+     *          Target type (signed).
+     *  @tparam bits
+     *          Amount of bits in value.
+     *  @param  value
+     *          The value to make signed in the available bits of T.
+     *  @return Returns a signed or unsigned number,
+     *          depending on whether value[src_bits : 0] was considered signed.
+     */
+    template<class T, uint_fast8_t bits> [[maybe_unused]]
+    static inline T extend_sign(size_t value) {
+        struct { T value:bits; } s;
+        return s.value = value;
     }
 
     /**
@@ -64,8 +102,8 @@ namespace utils::bits {
      *  \return
      *      Returns the amount of bits required to represent the value if reshifted to size_of<T> bits.
      */
-    template<class T>
-    [[maybe_unused]] static inline uint_fast8_t bits_needed(T value) {
+    template<class T> [[maybe_unused]]
+    static inline uint_fast8_t bits_needed(T value) {
         uint_fast8_t bits = 0;
 
         // 1. Mask value with amount of current bits : (value & ((1 << bits) - 1))

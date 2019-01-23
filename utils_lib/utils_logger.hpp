@@ -15,6 +15,8 @@ namespace utils {
      *  @brief  A class with static methods for logging to std::cout and a log file.
      *          Create the Loging instance with Logger::Create(),
      *          and destroy it by calling Logger::Destroy()
+     *
+     *      Use https://github.com/gabime/spdlog for a more extensive logger.
      */
     class Logger {
         private:
@@ -117,6 +119,14 @@ namespace utils {
                 utils::Logger::get().write_to_screen(end_line);
             }
 
+            static inline std::ostream& GetConsoleStream() {
+                return utils::Logger::get().screen_output;
+            }
+
+            static inline std::ofstream& GetFileStream() {
+                return utils::Logger::get().log_file;
+            }
+
             /**
              *  @brief  Format the given args and write to the streams.
              *
@@ -127,10 +137,14 @@ namespace utils {
             template<typename ... Type>
             static void Writef(const std::string& format, Type ...args) {
                 if (utils::Logger::get().canLog()) {
-                    const std::string text = utils::string::format(format, args...);
+                    if constexpr(sizeof...(args) > 0) {
+                        const std::string text = utils::string::format(format, args...);
+                        utils::Logger::get().write_to_file(text);
+                        utils::Logger::get().write_to_screen(text);
+                        return;
+                    }
 
-                    utils::Logger::get().write_to_file(text);
-                    utils::Logger::get().write_to_screen(text);
+                    utils::Logger::Write(format, false);
                 }
             }
 
@@ -171,6 +185,58 @@ namespace utils {
 
             static inline void WriteLn(const std::string &text, bool timestamp=true) {
                 utils::Logger::Write(text + utils::Logger::CRLF, timestamp);
+            }
+
+            template<typename ... Type>
+            static void Success(const std::string& format, Type ...args) {
+                if (utils::Logger::get().canLog()) {
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BOLD
+                                           | utils::os::Console::GREEN);
+                    utils::Logger::Write("[Success] ");
+
+                    utils::Logger::Command(utils::os::Console::RESET);
+                    utils::Logger::Writef(format + "\n", args...);
+                }
+            }
+
+            template<typename ... Type>
+            static void Info(const std::string& format, Type ...args) {
+                if (utils::Logger::get().canLog()) {
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BOLD
+                                           | utils::os::Console::CYAN);
+                    utils::Logger::Write("[Info] ");
+
+                    utils::Logger::Command(utils::os::Console::RESET);
+                    utils::Logger::Writef(format + "\n", args...);
+                }
+            }
+
+            template<typename ... Type>
+            static void Warn(const std::string& format, Type ...args) {
+                if (utils::Logger::get().canLog()) {
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BOLD
+                                           | utils::os::Console::YELLOW);
+                    utils::Logger::Write("[Warning] ");
+
+                    utils::Logger::Command(utils::os::Console::RESET);
+                    utils::Logger::Writef(format + "\n", args...);
+                }
+            }
+
+            template<typename ... Type>
+            static void Error(const std::string& format, Type ...args) {
+                if (utils::Logger::get().canLog()) {
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BOLD
+                                           | utils::os::Console::RED);
+                    utils::Logger::Write("[Error] ");
+
+                    utils::Logger::Command(utils::os::Console::RESET);
+                    utils::Logger::Writef(format + "\n", args...);
+                }
             }
 
             static void WriteProgress(const size_t& iteration, const size_t& total) {
