@@ -1,6 +1,11 @@
 #ifndef UTILS_IO_HPP
 #define UTILS_IO_HPP
 
+#include "utils_exceptions.hpp"
+#include "utils_bits.hpp"
+#include "utils_string.hpp"
+#include "utils_memory.hpp"
+
 #include <fstream>
 #include <vector>
 
@@ -13,11 +18,6 @@
 #else
     #include <filesystem>
 #endif
-
-#include "utils_exceptions.hpp"
-#include "utils_bits.hpp"
-#include "utils_string.hpp"
-#include "utils_memory.hpp"
 
 namespace utils::io {
     #ifdef __cpp_lib_experimental_filesystem

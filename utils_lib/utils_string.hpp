@@ -1,14 +1,14 @@
 #ifndef UTILS_STRING_HPP
 #define UTILS_STRING_HPP
 
+#include "utils_exceptions.hpp"
+#include "utils_memory.hpp"
+
 #include <string>
 #include <cstring>
 #include <algorithm>
 #include <sstream>
 #include <vector>
-
-#include "utils_exceptions.hpp"
-#include "utils_memory.hpp"
 
 namespace utils::string {
     /**	\brief	Trim whitespace from the start of the given string (in-place).

@@ -121,4 +121,5 @@ namespace utils::bits {
     }
 }
 
+#undef UTILS_BITS_CLZ_ULL
 #endif // UTILS_BITS_HPP

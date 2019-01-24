@@ -1,10 +1,7 @@
 #ifndef UTILS_MEMORY_HPP
 #define UTILS_MEMORY_HPP
 
-#include <algorithm>
-#include <vector>
-#include <unordered_map>
-#include <memory>
+//#define ALLOC_LOG
 
 #if __cplusplus < 201703L
 #error A C++17 compiler is required!
@@ -12,10 +9,13 @@
 
 #include "utils_algorithm.hpp"
 
-//#define ALLOC_LOG
+#include <algorithm>
+#include <vector>
+#include <unordered_map>
+#include <memory>
 
 #ifdef ALLOC_LOG
-#include <cstdio>
+    #include <cstdio>
 #endif
 
 namespace utils::memory {
@@ -283,5 +283,9 @@ namespace utils::memory {
         utils::memory::deallocVar(m);
     }
 }
+
+#ifdef ALLOC_LOG
+    #undef ALLOC_LOG
+#endif
 
 #endif // UTILS_MEMORY_HPP

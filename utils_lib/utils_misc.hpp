@@ -1,6 +1,10 @@
 #ifndef UTILS_MISC_HPP
 #define UTILS_MISC_HPP
 
+#include "utils_exceptions.hpp"
+#include "utils_string.hpp"
+#include "utils_memory.hpp"
+
 #include <type_traits>
 #include <cmath>
 
@@ -10,10 +14,6 @@
 #else
     #include <cxxabi.h>
 #endif
-
-#include "utils_exceptions.hpp"
-#include "utils_string.hpp"
-#include "utils_memory.hpp"
 
 namespace utils::misc {
     /**

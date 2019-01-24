@@ -5,10 +5,12 @@
 #include "utils_lib/utils_io.hpp"
 #include "utils_lib/utils_logger.hpp"
 #include "utils_lib/utils_memory.hpp"
+#include "utils_lib/utils_misc.hpp"
 #include "utils_lib/utils_os.hpp"
 #include "utils_lib/utils_print.hpp"
+#include "utils_lib/utils_random.hpp"
 #include "utils_lib/utils_time.hpp"
-#include "utils_lib/utils_misc.hpp"
+#include "utils_lib/utils_xorstring.hpp"
 
 #include "utils_lib/algo/algo_huffman.hpp"
 
@@ -27,16 +29,13 @@
  *      - csv lib
  *      - Floating/Signed-Bitset
  *      - Auto Mutex lock
+ *      - Other threading/future features
  *      - Log level
  *
  *      - Rename functions
  *
  *  https://github.com/Martchus/cpp-utilities
  */
-
-//struct MyDel { static const utils::printer::delimiters_values<char> values; };
-//const utils::printer::delimiters_values<char> MyDel::values = { "[\n    \"", "\",\n    \"", "\"\n]" };
-
 int main() {
     utils::Logger::Create("test.log");
 
@@ -79,7 +78,10 @@ int main() {
 //    std::iota(arr.get(), arr.get()+100, 0);
 //    utils::Logger::Writef("sum: %d\n", std::accumulate(arr.get(), arr.get() + 100, 0));
 
-    utils::Logger::Stream("\n\nHello\n", *utils::io::list_contents("./"));
+    auto file_list = utils::io::list_contents("./");
+    utils::Logger::Stream("\n\nHello\n", *file_list, "\n");
+    utils::Logger::Stream(utils::random::Random::get(*file_list), "\n");
+
 #endif
 
     return 0;

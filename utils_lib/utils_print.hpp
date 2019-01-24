@@ -440,6 +440,17 @@ namespace std {
         stream << utils::printer::print_container_helper<utils::printer::array_wrapper<T, N>, TChar, TCharTraits>(helper);
         return stream;
     }
+
+    // WARNING: Hacky dereference iterator
+    template<typename T, typename Container, typename TChar, typename TCharTraits>
+    std::basic_ostream<TChar, TCharTraits>&
+    operator<<(
+            std::basic_ostream<TChar, TCharTraits>& stream,
+            const __gnu_cxx::__normal_iterator<T, Container>& it_value)
+    {
+        stream << *it_value;
+        return stream;
+    }
 }
 
 #endif // UTILS_PRINT_HPP

@@ -1,16 +1,16 @@
 #ifndef HUFFMAN_HPP
 #define HUFFMAN_HPP
 
+#include "../utils_string.hpp"
+#include "../utils_memory.hpp"
+#include "../utils_logger.hpp"
+#include "../utils_io.hpp"
+
 #include <cstdint>
 #include <numeric>
 #include <unordered_map>
 #include <queue>
 #include <vector>
-
-#include "../utils_string.hpp"
-#include "../utils_memory.hpp"
-#include "../utils_logger.hpp"
-#include "../utils_io.hpp"
 
 namespace utils::algo {
 

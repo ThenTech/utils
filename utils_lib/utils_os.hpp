@@ -1,8 +1,6 @@
 #ifndef UTILS_OS_HPP
 #define UTILS_OS_HPP
 
-#include <iostream>
-
 #include "utils_bits.hpp"
 #include "utils_string.hpp"
 #include "utils_misc.hpp"
@@ -11,6 +9,8 @@
     #include <windows.h>
     #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
+
+#include <iostream>
 
 namespace utils::os {
     enum _Console_commands {
@@ -185,4 +185,5 @@ namespace utils::os {
     }
 }
 
+#undef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #endif // UTILS_OS_HPP

@@ -11,8 +11,6 @@
 #include <iomanip>
 #include <ctime>
 
-
-
 namespace utils {
     /**
      *  @brief  A class with static methods for logging to std::cout and a log file.
@@ -46,15 +44,33 @@ namespace utils {
                 return this->canLogScreen() || this->canLogFile();
             }
 
-            inline void write_to_screen(const std::string &text) const {
-                if (utils::Logger::get().canLogScreen()) {
-                    utils::Logger::get().screen_output << text;
+            inline void write_to_screen(const std::string& text) {
+                if (this->canLogScreen()) {
+                    this->screen_output << text;
                 }
             }
 
-            inline void write_to_file(const std::string &text) const {
-                if (utils::Logger::get().canLogFile()) {
-                    utils::Logger::get().log_file << text;
+            inline void write_to_file(const std::string& text) {
+                if (this->canLogFile()) {
+                    this->log_file << text;
+                }
+            }
+
+            template<typename ... Type>
+            void hdr_colour_format(utils::os::command_t hdr_colour,
+                                   const std::string& hdr_str,
+                                   const std::string& format,
+                                   Type ...args)
+            {
+                if (this->canLog()) {
+                    this->Command(  utils::os::Console::FG
+                                  | utils::os::Console::BOLD
+                                  | hdr_colour);
+                    this->Write("[" + hdr_str + "] ");
+
+                    this->Command(utils::os::Console::WHITE);
+                    this->Writef(format + utils::Logger::CRLF, args...);
+                    this->Command(utils::os::Console::RESET);
                 }
             }
 
@@ -84,13 +100,13 @@ namespace utils {
                                  + utils::Logger::CRLF
                                  + utils::Logger::CRLF;
 
-                if (utils::Logger::get().file_enabled) {
-                    utils::Logger::get().write_to_file(end_line);
-                    utils::Logger::get().log_file.close();
-                    utils::Logger::get().file_enabled = false;
+                if (this->file_enabled) {
+                    this->write_to_file(end_line);
+                    this->log_file.close();
+                    this->file_enabled = false;
                 }
 
-                utils::Logger::get().write_to_screen(end_line);
+                this->write_to_screen(end_line);
             }
 
             /**
@@ -104,7 +120,7 @@ namespace utils {
              *  @param  fileName
              *      The log file to use.
              */
-            static void Create(const std::string &fileName = "") {
+            static void Create(const std::string& fileName = "") {
                 // Console
                 utils::os::EnableVirtualConsole();
 
@@ -112,7 +128,6 @@ namespace utils {
 
                 // File
                 if (fileName.length() > 0) {
-
                     try {
                         utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
                         utils::Logger::get().file_enabled = true;
@@ -206,54 +221,34 @@ namespace utils {
 
             template<typename ... Type>
             static void Success(const std::string& format, Type ...args) {
-                if (utils::Logger::get().canLog()) {
-                    utils::Logger::Command(  utils::os::Console::FG
-                                           | utils::os::Console::BOLD
-                                           | utils::os::Console::GREEN);
-                    utils::Logger::Write("[Success] ");
-
-                    utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
-                }
+                utils::Logger::get().hdr_colour_format(
+                    utils::os::Console::GREEN, "Success",
+                    format, args...
+                );
             }
 
             template<typename ... Type>
             static void Info(const std::string& format, Type ...args) {
-                if (utils::Logger::get().canLog()) {
-                    utils::Logger::Command(  utils::os::Console::FG
-                                           | utils::os::Console::BOLD
-                                           | utils::os::Console::CYAN);
-                    utils::Logger::Write("[Info] ");
-
-                    utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
-                }
+                utils::Logger::get().hdr_colour_format(
+                    utils::os::Console::CYAN, "Info",
+                    format, args...
+                );
             }
 
             template<typename ... Type>
             static void Warn(const std::string& format, Type ...args) {
-                if (utils::Logger::get().canLog()) {
-                    utils::Logger::Command(  utils::os::Console::FG
-                                           | utils::os::Console::BOLD
-                                           | utils::os::Console::YELLOW);
-                    utils::Logger::Write("[Warning] ");
-
-                    utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
-                }
+                utils::Logger::get().hdr_colour_format(
+                    utils::os::Console::YELLOW, "Warning",
+                    format, args...
+                );
             }
 
             template<typename ... Type>
             static void Error(const std::string& format, Type ...args) {
-                if (utils::Logger::get().canLog()) {
-                    utils::Logger::Command(  utils::os::Console::FG
-                                           | utils::os::Console::BOLD
-                                           | utils::os::Console::RED);
-                    utils::Logger::Write("[Error] ");
-
-                    utils::Logger::Command(utils::os::Console::RESET);
-                    utils::Logger::Writef(format + utils::Logger::CRLF, args...);
-                }
+                utils::Logger::get().hdr_colour_format(
+                    utils::os::Console::RED, "Error",
+                    format, args...
+                );
             }
 
             static void WriteProgress(const size_t& iteration, const size_t& total) {
