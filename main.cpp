@@ -1,26 +1,32 @@
-#include "utils_lib/utils_exceptions.hpp"
-#include "utils_lib/utils_algorithm.hpp"
-#include "utils_lib/utils_bits.hpp"
-#include "utils_lib/utils_string.hpp"
-#include "utils_lib/utils_io.hpp"
-#include "utils_lib/utils_logger.hpp"
-#include "utils_lib/utils_memory.hpp"
-#include "utils_lib/utils_misc.hpp"
-#include "utils_lib/utils_os.hpp"
-#include "utils_lib/utils_print.hpp"
-#include "utils_lib/utils_random.hpp"
-#include "utils_lib/utils_time.hpp"
-#include "utils_lib/utils_xorstring.hpp"
+#include "utils_test/test_settings.hpp"
 
-#include "utils_lib/algo/algo_huffman.hpp"
+#ifdef ENABLE_TESTS
+    #warning "TESTS ENABLED"
 
-#if 0
-    #define ENABLE_TESTS
-    #include <cassert>
+    #define CATCH_CONFIG_RUNNER
+    #define CATCH_CONFIG_CONSOLE_WIDTH 100
+    #include "utils_lib/utils_logger.hpp"
+    #include "utils_lib/external/catch.hpp"
+#else
+    #warning "TESTS DISABLED"
 
-    #include "utils_test/utils_print_test.hpp"
+    #include "utils_lib/utils_exceptions.hpp"
+    #include "utils_lib/utils_algorithm.hpp"
+    #include "utils_lib/utils_bits.hpp"
+    #include "utils_lib/utils_string.hpp"
+    #include "utils_lib/utils_io.hpp"
+    #include "utils_lib/utils_json.hpp"
+    #include "utils_lib/utils_logger.hpp"
+    #include "utils_lib/utils_memory.hpp"
+    #include "utils_lib/utils_misc.hpp"
+    #include "utils_lib/utils_os.hpp"
+    #include "utils_lib/utils_print.hpp"
+    #include "utils_lib/utils_random.hpp"
+    #include "utils_lib/utils_time.hpp"
+    #include "utils_lib/utils_xorstring.hpp"
+
+    #include "utils_lib/algo/algo_huffman.hpp"
 #endif
-
 
 /*
  *  Possible others:
@@ -36,14 +42,15 @@
  *
  *  https://github.com/Martchus/cpp-utilities
  */
-int main() {
-    utils::Logger::Create("test.log");
+int main(int argc, char* argv[]) {
 
 #ifdef ENABLE_TESTS
-    assert(utils::algorithm::all(
-        test::print::run()
-    ));
+    utils::Logger::Create();
+    utils::Logger::SetScreenTitle("Testing C++ Utility library");
+
+    return Catch::Session().run(argc, argv);
 #else
+    utils::Logger::Create("test.log");
     utils::Logger::SetScreenTitle("C++ Utility library");
 
     utils::Logger::WriteLn("Start");
@@ -82,7 +89,6 @@ int main() {
     utils::Logger::Stream("\n\nHello\n", *file_list, "\n");
     utils::Logger::Stream(utils::random::Random::get(*file_list), "\n");
 
-#endif
-
     return 0;
+#endif
 }

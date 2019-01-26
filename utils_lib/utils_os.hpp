@@ -134,7 +134,7 @@ namespace utils::os {
                 cmd_str += BASE_ "3";
             }
 
-            cmd_str += utils::string::format("%d", utils::bits::ffs(uint64_t(cmd) / uint64_t(Console::BLACK)) - 1);
+            cmd_str += utils::string::format("%d", utils::bits::msb(uint64_t(cmd) / uint64_t(Console::BLACK)) - 1);
 
             if (cmd & Console::BRIGHT) {
                 cmd_str += ";1";

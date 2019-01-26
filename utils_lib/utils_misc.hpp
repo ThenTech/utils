@@ -121,6 +121,8 @@ namespace utils::misc {
      */
     [[maybe_unused]]
     static inline bool epsilon_equals(double x, double y, double epsilon = 1e-4) {
+        // TODO templated with enable_if decimal else just == compare
+        //      and std::numeric_limits<T>::epsilon()*100 ?
         return std::abs(x - y) < epsilon;
     }
 }

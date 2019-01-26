@@ -18,46 +18,56 @@ CC = g++-7
 CFLAGS = $(ECFLAGS) -std=c++17 -Wall -O3 -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
 
 # Default target
-TARGET = test_utils
+TARGET      = utils
+TARGET_TEST = test_utils
 
 # Tools
 createout = @mkdir -p $(OUTPUT)
-cleanobj  = @-rm -f *.o
+cleanobj  = @-rm -rf *.o
 
 ##################################################################
 
-.PHONY: all default $(TARGET) clean
+.PHONY: all default $(TARGET) test clean
 
 all:
 	@$(MAKE) --no-print-directory $(TARGET)
+	@$(MAKE) --no-print-directory test
 
 pre: clean
 	$(createout)
 
 default: pre compile
 	$(cleanobj)
+    
+test: CFLAGS := -DENABLE_TESTS $(CFLAGS)
+test: TARGET  = $(TARGET_TEST)
+test: default
+	@./$(OUTPUT)/$(TARGET_TEST)
 
 $(TARGET): default
 
 ##################################################################
 
 # Look for .hpp/.cpp files to compile and link
-OBJECTS = $(patsubst %.cpp,%.o, $(wildcard *.cpp))
+OBJECTS = $(patsubst ./%.cpp,./%.o, $(wildcard *.cpp **/*.cpp))
 HEADERS = $(wildcard *.hpp)
 
 # Compile each .cpp file to its object
 %.o: %.cpp $(HEADERS)
+	@echo "Compile" $@
 	@$(CC) $(CFLAGS) $(CODE_DEF) -c $< -o $@
 
 .PRECIOUS: $(TARGET) $(OBJECTS)
 
 # Call compiler for linking
 compile: $(OBJECTS)
+	@echo "Compiled and linking to" $(OUTPUT)/$(TARGET)
 	@$(CC) $(OBJECTS) -Wall $(CFLAGS) $(LIBS) -o $(OUTPUT)/$(TARGET)
 
 # Clean targets
 cleantg:
 	@-rm -r -f $(OUTPUT)/$(TARGET)
+	@-rm -r -f $(OUTPUT)/$(TARGET_TEST)
 
 # Clean all?
 clean:

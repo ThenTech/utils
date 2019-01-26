@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <type_traits>
 
+#include "external/catch_abort.hpp"
+
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
  */
@@ -11,6 +13,7 @@
     #define UTILS_BITS_CLZ_ULL  __lzcnt
 #else
     #define UTILS_BITS_CLZ_ULL  __builtin_clzll
+    #define UTILS_BITS_FFS_LL   __builtin_ffsll
 #endif
 
 namespace utils::bits {
@@ -33,9 +36,23 @@ namespace utils::bits {
      *      Index of least significat bit at one
      */
     template<class T> [[maybe_unused]]
-    static inline uint_fast8_t ffs(T value) {
+    static inline uint_fast32_t ffs(T value) {
+        return UTILS_BITS_FFS_LL(uint64_t(value));
+    }
+
+    /**
+     * \brief  Find MSB Set (first from left)
+     *         This function identifies the position of the MSB starting from LSB.
+     *
+     * \param  value
+     *      Value to find msb index
+     * \retval bitIndex
+     *      Index of msb
+     */
+    template<class T> [[maybe_unused]]
+    static inline uint_fast32_t msb(T value) {
         return value >= 0
-             ? uint_fast8_t(64 - UTILS_BITS_CLZ_ULL(uint64_t(value)))
+             ? uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uint64_t(value) | 1)) - (value == 0)
              : utils::bits::size_of<T>();
     }
 
@@ -45,17 +62,24 @@ namespace utils::bits {
         return value && !(value & (value - 1));
     }
 
+    [[maybe_unused]]
+    static inline int64_t round_to_multiple(int64_t value, int64_t multiple) noexcept(false) {
+        ASSERT(multiple);
+        const int64_t isPositive = int64_t(value >= 0ll);
+        return ((value + isPositive * (multiple - 1ll)) / multiple) * multiple;
+    }
+
     /**
      *  @brief  Round the given bits to the next byte.
      *
      *  @param  bits
-     *      The amount of bits to round to a byte.
+     *          The amount of bits to round to a byte.
      *  @return Returns the next byte if bits has 1-7 surplus bits
      *          or the current byte if no surplus bits.
      */
     [[maybe_unused]]
     static inline size_t round_to_byte(size_t bits) {
-        return (bits + (8u - (bits % 8u)) % 8u) / 8u;
+        return (bits + 7ull) / 8ull;
     }
 
     /**
@@ -103,8 +127,8 @@ namespace utils::bits {
      *      Returns the amount of bits required to represent the value if reshifted to size_of<T> bits.
      */
     template<class T> [[maybe_unused]]
-    static inline uint_fast8_t bits_needed(T value) {
-        uint_fast8_t bits = 0;
+    static inline uint_fast32_t bits_needed(T value) {
+        uint_fast32_t bits = 0;
 
         // 1. Mask value with amount of current bits : (value & ((1 << bits) - 1))
         // 2. Shift left to size of 16 bits          : << (16 - bits)

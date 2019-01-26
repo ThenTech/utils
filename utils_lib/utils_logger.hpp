@@ -96,7 +96,13 @@ namespace utils {
             ~Logger() {
                 static const std::string
                         end_line = utils::Logger::CRLF
-                                 + std::string(80, '-')
+                                 + std::string(
+                                    #ifdef CATCH_CONFIG_CONSOLE_WIDTH
+                                       (CATCH_CONFIG_CONSOLE_WIDTH - 1)
+                                    #else
+                                       (79)
+                                    #endif
+                                       , '-')
                                  + utils::Logger::CRLF
                                  + utils::Logger::CRLF;
 
@@ -280,6 +286,10 @@ namespace utils {
                 }
             }
 
+            static const utils::Logger& Stream() {
+                return utils::Logger::get();
+            }
+
             template<typename T>
             static void Stream(T arg) {
                 if (utils::Logger::get().canLog()) {
@@ -290,13 +300,20 @@ namespace utils {
             }
 
             template<typename T, typename ... Type>
-            static void Stream(T arg, Type ...args) {
+            static void Stream(T arg, Type&& ...args) {
                 if (utils::Logger::get().canLog()) {
                     std::stringstream ss;
                     ss << arg;
                     utils::Logger::Write(ss.str(), false);
                     utils::Logger::Stream(args...);
                 }
+            }
+
+            template<typename ... Type>
+            friend const utils::Logger& operator<<(const utils::Logger&, Type&& ...args)
+            {
+                utils::Logger::Stream(args...);
+                return utils::Logger::Stream();
             }
 
             static inline void Command(utils::os::command_t cmd) {

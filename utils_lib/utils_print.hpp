@@ -131,27 +131,19 @@ namespace utils::printer {
     // Defines the delimiter values for a specific container and character type
     template<typename T, typename TChar>
     struct delimiters {
-        static const delimiters_values<TChar> values;
+        static inline delimiters_values<TChar> values;
     };
 
     // Default delimiters
     template<typename T>
     struct delimiters<T, char> {
-            static const delimiters_values<char> values;
+            static inline constexpr delimiters_values<char> values = { "[ ", ", ", " ]" };
     };
-
-    template<typename T>
-    const delimiters_values<char>
-    delimiters<T, char>::values = { "[ ", ", ", " ]" };
 
     template<typename T>
     struct delimiters<T, wchar_t> {
-        static const delimiters_values<wchar_t> values;
+        static inline constexpr delimiters_values<wchar_t> values = { L"[ ", L", ", L" ]" };
     };
-
-    template<typename T>
-    const delimiters_values<wchar_t>
-    delimiters<T, wchar_t>::values = { L"[ ", L", ", L" ]" };
 
     ////////////////////////////////////////////////////////////////////////////
     /// vector<string> newline
@@ -159,30 +151,24 @@ namespace utils::printer {
     #if (PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES || PRETTY_PRINT_VECTOR_STRINGS_QUOTED)
         template<>
         struct delimiters<std::vector<std::string>, char> {
-                static const delimiters_values<char> values;
-        };
-
-        const delimiters_values<char>
-        delimiters<std::vector<std::string>, char>::values = {
-            #if PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
-                "[\n    \"", "\",\n    \"", "\"\n]"
-            #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
-                "[\"", "\", \"", "\"]"
-            #endif
+            static inline constexpr delimiters_values<char> values = {
+                #if PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+                    "[\n    \"", "\",\n    \"", "\"\n]"
+                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
+                    "[\"", "\", \"", "\"]"
+                #endif
+            };
         };
 
         template<>
         struct delimiters<std::vector<std::string>, wchar_t> {
-            static const delimiters_values<wchar_t> values;
-        };
-
-        const delimiters_values<wchar_t>
-        delimiters<std::vector<std::string>, wchar_t>::values = {
-            #if PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
-                L"[\n    \"", L"\",\n    \"", L"\"\n]"
-            #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
-                L"[\"", L"\", \"", L"\"]"
-            #endif
+            static inline constexpr delimiters_values<wchar_t> values = {
+                #if PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+                    L"[\n    \"", L"\",\n    \"", L"\"\n]"
+                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
+                    L"[\"", L"\", \"", L"\"]"
+                #endif
+            };
         };
     #endif
 
@@ -190,62 +176,37 @@ namespace utils::printer {
     // Delimiters for set
     template<typename T, typename TTraits, typename TAllocator>
     struct delimiters<std::set<T, TTraits, TAllocator>, char> {
-            static const delimiters_values<char> values;
+            static inline constexpr delimiters_values<char> values = { "{ ", ", ", " }" };
     };
-
-    template<typename T, typename TTraits, typename TAllocator>
-    const delimiters_values<char>
-    delimiters<std::set<T, TTraits, TAllocator>, char>::values = { "{ ", ", ", " }" };
 
     template<typename T, typename TTraits, typename TAllocator>
     struct delimiters<std::set<T, TTraits, TAllocator>, wchar_t> {
-            static const delimiters_values<wchar_t> values;
+            static inline constexpr delimiters_values<wchar_t> values = { L"{ ", L", ", L" }" };
     };
-
-    template<typename T, typename TTraits, typename TAllocator>
-    const delimiters_values<wchar_t>
-    delimiters<std::set<T, TTraits, TAllocator>, wchar_t>::values = { L"{ ", L", ", L" }" };
 
     ////////////////////////////////////////////////////////////////////////////
     // Delimiters for pair
     template<typename T1, typename T2>
     struct delimiters<std::pair<T1, T2>, char> {
-            static const delimiters_values<char> values;
+            static inline constexpr delimiters_values<char> values = { "(", ", ", ")" };
     };
-
-    template<typename T1, typename T2>
-    const delimiters_values<char>
-    delimiters<std::pair<T1, T2>, char>::values = { "(", ", ", ")" };
 
     template<typename T1, typename T2>
     struct delimiters<std::pair<T1, T2>, wchar_t> {
-            static const delimiters_values<wchar_t> values;
+            static inline constexpr delimiters_values<wchar_t> values = { L"(", L", ", L")" };
     };
-
-    template<typename T1, typename T2>
-    const delimiters_values<wchar_t>
-    delimiters<std::pair<T1, T2>, wchar_t>::values = { L"(", L", ", L")" };
 
     ////////////////////////////////////////////////////////////////////////////
     // Delimiters for tuple
     template<typename ...Args>
     struct delimiters<std::tuple<Args...>, char> {
-            static const delimiters_values<char> values;
+            static inline constexpr delimiters_values<char> values = { "(", ", ", ")" };
     };
-
-    template<typename ...Args>
-    const delimiters_values<char>
-    delimiters<std::tuple<Args...>, char>::values = { "(", ", ", ")" };
 
     template<typename ...Args>
     struct delimiters<std::tuple<Args...>, wchar_t> {
-            static const delimiters_values<wchar_t> values;
+            static inline constexpr delimiters_values<wchar_t> values = { L"(", L", ", L")" };
     };
-
-    template<typename ...Args>
-    const delimiters_values<wchar_t>
-    delimiters<std::tuple<Args...>, wchar_t>::values = { L"(", L", ", L")" };
-
 
     ////////////////////////////////////////////////////////////////////////////
     /// Functor to print containers. You can use this directly if you

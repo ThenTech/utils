@@ -17,7 +17,7 @@
 
     #define JM_XORSTR_DISABLE_AVX_INTRINSICS
 
-    #define xorstr(str)                                          \
+    #define xorstr_(str)                                         \
         utils::xostring::make_xorstr(                            \
         []() {                                                   \
             struct {                                             \
@@ -28,7 +28,7 @@
         std::make_index_sequence<sizeof(str) / sizeof(*str)>{},  \
         std::make_index_sequence<utils::xostring::detail::_buffer_size<sizeof(str)>()>{})
 
-    #define xorstr_(str) xorstr(str).crypt_get()
+    #define xorstr(str) xorstr_(str).crypt_get()
 
     #ifdef _MSC_VER
         #define XORSTR_FORCEINLINE __forceinline
@@ -328,7 +328,7 @@
 
     #undef XORSTR_INLINE
 #else
-    #define xorstr(s)
+    #define xorstr(s) s
 #endif
 
 #undef XORSTR_USE
