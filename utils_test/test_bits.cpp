@@ -2,7 +2,7 @@
 
 #ifdef ENABLE_TESTS
 #include "../utils_lib/external/catch.hpp"
-#include "../utils_lib/external/catch_abort.hpp"
+#include "../utils_lib/external/catch_extra.hpp"
 
 #include "../utils_lib/utils_bits.hpp"
 
