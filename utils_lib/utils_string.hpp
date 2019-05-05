@@ -55,26 +55,65 @@ namespace utils::string {
         return s;
     }
 
-    // erase from erase_from until end (in place)
+    /**
+     *  \brief  Erase everything starting from erase_from (inclusive; in place).
+     *
+     *  \param  str
+     *      The string to erase characters from.
+     *  \param  erase_from
+     *      The substring to look for and start erasing from.
+     */
     [[maybe_unused]]
     static inline void strEraseFrom(std::string &str, const std::string& erase_from) {
-        str = str.substr(0, str.find(erase_from));
+        const size_t pos = str.find(erase_from);
+
+        if (pos != std::string::npos) {
+            str = str.substr(0, pos);
+        }
     }
 
-    // erase from begin to erase_to (in place)
+    /**
+     *  \brief  Erase everything starting from the beginning of the string
+     *          to erase_to (exclusive; in place).
+     *
+     *  \param  str
+     *      The string to erase characters from.
+     *  \param  erase_to
+     *      The substring to look for and erase to.
+     */
     [[maybe_unused]]
     static inline void strEraseTo(std::string &str, const std::string& erase_to) {
-        str = str.substr(str.find(erase_to));
+        const size_t pos = str.find(erase_to);
+
+        if (pos != std::string::npos) {
+            str = str.substr(pos);
+        }
     }
 
-    // erase from erase_from until end (copying)
+    /**
+     *  \brief  Erase everything starting from erase_from (inclusive; copy).
+     *
+     *  \param  str
+     *      The string to erase characters from.
+     *  \param  erase_from
+     *      The substring to look for and start erasing from.
+     *  \return Returns a copy where the appropriate parts were erased.
+     */
     [[maybe_unused]]
     static inline std::string strErasedFrom(std::string str, const std::string& erase_from) {
         strEraseFrom(str, erase_from);
         return str;
     }
 
-    // erase from begin to erase_to (copying)
+    /**
+     *  \brief  Erase everything starting from the beginning of the string
+     *          to erase_to (exclusive; copy).
+     *
+     *  \param  str
+     *      The string to erase characters from.
+     *  \param  erase_to
+     *      The substring to look for and erase to.
+     */
     [[maybe_unused]]
     static inline std::string strErasedTo(std::string str, const std::string& erase_to) {
         strEraseTo(str, erase_to);
@@ -82,6 +121,8 @@ namespace utils::string {
     }
 
     /**	\brief	Transform the string contents to uppercase (within the current locale) (in-place).
+     *
+     *          WARNING: ASCII only
      *
      *	\param	str
      *		A reference to the string to perform the operation.
@@ -97,6 +138,8 @@ namespace utils::string {
 
     /**	\brief	Transform the string contents to uppercase (within the current locale) (copying).
      *
+     *          WARNING: ASCII only
+     *
      *	\param	str
      *		A copy of the string to perform the operation.
      */
@@ -107,6 +150,8 @@ namespace utils::string {
     }
 
     /**	\brief	Transform the string contents to lowercase (within the current locale) (in-place).
+     *
+     *          WARNING: ASCII only
      *
      *	\param	str
      *		A reference to the string to perform the operation.
@@ -121,6 +166,8 @@ namespace utils::string {
     }
 
     /**	\brief	Transform the string contents to lowercase (within the current locale) (copying).
+     *
+     *          WARNING: ASCII only
      *
      *	\param	str
      *		A copy of the string to perform the operation.

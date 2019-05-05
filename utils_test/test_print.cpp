@@ -15,7 +15,7 @@
 
 #define PUT_SS(V)     std::stringstream().swap(test_op); test_op << (V);
 
-TEST_CASE("Test utils::print", "utils::print" ) {
+TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
     std::stringstream test_op;
     std::stringstream formatter;
 

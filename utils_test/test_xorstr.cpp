@@ -36,7 +36,7 @@
     "6+1;>1<<^2b8+}bf].e^]'$,+.]%)(8b%37b!a[2@,?9*!dd#d^|9!33}};db4,%080,(4@*" \
     "''|7+[{e<(>3!9e8[?!<_&e568c27ba+                                        "
 
-TEST_CASE("Test utils::xorstr", "utils::xorstr" ) {
+TEST_CASE("Test utils::xorstr", "[utils][utils::xorstr]" ) {
     const std::string test_str = xorstr(ori_str);
 
     REQUIRE(ori_str == test_str);

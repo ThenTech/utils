@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "external/catch_abort.hpp"
+#include "external/catch_extra.hpp"
 
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
@@ -85,6 +85,10 @@ namespace utils::bits {
     /**
      *  @brief  Create a signed value of type T
      *          with the given value that is only src_bits long.
+     *
+     *          This abuses the fact that right-shifting a signed number
+     *          with an MSB of 1, will fill in the new MSBs as 1, making the
+     *          original value signed in the new (bigger) size.
      *  @tparam T
      *          Target type (signed).
      *  @param  value
@@ -94,10 +98,16 @@ namespace utils::bits {
      *  @return Returns a signed or unsigned number,
      *          depending on whether value[src_bits : 0] was considered signed.
      */
-    template<class T> [[maybe_unused]]
+    template<class T, size_t Tlen = utils::bits::size_of<T>()> [[maybe_unused]]
     static inline T shift_signed(const size_t value, size_t src_bits) {
-        const size_t bit_length = utils::bits::size_of<T>() - src_bits;
-        return T(value << bit_length) >> bit_length;
+        #if 0 // ASSERT that src_bits is not bigger than sizeof(T)
+            ASSERT(src_bits <= Tlen);
+            const size_t bit_length = Tlen - src_bits;
+            return T(value << bit_length) >> bit_length;
+        #else // If src_bits is bigger than sizeof(T), don't shift
+            const uint64_t bit_length = src_bits <= Tlen ? Tlen - src_bits : 0;
+            return T(value << bit_length) >> bit_length;
+        #endif
     }
 
     /**
@@ -114,6 +124,7 @@ namespace utils::bits {
      */
     template<class T, uint_fast8_t bits> [[maybe_unused]]
     static inline T extend_sign(size_t value) {
+        static_assert (bits > 0);
         struct { T value:bits; } s;
         return s.value = value;
     }

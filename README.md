@@ -20,7 +20,7 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [utils_misc.hpp](utils_lib/utils_misc.hpp)                   | Other                                                        |
 | [utils_os.hpp](utils_lib/utils_os.hpp)                       | OS extensions (console manipulation with colours etc.)       |
 | [utils_print.hpp](utils_lib/utils_print.hpp)                 | Generic pretty printer                                       |
-| [utils_random.hpp](utils_lib/utils_random.hpp)               | Modern random utilities from [effolkronium/random](https://github.com/effolkronium/random) |
+| [utils_random.hpp](utils_lib/utils_random.hpp)               | Namespace wrapper for [effolkronium/random](https://github.com/effolkronium/random) |
 | [utils_string.hpp](utils_lib/utils_string.hpp)               | String extensions                                            |
 | [utils_time.hpp](utils_lib/utils_time.hpp)                   | Time measurement                                             |
 | [utils_xorstring.hpp](utils_xorstring.hpp)                   | Compile time string obfuscation from [JustasMasiulis](https://github.com/JustasMasiulis/xorstr) or [qis](https://github.com/qis/xorstr) |
@@ -28,4 +28,5 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [external/catch.hpp](utils_lib/external/catch.hpp)           | [Catch2](https://github.com/catchorg/Catch2) C++ test framework |
 | [external/catch_extra.hpp](utils_lib/external/catch_extra.hpp) | Extra's for Catch like custom ASSERT and std::abort() recoverable test. |
 | [external/json.hpp](utils_lib/external/json.hpp)             | [JSON](https://github.com/nlohmann/json) library by Niels Lohmann |
+| [external/random.hpp](utils_lib/external/random.hpp)         | Modern random utilities from [effolkronium/random](https://github.com/effolkronium/random) |
 | [/utils_test/](utils_test/)                                  | Unit tests for every function with [Catch2](https://github.com/catchorg/Catch2) |

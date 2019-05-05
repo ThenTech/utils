@@ -40,7 +40,10 @@
  *
  *      - Rename functions
  *
+ *      - Catch 2 with BENCHMARK or Hayai
+ *
  *  https://github.com/Martchus/cpp-utilities
+ *  https://github.com/tlx/tlx
  */
 int main(int argc, char* argv[]) {
 
