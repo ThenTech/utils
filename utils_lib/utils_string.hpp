@@ -184,7 +184,9 @@ namespace utils::string {
         return str.find(ch) != std::string::npos;
     }
 
-    /**	\brief	Replace all consecutive occurrences of the given char within the given string (in-place).
+    /**	\brief	Erase all consecutive occurrences of the given char
+     *          within the given string (in-place).
+     *          Only erase consecutive and repeating chars, keep unique.
      *
      *	\param	str
      *		A reference to the string to replace the character.
@@ -192,7 +194,7 @@ namespace utils::string {
      *		The characters to replace.
      */
     [[maybe_unused]]
-    static inline void strReplaceConsecutive(std::string &str, const char ch) {
+    static inline void strEraseConsecutive(std::string &str, const char ch) {
         str.erase(std::unique(str.begin(), str.end(),
                                 [&](const char lhs, const char rhs) {
                                     return (lhs == ch) && (lhs == rhs);
@@ -200,7 +202,8 @@ namespace utils::string {
                              ), str.end());
     }
 
-    /**	\brief	Replace all occurrences of from with to in the given std::string str.
+    /**	\brief	Replace all occurrences of from with to in the given
+     *          std::string str.
      *
      *	\param	str
      *		A reference to the string to replace a substring.
@@ -211,6 +214,8 @@ namespace utils::string {
      */
     [[maybe_unused]]
     static inline void strReplaceAll(std::string &str, const std::string& from, const std::string& to) {
+        if (from.size() == 0) return;
+
         size_t start_pos = 0;
         while((start_pos = str.find(from, start_pos)) != std::string::npos) {
             str.replace(start_pos, from.length(), to);
@@ -218,12 +223,66 @@ namespace utils::string {
         }
     }
 
+    /**	\brief	Replace all occurrences of from with to in the given
+     *          std::string str.
+     *
+     *	\param	str
+     *		A reference to the string to replace a substring.
+     *	\param	from
+     *		A char to replace.
+     *	\param	to
+     *		A reference to a string to replace with.
+     */
     [[maybe_unused]]
-    static inline void strReplaceAll(std::string &str, const char& from, const std::string& to = "") {
+    static inline void strReplaceAll(std::string &str, const char from, const std::string& to = "") {
+        utils::string::strReplaceAll(str, std::string(1, from), to);
+    }
+
+    /**	\brief	Replace all occurrences of from with to in the given
+     *          std::string str.
+     *
+     *	\param	str
+     *		A reference to the string to replace a substring.
+     *	\param	from
+     *		A char to replace.
+     *	\param	to
+     *		A char to replace with.
+     */
+    [[maybe_unused]]
+    static inline void strReplaceAll(std::string &str, const char from, const char to) {
         size_t start_pos = 0;
         while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-            str.replace(start_pos, 1, to);
+            str.replace(start_pos, 1, 1, to);
             start_pos++;
+        }
+    }
+
+    /**	\brief	Erase all occurrences of erase in the given std::string str.
+     *
+     *	\param	str
+     *		A reference to the string to erase a char.
+     *	\param	erase
+     *		A char to erase.
+     */
+    [[maybe_unused]]
+    static inline void strEraseAll(std::string &str, const char erase) {
+        str.erase(std::remove(str.begin(), str.end(), erase), str.end());
+    }
+
+    /**	\brief	Erase all occurrences of erase in the given std::string str.
+     *
+     *	\param	str
+     *		A reference to the string to erase a string.
+     *	\param	erase
+     *		A string to erase.
+     */
+    [[maybe_unused]]
+    static inline void strEraseAll(std::string &str, const std::string& erase) {
+        if (erase.size() == 0) return;
+
+        size_t start_pos = 0;
+        while((start_pos = str.find(erase, start_pos)) != std::string::npos) {
+            str.erase(start_pos, erase.length());
         }
     }
 
@@ -255,12 +314,13 @@ namespace utils::string {
      * @param str_char
      */
     [[maybe_unused]]
-    static void split_on_borderchar(std::vector<std::string> &v, const std::string& s, const char str_char='\'') {
-        if (s.length() < 3) return;
-
-        size_t start = 0, end;
+    static void strExtractQuotedStrings(std::vector<std::string> &v, const std::string& s, const char str_char='\'') {
         const size_t len = s.length() - 1u;
         v.clear();
+
+        if (len < 2) return;
+
+        size_t start = 0, end;
 
         do {
             start = s.find(str_char, start);

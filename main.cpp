@@ -31,7 +31,6 @@
 /*
  *  Possible others:
  *      - Config reader with sections?
- *      - json lib
  *      - csv lib
  *      - Floating/Signed-Bitset
  *      - Auto Mutex lock

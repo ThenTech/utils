@@ -178,7 +178,7 @@ TEST_CASE("Test utils::string::strEraseFrom", "[utils][utils::string]") {
     REQUIRE(test_3 == "\n\n\n\nabcd\n\n\n");
 
     std::string test_4(alphabet_lower);
-    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size());
+    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size() - 1);
     const std::string erase_char(1, test_4[erase_index]);
 
     utils::string::strEraseFrom(test_4, erase_char);
@@ -199,7 +199,7 @@ TEST_CASE("Test utils::string::strErasedFrom", "[utils][utils::string]") {
     REQUIRE(utils::string::strErasedFrom(test_3, "dcba") == "\n\n\n\nabcd\n\n\n");
 
     std::string test_4(alphabet_lower);
-    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size());
+    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size() - 1);
     const std::string erase_char(1, test_4[erase_index]);
 
     REQUIRE(utils::string::strErasedFrom(test_4, erase_char).size() == erase_index);
@@ -223,7 +223,7 @@ TEST_CASE("Test utils::string::strEraseTo", "[utils][utils::string]") {
     REQUIRE(test_3 == "\n\n\n\nabcd\n\n\n");
 
     std::string test_4(alphabet_lower);
-    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size());
+    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size() - 1);
     const std::string erase_char(1, test_4[erase_index]);
 
     utils::string::strEraseTo(test_4, erase_char);
@@ -244,7 +244,7 @@ TEST_CASE("Test utils::string::strErasedTo", "[utils][utils::string]") {
     REQUIRE(utils::string::strErasedTo(test_3, "dcba") == "\n\n\n\nabcd\n\n\n");
 
     std::string test_4(alphabet_lower);
-    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size());
+    const size_t erase_index = utils::random::Random::get<size_t>(0, alphabet_lower.size() - 1);
     const std::string erase_char(1, test_4[erase_index]);
 
     REQUIRE(utils::string::strErasedTo(test_4, erase_char).size() == alphabet_lower.size() - erase_index);
@@ -317,27 +317,191 @@ TEST_CASE("Test utils::string::strToLowercase", "[utils][utils::string]") {
 }
 
 TEST_CASE("Test utils::string::strHasChar", "[utils][utils::string]") {
-    CHECK(false);
+    REQUIRE_FALSE(utils::string::strHasChar("", '.'));
+
+    REQUIRE(utils::string::strHasChar("     abcd     ", 'd'));
+    REQUIRE(utils::string::strHasChar("abcd\t\t", '\t'));
+    REQUIRE(utils::string::strHasChar("\n\n\n\nabcd\n\n\n", 'd'));
+
+    std::string test_1(alphabet_lower);
+    for (int i = 5; i--;) {
+        auto c = *utils::random::Random::get(test_1);
+        REQUIRE(utils::string::strHasChar(test_1, c));
+    }
+
+    REQUIRE_FALSE(utils::string::strHasChar(test_1, 'A'));
 }
 
-TEST_CASE("Test utils::string::strReplaceConsecutive", "[utils][utils::string]") {
-    CHECK(false);
+TEST_CASE("Test utils::string::strEraseConsecutive", "[utils][utils::string]") {
+    std::string empty("");
+    utils::string::strEraseConsecutive(empty, '.');
+    REQUIRE(empty.size() == 0);
+
+    std::string test_1("     aabcd     ");
+    utils::string::strEraseConsecutive(test_1, 'a');
+    REQUIRE(test_1 == "     abcd     ");
+    utils::string::strEraseConsecutive(test_1, 'b');
+    REQUIRE(test_1 == "     abcd     ");
+    utils::string::strEraseConsecutive(test_1, ' ');
+    REQUIRE(test_1 == " abcd ");
+
+    std::string test_2, charstr;
+
+    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
+        test_2 += utils::random::Random::get<char>('a', 'z');
+    }
+
+    charstr = std::string(utils::random::Random::get<size_t>(1, 10), '.');
+    test_2 += charstr;
+
+    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
+        test_2 += utils::random::Random::get<char>('a', 'z');
+    }
+
+    const size_t prelen(test_2.size());
+    utils::string::strEraseConsecutive(test_2, '.');
+    // Only repeated are removed, unique is kept => +1
+    REQUIRE(test_2.size() == prelen - charstr.size() + 1);
 }
 
 TEST_CASE("Test utils::string::strReplaceAll", "[utils][utils::string]") {
-    CHECK(false);
+    std::string empty("");
+    utils::string::strReplaceAll(empty, "", "");
+    REQUIRE(empty.size() == 0);
+
+    std::string test_1("     abcad     ");
+    utils::string::strReplaceAll(test_1, 'a');
+    REQUIRE(test_1 == "     bcd     ");
+    utils::string::strReplaceAll(test_1, "bc", "cb");
+    REQUIRE(test_1 == "     cbd     ");
+    utils::string::strReplaceAll(test_1, ' ', "<>");
+    REQUIRE(test_1 == "<><><><><>cbd<><><><><>");
+    utils::string::strReplaceAll(test_1, '<', '?');
+    REQUIRE(test_1 == "?>?>?>?>?>cbd?>?>?>?>?>");
+
+    std::string test_2, part1, charstr, part2;
+
+    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
+        part1 += utils::random::Random::get<char>('a', 'z');
+    }
+
+    charstr = std::string(utils::random::Random::get<size_t>(1, 10), '.');
+
+    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
+        part2 += utils::random::Random::get<char>('a', 'z');
+    }
+
+    test_2 = part1 + charstr + part2;
+
+    utils::string::strReplaceAll(test_2, '.', '=');
+    REQUIRE(test_2 == part1 + std::string(charstr.size(), '=') + part2);
+}
+
+TEST_CASE("Test utils::string::strEraseAll", "[utils][utils::string]") {
+    std::string empty("");
+    utils::string::strEraseAll(empty, "");
+    REQUIRE(empty.size() == 0);
+
+    std::string test_1("     abcad     ");
+    utils::string::strEraseAll(test_1, 'a');
+    REQUIRE(test_1 == "     bcd     ");
+    utils::string::strEraseAll(test_1, "bc");
+    REQUIRE(test_1 == "     d     ");
+    utils::string::strEraseAll(test_1, ' ');
+    REQUIRE(test_1 == "d");
+    test_1 += std::string(5, '0');
+    utils::string::strEraseAll(test_1, '0');
+    REQUIRE(test_1 == "d");
+
+    std::string test_2, part1, charstr, part2;
+
+    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
+        part1 += utils::random::Random::get<char>('a', 'z');
+    }
+
+    charstr = std::string(utils::random::Random::get<size_t>(1, 10), '.');
+
+    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
+        part2 += utils::random::Random::get<char>('a', 'z');
+    }
+
+    test_2 = part1 + charstr + part2;
+
+    utils::string::strEraseAll(test_2, '.');
+    REQUIRE(test_2 == part1 + part2);
 }
 
 TEST_CASE("Test utils::string::convert2WSTR", "[utils][utils::string]") {
-    CHECK(false);
+    auto test = utils::memory::unique_t<wchar_t>(utils::string::convert2WSTR("\0"));
+
+    REQUIRE(std::wstring(test.get()) == L"");
+    REQUIRE(std::wcscmp(test.get(), L"\0") == 0);
+
+    test = utils::memory::unique_t<wchar_t>(utils::string::convert2WSTR("AbCdE\0"));
+    REQUIRE(std::wcscmp(test.get(), L"AbCdE\0") == 0);
 }
 
-TEST_CASE("Test utils::string::split_on_borderchar", "[utils][utils::string]") {
-    CHECK(false);
+TEST_CASE("Test utils::string::strExtractQuotedStrings", "[utils][utils::string]") {
+    std::vector<std::string> list;
+    std::string quoted;
+
+    quoted = "'Hello', 'World'";
+    utils::string::strExtractQuotedStrings(list, quoted);
+    REQUIRE(list.size() == 2);
+    REQUIRE((list[0] == "Hello" && list[1] == "World"));
+
+    quoted = "'Hello', 'Wo\'rld'";
+    utils::string::strExtractQuotedStrings(list, quoted);
+    REQUIRE(list.size() == 2);
+    REQUIRE((list[0] == "Hello" && list[1] == "Wo"));
+
+    quoted = "''";
+    utils::string::strExtractQuotedStrings(list, quoted);
+    REQUIRE(list.size() == 0);
+
+    quoted = "' '";
+    utils::string::strExtractQuotedStrings(list, quoted);
+    REQUIRE(list.size() == 1);
+    REQUIRE(list[0] == " ");
+
+    quoted = "abcdef";
+    utils::string::strExtractQuotedStrings(list, quoted);
+    REQUIRE(list.size() == 0);
 }
 
 TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
-    CHECK(false);
+    std::stringstream ss;
+    std::string test;
+
+    std::stringstream().swap(ss);
+    test = utils::string::format("abc");
+    utils::string::print_format(ss, "abc");
+    REQUIRE(test     == "abc");
+    REQUIRE(ss.str() == "abc");
+
+    std::stringstream().swap(ss);
+    test = utils::string::format("\r\n%d\t%%", 42);
+    utils::string::print_format(ss, "\r\n%d\t%%", 42);
+    REQUIRE(test     == "\r\n42\t%");
+    REQUIRE(ss.str() == "\r\n42\t%");
+
+    std::stringstream().swap(ss);
+    test = utils::string::format("0x%08X", 0xBEEF);
+    utils::string::print_format(ss, "0x%08X", 0xBEEF);
+    REQUIRE(test     == "0x0000BEEF");
+    REQUIRE(ss.str() == "0x0000BEEF");
+
+    std::stringstream().swap(ss);
+    test = utils::string::format("%c%c%c%s%c", 'a', 'b', 'c', "Haha", '\n');
+    utils::string::print_format(ss, "%c%c%c%s%c", 'a', 'b', 'c', "Haha", '\n');
+    REQUIRE(test     == "abcHaha\n");
+    REQUIRE(ss.str() == "abcHaha\n");
+
+    std::stringstream().swap(ss);
+    test = utils::string::format("%*d", 4, 2);
+    utils::string::print_format(ss, "%*d", 4, 2);
+    REQUIRE(test     == "   2");
+    REQUIRE(ss.str() == "   2");
 }
 
 #endif
