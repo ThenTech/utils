@@ -168,5 +168,23 @@ TEST_CASE("Test utils::algorithm::max", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::max(smaller,  bigger, smaller, smaller) == Approx(bigger));
 }
 
+void __test_func(int& x) { x /= 5; }
+
+TEST_CASE("Test utils::algorithm::repeat", "[utils][utils::algorithm]") {
+    int test = 0;
+    utils::algorithm::repeat<5>([&](){ test++; });
+    REQUIRE(test == 5);
+
+    utils::algorithm::repeat([&](){ test *= 10; });
+    REQUIRE(test == 50);
+
+    utils::algorithm::repeat<2>(__test_func, test);
+    REQUIRE(test == 2);
+
+    utils::algorithm::repeat<1>([](){ CHECK(true); });
+
+    utils::algorithm::repeat<0>([&](){ test--; });
+    REQUIRE(test == 2);
+}
 
 #endif
