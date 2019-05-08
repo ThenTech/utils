@@ -134,4 +134,39 @@ TEST_CASE("Test utils::algorithm::multiply", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::multiply(10, 20, 30, 40, 50) == 12000000);
 }
 
+TEST_CASE("Test utils::algorithm::min", "[utils][utils::algorithm]") {
+    REQUIRE(utils::algorithm::min( 0,  0) ==  0);
+    REQUIRE(utils::algorithm::min( 1,  0) ==  0);
+    REQUIRE(utils::algorithm::min( 0,  1) ==  0);
+    REQUIRE(utils::algorithm::min(-1,  0) == -1);
+    REQUIRE(utils::algorithm::min( 0, -1) == -1);
+
+    const double smaller = utils::random::Random::get<double>(0.0, 100.0);
+    const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
+    REQUIRE(utils::algorithm::min(smaller, bigger ) == Approx(smaller));
+    REQUIRE(utils::algorithm::min(bigger , smaller) == Approx(smaller));
+
+    REQUIRE(utils::algorithm::min(bigger,  bigger, bigger,  bigger, smaller) == Approx(smaller));
+    REQUIRE(utils::algorithm::min(bigger,  bigger, bigger, smaller) == Approx(smaller));
+    REQUIRE(utils::algorithm::min(bigger, smaller, bigger,  bigger) == Approx(smaller));
+}
+
+TEST_CASE("Test utils::algorithm::max", "[utils][utils::algorithm]") {
+    REQUIRE(utils::algorithm::max( 0,  0) ==  0);
+    REQUIRE(utils::algorithm::max( 1,  0) ==  1);
+    REQUIRE(utils::algorithm::max( 0,  1) ==  1);
+    REQUIRE(utils::algorithm::max(-1,  0) ==  0);
+    REQUIRE(utils::algorithm::max( 0, -1) ==  0);
+
+    const double smaller = utils::random::Random::get<double>(0.0, 100.0);
+    const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
+    REQUIRE(utils::algorithm::max(smaller, bigger ) == Approx(bigger));
+    REQUIRE(utils::algorithm::max(bigger , smaller) == Approx(bigger));
+
+    REQUIRE(utils::algorithm::max(smaller, smaller, smaller, smaller, bigger) == Approx(bigger));
+    REQUIRE(utils::algorithm::max(smaller, smaller, smaller,  bigger) == Approx(bigger));
+    REQUIRE(utils::algorithm::max(smaller,  bigger, smaller, smaller) == Approx(bigger));
+}
+
+
 #endif

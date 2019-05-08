@@ -36,8 +36,8 @@ namespace utils::memory {
      *		A pointer to the newly allocated object.
      */
     template <class T, class ... Type> [[maybe_unused]]
-    static inline T* allocVar(Type ... args) {
-        return new T(args...);
+    static inline T* allocVar(Type &&... args) {
+        return new T(std::forward<Type>(args)...);
     }
 
     /**	\brief	Deallocate an object of type T that was allocated using SysUtils::allocVar<T>().
@@ -62,10 +62,16 @@ namespace utils::memory {
     template <class T, typename _Dp = std::default_delete<T>>
     using unique_t = std::unique_ptr<T, _Dp>;
 
+    /**
+     *  \brief  Create a unique_t<T> variable that deletes itself.
+     *
+     *  \param  Type... args
+     *      Variable argument list passed down to ctor of T.
+     */
     template <class T, class ... Type> [[maybe_unused]]
-    static inline auto new_unique_var(Type ... args) {
+    static inline auto new_unique_var(Type &&... args) {
         return unique_t<T, decltype(&deallocVar<T>)>(
-            allocVar<T>(args...),
+            allocVar<T>(std::forward<Type>(args)...),
             &deallocVar<T>
         );
     }
@@ -87,6 +93,16 @@ namespace utils::memory {
         return new T[x]();
     }
 
+    /**
+     *  \brief  Allocate an array of objects of type T on the heap
+     *          with a total length of all dims multiplied.
+     *          Access elements in this array with e.g. `y * y_dim + x` ((x_dim, y_dim) alloced)
+     *
+     *  \param  dims
+     *      Argument list of dimensions.
+     *  \return
+     *      A pointer to the newly allocated object.
+     */
     template <class T, typename ... size_t> [[maybe_unused]]
     static inline T* allocFlatArray(size_t ... dims) {
         return allocArray<T>(utils::algorithm::multiply<size_t...>(dims...));
@@ -125,9 +141,14 @@ namespace utils::memory {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[reallocArray] at 0x%p from %lld to %lld\n", a, old_size, new_size);
         #endif
+
         T* new_array = utils::memory::allocArray<T>(new_size);
-        std::copy_n(a, std::min(old_size, new_size), new_array);
-        utils::memory::deallocArray(a);
+
+        if (a != nullptr) {
+            std::copy_n(a, std::min(old_size, new_size), new_array);
+            utils::memory::deallocArray(a);
+        }
+
         a = new_array;
         old_size = new_size;
     }
@@ -138,11 +159,27 @@ namespace utils::memory {
     template <class T, typename _Dp = decltype(&deallocArray<T>)>
     using unique_arr_t = unique_t<T[], _Dp>;
 
+    /**
+     *  \brief  Create a unique_arr_t<T> variable that deletes itself.
+     *
+     *  \param  x
+     *      The length of the array in the first dimension.
+     *  \return
+     *      A unique_arr_t instance with the newly allocated object.
+     */
     template <class T> [[maybe_unused]]
     static inline unique_arr_t<T> new_unique_array(size_t x) {
         return unique_arr_t<T>(allocArray<T>(x), &deallocArray<T>);
     }
 
+    /**
+     *  \brief  Create a unique_arr_t<T> variable that deletes itself.
+     *
+     *  \param  dims
+     *      Argument list of dimensions.
+     *  \return
+     *      A unique_arr_t instance with the newly allocated object.
+     */
     template <class T, typename ... size_t> [[maybe_unused]]
     static inline unique_arr_t<T> new_unique_flat_array(size_t ... dims) {
         return unique_arr_t<T>(allocFlatArray<T>(dims...), &deallocArray<T>);
@@ -257,9 +294,9 @@ namespace utils::memory {
      * @param args
      */
     template <class T, class ... Type> [[maybe_unused]]
-    static inline auto new_unique_vector(Type ... args) {
+    static inline auto new_unique_vector(Type &&... args) {
         return unique_vect_t<T>(
-            allocVar<std::vector<T*>>(args...),
+            allocVar<std::vector<T*>>(std::forward<Type>(args)...),
             &deallocVector
         );
     }

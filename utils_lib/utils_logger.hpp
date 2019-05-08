@@ -318,7 +318,7 @@ namespace utils {
 
             static inline void Command(utils::os::command_t cmd) {
                 if (utils::Logger::get().canLogScreen()) {
-                    utils::os::command(cmd, utils::Logger::get().screen_output);
+                    utils::os::Command(cmd, utils::Logger::get().screen_output);
                 }
             }
 

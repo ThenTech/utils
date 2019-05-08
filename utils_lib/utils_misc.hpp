@@ -6,13 +6,17 @@
 #include "utils_memory.hpp"
 
 #include <type_traits>
-#include <cmath>
 
 #ifdef _MSC_VER
     #include <intrin.h>
     #include <typeinfo>
 #else
     #include <cxxabi.h>
+#endif
+
+#ifdef THREADING_ENABLED
+    #include <mutex>
+    #define LOCK_BLOCK(MTX) std::unique_lock<std::mutex> lock_##MTX(MTX)
 #endif
 
 namespace utils::misc {
@@ -105,25 +109,6 @@ namespace utils::misc {
             throw utils::exceptions::CastingException(buffer, type2name(out));
 
         return out;
-    }
-
-    /**	\brief	Check if the given doubles are equal.
-     *
-     *	\param	x
-     *		The first value to compare.
-     *	\param	y
-     *		The second value to compare.
-     *	\param	epsilon
-     *		The precision to compare with (standard deviation of 1e-4 or 0.0001).
-     *
-     *	\return	bool
-     *		Returns whether x equals y within the given epsilon precision.
-     */
-    [[maybe_unused]]
-    static inline bool epsilon_equals(double x, double y, double epsilon = 1e-4) {
-        // TODO templated with enable_if decimal else just == compare
-        //      and std::numeric_limits<T>::epsilon()*100 ?
-        return std::abs(x - y) < epsilon;
     }
 }
 

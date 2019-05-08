@@ -97,7 +97,7 @@ namespace utils::os {
     };
 
     [[maybe_unused]]
-    static void command(command_t cmd, std::ostream& out) {
+    static void Command(command_t cmd, std::ostream& out) {
         #define BASE_ "\033["
         std::string cmd_str = "";
 

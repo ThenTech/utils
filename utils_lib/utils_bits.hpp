@@ -10,7 +10,19 @@
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
  */
 #ifdef _MSC_VER
+    namespace {
+        template <typename T>
+        static inline uint_fast32_t __ffs_template(T x) {
+            if constexpr (x == 0) return 0u;
+            uint_fast32_t r = 1;
+            while ((x & 1) == 0)
+                x >>= 1, ++r;
+            return r;
+        }
+    }
+
     #define UTILS_BITS_CLZ_ULL  __lzcnt
+    #define UTILS_BITS_FFS_LL   __ffs_template
 #else
     #define UTILS_BITS_CLZ_ULL  __builtin_clzll
     #define UTILS_BITS_FFS_LL   __builtin_ffsll
@@ -157,4 +169,5 @@ namespace utils::bits {
 }
 
 #undef UTILS_BITS_CLZ_ULL
+#undef UTILS_BITS_FFS_LL
 #endif // UTILS_BITS_HPP

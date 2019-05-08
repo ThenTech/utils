@@ -17,6 +17,7 @@
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
     #include "utils_lib/utils_logger.hpp"
+    #include "utils_lib/utils_math.hpp"
     #include "utils_lib/utils_memory.hpp"
     #include "utils_lib/utils_misc.hpp"
     #include "utils_lib/utils_os.hpp"
