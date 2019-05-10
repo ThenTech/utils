@@ -4,16 +4,15 @@
 #include "utils_string.hpp"
 #include "utils_print.hpp"
 #include "utils_os.hpp"
+#include "utils_time.hpp"
 
 #include <iostream>
 #include <ostream>
 #include <fstream>
-#include <iomanip>
-#include <ctime>
 
 namespace utils {
     /**
-     *  @brief  A class with static methods for logging to std::cout and a log file.
+     *  \brief  A class with static methods for logging to std::cout and a log file.
      *          Create the Loging instance with Logger::Create(),
      *          and destroy it by calling Logger::Destroy()
      *
@@ -60,7 +59,7 @@ namespace utils {
             void hdr_colour_format(utils::os::command_t hdr_colour,
                                    const std::string& hdr_str,
                                    const std::string& format,
-                                   Type ...args)
+                                   const Type& ...args)
             {
                 if (this->canLog()) {
                     this->Command(  utils::os::Console::FG
@@ -173,7 +172,7 @@ namespace utils {
              *  @param  args
              */
             template<typename ... Type>
-            static void Writef(const std::string& format, Type ...args) {
+            static void Writef(const std::string& format, const Type& ...args) {
                 if (utils::Logger::get().canLog()) {
                     if constexpr(sizeof...(args) > 0) {
                         const std::string text = utils::string::format(format, args...);
@@ -200,17 +199,7 @@ namespace utils {
                 try {
                     if (utils::Logger::get().canLogFile()) {
                         if (timestamp) {
-                            auto t  = std::time(nullptr);
-
-                            #ifdef _MSC_VER
-                                tm tm_l;
-                                localtime_s(&tm_l, &t);
-                                tm *tm = &tm_l;
-                            #else
-                                auto tm = std::localtime(&t);
-                            #endif
-
-                            utils::Logger::get().log_file << std::put_time(tm, "[%Y-%m-%d %H:%M:%S] ");
+                            utils::Logger::get().log_file << utils::time::Timestamp("[%Y-%m-%d %H:%M:%S] ");
                         }
 
                         utils::Logger::get().log_file << text;
@@ -226,7 +215,7 @@ namespace utils {
             }
 
             template<typename ... Type>
-            static void Success(const std::string& format, Type ...args) {
+            static void Success(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::GREEN, "Success",
                     format, args...
@@ -234,7 +223,7 @@ namespace utils {
             }
 
             template<typename ... Type>
-            static void Info(const std::string& format, Type ...args) {
+            static void Info(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::CYAN, "Info",
                     format, args...
@@ -242,7 +231,7 @@ namespace utils {
             }
 
             template<typename ... Type>
-            static void Warn(const std::string& format, Type ...args) {
+            static void Warn(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::YELLOW, "Warning",
                     format, args...
@@ -250,7 +239,7 @@ namespace utils {
             }
 
             template<typename ... Type>
-            static void Error(const std::string& format, Type ...args) {
+            static void Error(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::RED, "Error",
                     format, args...
@@ -291,7 +280,7 @@ namespace utils {
             }
 
             template<typename T>
-            static void Stream(T arg) {
+            static void Stream(const T& arg) {
                 if (utils::Logger::get().canLog()) {
                     std::stringstream ss;
                     ss << arg;
@@ -300,7 +289,7 @@ namespace utils {
             }
 
             template<typename T, typename ... Type>
-            static void Stream(T arg, Type&& ...args) {
+            static void Stream(const T& arg, const Type& ...args) {
                 if (utils::Logger::get().canLog()) {
                     std::stringstream ss;
                     ss << arg;
@@ -310,7 +299,7 @@ namespace utils {
             }
 
             template<typename ... Type>
-            friend const utils::Logger& operator<<(const utils::Logger&, Type&& ...args)
+            friend const utils::Logger& operator<<(const utils::Logger&, const Type&& ...args)
             {
                 utils::Logger::Stream(args...);
                 return utils::Logger::Stream();

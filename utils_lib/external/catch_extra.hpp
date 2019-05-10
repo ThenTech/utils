@@ -61,6 +61,8 @@ static void signal_handler(int signal)  {
  */
 template<class F, class... Args>
 bool Function_Aborts(F&& f, Args&& ... args) {
+    static_assert(std::is_invocable_v<F, Args...>, "Function_Aborts: Callable function required.");
+
     auto previous_handler = std::signal(SIGABRT, signal_handler);
 
     if (previous_handler == SIG_ERR) {

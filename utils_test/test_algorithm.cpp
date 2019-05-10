@@ -168,7 +168,7 @@ TEST_CASE("Test utils::algorithm::max", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::max(smaller,  bigger, smaller, smaller) == Approx(bigger));
 }
 
-void __test_func(int& x) { x /= 5; }
+static void __test_func(int& x) { x /= 5; }
 
 TEST_CASE("Test utils::algorithm::repeat", "[utils][utils::algorithm]") {
     int test = 0;

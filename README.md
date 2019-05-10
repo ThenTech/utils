@@ -16,6 +16,7 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [utils_io.hpp](utils_lib/utils_io.hpp)                       | File/Stream IO (BitStream...)                                |
 | [utils_json.hpp](utils_lib/utils_json.hpp)                   | Namespace wrapper for [nlohmann JSON](https://github.com/nlohmann/json) |
 | [utils_logger.hpp](utils_lib/utils_logger.hpp)               | Static Logger singleton                                      |
+| [utils_math.hpp](utils_lib/utils_math.hpp)                   | Math extensions                                              |
 | [utils_memory.hpp](utils_lib/utils_memory.hpp)               | Memory management                                            |
 | [utils_misc.hpp](utils_lib/utils_misc.hpp)                   | Other                                                        |
 | [utils_os.hpp](utils_lib/utils_os.hpp)                       | OS extensions (console manipulation with colours etc.)       |

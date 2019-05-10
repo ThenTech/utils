@@ -36,6 +36,7 @@ Release
 Debug
 *.qbs
 *.qbs.user
+*.qbs.user.*
 *.log
 .vscode
 bin

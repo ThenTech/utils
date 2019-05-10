@@ -31,7 +31,7 @@ namespace utils::io {
         static constexpr std::string_view invalid_chars = "\"<>?!*|/:\\\n";
 
         for (const char& c : invalid_chars) {
-            utils::string::strReplaceAll(filename, c);
+            utils::string::strEraseAll(filename, c);
         }
     }
 

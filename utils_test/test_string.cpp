@@ -8,9 +8,9 @@
 #include "../utils_lib/utils_random.hpp"
 
 
-#define SPACES { ' ', '\t', '\n' }
-constexpr std::string_view alphabet_lower = "abcdefghijklmnopqrstuvwxyz";
-constexpr std::string_view alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+static const std::string SPACES { ' ', '\t', '\n' };
+static constexpr std::string_view alphabet_lower = "abcdefghijklmnopqrstuvwxyz";
+static constexpr std::string_view alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TEST_CASE("Test utils::string::ltrim", "[utils][utils::string]") {
     std::string empty("");
@@ -31,13 +31,10 @@ TEST_CASE("Test utils::string::ltrim", "[utils][utils::string]") {
 
     std::string test_4, spacesstr, charstr;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        spacesstr += utils::random::Random::get<char>(SPACES);
-    }
-
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        charstr += utils::random::Random::get<char>('a', 'z');
-    }
+    spacesstr = utils::random::pick_x_from(utils::random::Random::get<size_t>(1, 10),
+                                           SPACES);
+    charstr = utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                             'a', 'z');
 
     test_4 = spacesstr;
     utils::string::ltrim(test_4);
@@ -71,13 +68,10 @@ TEST_CASE("Test utils::string::rtrim", "[utils][utils::string]") {
 
     std::string test_4, spacesstr, charstr;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        spacesstr += utils::random::Random::get<char>(SPACES);
-    }
-
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        charstr += utils::random::Random::get<char>('a', 'z');
-    }
+    spacesstr = utils::random::pick_x_from(utils::random::Random::get<size_t>(1, 10),
+                                           SPACES);
+    charstr = utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                             'a', 'z');
 
     test_4 = spacesstr;
     utils::string::rtrim(test_4);
@@ -111,13 +105,10 @@ TEST_CASE("Test utils::string::trim", "[utils][utils::string]") {
 
     std::string test_4, spacesstr, charstr;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        spacesstr += utils::random::Random::get<char>(SPACES);
-    }
-
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        charstr += utils::random::Random::get<char>('a', 'z');
-    }
+    spacesstr = utils::random::pick_x_from(utils::random::Random::get<size_t>(1, 10),
+                                           SPACES);
+    charstr = utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                             'a', 'z');
 
     test_4 = spacesstr;
     utils::string::trim(test_4);
@@ -147,13 +138,10 @@ TEST_CASE("Test utils::string::trimmed", "[utils][utils::string]") {
 
     std::string spacesstr, charstr;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        spacesstr += utils::random::Random::get<char>(SPACES);
-    }
-
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        charstr += utils::random::Random::get<char>('a', 'z');
-    }
+    spacesstr = utils::random::pick_x_from(utils::random::Random::get<size_t>(1, 10),
+                                           SPACES);
+    charstr = utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                             'a', 'z');
 
     REQUIRE(utils::string::trimmed(spacesstr).size() == 0);
     REQUIRE(utils::string::trimmed(spacesstr + charstr + spacesstr) == charstr);
@@ -347,16 +335,14 @@ TEST_CASE("Test utils::string::strEraseConsecutive", "[utils][utils::string]") {
 
     std::string test_2, charstr;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        test_2 += utils::random::Random::get<char>('a', 'z');
-    }
+    test_2 += utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                             'a', 'z');
 
     charstr = std::string(utils::random::Random::get<size_t>(1, 10), '.');
     test_2 += charstr;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        test_2 += utils::random::Random::get<char>('a', 'z');
-    }
+    test_2 += utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                             'a', 'z');
 
     const size_t prelen(test_2.size());
     utils::string::strEraseConsecutive(test_2, '.');
@@ -381,15 +367,11 @@ TEST_CASE("Test utils::string::strReplaceAll", "[utils][utils::string]") {
 
     std::string test_2, part1, charstr, part2;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        part1 += utils::random::Random::get<char>('a', 'z');
-    }
-
+    part1 += utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                            'a', 'z');
     charstr = std::string(utils::random::Random::get<size_t>(1, 10), '.');
-
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        part2 += utils::random::Random::get<char>('a', 'z');
-    }
+    part2 += utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                            'a', 'z');
 
     test_2 = part1 + charstr + part2;
 
@@ -415,15 +397,11 @@ TEST_CASE("Test utils::string::strEraseAll", "[utils][utils::string]") {
 
     std::string test_2, part1, charstr, part2;
 
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        part1 += utils::random::Random::get<char>('a', 'z');
-    }
-
+    part1 += utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                            'a', 'z');
     charstr = std::string(utils::random::Random::get<size_t>(1, 10), '.');
-
-    for (int i = utils::random::Random::get<int>(1, 10); i > 0; i--) {
-        part2 += utils::random::Random::get<char>('a', 'z');
-    }
+    part2 += utils::random::generate_string(utils::random::Random::get<size_t>(1, 10),
+                                            'a', 'z');
 
     test_2 = part1 + charstr + part2;
 
@@ -474,6 +452,12 @@ TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
     std::string test;
 
     std::stringstream().swap(ss);
+    test = utils::string::format("");
+    utils::string::print_format(ss, "");
+    REQUIRE(test     == "");
+    REQUIRE(ss.str() == "");
+
+    std::stringstream().swap(ss);
     test = utils::string::format("abc");
     utils::string::print_format(ss, "abc");
     REQUIRE(test     == "abc");
@@ -502,6 +486,94 @@ TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
     utils::string::print_format(ss, "%*d", 4, 2);
     REQUIRE(test     == "   2");
     REQUIRE(ss.str() == "   2");
+
+    std::stringstream().swap(ss);
+    const std::string frmt("%d%d%d");
+    const int x = 1, y = 2, z = 3;
+    test = utils::string::format(frmt + "%c", x, y, z, '\n');
+    utils::string::print_format(ss, frmt + "%c", x, y, z, '\n');
+    REQUIRE(test     == "123\n");
+    REQUIRE(ss.str() == "123\n");
+}
+
+TEST_CASE("Test utils::string::is_base64", "[utils][utils::string]") {
+    REQUIRE(utils::string::is_base64(""        ));
+    REQUIRE(utils::string::is_base64("Zg=="    ));
+    REQUIRE(utils::string::is_base64("Zm8="    ));
+    REQUIRE(utils::string::is_base64("Zm9v"    ));
+    REQUIRE(utils::string::is_base64("Zm9vYg=="));
+    REQUIRE(utils::string::is_base64("Zm9vYmE="));
+    REQUIRE(utils::string::is_base64("Zm9vYmFy"));
+
+    REQUIRE(utils::string::is_base64("AA=="));
+    REQUIRE(utils::string::is_base64("AAA="));
+    REQUIRE(utils::string::is_base64("AAAA"));
+    REQUIRE(utils::string::is_base64("/w=="));
+    REQUIRE(utils::string::is_base64("//8="));
+    REQUIRE(utils::string::is_base64("////"));
+    REQUIRE(utils::string::is_base64("/+8="));
+}
+
+TEST_CASE("Test utils::string::base64_encode", "[utils][utils::string]") {
+    std::string enc, dec, str;
+
+    REQUIRE(utils::string::base64_encode(""      ) == "");
+    REQUIRE(utils::string::base64_encode("f"     ) == "Zg==");
+    REQUIRE(utils::string::base64_encode("fo"    ) == "Zm8=");
+    REQUIRE(utils::string::base64_encode("foo"   ) == "Zm9v");
+    REQUIRE(utils::string::base64_encode("foob"  ) == "Zm9vYg==");
+    REQUIRE(utils::string::base64_encode("fooba" ) == "Zm9vYmE=");
+    REQUIRE(utils::string::base64_encode("foobar") == "Zm9vYmFy");
+
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\0")          , 1) == "AA==");
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\0\0")        , 2) == "AAA=");
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\0\0\0")      , 3) == "AAAA");
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\377")        , 1) == "/w==");
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\377\377")    , 2) == "//8=");
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\377\377\377"), 3) == "////");
+    REQUIRE(utils::string::base64_encode(reinterpret_cast<const uint8_t*>("\xff\xef")    , 2) == "/+8=");
+
+    str = "Hello World!!";
+    enc = utils::string::base64_encode(str);
+    dec = utils::string::base64_decode(enc);
+    REQUIRE((enc.size() > 0 && enc.back() == '='));
+    REQUIRE(utils::string::is_base64(enc));
+    REQUIRE(dec == str);
+
+    for (int j = 0; j < 5; ++j) {
+        str = utils::random::generate_string<>(1024);
+        enc = utils::string::base64_encode(str);
+        dec = utils::string::base64_decode(enc);
+        REQUIRE(utils::string::is_base64(enc));
+        REQUIRE(dec == str);
+    }
+}
+
+TEST_CASE("Test utils::string::base64_decode", "[utils][utils::string]") {
+    REQUIRE(utils::string::base64_decode(""        ) == ""      );
+    REQUIRE(utils::string::base64_decode("Zg=="    ) == "f"     );
+    REQUIRE(utils::string::base64_decode("Zm8="    ) == "fo"    );
+    REQUIRE(utils::string::base64_decode("Zm9v"    ) == "foo"   );
+    REQUIRE(utils::string::base64_decode("Zm9vYg==") == "foob"  );
+    REQUIRE(utils::string::base64_decode("Zm9vYmE=") == "fooba" );
+    REQUIRE(utils::string::base64_decode("Zm9vYmFy") == "foobar");
+
+    REQUIRE(std::strcmp(utils::string::base64_decode("AA==").c_str(), "\0"          ) == 0);
+    REQUIRE(std::strcmp(utils::string::base64_decode("AAA=").c_str(), "\0\0"        ) == 0);
+    REQUIRE(std::strcmp(utils::string::base64_decode("AAAA").c_str(), "\0\0\0"      ) == 0);
+    REQUIRE(std::strcmp(utils::string::base64_decode("/w==").c_str(), "\377"        ) == 0);
+    REQUIRE(std::strcmp(utils::string::base64_decode("//8=").c_str(), "\377\377"    ) == 0);
+    REQUIRE(std::strcmp(utils::string::base64_decode("////").c_str(), "\377\377\377") == 0);
+    REQUIRE(std::strcmp(utils::string::base64_decode("/+8=").c_str(), "\xff\xef"    ) == 0);
+
+    CHECK_THROWS_AS(utils::string::base64_decode("^"    ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("A"    ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("A^"   ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("AA"   ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("AA="  ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("AA===") == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("AAA"  ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("AAA^" ) == "", utils::exceptions::ConversionException);
 }
 
 #endif

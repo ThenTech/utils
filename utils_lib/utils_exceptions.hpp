@@ -132,8 +132,21 @@ namespace utils::exceptions {
      */
     class UnexpectedExtension : public Exception  {
         public:
-            UnexpectedExtension(std::string ext)
+            UnexpectedExtension(const std::string& ext)
                 : Exception("UnexpectedExtension", ext)
+            {}
+    };
+
+    /**
+     *	\brief
+     *		Conversion exception.
+     *	\param	msg
+     *		The task throwing the exception.
+     */
+    class ConversionException : public Exception  {
+        public:
+            ConversionException(const std::string& msg)
+                : Exception("ConversionException", msg)
             {}
     };
 }

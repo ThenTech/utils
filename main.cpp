@@ -92,6 +92,13 @@ int main(int argc, char* argv[]) {
     utils::Logger::Stream("\n\nHello\n", *file_list, "\n");
     utils::Logger::Stream(utils::random::Random::get(*file_list), "\n");
 
+
+    std::string s = utils::random::generate_string<char>(10, 'a', 'z');
+    utils::Logger::Stream(s.size(), ", ", s.size() == 10, " => '", s, "'\n");
+
+    auto x = utils::random::pick_x_from(10, d);
+    utils::Logger::Stream(x.size(), ", ", x.size() == 10, " => '", x, "'\n");
+
     return 0;
 #endif
 }

@@ -157,7 +157,7 @@ namespace utils::string {
      *		A reference to the string to perform the operation.
      */
     [[maybe_unused]]
-    static void strToLower(std::string &str) {
+    static inline void strToLower(std::string &str) {
         std::transform(str.begin(), str.end(), str.begin(),
             [](std::string::value_type ch) {
                 return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).tolower(ch);
@@ -336,6 +336,9 @@ namespace utils::string {
 
     /**
      *  \brief  Format the given args into the format string.
+     *          Disabled if no arguments are given, then the non-template
+     *          method below will be called and will return the given format
+     *          string as-is.
      *
      *  \tparam ...Type
      *      Variable argument list of params to expand in the format string.
@@ -346,7 +349,10 @@ namespace utils::string {
      *  \return
      *      Returns the format expanded with the args.
      */
-    template<typename ... Type> [[maybe_unused]]
+    template<
+        typename ... Type,
+        class = std::enable_if_t<sizeof...(Type) !=0 >
+    > [[maybe_unused]]
     static std::string format(const std::string& format, Type&& ...args) {
         const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
         auto buf = utils::memory::new_unique_array<char>(size);
@@ -354,6 +360,20 @@ namespace utils::string {
         std::snprintf(buf.get(), size, format.c_str(), args...);
 
         return std::string(buf.get(), buf.get() + size - 1 ); // Strip '\0'
+    }
+
+    /**
+     *  \brief  Dummy format method to be called if no format args are given
+     *          to the above method format<>().
+     *
+     *  \param  format
+     *      The format string to expand.
+     *  \return
+     *      Returns the given string.
+     */
+    [[maybe_unused]]
+    static inline std::string format(const std::string& format) {
+        return format;
     }
 
     /**
@@ -367,8 +387,217 @@ namespace utils::string {
      *      The args tro fill in.
      */
     template<typename ... Type> [[maybe_unused]]
-    static void print_format(std::ostream& stream, const std::string& format, Type&& ...args) {
+    static inline void print_format(std::ostream& stream, const std::string& format, Type&& ...args) {
         stream << utils::string::format(format, args...);
+    }
+
+
+    /**
+     *  \brief  Static buffer with all valid base64 chars.
+     */
+    static constexpr std::string_view _base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                                      "abcdefghijklmnopqrstuvwxyz"
+                                                      "0123456789+/";
+
+    /**
+     *  \brief  Check if given char is a valid base64 char (without `=` pad).
+     *
+     *  \param  c
+     *      The character to check.
+     *  \return
+     *      Returns true if _base64_chars.find(c) != npos
+     */
+    [[maybe_unused]]
+    static inline bool is_base64(uint8_t c) {
+        return (std::isalnum(c) || (c == '+') || (c == '/'));
+    }
+
+    /**
+     *  \brief  Check if given buffer contains a valid base64
+     *          encoded string.
+     *
+     *  \param  buffer
+     *      The buffer to check.
+     *  \param  buffer
+     *      The length of the buffer.
+     *  \return
+     *      Returns true if buffer contains a valid base64 encoded string.
+     */
+    [[maybe_unused]]
+    static bool is_base64(const uint8_t *buffer, size_t length) {
+        if (length % 4) return false;
+        const uint8_t *end = --buffer + length + 1;
+
+        while (++buffer != end) {
+            if (*buffer == '=') {
+                break;
+            } else if (!utils::string::is_base64(*buffer)) {
+                return false;
+            }
+        }
+
+        switch (end - buffer) {
+            case 0:
+                return true;
+            case 1:
+                return buffer[0] == '=';
+            case 2:
+                return buffer[0] == '=' && buffer[1] == '=';
+            default:
+                return false;
+        }
+    }
+
+    /**
+     *  \brief  Check if given string contains is a valid base64
+     *          encoded string.
+     *
+     *  \param  str
+     *      The string to check.
+     *  \return
+     *      Returns true if string contains a valid base64 encoded string.
+     */
+    [[maybe_unused]]
+    static inline bool is_base64(const std::string& str) {
+        return utils::string::is_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
+    }
+
+    /**
+     *  \brief  Encode the given buffer with base64.
+     *
+     *  \param  buffer
+     *      The buffer to encode.
+     *  \param  length
+     *      The length of the buffer to encode.
+     *  \return Return an std::string containing the encoded buffer.
+     */
+    [[maybe_unused]]
+    static std::string base64_encode(const uint8_t *buffer, size_t length) {
+        std::string encoded;
+        const uint8_t mod = length % 3;
+        encoded.reserve(((length / 3) + (mod > 0)) * 4);
+        uint32_t temp;
+
+        for (const uint8_t *end = --buffer + length - mod; buffer != end;) {
+            temp = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8) | (buffer[3]);
+            buffer += 3;
+
+            encoded.push_back(utils::string::_base64_chars[(temp & 0x00FC0000) >> 18]);
+            encoded.push_back(utils::string::_base64_chars[(temp & 0x0003F000) >> 12]);
+            encoded.push_back(utils::string::_base64_chars[(temp & 0x00000FC0) >> 6]);
+            encoded.push_back(utils::string::_base64_chars[(temp & 0x0000003F)]);
+        }
+
+        switch (mod) {
+            case 1:
+                temp = (uint32_t(buffer[1]) << 16);
+
+                encoded.push_back(utils::string::_base64_chars[(temp & 0x00FC0000) >> 18]);
+                encoded.push_back(utils::string::_base64_chars[(temp & 0x0003F000) >> 12]);
+                encoded.push_back('=');
+                encoded.push_back('=');
+                break;
+            case 2:
+                temp = (uint32_t(buffer[1]) << 16) | (uint32_t(buffer[2]) << 8);
+
+                encoded.push_back(utils::string::_base64_chars[(temp & 0x00FC0000) >> 18]);
+                encoded.push_back(utils::string::_base64_chars[(temp & 0x0003F000) >> 12]);
+                encoded.push_back(utils::string::_base64_chars[(temp & 0x00000FC0) >> 6]);
+                encoded.push_back('=');
+                break;
+        }
+
+        return encoded;
+    }
+
+    /**
+     *  \brief  Encode the given string with base64.
+     *
+     *  \param  str
+     *      The string to encode.
+     *  \return Return an std::string containing the encoded string.
+     */
+    [[maybe_unused]]
+    static inline std::string base64_encode(const std::string& str) {
+        return utils::string::base64_encode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
+    }
+
+    /**
+     *  \brief  Decode the given buffer with base64.
+     *
+     *  \param  buffer
+     *      The buffer to decode.
+     *  \param  length
+     *      The length of the buffer to decode.
+     *  \return Return an std::string containing the decoded buffer.
+     */
+    [[maybe_unused]]
+    static std::string base64_decode(const uint8_t *buffer, size_t length) {
+        if (length % 4) {
+            throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid size)");
+        }
+
+        const uint8_t *const buffer_end = buffer + length;
+        size_t decoded_length = (length / 4) * 3;
+
+        if (length) {
+            decoded_length -= (*(buffer_end - 2) == '=') + (*(buffer_end - 1) == '=');
+        }
+
+        std::string decoded;
+        decoded.resize(decoded_length);
+        char *iter = decoded.data() - 1;
+
+        while (buffer < buffer_end) {
+            int32_t temp = 0;
+
+            for (uint8_t i = 0; i < 4; ++i, ++buffer) {
+                temp <<= 6;
+                if (*buffer >= 'A' && *buffer <= 'Z') {
+                    temp |= *buffer - 'A';
+                } else if (*buffer >= 'a' && *buffer <= 'z') {
+                    temp |= *buffer - 'a' + 26;
+                } else if (*buffer >= '0' && *buffer <= '9') {
+                    temp |= *buffer - '0' + 2 * 26;
+                } else if (*buffer == '+') {
+                    temp |= 2 * 26 + 10;
+                } else if (*buffer == '/') {
+                    temp |= 2 * 26 + 10 + 1;
+                } else if (*buffer == '=') {
+                    switch (buffer_end - buffer) {
+                        case 1:
+                            *++iter = char((temp >> 16) & 0xFF);
+                            *++iter = char((temp >>  8) & 0xFF);
+                            return decoded;
+                        case 2:
+                            *++iter = char((temp >> 10) & 0xFF);
+                            return decoded;
+                        default:
+                            throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid padding)");
+                    }
+                } else {
+                    throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid character)");
+                }
+            }
+
+            *++iter = char((temp >> 16) & 0xFF);
+            *++iter = char((temp >>  8) & 0xFF);
+            *++iter = char((temp      ) & 0xFF);
+        }
+
+        return decoded;
+    }
+
+    /**
+     *  \brief  Decode the given string with base64.
+     *
+     *  \param  str
+     *      The string to decode.
+     *  \return Return an std::string containing the decoded string.
+     */
+    [[maybe_unused]]
+    static inline std::string base64_decode(const std::string& str) {
+        return utils::string::base64_decode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 }
 
