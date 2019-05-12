@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "external/catch_extra.hpp"
+#include "utils_catch.hpp"
 
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html

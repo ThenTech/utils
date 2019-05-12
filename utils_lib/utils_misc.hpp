@@ -2,17 +2,9 @@
 #define UTILS_MISC_HPP
 
 #include "utils_exceptions.hpp"
-#include "utils_string.hpp"
 #include "utils_memory.hpp"
 
-#include <type_traits>
-
-#ifdef _MSC_VER
-    #include <intrin.h>
-    #include <typeinfo>
-#else
-    #include <cxxabi.h>
-#endif
+#include <iomanip>
 
 #ifdef THREADING_ENABLED
     #include <mutex>
@@ -28,43 +20,6 @@ namespace utils::misc {
     template <typename E>
     constexpr inline auto to_underlying(E e) noexcept {
         return static_cast<std::underlying_type_t<E>>(e);
-    }
-
-    /**	\brief	Returns the internal actual class name of the given object o.
-     *
-     *	**Uses __abi::__cxa_demangle__ which is part of <cxxabi.h> included in all GCC compilers.**
-     *
-     *	If GCC is not used, type2name will revert to typeid(o).name() instead.
-     *
-     *	\tparam	T
-     *		The type of object to get the name demangled from.
-     *	\param	o
-     *		The object to demangle the name from.
-     *	\return
-     *		Returns the class name of o.
-     */
-    template <
-        class T, typename ... Strings,
-        std::enable_if_t<(std::is_convertible_v<Strings const&, std::string_view> && ...), int> = 0
-    >
-    [[maybe_unused]]
-    static const std::string type2name(T const& o, Strings&& ...filter) {
-        #ifdef _CXXABI_H
-            // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
-            utils::memory::unique_t<char, decltype (&std::free)>
-                    demang(abi::__cxa_demangle(typeid(o).name(), nullptr, nullptr, nullptr),
-                           &std::free);
-            std::string s(demang.get());
-        #else
-            std::string s(typeid(o).name());
-        #endif
-
-        // Remove every occurence in filter... list from output (e.g. std::out)
-        if constexpr (sizeof...(filter) > 0) {
-            (utils::string::strReplaceAll(s, filter, ""), ...);
-        }
-
-        return s;
     }
 
     /**	\brief

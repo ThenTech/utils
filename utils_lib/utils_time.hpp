@@ -68,16 +68,16 @@ namespace utils::time {
      */
     [[maybe_unused]]
     static inline auto Timestamp(const char* frmt="%Y-%m-%d %H:%M:%S", std::time_t *epoch_time = nullptr) {
-        if (epoch_time == nullptr) {
-            std::time(epoch_time);
-        }
+        const std::time_t stamp = (epoch_time == nullptr
+                                  ? std::time(nullptr)
+                                  : *epoch_time);
 
         #ifdef _MSC_VER
             tm tm_l;
-            localtime_s(&tm_l, epoch_time);
+            localtime_s(&tm_l, &stamp);
             tm *tm = &tm_l;
         #else
-            auto tm = std::localtime(epoch_time);
+            auto tm = std::localtime(&stamp);
         #endif
 
         return std::put_time(tm, frmt);

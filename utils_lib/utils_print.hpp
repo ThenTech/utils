@@ -11,8 +11,17 @@
 #include <vector>
 #include <algorithm>
 
-#define PRETTY_PRINT_VECTOR_STRINGS_QUOTED              1
-#define PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES 1
+#ifdef _MSC_VER
+    #include <intrin.h>
+    #include <typeinfo>
+#else
+    #include <cxxabi.h>
+#endif
+
+#include "utils_string.hpp"
+
+#define UTILS_PRINT_VECTOR_STRINGS_QUOTED              1
+#define UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES 1
 
 
 namespace std {
@@ -23,7 +32,7 @@ namespace std {
     template<typename T, typename TTraits, typename TAllocator> class set;
     template<typename TKey, typename TValue, typename TTraits, typename TAllocator> class map;
     template<typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator> class unordered_map;
-    template<typename T, std::size_t N> class array;
+    template<typename T, std::size_t N> struct array;
 }
 
 
@@ -106,7 +115,7 @@ namespace utils::printer {
             }
     };
 
-    #if _MSC_VER >= 1400
+    #if defined(_MSC_VER) && _MSC_VER >= 1400
         // Declare pretty_ostream_iterator as checked
         template<typename T, typename TChar, typename TCharTraits>
         struct std::_Is_checked_helper<pretty_ostream_iterator<T, TChar, TCharTraits>>
@@ -148,11 +157,11 @@ namespace utils::printer {
     ////////////////////////////////////////////////////////////////////////////
     /// vector<string> newline
     ////////////////////////////////////////////////////////////////////////////
-    #if (PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES || PRETTY_PRINT_VECTOR_STRINGS_QUOTED)
+    #if (UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES || UTILS_PRINT_VECTOR_STRINGS_QUOTED)
         template<>
         struct delimiters<std::vector<std::string>, char> {
             static inline constexpr delimiters_values<char> values = {
-                #if PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
                     "[\n    \"", "\",\n    \"", "\"\n]"
                 #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
                     "[\"", "\", \"", "\"]"
@@ -163,7 +172,7 @@ namespace utils::printer {
         template<>
         struct delimiters<std::vector<std::string>, wchar_t> {
             static inline constexpr delimiters_values<wchar_t> values = {
-                #if PRETTY_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
                     L"[\n    \"", L"\",\n    \"", L"\"\n]"
                 #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
                     L"[\"", L"\", \"", L"\"]"
@@ -311,6 +320,43 @@ namespace utils::printer {
     utils::printer::array_wrapper<T, N> print_array_helper(const T* a) {
         static_assert(N > 0, "print_array_helper requires N!");
         return utils::printer::array_wrapper<T, N>(a);
+    }
+
+    /**	\brief	Returns the internal actual class name of the given object o.
+     *
+     *	**Uses __abi::__cxa_demangle__ which is part of <cxxabi.h> included in all GCC compilers.**
+     *
+     *	If GCC is not used, type2name will revert to typeid(o).name() instead.
+     *
+     *	\tparam	T
+     *		The type of object to get the name demangled from.
+     *	\param	o
+     *		The object to demangle the name from.
+     *	\return
+     *		Returns the class name of o.
+     */
+    template <
+        class T, typename ... Strings,
+        std::enable_if_t<(std::is_convertible_v<Strings const&, std::string_view> && ...), int> = 0
+    >
+    [[maybe_unused]]
+    static const std::string type2name(T const& o, Strings&& ...filter) {
+        #ifdef _CXXABI_H
+            // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
+            utils::memory::unique_t<char, decltype (&std::free)>
+                    demang(abi::__cxa_demangle(typeid(o).name(), nullptr, nullptr, nullptr),
+                           &std::free);
+            std::string s(demang.get());
+        #else
+            std::string s(typeid(o).name());
+        #endif
+
+        // Remove every occurence in filter... list from output (e.g. std::out)
+        if constexpr (sizeof...(filter) > 0) {
+            (utils::string::strReplaceAll(s, filter, ""), ...);
+        }
+
+        return s;
     }
 }
 

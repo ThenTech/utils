@@ -2,7 +2,7 @@
 #define UTILS_RANDOM_HPP
 
 #include "external/random.hpp"
-#include "external/catch_extra.hpp"
+#include "utils_catch.hpp"
 
 /*
  *  NOTE: Does adding inline to static methods increase performance?

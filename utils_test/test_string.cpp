@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/external/catch.hpp"
+#include "../utils_lib/utils_catch.hpp"
 
 #include "../utils_lib/utils_string.hpp"
 

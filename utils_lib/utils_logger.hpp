@@ -5,10 +5,22 @@
 #include "utils_print.hpp"
 #include "utils_os.hpp"
 #include "utils_time.hpp"
+#include "utils_catch.hpp"
 
 #include <iostream>
 #include <ostream>
 #include <fstream>
+
+
+#ifdef LOG_ERROR_TRACE
+    #undef LOG_ERROR_TRACE
+#endif
+
+/**
+ *  Macro to print an error trace to Logger.
+ */
+#define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(TRACE_LOCATION, e);
+
 
 namespace utils {
     /**
@@ -81,7 +93,7 @@ namespace utils {
                 , file_paused(false)
                 , screen_output(std::cout)
             {
-                // Empty
+                utils::os::EnableVirtualConsole();
             }
 
             Logger(Logger const&)         = delete;
@@ -126,9 +138,6 @@ namespace utils {
              *      The log file to use.
              */
             static void Create(const std::string& fileName = "") {
-                // Console
-                utils::os::EnableVirtualConsole();
-
                 utils::Logger::Destroy();
 
                 // File
@@ -246,6 +255,48 @@ namespace utils {
                 );
             }
 
+            static void ErrorTrace(const char* file, const int line, const char* function, const std::exception& e) {
+                if (utils::Logger::get().canLog()) {
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BOLD
+                                           | utils::os::Console::RED);
+                    utils::Logger::Write("[ERROR] Exception thrown:\n  ");
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::YELLOW);
+                    utils::Logger::Write(e.what(), false);
+                    utils::Logger::Command(  utils::os::Console::RESET);
+                    utils::Logger::Write("\n    in ", false);
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::CYAN);
+                    utils::Logger::Write(file, false);
+                    utils::Logger::Command(  utils::os::Console::RESET);
+                    utils::Logger::Write(":", false);
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::CYAN);
+                    utils::Logger::Write(std::to_string(line), false);
+                    utils::Logger::Command(  utils::os::Console::RESET);
+                    utils::Logger::Write("\n    inside: ", false);
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::MAGENTA);
+                    utils::Logger::Write(function, false);
+                    utils::Logger::Command(  utils::os::Console::RESET);
+                    utils::Logger::Write(utils::Logger::CRLF, false);
+                } else {
+                    std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  "
+                              << e.what()
+                              << "\033[0m" "\n    in " "\033[36;1m"
+                              << file
+                              << "\033[0m" ":" "\033[36;1m"
+                              << line
+                              << "\033[0m" "\n    inside: " "\033[35;1m"
+                              << function
+                              << "\033[0m" << std::endl;
+                }
+            }
+
             static void WriteProgress(const size_t& iteration, const size_t& total) {
                 static constexpr size_t LEN = 55u;
                 static size_t stepu = 0u;
@@ -299,13 +350,13 @@ namespace utils {
             }
 
             template<typename ... Type>
-            friend const utils::Logger& operator<<(const utils::Logger&, const Type&& ...args)
+            friend const utils::Logger& operator<<(const utils::Logger&, const Type& ...args)
             {
                 utils::Logger::Stream(args...);
                 return utils::Logger::Stream();
             }
 
-            static inline void Command(utils::os::command_t cmd) {
+            static inline void Command(const utils::os::command_t cmd) {
                 if (utils::Logger::get().canLogScreen()) {
                     utils::os::Command(cmd, utils::Logger::get().screen_output);
                 }

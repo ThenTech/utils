@@ -97,7 +97,7 @@ namespace utils::os {
     };
 
     [[maybe_unused]]
-    static void Command(command_t cmd, std::ostream& out) {
+    static void Command(const command_t cmd, std::ostream& out = std::cout) {
         #define BASE_ "\033["
         std::string cmd_str = "";
 
@@ -147,7 +147,7 @@ namespace utils::os {
     }
 
     [[maybe_unused]]
-    static void SetScreenTitle(const std::string& title, std::ostream& out) {
+    static void SetScreenTitle(const std::string& title, std::ostream& out = std::cout) {
         out << "\033]2;" << title << "\007";
     }
 

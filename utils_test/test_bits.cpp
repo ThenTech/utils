@@ -1,8 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/external/catch.hpp"
-#include "../utils_lib/external/catch_extra.hpp"
+#include "../utils_lib/utils_catch.hpp"
 
 #include "../utils_lib/utils_bits.hpp"
 
@@ -45,8 +44,11 @@ TEST_CASE("Test utils::bits::round_to_multiple", "[utils][utils::bits]" ) {
     REQUIRE(utils::bits::round_to_multiple(0 , 10)     == 0);
     REQUIRE(utils::bits::round_to_multiple(0x8000, 16) == 0x8000);
 
-    REQUIRE_FALSE(Function_Aborts(utils::bits::round_to_multiple, 1, 1));
-    REQUIRE(Function_Aborts(utils::bits::round_to_multiple, 1, 0));
+    REQUIRE_FUNCTION_ABORTS_FALSE(utils::bits::round_to_multiple, 1, 1);
+    REQUIRE_FUNCTION_ABORTS(utils::bits::round_to_multiple, 1, 0);
+
+//    REQUIRE_FALSE(Function_Aborts(utils::bits::round_to_multiple, 1, 1));
+//    REQUIRE(Function_Aborts(utils::bits::round_to_multiple, 1, 0));
 
     for (int64_t i = 1; i < 10; i++) {
         CHECK(utils::bits::round_to_multiple(i, 10) == 10);
@@ -108,16 +110,16 @@ TEST_CASE("Test utils::bits::shift_signed", "[utils][utils::bits]" ) {
     CHECK(utils::bits::shift_signed<uint16_t>(0x7FFF, 15) == 0x7FFF);
     CHECK(utils::bits::shift_signed<uint16_t>(0xDEAD, 16) == 0xDEAD);
 
-    if (Function_Aborts(utils::bits::shift_signed<int16_t>, 0, 17)) {
-        CHECK(!Function_Aborts(utils::bits::shift_signed<int8_t>, 0, 8));
-        CHECK( Function_Aborts(utils::bits::shift_signed<int8_t>, 0, 9));
-        CHECK(!Function_Aborts(utils::bits::shift_signed<int32_t>, 0, 32));
-        CHECK( Function_Aborts(utils::bits::shift_signed<int32_t>, 0, 33));
+    if (utils::Catch::Function_Aborts(utils::bits::shift_signed<int16_t>, 0, 17)) {
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<int8_t>, 0, 8);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<int8_t>, 0, 9);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<int32_t>, 0, 32);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<int32_t>, 0, 33);
 
-        CHECK(!Function_Aborts(utils::bits::shift_signed<uint8_t>, 0, 8));
-        CHECK( Function_Aborts(utils::bits::shift_signed<uint8_t>, 0, 9));
-        CHECK(!Function_Aborts(utils::bits::shift_signed<uint32_t>, 0, 32));
-        CHECK( Function_Aborts(utils::bits::shift_signed<uint32_t>, 0, 33));
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<uint8_t>, 0, 8);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<uint8_t>, 0, 9);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<uint32_t>, 0, 32);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<uint32_t>, 0, 33);
     } else {
         CHECK(utils::bits::shift_signed< int16_t>(0xBEEF, 17) ==  int16_t(0xBEEF));
         CHECK(utils::bits::shift_signed<uint16_t>(0xBEEF, 17) == uint16_t(0xBEEF));
