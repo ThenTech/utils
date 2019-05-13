@@ -23,22 +23,22 @@
 /**
  *  Whether to print noticication to std::cerr if signal was handled.
  */
-#define CATCH_REPORT_SIG_HANDLER 0
+#define UTILS_CATCH_REPORT_SIG_HANDLER 0
 
 
 /**
  *  Macro to insert demangled function signature at compile time.
  */
 #ifdef _MSC_VER
-    #define CATCH_FUNCTION_NAME __FUNCDNAME__  // or __FUNCSIG__?
+    #define UTILS_CATCH_FUNCTION_NAME __FUNCDNAME__  // or __FUNCSIG__?
 #else
-    #define CATCH_FUNCTION_NAME __PRETTY_FUNCTION__
+    #define UTILS_CATCH_FUNCTION_NAME __PRETTY_FUNCTION__
 #endif
 
 /**
  *  Macro to insert current file, line and function at compile time.
  */
-#define TRACE_LOCATION __FILE__,__LINE__,CATCH_FUNCTION_NAME
+#define UTILS_TRACE_LOCATION __FILE__,__LINE__,UTILS_CATCH_FUNCTION_NAME
 
 /**
  *  Macro to print an error trace.
@@ -52,7 +52,7 @@
                   << "\033[0m" ":" "\033[36;1m"                              \
                   << __LINE__                                                \
                   << "\033[0m" "\n    inside: " "\033[35;1m"                 \
-                  << CATCH_FUNCTION_NAME                                     \
+                  << UTILS_CATCH_FUNCTION_NAME                                     \
                   << "\033[0m" << std::endl;                                 \
     } while (false)
 
@@ -71,7 +71,7 @@
                           << __FILE__                                            \
                           << "\033[0m" ":" "\033[36;1m"                          \
                           << __LINE__ << "\033[0m" "\n    inside: " "\033[35;1m" \
-                          << CATCH_FUNCTION_NAME                                 \
+                          << UTILS_CATCH_FUNCTION_NAME                                 \
                           << "\033[0m" << std::endl;                             \
                 std::abort();                                                    \
             }                                                                    \
@@ -96,12 +96,12 @@ namespace utils::Catch {
      */
     static void _function_abort_signal_handler(int signal)  {
         if (signal == SIGABRT) {
-            #if CATCH_REPORT_SIG_HANDLER
+            #if UTILS_CATCH_REPORT_SIG_HANDLER
                 std::cerr << "SIGABRT received\n";
             #endif
             std::longjmp(_signal_handler_env, 1);
         } else {
-            #if CATCH_REPORT_SIG_HANDLER
+            #if UTILS_CATCH_REPORT_SIG_HANDLER
                 std::cerr << "Unexpected signal " << signal << " received\n";
             #endif
         }
@@ -142,6 +142,8 @@ namespace utils::Catch {
         std::signal(SIGABRT, previous_handler);
         return aborted;
     }
+
 }
 
+#undef UTILS_CATCH_REPORT_SIG_HANDLER
 #endif // CATCH_ABORT_HPP

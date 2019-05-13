@@ -18,7 +18,7 @@ namespace utils::misc {
      *      The enum value to cast.
      */
     template <typename E>
-    constexpr inline auto to_underlying(E e) noexcept {
+    inline constexpr auto to_underlying(const E e) noexcept {
         return static_cast<std::underlying_type_t<E>>(e);
     }
 

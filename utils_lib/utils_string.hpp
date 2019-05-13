@@ -351,7 +351,7 @@ namespace utils::string {
      */
     template<
         typename ... Type,
-        class = std::enable_if_t<sizeof...(Type) !=0 >
+        typename = std::enable_if_t<sizeof...(Type) != 0>
     > [[maybe_unused]]
     static std::string format(const std::string& format, Type&& ...args) {
         const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'

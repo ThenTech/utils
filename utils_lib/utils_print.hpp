@@ -336,11 +336,11 @@ namespace utils::printer {
      *		Returns the class name of o.
      */
     template <
-        class T, typename ... Strings,
+        class T, typename ...Strings,
         std::enable_if_t<(std::is_convertible_v<Strings const&, std::string_view> && ...), int> = 0
     >
     [[maybe_unused]]
-    static const std::string type2name(T const& o, Strings&& ...filter) {
+    static const std::string type2name(T const& o, const Strings& ...filter) {
         #ifdef _CXXABI_H
             // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
             utils::memory::unique_t<char, decltype (&std::free)>
@@ -460,4 +460,6 @@ namespace std {
     }
 }
 
+#undef UTILS_PRINT_VECTOR_STRINGS_QUOTED
+#undef UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
 #endif // UTILS_PRINT_HPP

@@ -10,30 +10,32 @@
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
  */
 #ifdef _MSC_VER
-    namespace {
-        template <typename T>
-        static inline uint_fast32_t __ffs_template(T x) {
-            if constexpr (x == 0) return 0u;
-            uint_fast32_t r = 1;
-            while ((x & 1) == 0)
-                x >>= 1, ++r;
-            return r;
-        }
-    }
-
     #define UTILS_BITS_CLZ_ULL  __lzcnt
-    #define UTILS_BITS_FFS_LL   __ffs_template
+    #define UTILS_BITS_FFS_LL   utils::bits::internal::_ffs_template
 #else
     #define UTILS_BITS_CLZ_ULL  __builtin_clzll
     #define UTILS_BITS_FFS_LL   __builtin_ffsll
 #endif
 
 namespace utils::bits {
+    namespace internal {
+        #ifdef _MSC_VER
+            template <typename T>
+            static inline uint_fast32_t _ffs_template(T x) {
+                if constexpr (x == 0) return 0u;
+                uint_fast32_t r = 1;
+                while ((x & 1) == 0)
+                    x >>= 1, ++r;
+                return r;
+            }
+        #endif
+    }
+
     /**
      * \brief Return the size in bits of the given type.
      */
     template<class T>
-    constexpr inline size_t size_of(void) {
+    inline constexpr size_t size_of(void) {
         return sizeof(T) * 8u;
     }
 
@@ -48,7 +50,7 @@ namespace utils::bits {
      *      Index of least significat bit at one
      */
     template<class T> [[maybe_unused]]
-    static inline uint_fast32_t ffs(T value) {
+    static inline constexpr uint_fast32_t ffs(const T value) {
         return UTILS_BITS_FFS_LL(uint64_t(value));
     }
 
@@ -62,20 +64,63 @@ namespace utils::bits {
      *      Index of msb
      */
     template<class T> [[maybe_unused]]
-    static inline uint_fast32_t msb(T value) {
+    static inline constexpr uint_fast32_t msb(const T value) {
         return value >= 0
              ? uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uint64_t(value) | 1)) - (value == 0)
              : utils::bits::size_of<T>();
     }
 
+    /**
+     *  \brief  Determine if given value is a power of 2.
+     *
+     *  \param  value
+     *      The value to check.
+     *  \return Returns true if value is the result of (1 << x).
+     */
     template<class T> [[maybe_unused]]
-    static inline bool is_power_of_2(T value) {
-        static_assert(std::is_integral<T>::value, "utils::bits::is_power_of_2: Integral required.");
+    static inline constexpr bool is_power_of_2(const T value) {
+        static_assert(std::is_integral_v<T>, "utils::bits::is_power_of_2: Integral required.");
         return value && !(value & (value - 1));
     }
 
+    /**
+     *  \brief  Check if given value is an odd number.
+     *
+     *  \param  value
+     *      The value to check.
+     *  \return Returns true if the value is odd.
+     */
+    template<class T> [[maybe_unused]]
+    static inline constexpr bool is_odd(const T value) {
+        static_assert(std::is_integral_v<T>, "utils::bits::is_odd: Integral required.");
+        return (value & T(1)) != T(0);
+    }
+
+    /**
+     *  \brief  Check if given value is an even number.
+     *
+     *  \param  value
+     *      The value to check.
+     *  \return Returns true if the value is even (divisable by 2).
+     */
+    template<class T> [[maybe_unused]]
+    static inline constexpr bool is_even(const T value) {
+        static_assert(std::is_integral_v<T>, "utils::bits::is_even: Integral required.");
+        return !utils::bits::is_odd(value);
+    }
+
+    /**
+     *  \brief  Round the given value to the next multiple of \p multiple,
+     *          greater or equal to \p value itself.
+     *
+     *  \param  value
+     *      The number to round.
+     *  \param  multiple
+     *      The multiple to round to.
+     *  \return Returns the nearest multiple greater than \p value.
+     */
     [[maybe_unused]]
-    static inline int64_t round_to_multiple(int64_t value, int64_t multiple) noexcept(false) {
+    static inline constexpr int64_t round_to_multiple(const int64_t value, const int64_t multiple) noexcept(false) {
         ASSERT(multiple);
         const int64_t isPositive = int64_t(value >= 0ll);
         return ((value + isPositive * (multiple - 1ll)) / multiple) * multiple;
@@ -90,7 +135,7 @@ namespace utils::bits {
      *          or the current byte if no surplus bits.
      */
     [[maybe_unused]]
-    static inline size_t round_to_byte(size_t bits) {
+    static inline constexpr size_t round_to_byte(const size_t bits) {
         return (bits + 7ull) / 8ull;
     }
 
@@ -110,8 +155,11 @@ namespace utils::bits {
      *  @return Returns a signed or unsigned number,
      *          depending on whether value[src_bits : 0] was considered signed.
      */
-    template<class T, size_t Tlen = utils::bits::size_of<T>()> [[maybe_unused]]
-    static inline T shift_signed(const size_t value, size_t src_bits) {
+    template<
+        class T,
+        size_t Tlen = utils::bits::size_of<T>()
+    > [[maybe_unused]]
+    static inline T shift_signed(const size_t value, const size_t src_bits) {
         #if 0 // ASSERT that src_bits is not bigger than sizeof(T)
             ASSERT(src_bits <= Tlen);
             const size_t bit_length = Tlen - src_bits;
@@ -135,8 +183,8 @@ namespace utils::bits {
      *          depending on whether value[src_bits : 0] was considered signed.
      */
     template<class T, uint_fast8_t bits> [[maybe_unused]]
-    static inline T extend_sign(size_t value) {
-        static_assert (bits > 0);
+    static inline T extend_sign(const size_t value) {
+        static_assert(bits > 0, "utils::bits::extend_sign: Amount of bits greater than 0 required.");
         struct { T value:bits; } s;
         return s.value = value;
     }
@@ -151,6 +199,8 @@ namespace utils::bits {
      */
     template<class T> [[maybe_unused]]
     static inline uint_fast32_t bits_needed(T value) {
+        static_assert(std::is_integral_v<T>, "utils::bits::bits_needed: Integral required.");
+
         uint_fast32_t bits = 0;
 
         // 1. Mask value with amount of current bits : (value & ((1 << bits) - 1))

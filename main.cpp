@@ -48,14 +48,21 @@
  *  https://github.com/tlx/tlx
  *
  * TODO Doxygen
+ * TODO ErrorTrace + Stacktrace?
  */
 int main(int argc, char* argv[]) {
 
 #ifdef ENABLE_TESTS
-    utils::Logger::Create();
     utils::Logger::SetScreenTitle("Testing C++ Utility library");
+    utils::Logger::WriteLn("Running tests...");
 
-    return Catch::Session().run(argc, argv);
+    const auto start = utils::time::Timer::Start();
+    const int status = Catch::Session().run(argc, argv);
+    const auto   end = utils::time::Timer::Duration_ms(start);
+
+    utils::Logger::Writef("Tests completed in % 9.3f ms" + utils::Logger::CRLF, end);
+
+    return status;
 #else
     utils::Logger::Create("test.log");
     utils::Logger::SetScreenTitle("C++ Utility library");
@@ -104,6 +111,8 @@ int main(int argc, char* argv[]) {
     } catch (const std::exception& e) {
         LOG_ERROR_TRACE(e);
     }
+
+    utils::Logger::Writef("UUID: %s\n", utils::random::generate_uuid().c_str());
 
     return 0;
 #endif

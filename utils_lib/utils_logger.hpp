@@ -19,7 +19,7 @@
 /**
  *  Macro to print an error trace to Logger.
  */
-#define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(TRACE_LOCATION, e);
+#define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(UTILS_TRACE_LOCATION, e);
 
 
 namespace utils {
@@ -67,7 +67,7 @@ namespace utils {
                 }
             }
 
-            template<typename ... Type>
+            template<typename ...Type>
             void hdr_colour_format(utils::os::command_t hdr_colour,
                                    const std::string& hdr_str,
                                    const std::string& format,
@@ -180,7 +180,7 @@ namespace utils {
              *      The text to format in and write.
              *  @param  args
              */
-            template<typename ... Type>
+            template<typename ...Type>
             static void Writef(const std::string& format, const Type& ...args) {
                 if (utils::Logger::get().canLog()) {
                     if constexpr(sizeof...(args) > 0) {
@@ -223,7 +223,7 @@ namespace utils {
                 utils::Logger::Write(text + utils::Logger::CRLF, timestamp);
             }
 
-            template<typename ... Type>
+            template<typename ...Type>
             static void Success(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::GREEN, "Success",
@@ -231,7 +231,7 @@ namespace utils {
                 );
             }
 
-            template<typename ... Type>
+            template<typename ...Type>
             static void Info(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::CYAN, "Info",
@@ -239,7 +239,7 @@ namespace utils {
                 );
             }
 
-            template<typename ... Type>
+            template<typename ...Type>
             static void Warn(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::YELLOW, "Warning",
@@ -247,7 +247,7 @@ namespace utils {
                 );
             }
 
-            template<typename ... Type>
+            template<typename ...Type>
             static void Error(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::os::Console::RED, "Error",
@@ -339,20 +339,23 @@ namespace utils {
                 }
             }
 
-            template<typename T, typename ... Type>
+            template<typename T, typename ...Type>
             static void Stream(const T& arg, const Type& ...args) {
                 if (utils::Logger::get().canLog()) {
                     std::stringstream ss;
                     ss << arg;
+                    ((ss << args), ...);
                     utils::Logger::Write(ss.str(), false);
-                    utils::Logger::Stream(args...);
                 }
             }
 
-            template<typename ... Type>
+            template<typename ...Type>
             friend const utils::Logger& operator<<(const utils::Logger&, const Type& ...args)
             {
-                utils::Logger::Stream(args...);
+                if constexpr (sizeof...(Type) > 0) {
+                    utils::Logger::Stream(args...);
+                }
+
                 return utils::Logger::Stream();
             }
 

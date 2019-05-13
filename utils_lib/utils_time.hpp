@@ -67,7 +67,7 @@ namespace utils::time {
      *  \return Returns a string type with the formatted time.
      */
     [[maybe_unused]]
-    static inline auto Timestamp(const char* frmt="%Y-%m-%d %H:%M:%S", std::time_t *epoch_time = nullptr) {
+    static inline auto Timestamp(const char* frmt="%Y-%m-%d %H:%M:%S", const std::time_t *epoch_time = nullptr) {
         const std::time_t stamp = (epoch_time == nullptr
                                   ? std::time(nullptr)
                                   : *epoch_time);

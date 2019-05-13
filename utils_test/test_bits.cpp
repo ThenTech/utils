@@ -39,6 +39,22 @@ TEST_CASE("Test utils::bits::is_power_of_2", "[utils][utils::bits]" ) {
     }
 }
 
+TEST_CASE("Test utils::bits::is_odd", "[utils][utils::bits]" ) {
+    REQUIRE(utils::bits::is_odd(1)      == true);
+    REQUIRE(utils::bits::is_odd(-1)     == true);
+    REQUIRE(utils::bits::is_odd(0)      == false);
+    REQUIRE(utils::bits::is_odd(0x8000) == false);
+    REQUIRE(utils::bits::is_odd(2)      == false);
+}
+
+TEST_CASE("Test utils::bits::is_even", "[utils][utils::bits]" ) {
+    REQUIRE(utils::bits::is_even(1)      == false);
+    REQUIRE(utils::bits::is_even(-1)     == false);
+    REQUIRE(utils::bits::is_even(0)      == true);
+    REQUIRE(utils::bits::is_even(0x8000) == true);
+    REQUIRE(utils::bits::is_even(2)      == true);
+}
+
 TEST_CASE("Test utils::bits::round_to_multiple", "[utils][utils::bits]" ) {
     REQUIRE(utils::bits::round_to_multiple(-1, 10)     == 0);
     REQUIRE(utils::bits::round_to_multiple(0 , 10)     == 0);
@@ -46,9 +62,6 @@ TEST_CASE("Test utils::bits::round_to_multiple", "[utils][utils::bits]" ) {
 
     REQUIRE_FUNCTION_ABORTS_FALSE(utils::bits::round_to_multiple, 1, 1);
     REQUIRE_FUNCTION_ABORTS(utils::bits::round_to_multiple, 1, 0);
-
-//    REQUIRE_FALSE(Function_Aborts(utils::bits::round_to_multiple, 1, 1));
-//    REQUIRE(Function_Aborts(utils::bits::round_to_multiple, 1, 0));
 
     for (int64_t i = 1; i < 10; i++) {
         CHECK(utils::bits::round_to_multiple(i, 10) == 10);

@@ -3,6 +3,8 @@
 
 #include "external/random.hpp"
 #include "utils_catch.hpp"
+#include <sstream>
+#include <iomanip>
 
 /*
  *  NOTE: Does adding inline to static methods increase performance?
@@ -208,6 +210,31 @@ namespace utils::random {
 
         return picked;
     };
+
+
+    [[maybe_unused]]
+    static inline std::string generate_uuid(void) {
+        std::stringstream guid;
+        auto dist = Random::integer_dist_t<uint8_t> {
+            static_cast<uint8_t>(0x00),
+            static_cast<uint8_t>(0xFF)
+        };
+
+        #define GET_HEX static_cast<int>(dist(Random::engine()))
+
+        guid << std::hex << std::setfill('0') << std::setw(2)
+             << GET_HEX << GET_HEX << GET_HEX << GET_HEX
+             << '-'
+             << GET_HEX << GET_HEX
+             << '-'
+             << GET_HEX << GET_HEX
+             << '-'
+             << GET_HEX << GET_HEX
+             << '-'
+             << GET_HEX << GET_HEX << GET_HEX << GET_HEX << GET_HEX << GET_HEX;
+
+        return guid.str();
+    }
 }
 
 
