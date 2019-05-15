@@ -2,6 +2,7 @@
 #define UTILS_BITS_HPP
 
 #include <cstdint>
+#include <limits>
 #include <type_traits>
 
 #include "utils_catch.hpp"
@@ -32,11 +33,13 @@ namespace utils::bits {
     }
 
     /**
-     * \brief Return the size in bits of the given type.
+     * \brief   Return the size in bits of the given type.
+     *          Uses sizeof(T) * CHAR_BITS or
+     *          std::numeric_limits<uint8_t>::digits
      */
     template<class T>
     inline constexpr size_t size_of(void) {
-        return sizeof(T) * 8u;
+        return sizeof(T) * CHAR_BIT;
     }
 
     /**
@@ -68,6 +71,55 @@ namespace utils::bits {
         return value >= 0
              ? uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uint64_t(value) | 1)) - (value == 0)
              : utils::bits::size_of<T>();
+    }
+
+
+    /**
+     *  \brief  Bitwise rotate the given \p value to the left by \p n bits.
+     *
+     *  \param  value
+     *      The value to rotate.
+     *  \param  n
+     *      The amount of bit places to rotate left with.
+     *  \return The result will be of type T but with \p bit_length bits used,
+     *          other bits exceeding the length will become zeroes.
+     *          The value will be shifted to the left, and any bits exceeding
+     *          \p bit_length will be appended to the right.
+     */
+    template <
+        class T,
+        size_t bit_length = utils::bits::size_of<T>()
+    > [[maybe_unused]]
+    static inline constexpr T rotl(const T value, const int_fast32_t n = 1) {
+        static_assert(std::is_integral_v<T>, "utils::bits::rotl: Integral required.");
+
+        constexpr T mask_size = ~(uint64_t(~0) << bit_length);
+        const     T mask_data = ~(uint64_t(~0) << n);
+        return ((value << n) & mask_size) | ((value >> (bit_length - n)) & mask_data);
+    }
+
+    /**
+     *  \brief  Bitwise rotate the given \p value to the right by \p n bits.
+     *
+     *  \param  value
+     *      The value to rotate.
+     *  \param  n
+     *      The amount of bit places to rotate right with.
+     *  \return The result will be of type T but with \p bit_length bits used,
+     *          other bits exceeding the length will become zeroes.
+     *          The value will be shifted to the right, and any bits shifted out
+     *          will be appended to the left starting at \p bit_length.
+     */
+    template <
+        class T,
+        size_t bit_length = utils::bits::size_of<T>()
+    > [[maybe_unused]]
+    static inline constexpr T rotr(const T value, const int_fast32_t n = 1) {
+        static_assert(std::is_integral_v<T>, "utils::bits::rotr: Integral required.");
+
+        const     T mask_right = ~(uint64_t(~0) << (bit_length - n));
+        const     T mask_data  = ~(uint64_t(~0) << n);
+        return ((value >> n) & mask_right) | ((value & mask_data) << (bit_length - n));
     }
 
     /**

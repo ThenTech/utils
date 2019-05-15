@@ -212,6 +212,11 @@ namespace utils::random {
     };
 
 
+    /**
+     *  \brief  Generate Universal Unique IDentifier v4
+     *
+     *  \return Returns a formatted string (groups with `-`) with a randon UUID.
+     */
     [[maybe_unused]]
     static inline std::string generate_uuid(void) {
         std::stringstream guid;
@@ -220,16 +225,16 @@ namespace utils::random {
             static_cast<uint8_t>(0xFF)
         };
 
-        #define GET_HEX static_cast<int>(dist(Random::engine()))
+        #define GET_HEX    static_cast<int>(dist(Random::engine()))
 
         guid << std::hex << std::setfill('0') << std::setw(2)
              << GET_HEX << GET_HEX << GET_HEX << GET_HEX
              << '-'
              << GET_HEX << GET_HEX
              << '-'
-             << GET_HEX << GET_HEX
+             << ((GET_HEX & 0x0F) | 0x40) << GET_HEX
              << '-'
-             << GET_HEX << GET_HEX
+             << ((GET_HEX & 0x3F) | 0x80) << GET_HEX
              << '-'
              << GET_HEX << GET_HEX << GET_HEX << GET_HEX << GET_HEX << GET_HEX;
 

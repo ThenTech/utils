@@ -28,7 +28,6 @@
     #include "utils_lib/utils_xorstring.hpp"
 
     #include "utils_lib/algo/algo_huffman.hpp"
-
 #endif
 
 /*
@@ -64,15 +63,20 @@ int main(int argc, char* argv[]) {
 
     return status;
 #else
-    utils::Logger::Create("test.log");
+    utils::Logger::Create("test.log", utils::Logger::Level::LOG_DEBUG);
     utils::Logger::SetScreenTitle("C++ Utility library");
 
     utils::Logger::WriteLn("Start");
 
-    utils::Logger::Success("Success");
+    utils::Logger::Debug("Debug");
     utils::Logger::Info("Info");
+    utils::Logger::Success("Success");
+    utils::Logger::Notice("Notice");
     utils::Logger::Warn("Warn");
     utils::Logger::Error("Error");
+    utils::Logger::Critical("Critical");
+    utils::Logger::Alert("Alert");
+    utils::Logger::Emergency("Emergency");
 
     /* 0x06 => 4
      * 0xFFFFFFF0 => 5

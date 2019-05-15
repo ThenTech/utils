@@ -10,6 +10,7 @@
 #include <iostream>
 #include <ostream>
 #include <fstream>
+#include <mutex>
 
 
 #ifdef LOG_ERROR_TRACE
@@ -31,56 +32,97 @@ namespace utils {
      *      Use https://github.com/gabime/spdlog for a more extensive logger.
      */
     class Logger {
+        public:
+            enum class Level {
+                LOG_EMERGENCY = 0, // Emergency     - A "panic" condition usually affecting multiple apps/servers/sites. At this level it would usually notify all tech staff on call.
+                LOG_ALERT     = 1, // Alert         - Should be corrected immediately, therefore notify staff who can fix the problem. An example would be the loss of a primary ISP connection.
+                LOG_CRITICAL  = 2, // Critical      - Should be corrected immediately, but indicates failure in a secondary system, an example is a loss of a backup ISP connection.
+                LOG_ERROR     = 3, // Error         - Non-urgent failures, these should be relayed to developers or admins; each item must be resolved within a given time.
+                LOG_WARNING   = 4, // Warning       - Warning messages, not an error, but indication that an error will occur if action is not taken, e.g. file system 85% full - each item must be resolved within a given time.
+                LOG_NOTICE    = 5, // Notice        - Events that are unusual but not error conditions - might be summarized in an email to developers or admins to spot potential problems - no immediate action required.
+                LOG_INFO      = 6, // Informational - Normal operational messages - may be harvested for reporting, measuring throughput, etc. - no action required.
+                LOG_DEBUG     = 7  // Debug         - Info useful to developers for debugging the application, not useful during operations.
+            };
+
         private:
             bool screen_enabled;
             bool screen_paused;
             bool file_enabled;
             bool file_paused;
+            bool file_timestamp;
 
             std::ostream&  screen_output;
             std::ofstream  log_file;
+            Logger::Level  level_screen;
+            Logger::Level  level_file;
+
+            std::mutex logger_mutex;
+            std::mutex file_mutex;
+            std::mutex screen_mutex;
 
             static /*inline*/ Logger& get() {
                 static Logger instance;
                 return instance;
             }
 
-            inline bool canLogScreen(void) const {
-                return this->screen_enabled && !this->screen_paused;
+            inline bool canLogScreen(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {
+                return this->screen_enabled && !this->screen_paused
+                    && level <= this->level_screen;
             }
-            inline bool canLogFile(void) const {
-                return this->file_enabled && !this->file_paused;
+            inline bool canLogFile(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {
+                return this->file_enabled && !this->file_paused
+                    && level <= this->level_file;
             }
-            inline bool canLog(void) const {
-                return this->canLogScreen() || this->canLogFile();
+            inline bool canLog(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {
+                return this->canLogScreen(level) || this->canLogFile(level);
             }
 
             inline void write_to_screen(const std::string& text) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+
                 if (this->canLogScreen()) {
                     this->screen_output << text;
                 }
             }
 
             inline void write_to_file(const std::string& text) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+
                 if (this->canLogFile()) {
-                    this->log_file << text;
+                    try {
+                        if (this->GetFileTimestamp()) {
+                            this->log_file << utils::time::Timestamp("[%Y-%m-%d %H:%M:%S] ");
+                        }
+
+                        this->log_file << text;
+                    } catch (std::exception const& e) {
+                        std::cerr << "[Logger][ERROR] " << e.what() << std::endl;
+                        utils::Logger::DestroyFile();
+                    }
                 }
             }
 
             template<typename ...Type>
-            void hdr_colour_format(utils::os::command_t hdr_colour,
+            void hdr_colour_format(const Logger::Level level,
+                                   const utils::os::command_t hdr_colour,
                                    const std::string& hdr_str,
                                    const std::string& format,
                                    const Type& ...args)
             {
-                if (this->canLog()) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().logger_mutex);
+
+                if (this->canLog(level)) {
                     this->Command(  utils::os::Console::FG
                                   | utils::os::Console::BOLD
                                   | hdr_colour);
-                    this->Write("[" + hdr_str + "] ");
+                    this->Write("[" + hdr_str + "]", true);
 
-                    this->Command(utils::os::Console::WHITE);
-                    this->Writef(format + utils::Logger::CRLF, args...);
+                    this->Command(utils::os::Console::RESET
+                                | utils::os::Console::WHITE);
+                    const bool stamp = this->GetFileTimestamp();
+                    this->SetFileTimestamp(false);
+                    this->Writef(" " + format + utils::Logger::CRLF, args...);
+                    this->SetFileTimestamp(stamp);
                     this->Command(utils::os::Console::RESET);
                 }
             }
@@ -91,9 +133,17 @@ namespace utils {
                 , screen_paused(false)
                 , file_enabled(false)
                 , file_paused(false)
+                , file_timestamp(true)
                 , screen_output(std::cout)
+                , level_screen(Level::LOG_INFO)
+                , level_file(Level::LOG_INFO)
             {
                 utils::os::EnableVirtualConsole();
+
+                if (this->screen_output.bad()) {
+                    this->screen_enabled = false;
+                    std::cerr << "[Logger][ERROR] Bad screen output stream!" << std::endl;
+                }
             }
 
             Logger(Logger const&)         = delete;
@@ -118,12 +168,51 @@ namespace utils {
                                  + utils::Logger::CRLF;
 
                 if (this->file_enabled) {
+                    this->SetFileTimestamp(false);
                     this->write_to_file(end_line);
                     this->log_file.close();
                     this->file_enabled = false;
                 }
 
                 this->write_to_screen(end_line);
+            }
+
+            static void InitFile(const std::string& fileName = "",
+                                   const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
+            {
+                utils::Logger::DestroyFile();
+                utils::Logger::SetFileLogLevel(level);
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                bool enable_file = false;
+
+                if (fileName.length() > 0) {
+                    try {
+                        utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
+                        enable_file = true;
+                    } catch (std::exception const& e) {
+                        std::cerr << "[Logger][ERROR] " << e.what() << std::endl;
+                        enable_file = false;
+                    }
+                }
+
+                utils::Logger::get().file_enabled = enable_file;
+            }
+
+            static void InitScreen(std::ostream& console_stream = std::cout,
+                                     const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
+            {
+                utils::Logger::DestroyScreen();
+                utils::Logger::SetScreenLogLevel(level);
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+
+                if (console_stream.bad()) {
+                    utils::Logger::get().screen_output.tie(&std::cerr);
+                    utils::Logger::get().screen_output << "[Logger][ERROR] Bad screen output stream!" << std::endl;
+                } else {
+                    utils::Logger::get().screen_output.tie(&console_stream);
+                }
+
+                utils::Logger::get().screen_enabled = true;
             }
 
             /**
@@ -137,32 +226,37 @@ namespace utils {
              *  @param  fileName
              *      The log file to use.
              */
-            static void Create(const std::string& fileName = "") {
-                utils::Logger::Destroy();
-
-                // File
-                if (fileName.length() > 0) {
-                    try {
-                        utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
-                        utils::Logger::get().file_enabled = true;
-                        return;
-                    } catch (std::exception const& e) {
-                        std::cerr << "[Logger] " << e.what() << std::endl;
-                    }
-                }
-
-                utils::Logger::get().file_enabled = false;
+            static void Create(const std::string& fileName = "",
+                               const utils::Logger::Level level = utils::Logger::Level::LOG_INFO,
+                               std::ostream& console_stream = std::cout)
+            {
+                utils::Logger::InitScreen(console_stream, level);
+                utils::Logger::InitFile(fileName, level);
             }
 
             /**
-             *  @brief  Detroy the Logging instance by closing the output file.
+             *  \brief  Destroy the file Logging instance by closing the output file.
              */
-            static void Destroy() {
+            static void DestroyFile() {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+
                 if (utils::Logger::get().file_enabled) {
                     utils::Logger::get().log_file.close();
                     utils::Logger::get().file_enabled = false;
                 }
-                utils::Logger::Command(utils::os::Console::RESET);
+            }
+
+            /**
+             *  \brief  Destroy the screen Logging instance.
+             */
+            static void DestroyScreen() {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+
+                if (utils::Logger::get().screen_enabled) {
+                    utils::os::Command(utils::os::Console::RESET, utils::Logger::get().screen_output);
+                    utils::Logger::get().screen_output.flush();
+                    utils::Logger::get().screen_enabled = false;
+                }
             }
 
             static inline std::ostream& GetConsoleStream() {
@@ -182,15 +276,10 @@ namespace utils {
              */
             template<typename ...Type>
             static void Writef(const std::string& format, const Type& ...args) {
-                if (utils::Logger::get().canLog()) {
-                    if constexpr(sizeof...(args) > 0) {
-                        const std::string text = utils::string::format(format, args...);
-                        utils::Logger::get().write_to_file(text);
-                        utils::Logger::get().write_to_screen(text);
-                        return;
-                    }
-
-                    utils::Logger::Write(format, false);
+                if constexpr(sizeof...(args) > 0) {
+                    utils::Logger::Write(utils::string::format(format, args...), utils::Logger::GetFileTimestamp());
+                } else {
+                    utils::Logger::Write(format, utils::Logger::GetFileTimestamp());
                 }
             }
 
@@ -199,33 +288,36 @@ namespace utils {
              *
              *  @param  text
              *      The text to write.
-             *  @param  timestamp
-             *      Whether to include a timestamp (in the file only).
              */
-            static void Write(const std::string &text, bool timestamp=true) {
-                utils::Logger::get().write_to_screen(text);
+            static void Write(const std::string &text, const bool timestamp = false) {
+                if (utils::Logger::get().canLog()) {
+                    const bool stamp = utils::Logger::GetFileTimestamp();
+                    utils::Logger::SetFileTimestamp(timestamp);
 
-                try {
-                    if (utils::Logger::get().canLogFile()) {
-                        if (timestamp) {
-                            utils::Logger::get().log_file << utils::time::Timestamp("[%Y-%m-%d %H:%M:%S] ");
-                        }
+                    utils::Logger::get().write_to_screen(text);
+                    utils::Logger::get().write_to_file(text);
 
-                        utils::Logger::get().log_file << text;
-                    }
-                } catch (std::exception const& e) {
-                    std::cerr << "[Logger] " << e.what() << std::endl;
-                    utils::Logger::Destroy();
+                    utils::Logger::SetFileTimestamp(stamp);
                 }
             }
 
-            static inline void WriteLn(const std::string &text, bool timestamp=true) {
+            static inline void WriteLn(const std::string &text, const bool timestamp = false) {
                 utils::Logger::Write(text + utils::Logger::CRLF, timestamp);
+            }
+
+            template<typename ...Type>
+            static void Debug(const std::string& format, const Type& ...args) {
+                utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_DEBUG,
+                    utils::os::Console::BG | utils::os::Console::BLUE, "DEBUG",
+                    format, args...
+                );
             }
 
             template<typename ...Type>
             static void Success(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_INFO,
                     utils::os::Console::GREEN, "Success",
                     format, args...
                 );
@@ -234,7 +326,20 @@ namespace utils {
             template<typename ...Type>
             static void Info(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_INFO,
                     utils::os::Console::CYAN, "Info",
+                    format, args...
+                );
+            }
+
+            template<typename ...Type>
+            static void Notice(const std::string& format, const Type& ...args) {
+                utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_NOTICE,
+                    utils::os::Console::BG |
+                    utils::os::Console::BRIGHT |
+                    utils::os::Console::CYAN,
+                    "Notice",
                     format, args...
                 );
             }
@@ -242,6 +347,7 @@ namespace utils {
             template<typename ...Type>
             static void Warn(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_WARNING,
                     utils::os::Console::YELLOW, "Warning",
                     format, args...
                 );
@@ -250,40 +356,81 @@ namespace utils {
             template<typename ...Type>
             static void Error(const std::string& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_ERROR,
                     utils::os::Console::RED, "Error",
                     format, args...
                 );
             }
 
+            template<typename ...Type>
+            static void Critical(const std::string& format, const Type& ...args) {
+                utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_CRITICAL,
+                    utils::os::Console::BG | utils::os::Console::RED, "Critical",
+                    format, args...
+                );
+            }
+
+            template<typename ...Type>
+            static void Alert(const std::string& format, const Type& ...args) {
+                utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_ALERT,
+                    utils::os::Console::MAGENTA, "Alert",
+                    format, args...
+                );
+            }
+
+            template<typename ...Type>
+            static void Emergency(const std::string& format, const Type& ...args) {
+                utils::Logger::get().hdr_colour_format(
+                    utils::Logger::Level::LOG_EMERGENCY,
+                    utils::os::Console::BG |
+                    utils::os::Console::BRIGHT |
+                    utils::os::Console::MAGENTA,
+                    "Emergency",
+                    format, args...
+                );
+            }
+
             static void ErrorTrace(const char* file, const int line, const char* function, const std::exception& e) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().logger_mutex);
+
                 if (utils::Logger::get().canLog()) {
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::BOLD
                                            | utils::os::Console::RED);
-                    utils::Logger::Write("[ERROR] Exception thrown:\n  ");
+                    utils::Logger::Write("[ERROR] Exception thrown:\n  ", true);
+
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::YELLOW);
-                    utils::Logger::Write(e.what(), false);
+                    utils::Logger::Write(e.what());
+
                     utils::Logger::Command(  utils::os::Console::RESET);
-                    utils::Logger::Write("\n    in ", false);
+                    utils::Logger::Write("\n    in ");
+
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::BRIGHT
                                            | utils::os::Console::CYAN);
-                    utils::Logger::Write(file, false);
+                    utils::Logger::Write(file);
+
                     utils::Logger::Command(  utils::os::Console::RESET);
-                    utils::Logger::Write(":", false);
+                    utils::Logger::Write(":");
+
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::BRIGHT
                                            | utils::os::Console::CYAN);
-                    utils::Logger::Write(std::to_string(line), false);
+                    utils::Logger::Write(std::to_string(line));
+
                     utils::Logger::Command(  utils::os::Console::RESET);
-                    utils::Logger::Write("\n    inside: ", false);
+                    utils::Logger::Write("\n    inside: ");
+
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::BRIGHT
                                            | utils::os::Console::MAGENTA);
-                    utils::Logger::Write(function, false);
+                    utils::Logger::Write(function);
+
                     utils::Logger::Command(  utils::os::Console::RESET);
-                    utils::Logger::Write(utils::Logger::CRLF, false);
+                    utils::Logger::Write(utils::Logger::CRLF);
                 } else {
                     std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  "
                               << e.what()
@@ -297,7 +444,7 @@ namespace utils {
                 }
             }
 
-            static void WriteProgress(const size_t& iteration, const size_t& total) {
+            static void WriteProgress(const size_t& iteration, const size_t& total, const char* prefix = "Progress ") {
                 static constexpr size_t LEN = 55u;
                 static size_t stepu = 0u;
 
@@ -311,9 +458,10 @@ namespace utils {
                     const float progress = float(iteration) / total;
 
                     const size_t filled_len = std::min(LEN, size_t(LEN * progress));
+                    std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
 
-                    utils::Logger::get().screen_output
-                        << "\rProgress |"
+                    utils::Logger::GetConsoleStream()
+                        << "\r" << prefix << "|"
                         << std::string(filled_len, utils::Logger::FILL[0])
                         << std::string(LEN - filled_len, '-')
                         << "| "
@@ -321,7 +469,7 @@ namespace utils {
                         << std::flush;
 
                     if (done) {
-                        utils::Logger::get().screen_output << std::endl;
+                        utils::Logger::GetConsoleStream() << std::endl;
                     }
                 }
             }
@@ -335,7 +483,7 @@ namespace utils {
                 if (utils::Logger::get().canLog()) {
                     std::stringstream ss;
                     ss << arg;
-                    utils::Logger::Write(ss.str(), false);
+                    utils::Logger::Write(ss.str());
                 }
             }
 
@@ -345,7 +493,7 @@ namespace utils {
                     std::stringstream ss;
                     ss << arg;
                     ((ss << args), ...);
-                    utils::Logger::Write(ss.str(), false);
+                    utils::Logger::Write(ss.str());
                 }
             }
 
@@ -360,38 +508,65 @@ namespace utils {
             }
 
             static inline void Command(const utils::os::command_t cmd) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+
                 if (utils::Logger::get().canLogScreen()) {
-                    utils::os::Command(cmd, utils::Logger::get().screen_output);
+                    utils::os::Command(cmd, utils::Logger::GetConsoleStream());
                 }
             }
 
             static inline void SetScreenTitle(const std::string& title) {
-                utils::os::SetScreenTitle(title, utils::Logger::get().screen_output);
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                utils::os::SetScreenTitle(title, utils::Logger::GetConsoleStream());
             }
 
             static inline void PauseScreen(void) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
                 utils::Logger::get().screen_paused = true;
             }
             static inline void PauseFile(void) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_paused = true;
             }
-
             static inline void Pause(void) {
                 utils::Logger::get().PauseScreen();
                 utils::Logger::get().PauseFile();
             }
 
             static inline void ResumeScreen(void) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
                 utils::Logger::get().screen_paused = false;
             }
-
             static inline void ResumeFile(void) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_paused = false;
             }
-
             static inline void Resume(void) {
                 utils::Logger::get().ResumeScreen();
                 utils::Logger::get().ResumeFile();
+            }
+
+            static inline void SetFileTimestamp(const bool stamp) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                utils::Logger::get().file_timestamp = stamp;
+            }
+            static inline bool GetFileTimestamp(void) {
+                return utils::Logger::get().file_timestamp;
+            }
+
+            static inline void SetScreenLogLevel(const utils::Logger::Level level) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                utils::Logger::get().level_screen = level;
+            }
+            static inline utils::Logger::Level GetScreenLogLevel(void) {
+                return utils::Logger::get().level_screen;
+            }
+            static inline void SetFileLogLevel(const utils::Logger::Level level) {
+                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                utils::Logger::get().level_file = level;
+            }
+            static inline utils::Logger::Level GetFileLogLevel(void) {
+                return utils::Logger::get().level_file;
             }
 
             /**
