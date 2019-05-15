@@ -447,6 +447,41 @@ TEST_CASE("Test utils::string::strExtractQuotedStrings", "[utils][utils::string]
     REQUIRE(list.size() == 0);
 }
 
+TEST_CASE("Test utils::string::strJoin", "[utils][utils::string]") {
+    REQUIRE(utils::string::strJoin({}) == "");
+    REQUIRE(utils::string::strJoin({"test"}) == "test");
+    REQUIRE(utils::string::strJoin({"test", "tset"}, ",")  == "test,tset");
+    REQUIRE(utils::string::strJoin({"test", "tset"}, ", ") == "test, tset");
+    REQUIRE(utils::string::strJoin({"test", "tset"}, '.')  == "test.tset");
+    REQUIRE(utils::string::strJoin({"test", "tset"}, "")   == "testtset");
+    REQUIRE(utils::string::strJoin({"", "tset"}, "+")      == "+tset");
+    REQUIRE(utils::string::strJoin({"test", ""}, "+")      == "test+");
+    REQUIRE(utils::string::strJoin({"1", "2", "3", "4"}, " * ") == "1 * 2 * 3 * 4");
+}
+
+TEST_CASE("Test utils::string::strSplit", "[utils][utils::string]") {
+    std::vector<std::string> splitted;
+
+    utils::string::strSplit(splitted, "");
+    REQUIRE(splitted.empty());
+
+    utils::string::strSplit(splitted, "a,b,c");
+    REQUIRE(splitted.size() == 3);
+    REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
+
+    utils::string::strSplit(splitted, "a\\b\\c", '\\');
+    REQUIRE(splitted.size() == 3);
+    REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
+
+    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;");
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "");
+    CHECK(splitted[2] == "a ");
+    CHECK(splitted[3] == "\tb\n");
+    CHECK(splitted[4] == " c ;");
+}
+
 TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
     std::stringstream ss;
     std::string test;

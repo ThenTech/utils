@@ -308,10 +308,19 @@ namespace utils::string {
     }
 
     /**
-     * @brief addStringArrayToVector
-     * @param v
-     * @param s
-     * @param str_char
+     *  \brief  Extract a vector of strings from the given string \p s that have
+     *          been quoted with char \p str_char.
+     *
+     *          e.g. 'str1', 'str2' => extract every string between 2 `'`
+     *                  => returns [ "str1", "str2" ]
+     *
+     *  \param  v
+     *      The vector to add the strings to. Will be cleared on start.
+     *  \param  s
+     *      The string to look for quoted strings in.
+     *  \param  str_char
+     *      The char the strings are quoted in.
+     *  \return Returns the list of quoted strings, without quotes.
      */
     [[maybe_unused]]
     static void strExtractQuotedStrings(std::vector<std::string> &v, const std::string& s, const char str_char='\'') {
@@ -332,6 +341,68 @@ namespace utils::string {
                 }
             }
         } while (start != std::string::npos && start < len);
+    }
+
+    /**
+     *  \brief  Join the strings in \p v with the string \p join_with between them.
+     *
+     *  \param  v
+     *      The list of strings to join.
+     *  \param  join_with
+     *      The string to join with.
+     *  \return Returns one string containing all the strings in \p v appended
+     *          to eachother, joined by \p join_with.
+     */
+    [[maybe_unused]]
+    static std::string strJoin(const std::vector<std::string> &v, const std::string& join_with=",") {
+        std::string joined;
+        const auto end = v.end();
+
+        if (auto start = v.begin(); start != end) {
+            joined += *start;
+
+            while(++start != end) {
+                joined += join_with + *start;
+            }
+        }
+
+        return joined;
+    }
+
+    /**
+     *  \brief  Join the strings in \p v with the char \p join_with between them.
+     *
+     *  \param  v
+     *      The list of strings to join.
+     *  \param  join_with
+     *      The char to join with.
+     *  \return Returns one string containing all the strings in \p v appended
+     *          to eachother, joined by \p join_with.
+     */
+    [[maybe_unused]]
+    static inline std::string strJoin(const std::vector<std::string> &v, const char join_with) {
+        return utils::string::strJoin(v, std::string(1, join_with));
+    }
+
+    /**
+     *  \brief  Split the given string \p s into parts delimited by \p delim.
+     *
+     *  \param  v
+     *      The vector to add the splitted strings to.
+     *  \param  s
+     *      The string to split.
+     *  \param  delim
+     *      The character delimiter.
+     *  \return Returns a list of seperate strings that were delimited by \p delim.
+     */
+    [[maybe_unused]]
+    static void strSplit(std::vector<std::string> &v, const std::string &s, const char delim = ',') {
+        std::stringstream ss(s);
+        v.clear();
+
+        for(std::string item; std::getline(ss, item, delim); ) {
+            v.emplace_back(item);
+        }
     }
 
     /**

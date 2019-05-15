@@ -35,9 +35,7 @@
  *      - Config reader with sections?
  *      - csv lib
  *      - Floating/Signed-Bitset
- *      - Auto Mutex lock
  *      - Other threading/future features
- *      - Log level
  *
  *      - Rename functions
  *
