@@ -26,6 +26,7 @@
     #include "utils_lib/utils_random.hpp"
     #include "utils_lib/utils_time.hpp"
     #include "utils_lib/utils_xorstring.hpp"
+    #include "utils_lib/utils_threading.hpp"
 
     #include "utils_lib/algo/algo_huffman.hpp"
 #endif
@@ -117,5 +118,5 @@ int main(int argc, char* argv[]) {
     utils::Logger::Writef("UUID: %s\n", utils::random::generate_uuid().c_str());
 
     return 0;
-#endif
+#endif  // ENABLE_TESTS
 }

@@ -6,10 +6,6 @@
 
 #include <iomanip>
 
-#ifdef THREADING_ENABLED
-    #include <mutex>
-    #define LOCK_BLOCK(MTX) std::unique_lock<std::mutex> lock_##MTX(MTX)
-#endif
 
 namespace utils::misc {
     /**
