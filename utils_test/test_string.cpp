@@ -457,6 +457,18 @@ TEST_CASE("Test utils::string::strJoin", "[utils][utils::string]") {
     REQUIRE(utils::string::strJoin({"", "tset"}, "+")      == "+tset");
     REQUIRE(utils::string::strJoin({"test", ""}, "+")      == "test+");
     REQUIRE(utils::string::strJoin({"1", "2", "3", "4"}, " * ") == "1 * 2 * 3 * 4");
+
+    REQUIRE(utils::string::strJoin(std::vector<char>{}, ' ') == "");
+    REQUIRE(utils::string::strJoin(std::vector<char>{'x'}, '\0') == "x");
+    REQUIRE(utils::string::strJoin(std::vector<char>{'x'}, '_') == "x");
+    REQUIRE(utils::string::strJoin(std::vector<char>{'x', 'y'}, '_') == "x_y");
+    REQUIRE(utils::string::strJoin(std::vector<char>{'1', '2', '3', '4'}, '*') == "1*2*3*4");
+
+    std::string ds = utils::string::strJoin(std::vector<uint8_t>{'a', 'b', '\0', '\"'}, '\0');
+    CHECK(int(ds[0]) == int('a'));
+    CHECK(int(ds[1]) == int('b'));
+    CHECK(int(ds[2]) == int('\0'));
+    CHECK(int(ds[3]) == int('\"'));
 }
 
 TEST_CASE("Test utils::string::strSplit", "[utils][utils::string]") {

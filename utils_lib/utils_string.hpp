@@ -385,6 +385,48 @@ namespace utils::string {
     }
 
     /**
+     *  \brief  Join the chars in \p v with the char \p join_with between them.
+     *
+     *  \param  v
+     *      The list of chars to join (a compatible char type).
+     *  \param  join_with
+     *      The char to join with. If \p join_with == '\0', just concatenate all chars.
+     *  \return Returns one string containing all the chars in \p v appended
+     *          to eachother, joined by \p join_with.
+     */
+    template<
+        class CharT,
+        typename std::enable_if_t<   std::is_same<CharT, char>::value
+                                  || std::is_same<CharT, int8_t>::value
+                                  || std::is_same<CharT, uint8_t>::value
+                                  || std::is_same<CharT, wchar_t>::value
+                                  || std::is_same<CharT, char16_t>::value
+                                  || std::is_same<CharT, char32_t>::value,
+                                     int> = 0
+    > [[maybe_unused]]
+    static std::string strJoin(const std::vector<CharT> &v, const char join_with='\0') {
+        std::string joined;
+        const auto end = v.end();
+
+        if (auto start = v.begin(); start != end) {
+            if (join_with == '\0') {
+                joined.reserve(v.size());
+                joined.assign(v.begin(), v.end());
+            } else {
+                joined.reserve(v.size() * 2 - 1);
+                joined.push_back(*start);
+
+                while(++start != end) {
+                    joined.push_back(join_with);
+                    joined.push_back(*start);
+                }
+            }
+        }
+
+        return joined;
+    }
+
+    /**
      *  \brief  Split the given string \p s into parts delimited by \p delim.
      *
      *  \param  v

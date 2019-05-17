@@ -23,8 +23,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
     const std::string randomstr(std::to_string(randomint));
 
     SECTION("Test std::pair printing") {
-        utils::printer::delimiters_values dels(
-            utils::printer::delimiters<std::pair<int, std::string>, char>::values);
+        utils::print::delimiters_values dels(
+            utils::print::delimiters<std::pair<int, std::string>, char>::values);
         formatter << dels.prefix    << randomint
                   << dels.delimiter << randomint
                   << dels.postfix;
@@ -41,8 +41,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
     }
 
     SECTION("Test std::array printing") {
-        utils::printer::delimiters_values dels(
-            utils::printer::delimiters<std::array<char, 5>, char>::values);
+        utils::print::delimiters_values dels(
+            utils::print::delimiters<std::array<char, 5>, char>::values);
         formatter << dels.prefix    << 'h'
                   << dels.delimiter << 'e'
                   << dels.delimiter << 'l'
@@ -65,8 +65,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
             utils::random::Random::get<int>()
         };
 
-        utils::printer::delimiters_values dels(
-            utils::printer::delimiters<const int(&)[4], char>::values);
+        utils::print::delimiters_values dels(
+            utils::print::delimiters<const int(&)[4], char>::values);
         formatter << dels.prefix    << var[0]
                   << dels.delimiter << var[1]
                   << dels.delimiter << var[2]
@@ -74,7 +74,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
                   << dels.postfix;
         const std::string frmt(formatter.str());
 
-        PUT_SS(utils::printer::print_array_helper(var));
+        PUT_SS(utils::print::print_array_helper(var));
         CHECK(test_op.str() == frmt);
     }
 
@@ -82,8 +82,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
         auto var = utils::memory::new_unique_flat_array<int>(10, 10);
         std::generate_n(var.get(), 100, []{ return utils::random::Random::get<int>(); });
 
-        utils::printer::delimiters_values dels(
-            utils::printer::delimiters<const int(&)[100], char>::values);
+        utils::print::delimiters_values dels(
+            utils::print::delimiters<const int(&)[100], char>::values);
         formatter << dels.prefix << var[0];
         for (size_t i = 1; i < 100;)
             formatter << dels.delimiter << var[i++];
@@ -91,14 +91,14 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
 
         const std::string frmt(formatter.str());
 
-        PUT_SS( (utils::printer::print_array_helper<int, 100>(var.get())) );
+        PUT_SS( (utils::print::print_array_helper<int, 100>(var.get())) );
         CHECK(test_op.str() == frmt);
     }
 
     SECTION("Test std::tuple printing") {
         SECTION("Test std::tuple<int> printing") {
-            utils::printer::delimiters_values dels(
-                utils::printer::delimiters<std::tuple<int>, char>::values);
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::tuple<int>, char>::values);
             formatter << dels.prefix    << randomint
                       << dels.postfix;
             const std::string frmt(formatter.str());
@@ -112,8 +112,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
         SECTION("Test std::tuple<string, pair, int> printing") {
             const auto var1 = std::make_pair(randomstr, randomint);
 
-            utils::printer::delimiters_values dels(
-                utils::printer::delimiters<std::tuple<std::string, std::pair<int, std::string>, int>, char>::values);
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::tuple<std::string, std::pair<int, std::string>, int>, char>::values);
             formatter << dels.prefix    << randomstr
                       << dels.delimiter << var1
                       << dels.delimiter << randomint
@@ -131,8 +131,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
             const double randomdbl (utils::random::Random::get<double>());
             const std::pair<double, std::string> var1(randomdbl, "meow");
 
-            utils::printer::delimiters_values dels(
-                utils::printer::delimiters<std::tuple<int, int, std::pair<double, std::string>>, char>::values);
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::tuple<int, int, std::pair<double, std::string>>, char>::values);
             formatter << dels.prefix    << randomint
                       << dels.delimiter << randomint2
                       << dels.delimiter << var1

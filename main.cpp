@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
     utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::ffs(8));
 
     utils::Logger::Command(utils::os::Console::BRIGHT | utils::os::Console::CYAN);
-    utils::Logger::WriteLn(utils::printer::type2name(std::string() /*, "std::"*/));
+    utils::Logger::WriteLn(utils::print::type2name(std::string() /*, "std::"*/));
     utils::Logger::Command(utils::os::Console::RESET);
 
 //    utils::algo::Huffman<>::encode("README.md", "enc.txt");

@@ -52,7 +52,7 @@
                   << "\033[0m" ":" "\033[36;1m"                              \
                   << __LINE__                                                \
                   << "\033[0m" "\n    inside: " "\033[35;1m"                 \
-                  << UTILS_CATCH_FUNCTION_NAME                                     \
+                  << UTILS_CATCH_FUNCTION_NAME                               \
                   << "\033[0m" << std::endl;                                 \
     } while (false)
 
@@ -71,7 +71,7 @@
                           << __FILE__                                            \
                           << "\033[0m" ":" "\033[36;1m"                          \
                           << __LINE__ << "\033[0m" "\n    inside: " "\033[35;1m" \
-                          << UTILS_CATCH_FUNCTION_NAME                                 \
+                          << UTILS_CATCH_FUNCTION_NAME                           \
                           << "\033[0m" << std::endl;                             \
                 std::abort();                                                    \
             }                                                                    \
@@ -87,13 +87,13 @@ namespace utils::Catch {
      */
     static jmp_buf _signal_handler_env;
 
-    [[maybe_unused]]
     /**
      *  \brief  Custom signal handler to detect if a function aborted.
      *
      *  \param  signal
      *      The signal id to check.
      */
+    [[maybe_unused]]
     static void _function_abort_signal_handler(int signal)  {
         if (signal == SIGABRT) {
             #if UTILS_CATCH_REPORT_SIG_HANDLER
@@ -142,7 +142,6 @@ namespace utils::Catch {
         std::signal(SIGABRT, previous_handler);
         return aborted;
     }
-
 }
 
 #undef UTILS_CATCH_REPORT_SIG_HANDLER

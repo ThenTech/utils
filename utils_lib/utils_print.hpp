@@ -36,7 +36,7 @@ namespace std {
 }
 
 
-namespace utils::printer {
+namespace utils::print {
     ////////////////////////////////////////////////////////////////////////////
     /// Mark std:: types as container
     ////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ namespace utils::printer {
     // Default delimiters
     template<typename T>
     struct delimiters<T, char> {
-            static inline constexpr delimiters_values<char> values = { "[ ", ", ", " ]" };
+        static inline constexpr delimiters_values<char> values = { "[ ", ", ", " ]" };
     };
 
     template<typename T>
@@ -308,18 +308,18 @@ namespace utils::printer {
 
     // Mark array_wrapper as a container
     template<typename T, size_t N>
-    struct is_container<utils::printer::array_wrapper<T, N>> : public std::true_type { };
+    struct is_container<utils::print::array_wrapper<T, N>> : public std::true_type { };
 
 
     template <typename T, size_t N>
-    utils::printer::array_wrapper<T, N> print_array_helper(const T (&a)[N]) {
-        return utils::printer::array_wrapper<T, N>(a);
+    utils::print::array_wrapper<T, N> print_array_helper(const T (&a)[N]) {
+        return utils::print::array_wrapper<T, N>(a);
     }
 
     template <typename T, size_t N = 0>
-    utils::printer::array_wrapper<T, N> print_array_helper(const T* a) {
+    utils::print::array_wrapper<T, N> print_array_helper(const T* a) {
         static_assert(N > 0, "print_array_helper requires N!");
-        return utils::printer::array_wrapper<T, N>(a);
+        return utils::print::array_wrapper<T, N>(a);
     }
 
     /**	\brief	Returns the internal actual class name of the given object o.
@@ -370,7 +370,7 @@ namespace std {
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::printer::print_container_helper<T, TChar, TCharTraits, TDelimiters>& helper)
+            const utils::print::print_container_helper<T, TChar, TCharTraits, TDelimiters>& helper)
     {
         helper(stream);
         return stream;
@@ -378,12 +378,12 @@ namespace std {
 
     // Prints a container to the stream using default delimiters
     template<typename T, typename TChar, typename TCharTraits>
-    typename std::enable_if<utils::printer::is_container<T>::value, std::basic_ostream<TChar, TCharTraits>&>::type
+    typename std::enable_if<utils::print::is_container<T>::value, std::basic_ostream<TChar, TCharTraits>&>::type
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const T& container)
     {
-        stream << utils::printer::print_container_helper<T, TChar, TCharTraits>(container);
+        stream << utils::print::print_container_helper<T, TChar, TCharTraits>(container);
         return stream;
     }
 
@@ -394,18 +394,18 @@ namespace std {
             std::basic_ostream<TChar, TCharTraits>& stream,
             const std::pair<T1, T2>& value)
     {
-        if (utils::printer::delimiters<std::pair<T1, T2>, TChar>::values.prefix != NULL)
-            stream << utils::printer::delimiters<std::pair<T1, T2>, TChar>::values.prefix;
+        if (utils::print::delimiters<std::pair<T1, T2>, TChar>::values.prefix != NULL)
+            stream << utils::print::delimiters<std::pair<T1, T2>, TChar>::values.prefix;
 
         stream << value.first;
 
-        if (utils::printer::delimiters<std::pair<T1, T2>, TChar>::values.delimiter != NULL)
-            stream << utils::printer::delimiters<std::pair<T1, T2>, TChar>::values.delimiter;
+        if (utils::print::delimiters<std::pair<T1, T2>, TChar>::values.delimiter != NULL)
+            stream << utils::print::delimiters<std::pair<T1, T2>, TChar>::values.delimiter;
 
         stream << value.second;
 
-        if (utils::printer::delimiters<std::pair<T1, T2>, TChar>::values.postfix != NULL)
-            stream << utils::printer::delimiters<std::pair<T1, T2>, TChar>::values.postfix;
+        if (utils::print::delimiters<std::pair<T1, T2>, TChar>::values.postfix != NULL)
+            stream << utils::print::delimiters<std::pair<T1, T2>, TChar>::values.postfix;
 
         return stream;
     }
@@ -414,7 +414,7 @@ namespace std {
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::printer::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TDelimiters>& helper)
+            const utils::print::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TDelimiters>& helper)
     {
         helper(stream);
         return stream;
@@ -427,13 +427,13 @@ namespace std {
             std::basic_ostream<TChar, TCharTraits>& stream,
             const std::tuple<Args...>& value)
     {
-        if (utils::printer::delimiters<std::tuple<Args...>, TChar>::values.prefix != NULL)
-            stream << utils::printer::delimiters<std::tuple<Args...>, TChar>::values.prefix;
+        if (utils::print::delimiters<std::tuple<Args...>, TChar>::values.prefix != NULL)
+            stream << utils::print::delimiters<std::tuple<Args...>, TChar>::values.prefix;
 
-        stream << utils::printer::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TCharTraits>(value);
+        stream << utils::print::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TCharTraits>(value);
 
-        if (utils::printer::delimiters<std::tuple<Args...>, TChar>::values.postfix != NULL)
-            stream << utils::printer::delimiters<std::tuple<Args...>, TChar>::values.postfix;
+        if (utils::print::delimiters<std::tuple<Args...>, TChar>::values.postfix != NULL)
+            stream << utils::print::delimiters<std::tuple<Args...>, TChar>::values.postfix;
 
         return stream;
     }
@@ -442,9 +442,9 @@ namespace std {
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::printer::array_wrapper<T, N>& helper)
+            const utils::print::array_wrapper<T, N>& helper)
     {
-        stream << utils::printer::print_container_helper<utils::printer::array_wrapper<T, N>, TChar, TCharTraits>(helper);
+        stream << utils::print::print_container_helper<utils::print::array_wrapper<T, N>, TChar, TCharTraits>(helper);
         return stream;
     }
 

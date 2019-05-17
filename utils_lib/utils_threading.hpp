@@ -107,7 +107,7 @@ namespace utils::threading {
                     std::bind(std::forward<F>(f), std::forward<Args>(args)...)
                 );
 
-                std::future<result_type_t> res = task->get_future();
+                std::future<result_type_t> res = task.get_future();
                 {
                     LOCK_BLOCK(this->queue_mutex);
 
