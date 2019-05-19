@@ -27,6 +27,9 @@
 #ifndef UTILS_COLOUR_HPP
 #define UTILS_COLOUR_HPP
 
+#include "utils_string.hpp"
+#include "utils_misc.hpp"
+
 #include <cmath>
 #include <array>
 #include <algorithm>
@@ -44,8 +47,6 @@
     #include <QString>
 #endif
 
-#include "utils_string.hpp"
-#include "utils_misc.hpp"
 
 namespace utils::colour {
     //////////////////////////////////////////////////////////////////////////////////

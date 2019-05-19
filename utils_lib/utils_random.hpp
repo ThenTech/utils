@@ -3,6 +3,8 @@
 
 #include "external/random.hpp"
 #include "utils_catch.hpp"
+#include "utils_string.hpp"
+
 #include <sstream>
 #include <iomanip>
 
@@ -211,7 +213,6 @@ namespace utils::random {
         return picked;
     };
 
-
     /**
      *  \brief  Generate Universal Unique IDentifier v4
      *
@@ -219,28 +220,24 @@ namespace utils::random {
      */
     [[maybe_unused]]
     static inline std::string generate_uuid(void) {
-        std::stringstream guid;
         auto dist = Random::integer_dist_t<uint8_t> {
             static_cast<uint8_t>(0x00),
             static_cast<uint8_t>(0xFF)
         };
 
-        #define GET_HEX    static_cast<int>(dist(Random::engine()))
+        #define FX      "%02X"
+        #define SEP     "-"
+        #define GET_HEX (dist(Random::engine()))
 
-        guid << std::hex << std::setfill('0') << std::setw(2)
-             << GET_HEX << GET_HEX << GET_HEX << GET_HEX
-             << '-'
-             << GET_HEX << GET_HEX
-             << '-'
-             << ((GET_HEX & 0x0F) | 0x40) << GET_HEX
-             << '-'
-             << ((GET_HEX & 0x3F) | 0x80) << GET_HEX
-             << '-'
-             << GET_HEX << GET_HEX << GET_HEX << GET_HEX << GET_HEX << GET_HEX;
-
-        return guid.str();
+        return utils::string::format(
+            FX FX FX FX SEP FX FX SEP FX FX SEP FX FX SEP FX FX FX FX FX FX,
+            GET_HEX, GET_HEX, GET_HEX, GET_HEX,
+            GET_HEX, GET_HEX,
+            static_cast<uint8_t>((GET_HEX & 0x0F) | 0x40), GET_HEX,
+            static_cast<uint8_t>((GET_HEX & 0x3F) | 0x80), GET_HEX,
+            GET_HEX, GET_HEX, GET_HEX, GET_HEX, GET_HEX, GET_HEX
+        );
     }
 }
-
 
 #endif // UTILS_RANDOM_HPP
