@@ -39,7 +39,7 @@ namespace utils::bits {
      */
     template<class T>
     inline constexpr size_t size_of(void) {
-        return sizeof(T) * CHAR_BIT;
+        return sizeof(T) * std::numeric_limits<uint8_t>::digits;
     }
 
     /**
@@ -93,7 +93,7 @@ namespace utils::bits {
     static inline constexpr T rotl(const T value, const int_fast32_t n = 1) {
         static_assert(std::is_integral_v<T>, "utils::bits::rotl: Integral required.");
 
-        constexpr T mask_size = ~(uint64_t(~0) << bit_length);
+        constexpr T mask_size = bit_length == 64 ? uint64_t(~0ull) : ~(uint64_t(~0) << bit_length);
         const     T mask_data = ~(uint64_t(~0) << n);
         return ((value << n) & mask_size) | ((value >> (bit_length - n)) & mask_data);
     }

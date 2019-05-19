@@ -121,11 +121,11 @@ namespace utils::algorithm {
      *  \param  ...args
      *      Arguments to be passed to fn.
      */
-    template<size_t times = 1, typename Action, typename... Args>
-    void repeat(Action&& fn, Args &&... args) {
-        static_assert(std::is_invocable_v<Action, Args...>, "utils::algorithm::repeat: Callable function required.");
+    template<size_t times = 1, typename F, typename... Args>
+    void repeat(F&& fn, Args &&... args) {
+        static_assert(std::is_invocable_v<F, Args...>, "utils::algorithm::repeat: Callable function required.");
         for (size_t i = 0; i < times; i++) {
-            std::invoke(fn, args...);
+            std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
         }
     }
 }

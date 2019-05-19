@@ -14,6 +14,7 @@
     #include "utils_lib/utils_algorithm.hpp"
     #include "utils_lib/utils_bits.hpp"
     #include "utils_lib/utils_catch.hpp"
+    #include "utils_lib/utils_colour.hpp"
     #include "utils_lib/utils_string.hpp"
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
@@ -54,11 +55,12 @@ int main(int argc, char* argv[]) {
     utils::Logger::SetScreenTitle("Testing C++ Utility library");
     utils::Logger::WriteLn("Running tests...");
 
-    const auto start = utils::time::Timer::Start();
-    const int status = Catch::Session().run(argc, argv);
-    const auto   end = utils::time::Timer::Duration_ms(start);
+    int status = 0;
+    const auto test_duration = utils::time::Timer::time<utils::time::Timer::time_ms>([&](){
+        status = Catch::Session().run(argc, argv);
+    });
 
-    utils::Logger::Writef("Tests completed in % 9.3f ms" + utils::Logger::CRLF, end);
+    utils::Logger::Writef("Tests completed in %.3f ms (%d)" + utils::Logger::CRLF, test_duration, status);
 
     return status;
 #else
@@ -116,6 +118,15 @@ int main(int argc, char* argv[]) {
     }
 
     utils::Logger::Writef("UUID: %s\n", utils::random::generate_uuid().c_str());
+
+//    const double timed_ns = utils::time::Timer::time_n<1>([](){
+//        using namespace std::chrono_literals;
+//        std::this_thread::sleep_for(1s);
+//    });
+//    utils::Logger::Writef("Took %0.6f ns\n", timed_ns);
+
+//    utils::Logger::Stream(utils::colour::GetHotColor(0.5));
+//    utils::Logger::Stream(utils::colour::Colour::from_hex("#ABCDEF").to_hex());
 
     return 0;
 #endif  // ENABLE_TESTS

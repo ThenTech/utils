@@ -4,6 +4,7 @@
 #include <chrono>
 #include <iomanip>
 #include <ctime>
+#include <functional>
 
 namespace utils::time {
     /**
@@ -23,25 +24,91 @@ namespace utils::time {
         /**
          *  \brief  Return the time in ns that elepsed from start.
          */
-        [[maybe_unused]]
-        static inline int64_t Duration_ns(const timepoint_t& start) {
-            const timepoint_t end = std::chrono::steady_clock::now();
-            return std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-        }
+        struct time_ns {
+            static inline int64_t duration(const timepoint_t& start) {
+                const timepoint_t end = std::chrono::steady_clock::now();
+                return std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+            }
+        };
 
         /**
          *  \brief  Return the time in ms that elepsed from start.
          */
-        [[maybe_unused]] static inline double Duration_ms(const timepoint_t& start) {
-            return double(utils::time::Timer::Duration_ns(start)) / 1.0e6;
-        }
+        struct time_ms {
+            static inline double duration(const timepoint_t& start) {
+                return double(utils::time::Timer::time_ns::duration(start)) / 1.0e6;
+            }
+        };
 
         /**
          *  \brief  Return the time in s that elepsed from start.
          */
-        [[maybe_unused]]
-        static inline double Duration_s(const timepoint_t& start) {
-            return double(utils::time::Timer::Duration_ns(start)) / 1.0e9;
+        struct time_s {
+            static inline double duration(const timepoint_t& start) {
+                return double(utils::time::Timer::time_ns::duration(start)) / 1.0e9;
+            }
+        };
+
+        /**
+         *  \brief  Time the execution of \p f, with \p duration_struct resolution.
+         *
+         *  \tparam duration_struct
+         *      A struct with a `::duration(timepoint_t)` method specifying the
+         *      resolution of the measurement.
+         *  \param  f
+         *      The function to exucute and time.
+         *  \param  args
+         *      The arguments to pass to \p f.
+         *  \return Returns the `duration_struct::duration()` from the start and
+         *          end of the execution of \p f.
+         */
+        template<
+            class duration_struct = utils::time::Timer::time_ns,
+            class F,
+            class... Args
+        > [[maybe_unused]]
+        static inline double time(F&& f, Args&& ... args) {
+            static_assert(std::is_invocable_v<F, Args...>, "utils::time::Timer::time: Callable function required.");
+
+            const auto start = utils::time::Timer::Start();
+            std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
+            return duration_struct::duration(start);
+        }
+
+        /**
+         *  \brief  Time the execution of \p f, with \p duration_struct resolution,
+         *          \p N times.
+         *
+         *  \tparam N
+         *      The amount of times to execute the function and average the results.
+         *  \tparam duration_struct
+         *      A struct with a `::duration(timepoint_t)` method specifying the
+         *      resolution of the measurement.
+         *  \param  f
+         *      The function to exucute and time.
+         *  \param  args
+         *      The arguments to pass to \p f.
+         *  \return Returns the average `duration_struct::duration()` from the
+         *          sum of start and ends of each execution of \p f.
+         */
+        template<
+            size_t N = 10,
+            class duration_struct = utils::time::Timer::time_ns,
+            class F,
+            class... Args
+        > [[maybe_unused]]
+        static inline double time_n(F&& f, Args&& ... args) {
+            static_assert(std::is_invocable_v<F, Args...>, "utils::time::Timer::time: Callable function required.");
+            static_assert(N > 0, "utils::time::Timer::time: Time at least 1 run.");
+            double total_time = 0.0;
+
+            for (size_t i = 0; i < N; i++) {
+                total_time += utils::time::Timer::time<duration_struct>(
+                                  std::forward<F>(f),
+                                  std::forward<Args>(args)...);
+            }
+
+            return total_time / double(N);
         }
     }
 

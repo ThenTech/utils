@@ -46,6 +46,9 @@ TEST_CASE("Test utils::bits::rotl", "[utils][utils::bits]" ) {
     REQUIRE(int32_t(0xFFFFFF01) == utils::bits::rotl(int32_t(0xFFFFFF80), 1));
     REQUIRE(int32_t(0x00000001) == utils::bits::rotl<int32_t,  8>(int32_t(0x12345680), 1));
     REQUIRE(int32_t(0x00000000) == utils::bits::rotl<int32_t, 16>(int32_t(0xDEAD0000), 1));
+
+    REQUIRE((uint64_t(1) << 63) == utils::bits::rotl(uint64_t(1) << 62, 1));
+    REQUIRE( uint64_t(1)        == utils::bits::rotl(uint64_t(1) << 63, 1));
 }
 
 TEST_CASE("Test utils::bits::rotr", "[utils][utils::bits]" ) {
@@ -66,6 +69,9 @@ TEST_CASE("Test utils::bits::rotr", "[utils][utils::bits]" ) {
     REQUIRE(int32_t(0x7FFFFFC0) == utils::bits::rotr(int32_t(0xFFFFFF80), 1));
     REQUIRE(int32_t(0x00000040) == utils::bits::rotr<int32_t,  8>(int32_t(0x12345680), 1));
     REQUIRE(int32_t(0x00000000) == utils::bits::rotr<int32_t, 16>(int32_t(0xDEAD0000), 1));
+
+    REQUIRE((uint64_t(1) << 62) == utils::bits::rotr(uint64_t(1) << 63, 1));
+    REQUIRE((uint64_t(1) << 63) == utils::bits::rotr(uint64_t(1), 1));
 }
 
 TEST_CASE("Test utils::bits::is_power_of_2", "[utils][utils::bits]" ) {

@@ -3,6 +3,7 @@
 
 #include "utils_exceptions.hpp"
 #include "utils_memory.hpp"
+#include "utils_print.hpp"
 
 #include <iomanip>
 
@@ -45,19 +46,22 @@ namespace utils::misc {
                 try {
                     cast << std::stoll(buffer + 2, nullptr, 2);
                 } catch(std::invalid_argument const&) {
-                    throw utils::exceptions::CastingException(buffer, type2name(out));
+                    throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));
                 }
             } else {
                 // Octal literal
                 cast << std::oct << buffer;
             }
+        } else if (buffer[0] == '#') {
+            // Hex colour string
+            cast << std::hex << ++buffer;
         } else {
             // Decimal/float/...
             cast << buffer;
         }
 
         if (!(cast >> out))
-            throw utils::exceptions::CastingException(buffer, type2name(out));
+            throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));
 
         return out;
     }
