@@ -6,6 +6,39 @@
 #include "../utils_lib/utils_bits.hpp"
 
 
+TEST_CASE("Test utils::bits::and_all", "[utils][utils::bits]") {
+    REQUIRE(utils::bits::and_all( 0) ==  0);
+    REQUIRE(utils::bits::and_all( 1) ==  1);
+    REQUIRE(utils::bits::and_all(-1) == -1);
+
+    REQUIRE(0x0000 == utils::bits::and_all(0xFF00, 0x00FF));
+    REQUIRE(0x1234 == utils::bits::and_all(0xFFFF, 0x1234));
+    REQUIRE(0x1004 == utils::bits::and_all(0x100F, 0x1234, 0xFFFC));
+}
+
+TEST_CASE("Test utils::bits::or_all", "[utils][utils::bits]") {
+    REQUIRE(utils::bits::or_all( 0) ==  0);
+    REQUIRE(utils::bits::or_all( 1) ==  1);
+    REQUIRE(utils::bits::or_all(-1) == -1);
+
+    REQUIRE(0xFFFF == utils::bits::or_all(0xFF00, 0x00FF));
+    REQUIRE(0xFFFF == utils::bits::or_all(0xFFFF, 0x1234));
+    REQUIRE(0xFFFF == utils::bits::or_all(0x100F, 0x1234, 0xFFFC));
+    REQUIRE(0xF050 == utils::bits::or_all(0x8000, 0x4000, 0x2000, 0x1000, 0x0050));
+}
+
+TEST_CASE("Test utils::bits::xor_all", "[utils][utils::bits]") {
+    REQUIRE(utils::bits::xor_all( 0) ==  0);
+    REQUIRE(utils::bits::xor_all( 1) ==  1);
+    REQUIRE(utils::bits::xor_all(-1) == -1);
+    REQUIRE(utils::bits::xor_all(1, 1) == 0);
+
+    REQUIRE(0xFFFF == utils::bits::xor_all(0xFF00, 0x00FF));
+    REQUIRE(0xEDCB == utils::bits::xor_all(0xFFFF, 0x1234));
+    REQUIRE(0xFDC7 == utils::bits::xor_all(0x100F, 0x1234, 0xFFFC));
+    REQUIRE(0xF050 == utils::bits::xor_all(0x8000, 0x4000, 0x2000, 0x1000, 0x0050));
+}
+
 TEST_CASE("Test utils::bits::ffs", "[utils][utils::bits]" ) {
     REQUIRE(utils::bits::ffs<int>(-1)     == 1);
     REQUIRE(utils::bits::ffs<int>(1)      == 1);

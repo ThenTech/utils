@@ -102,6 +102,27 @@ TEST_CASE("Test utils::algorithm::all_equal", "[utils][utils::algorithm]") {
     REQUIRE_FALSE(utils::algorithm::all_equal(42, 42, 42, 42, 42, 42, 43, 42, 52));
 }
 
+TEST_CASE("Test utils::algorithm::all_within", "[utils][utils::algorithm]") {
+    REQUIRE(utils::algorithm::all_within(0, 10));
+    REQUIRE(utils::algorithm::all_within(0, 10, 0));
+    REQUIRE(utils::algorithm::all_within(0, 10, 10));
+    REQUIRE(utils::algorithm::all_within(0, 10, 1, 2, 3, 4));
+    REQUIRE(utils::algorithm::all_within(10, 0, 1, 2, 10, 4));
+    REQUIRE_FALSE(utils::algorithm::all_within(0, 10, 1, 2, 11, 4));
+    REQUIRE_FALSE(utils::algorithm::all_within(10, 0, 1, 2, 11, 4));
+
+    REQUIRE(utils::algorithm::all_within(1, 1, 1, 1, 1, 1));
+    REQUIRE_FALSE(utils::algorithm::all_within(1, 1, 1, 1, 0, 1));
+
+    REQUIRE(utils::algorithm::all_within(0.0, 1.0, 1e-10, 1e-6, 0.2, 0.555, 0.99999, 1.0));
+
+    auto c = utils::random::generate_x<int>(10, 0, 10);
+    REQUIRE(utils::algorithm::within(0, 10, c));
+    c.push_back(12);
+    CHECK_FALSE(utils::algorithm::within(0, 10, c));
+    CHECK(utils::algorithm::within(0, 15, c));
+}
+
 TEST_CASE("Test utils::algorithm::sum", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::sum( ) == 0);
     REQUIRE(utils::algorithm::sum(0) == 0);

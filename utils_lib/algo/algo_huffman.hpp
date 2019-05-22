@@ -89,7 +89,7 @@ namespace utils::algo {
                     return;
                 }
 
-                if (node->left == nullptr && node->right == nullptr) {
+                if (node->isLeaf()) {
                     utils::Logger::Writef(s + " => %X" + utils::Logger::CRLF, node->data);
                     return;
                 }

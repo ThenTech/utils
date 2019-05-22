@@ -1,8 +1,11 @@
 #ifndef UTILS_ALGORITHM_HPP
 #define UTILS_ALGORITHM_HPP
 
+#include "external/random.hpp"
+
 #include <algorithm>
 #include <functional>
+
 
 namespace utils::algorithm {
     /**
@@ -44,7 +47,7 @@ namespace utils::algorithm {
      *  \return
      *      True if arg1 == ... == argn
      */
-    template <class... T> [[maybe_unused]]
+    template <typename... T> [[maybe_unused]]
     static inline constexpr bool all_equal(T const&... args) {
         if constexpr (sizeof...(T) == 0) {
             return true;
@@ -53,6 +56,43 @@ namespace utils::algorithm {
                 return ((a0 == rest) && ...);
             }(args...);
         }
+    }
+
+    /**
+     *  \brief  Generic test if all args are within [min, max] (inclusive).
+     *
+     *  \return
+     *      True if (min <= arg1 && arg1 <= max) && ...
+     */
+    template <typename T, typename... Ts> [[maybe_unused]]
+    static inline constexpr bool all_within(T min, T max, const Ts&... ts) {
+        if constexpr (sizeof...(Ts) == 0) {
+            (void)min; (void)max;
+            return true;
+        } else {
+            if (max < min) // Allow range from higher to lower
+                std::swap(min, max);
+            return ((min <= ts && ts <= max) && ...);
+        }
+    }
+
+    /**
+     *  \brief  Generic test if all elements in the container
+     *          are within [min, max] (inclusive).
+     *
+     *  \return
+     *      True if (min <= arg1 && arg1 <= max) && ...
+     */
+    template <typename T, typename Container> [[maybe_unused]]
+    static inline constexpr bool within(T min, T max, const Container& cont) {
+        static_assert (effolkronium::details::is_iterator<decltype(std::begin(cont))>::value,
+                       "utils::bits::all_within: Container must have iterator support.");
+        if (max < min) // Allow range from higher to lower
+            std::swap(min, max);
+
+        return std::all_of(std::begin(cont), std::end(cont), [min, max](const T& x){
+            return min <= x && x <= max;
+        });
     }
 
     /**

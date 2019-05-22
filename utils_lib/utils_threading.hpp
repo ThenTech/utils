@@ -1,6 +1,8 @@
 #ifndef UTILS_THREADING_HPP
 #define UTILS_THREADING_HPP
 
+#include "utils_exceptions.hpp"
+
 #include <mutex>
 #include <thread>
 #include <future>
@@ -12,10 +14,9 @@
 #include <functional>
 #include <memory>
 
-#include "utils_exceptions.hpp"
-
 
 #define LOCK_BLOCK(MTX) std::unique_lock<std::mutex> __lock(MTX)
+
 
 namespace utils::threading {
     /**

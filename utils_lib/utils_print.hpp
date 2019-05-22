@@ -5,6 +5,8 @@
  *  Reference: https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
  */
 
+#include "utils_string.hpp"
+
 #include <iostream>
 #include <iterator>
 #include <type_traits>
@@ -18,7 +20,6 @@
     #include <cxxabi.h>
 #endif
 
-#include "utils_string.hpp"
 
 #define UTILS_PRINT_VECTOR_STRINGS_QUOTED              1
 #define UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES 1

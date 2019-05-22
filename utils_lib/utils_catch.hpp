@@ -1,12 +1,13 @@
 #ifndef CATCH_ABORT_HPP
 #define CATCH_ABORT_HPP
 
+#include "../utils_test/test_settings.hpp"
+
 #include <iostream>
 #include <functional>
 #include <csetjmp>
 #include <csignal>
 
-#include "../utils_test/test_settings.hpp"
 
 #ifdef ENABLE_TESTS
     #include "../utils_lib/external/catch.hpp"
@@ -80,32 +81,35 @@
     #define ASSERT(condition) do { } while (false)
 #endif
 
-namespace utils::Catch {
-    /**
-     *  \brief  The variable to save the environment to
-     *          for jumping back after a function abort.
-     */
-    static jmp_buf _signal_handler_env;
 
-    /**
-     *  \brief  Custom signal handler to detect if a function aborted.
-     *
-     *  \param  signal
-     *      The signal id to check.
-     */
-    [[maybe_unused]]
-    static void _function_abort_signal_handler(int signal)  {
-        if (signal == SIGABRT) {
-            #if UTILS_CATCH_REPORT_SIG_HANDLER
-                std::cerr << "SIGABRT received\n";
-            #endif
-            std::longjmp(_signal_handler_env, 1);
-        } else {
-            #if UTILS_CATCH_REPORT_SIG_HANDLER
-                std::cerr << "Unexpected signal " << signal << " received\n";
-            #endif
-        }
-    };
+namespace utils::Catch {
+    namespace internal {
+        /**
+         *  \brief  The variable to save the environment to
+         *          for jumping back after a function abort.
+         */
+        static jmp_buf _signal_handler_env;
+
+        /**
+         *  \brief  Custom signal handler to detect if a function aborted.
+         *
+         *  \param  signal
+         *      The signal id to check.
+         */
+        [[maybe_unused]]
+        static void _function_abort_signal_handler(int signal)  {
+            if (signal == SIGABRT) {
+                #if UTILS_CATCH_REPORT_SIG_HANDLER
+                    std::cerr << "SIGABRT received\n";
+                #endif
+                std::longjmp(_signal_handler_env, 1);
+            } else {
+                #if UTILS_CATCH_REPORT_SIG_HANDLER
+                    std::cerr << "Unexpected signal " << signal << " received\n";
+                #endif
+            }
+        };
+    }
 
     /**
      *  @brief  Function_Aborts
@@ -125,7 +129,7 @@ namespace utils::Catch {
     bool Function_Aborts(F&& f, Args&& ... args) {
         static_assert(std::is_invocable_v<F, Args...>, "Function_Aborts: Callable function required.");
 
-        auto previous_handler = std::signal(SIGABRT, _function_abort_signal_handler);
+        auto previous_handler = std::signal(SIGABRT, utils::Catch::internal::_function_abort_signal_handler);
 
         if (previous_handler == SIG_ERR) {
             return true;
@@ -133,7 +137,7 @@ namespace utils::Catch {
 
         bool aborted = false;
 
-        if (!setjmp(_signal_handler_env)) {
+        if (!setjmp(utils::Catch::internal::_signal_handler_env)) {
             std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
         } else {
             aborted = true;

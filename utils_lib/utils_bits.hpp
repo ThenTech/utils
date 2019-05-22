@@ -1,11 +1,12 @@
 #ifndef UTILS_BITS_HPP
 #define UTILS_BITS_HPP
 
+#include "utils_catch.hpp"
+
 #include <cstdint>
 #include <limits>
 #include <type_traits>
 
-#include "utils_catch.hpp"
 
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
@@ -41,6 +42,49 @@ namespace utils::bits {
     inline constexpr size_t size_of(void) {
         return sizeof(T) * std::numeric_limits<uint8_t>::digits;
     }
+
+    /**
+     *  \brief  Generic bitwise AND all args.
+     *
+     *  \return Return arg1 & ... & argn
+     */
+    template<
+        typename... T,
+        typename C = std::common_type_t<T...>
+    > [[maybe_unused]]
+    static inline constexpr C and_all(T const&... args) {
+        static_assert(std::is_integral_v<C>, "utils::bits::and_all: Integrals required.");
+        return (... & args);
+    }
+
+    /**
+     *  \brief  Generic bitwise OR all args.
+     *
+     *  \return Return arg1 | ... | argn
+     */
+    template<
+        typename... T,
+        typename C = std::common_type_t<T...>
+    > [[maybe_unused]]
+    static inline constexpr C or_all(T const&... args) {
+        static_assert(std::is_integral_v<C>, "utils::bits::or_all: Integrals required.");
+        return (... | args);
+    }
+
+    /**
+     *  \brief  Generic bitwise XOR all args.
+     *
+     *  \return Return arg1 ^ ... ^ argn
+     */
+    template<
+        typename... T,
+        typename C = std::common_type_t<T...>
+    > [[maybe_unused]]
+    static inline constexpr C xor_all(T const&... args) {
+        static_assert(std::is_integral_v<C>, "utils::bits::xor_all: Integrals required.");
+        return (... ^ args);
+    }
+
 
     /**
      * \brief  Find First Set

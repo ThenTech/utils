@@ -5,6 +5,7 @@
 
     #define CATCH_CONFIG_RUNNER
     #define CATCH_CONFIG_CONSOLE_WIDTH 100
+    #define CATCH_CONFIG_FAST_COMPILE
     #include "utils_lib/utils_logger.hpp"
     #include "utils_lib/external/catch.hpp"
 #else
@@ -30,6 +31,8 @@
     #include "utils_lib/utils_threading.hpp"
 
     #include "utils_lib/algo/algo_huffman.hpp"
+    #include "utils_lib/algo/algo_bstree.hpp"
+    #include "utils_lib/algo/algo_avltree.hpp"
 #endif
 
 /*
@@ -45,6 +48,8 @@
  *
  *  https://github.com/Martchus/cpp-utilities
  *  https://github.com/tlx/tlx
+ *
+ *  https://github.com/palacaze/sigslot
  *
  * TODO Doxygen
  * TODO ErrorTrace + Stacktrace?

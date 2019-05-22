@@ -22,7 +22,7 @@
  SOFTWARE.
 
  Adapted from https://github.com/yuki-koyama/tinycolormap
- */
+*/
 
 #ifndef UTILS_COLOUR_HPP
 #define UTILS_COLOUR_HPP
@@ -121,9 +121,9 @@ namespace utils::colour {
 
         inline Colour operator*(double s) {
             return {
-                s *this->r(),
-                s *this->g(),
-                s *this->b()
+                s * this->r(),
+                s * this->g(),
+                s * this->b()
             };
         }
 

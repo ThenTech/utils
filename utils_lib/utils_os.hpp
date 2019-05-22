@@ -12,6 +12,7 @@
 
 #include <iostream>
 
+
 namespace utils::os {
     namespace internal {
         enum _Console_commands {

@@ -5,6 +5,7 @@
 
 #include <cmath>
 
+
 namespace utils::math {
     namespace internal {
         /**
