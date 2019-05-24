@@ -449,9 +449,8 @@ namespace utils::string {
 
     /**
      *  \brief  Format the given args into the format string.
-     *          Disabled if no arguments are given, then the non-template
-     *          method below will be called and will return the given format
-     *          string as-is.
+     *          If no arguments are given, the given format string
+     *          will be returned as-is.
      *
      *  \tparam ...Type
      *      Variable argument list of params to expand in the format string.
@@ -467,41 +466,16 @@ namespace utils::string {
         typename = std::enable_if_t<sizeof...(Type) != 0>
     > [[maybe_unused]]
     static std::string format(const std::string& format, Type&& ...args) {
-        const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
-        auto buf = utils::memory::new_unique_array<char>(size);
+        if constexpr(sizeof...(Type) != 0) {
+            const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
+            auto buf = utils::memory::new_unique_array<char>(size);
 
-        std::snprintf(buf.get(), size, format.c_str(), args...);
+            std::snprintf(buf.get(), size, format.c_str(), args...);
 
-        return std::string(buf.get(), buf.get() + size - 1 ); // Strip '\0'
-    }
-
-    /**
-     *  \brief  Dummy format method to be called if no format args are given
-     *          to the above method format<>().
-     *
-     *  \param  format
-     *      The format string to expand.
-     *  \return
-     *      Returns the given string.
-     */
-    [[maybe_unused]]
-    static inline std::string format(const std::string& format) {
-        return format;
-    }
-
-    /**
-     *  \brief  Format the given args into the format string and write to stream.
-     *
-     *  \tparam ...Type
-     *      Variable argument list of params to expand in the format string.
-     *  \param  format
-     *      The format string to expand.
-     *  \param  args
-     *      The args tro fill in.
-     */
-    template<typename ... Type> [[maybe_unused]]
-    static inline void print_format(std::ostream& stream, const std::string& format, Type&& ...args) {
-        stream << utils::string::format(format, args...);
+            return std::string(buf.get(), buf.get() + size - 1 ); // Strip '\0'
+        } else {
+            return format;
+        }
     }
 
 

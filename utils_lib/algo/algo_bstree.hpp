@@ -17,7 +17,7 @@ namespace utils::algo {
 
     template <typename T>
     class BSTreeNodeBase {
-        template <typename U> friend class BSTree;
+            template <typename U> friend class BSTree;
 
         private:
             T *mLeft{nullptr};
@@ -52,6 +52,61 @@ namespace utils::algo {
                 return *this;
             }
     };
+
+    template <typename T>
+    class BSNode : public utils::algo::BSTreeNodeBase<BSNode<T>> {
+        private:
+            int mWeight = 0;
+            T   mValue;
+
+        public:
+            BSNode() = default;
+            BSNode(const int& weight, const T& value)
+                : mWeight{weight}, mValue{std::move(value)}
+            {
+                // Empty
+            }
+            ~BSNode() = default;
+
+            inline bool operator<(const BSNode& other) const {
+                return this->mWeight < other.mWeight;
+            }
+
+            friend bool operator<(const BSNode& lhs, const int& rhs) {
+                return lhs.mWeight < rhs;
+            }
+
+            friend bool operator<(const int& lhs, const BSNode& rhs){
+                return lhs < rhs.mWeight;
+            }
+
+            int GetWeight() const {
+                return this->mWeight;
+            }
+
+            inline void SetWeight(const int& key) {
+                this->mWeight = key;
+            }
+
+            const T& GetValue() const {
+                return this->mValue;
+            }
+
+            inline void SetValue(const T& value) {
+                this->mValue = value;
+            }
+    };
+
+    template<typename T, typename TChar, typename TCharTraits>
+    std::basic_ostream<TChar, TCharTraits>&
+    operator<<(
+            std::basic_ostream<TChar, TCharTraits>& os,
+            const BSNode<T>& node)
+    {
+        os << "[" << node.GetWeight() << "] "<< node.GetValue();
+        return os;
+    }
+
 
     template <typename T>
     class BSTree {

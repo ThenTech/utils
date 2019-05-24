@@ -155,17 +155,10 @@ namespace utils {
              *  Dtor: write line to outputs and close streams.
              */
             ~Logger() {
-                static const std::string
-                        end_line = utils::Logger::CRLF
-                                 + std::string(
-                                    #ifdef CATCH_CONFIG_CONSOLE_WIDTH
-                                       (CATCH_CONFIG_CONSOLE_WIDTH - 1)
-                                    #else
-                                       (79)
-                                    #endif
-                                       , '-')
-                                 + utils::Logger::CRLF
-                                 + utils::Logger::CRLF;
+                const std::string end_line =
+                        utils::Logger::CRLF
+                      + utils::Logger::LINE
+                      + utils::Logger::CRLF;
 
                 if (this->file_enabled) {
                     this->SetFileTimestamp(false);
@@ -265,6 +258,13 @@ namespace utils {
 
             static inline std::ofstream& GetFileStream() {
                 return utils::Logger::get().log_file;
+            }
+
+            /**
+             *  \brief  Write a seperator (line) to the stream.
+             */
+            static void Separator(void) {
+                utils::Logger::Write(utils::Logger::LINE);
             }
 
             /**
@@ -579,6 +579,14 @@ namespace utils {
             static inline const std::string FILL  = "#";
             static inline const std::string EMPTY = " ";
             static inline const std::string CRLF  = "\r\n";
+            static inline const std::string LINE  = std::string(
+                       #ifdef CATCH_CONFIG_CONSOLE_WIDTH
+                          (CATCH_CONFIG_CONSOLE_WIDTH - 1)
+                       #else
+                          (79)
+                       #endif
+                          , '-')
+                    + utils::Logger::CRLF;
     };
 }
 

@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
 
     return status;
 #else
+    (void)argc; (void)argv;
     utils::Logger::Create("test.log", utils::Logger::Level::LOG_DEBUG);
     utils::Logger::SetScreenTitle("C++ Utility library");
 
