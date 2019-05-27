@@ -500,37 +500,37 @@ TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
 
     std::stringstream().swap(ss);
     test = utils::string::format("");
-    utils::string::print_format(ss, "");
+    ss  << utils::string::format("");
     REQUIRE(test     == "");
     REQUIRE(ss.str() == "");
 
     std::stringstream().swap(ss);
     test = utils::string::format("abc");
-    utils::string::print_format(ss, "abc");
+    ss  << utils::string::format("abc");
     REQUIRE(test     == "abc");
     REQUIRE(ss.str() == "abc");
 
     std::stringstream().swap(ss);
     test = utils::string::format("\r\n%d\t%%", 42);
-    utils::string::print_format(ss, "\r\n%d\t%%", 42);
+    ss  << utils::string::format("\r\n%d\t%%", 42);
     REQUIRE(test     == "\r\n42\t%");
     REQUIRE(ss.str() == "\r\n42\t%");
 
     std::stringstream().swap(ss);
     test = utils::string::format("0x%08X", 0xBEEF);
-    utils::string::print_format(ss, "0x%08X", 0xBEEF);
+    ss  << utils::string::format("0x%08X", 0xBEEF);
     REQUIRE(test     == "0x0000BEEF");
     REQUIRE(ss.str() == "0x0000BEEF");
 
     std::stringstream().swap(ss);
     test = utils::string::format("%c%c%c%s%c", 'a', 'b', 'c', "Haha", '\n');
-    utils::string::print_format(ss, "%c%c%c%s%c", 'a', 'b', 'c', "Haha", '\n');
+    ss  << utils::string::format("%c%c%c%s%c", 'a', 'b', 'c', "Haha", '\n');
     REQUIRE(test     == "abcHaha\n");
     REQUIRE(ss.str() == "abcHaha\n");
 
     std::stringstream().swap(ss);
     test = utils::string::format("%*d", 4, 2);
-    utils::string::print_format(ss, "%*d", 4, 2);
+    ss  << utils::string::format("%*d", 4, 2);
     REQUIRE(test     == "   2");
     REQUIRE(ss.str() == "   2");
 
@@ -538,7 +538,7 @@ TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
     const std::string frmt("%d%d%d");
     const int x = 1, y = 2, z = 3;
     test = utils::string::format(frmt + "%c", x, y, z, '\n');
-    utils::string::print_format(ss, frmt + "%c", x, y, z, '\n');
+    ss  << utils::string::format(frmt + "%c", x, y, z, '\n');
     REQUIRE(test     == "123\n");
     REQUIRE(ss.str() == "123\n");
 }

@@ -17,6 +17,7 @@
     #include "utils_lib/utils_catch.hpp"
     #include "utils_lib/utils_colour.hpp"
     #include "utils_lib/utils_string.hpp"
+    #include "utils_lib/utils_ini.hpp"
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
     #include "utils_lib/utils_logger.hpp"
@@ -119,9 +120,7 @@ int main(int argc, char* argv[]) {
 
     try {
         throw utils::exceptions::FileReadException("log.txt");
-    } catch (const std::exception& e) {
-        LOG_ERROR_TRACE(e);
-    }
+    } CATCH_AND_LOG_ERROR_TRACE();
 
     utils::Logger::Writef("UUID: %s\n", utils::random::generate_uuid().c_str());
 

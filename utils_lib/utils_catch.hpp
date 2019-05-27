@@ -58,6 +58,16 @@
     } while (false)
 
 /**
+ *  Macro to catch an exception, print an error trace
+ *  and execute other code afterwards.
+ */
+#define CATCH_AND_LOG_ERROR_TRACE(...)                                      \
+    catch (const std::exception& e) {                                       \
+        LOG_ERROR_TRACE(e);                                                 \
+        __VA_ARGS__                                                         \
+    }
+
+/**
  *  Assertion macro.
  */
 #if defined(ENABLE_TESTS)

@@ -149,6 +149,22 @@ namespace utils::exceptions {
                 : Exception("ConversionException", msg)
             {}
     };
+
+    /**
+     *	\brief
+     *		KeyDoesNotExist exception.
+     *	\param	container
+     *		The container in which the key was not found.
+     *	\param	key
+     *		The key that was not found.
+     */
+    class KeyDoesNotExistException : public Exception  {
+        public:
+            KeyDoesNotExistException(const std::string& container, const std::string& key)
+                : Exception("KeyDoesNotExistException",
+                            "The specified key '" + key + "' does not exist in " + container)
+            {}
+    };
 }
 
 #endif // UTILS_EXCEPTIONS_HPP

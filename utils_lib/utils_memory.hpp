@@ -60,6 +60,7 @@ namespace utils::memory {
      *  std::unique_ptr that contains a pointer to T.
      */
     template <class T, typename _Dp = std::default_delete<T>>
+//    template <class T, typename _Dp = decltype(&deallocVar<T>)>
     using unique_t = std::unique_ptr<T, _Dp>;
 
     /**

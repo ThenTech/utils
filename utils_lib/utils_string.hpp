@@ -332,10 +332,12 @@ namespace utils::string {
         size_t start = 0, end;
 
         do {
-            start = s.find(str_char, start);
-            if (start != std::string::npos) {
-                end = s.find(str_char, ++start);
-                if (end != std::string::npos) {
+            if (start = s.find(str_char, start);
+                start != std::string::npos)
+            {
+                if (end = s.find(str_char, ++start);
+                    end != std::string::npos)
+                {
                     v.emplace_back(s.substr(start, end-start));
                     start = end + 1u;
                 }
@@ -461,10 +463,7 @@ namespace utils::string {
      *  \return
      *      Returns the format expanded with the args.
      */
-    template<
-        typename ... Type,
-        typename = std::enable_if_t<sizeof...(Type) != 0>
-    > [[maybe_unused]]
+    template<typename ... Type> [[maybe_unused]]
     static std::string format(const std::string& format, Type&& ...args) {
         if constexpr(sizeof...(Type) != 0) {
             const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
