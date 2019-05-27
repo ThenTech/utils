@@ -61,6 +61,18 @@ TEST_CASE("Test utils::bits::msb", "[utils][utils::bits]" ) {
     }
 }
 
+TEST_CASE("Test utils::bits::popcount", "[utils][utils::bits]" ) {
+    REQUIRE(utils::bits::popcount<int>(0)      == 0);
+    REQUIRE(utils::bits::popcount<int>(1)      == 1);
+    REQUIRE(utils::bits::popcount<int>(-1)     == utils::bits::size_of<int>());
+    REQUIRE(utils::bits::popcount<int>(0x8001) == 2);
+    REQUIRE(utils::bits::popcount<int>(0xFF)   == 8);
+
+    for (uint64_t i = 64, mask = 1ull << 63; i--; mask >>= 1) {
+        CHECK(utils::bits::popcount(mask) == 1);
+    }
+}
+
 TEST_CASE("Test utils::bits::rotl", "[utils][utils::bits]" ) {
     REQUIRE(0x00 == utils::bits::rotl(0));
     REQUIRE(0xFF == utils::bits::rotl<uint8_t>(0xFF, 8));

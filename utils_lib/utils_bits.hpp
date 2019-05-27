@@ -14,9 +14,11 @@
 #ifdef _MSC_VER
     #define UTILS_BITS_CLZ_ULL  __lzcnt
     #define UTILS_BITS_FFS_LL   utils::bits::internal::_ffs_template
+    #define UTILS_BITS_CNT_LL   utils::bits::internal::_cnt_template
 #else
     #define UTILS_BITS_CLZ_ULL  __builtin_clzll
     #define UTILS_BITS_FFS_LL   __builtin_ffsll
+    #define UTILS_BITS_CNT_LL   __builtin_popcountll
 #endif
 
 namespace utils::bits {
@@ -28,6 +30,15 @@ namespace utils::bits {
                 uint_fast32_t r = 1;
                 while ((x & 1) == 0)
                     x >>= 1, ++r;
+                return r;
+            }
+
+            template <typename T>
+            static inline uint_fast32_t _cnt_template(T x) {
+                if constexpr (x == 0) return 0u;
+                uint_fast32_t r = 0;
+                while (x)
+                    r += (x & 1) == 1, x >>= 1;
                 return r;
             }
         #endif
@@ -98,7 +109,9 @@ namespace utils::bits {
      */
     template<class T> [[maybe_unused]]
     static inline constexpr uint_fast32_t ffs(const T value) {
-        return UTILS_BITS_FFS_LL(uint64_t(value));
+        static_assert(std::is_integral_v<T>, "utils::bits::ffs: Integral required.");
+        using uT = typename std::make_unsigned<T>::type;
+        return UTILS_BITS_FFS_LL(uT(value));
     }
 
     /**
@@ -112,11 +125,26 @@ namespace utils::bits {
      */
     template<class T> [[maybe_unused]]
     static inline constexpr uint_fast32_t msb(const T value) {
-        return value >= 0
-             ? uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uint64_t(value) | 1)) - (value == 0)
-             : utils::bits::size_of<T>();
+        static_assert(std::is_integral_v<T>, "utils::bits::msb: Integral required.");
+        using uT = typename std::make_unsigned<T>::type;
+        return uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uT(value) | 1)) - (value == 0);
     }
 
+    /**
+     * \brief  Popcount
+     *         This function counts the amount of set bits.
+     *
+     * \param  value
+     *      Value to count the set bits in.
+     * \retval bitIndex
+     *      The amount of bits that are `1`.
+     */
+    template<class T> [[maybe_unused]]
+    static inline constexpr uint_fast32_t popcount(const T value) {
+        static_assert(std::is_integral_v<T>, "utils::bits::popcount: Integral required.");
+        using uT = typename std::make_unsigned<T>::type;
+        return UTILS_BITS_CNT_LL(uT(value));
+    }
 
     /**
      *  \brief  Bitwise rotate the given \p value to the left by \p n bits.

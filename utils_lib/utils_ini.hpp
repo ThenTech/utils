@@ -19,8 +19,8 @@ namespace utils::ini {
 
     template<typename TDelimiters = utils::ini::Delimiters>
     class ConfigReader {
-        private:
-            using Value    = std::variant<int, size_t, float, double, std::string>;
+        public:
+            using Value    = std::variant<int, size_t, float, double, std::string, bool>;
             using Contents = std::map<std::string, Value>;
 
             template<typename T, typename VARIANT_T>
@@ -30,7 +30,7 @@ namespace utils::ini {
             struct isVariantMember<T, std::variant<ALL_T...>>
               : public std::disjunction<std::is_same<T, ALL_T>...> {};
 
-
+        private:
             const bool read_from_file;
             const std::string filename;
             std::stringstream inifile;
@@ -45,7 +45,7 @@ namespace utils::ini {
                     utils::string::ltrim(line);
 
                     // Continue if too small or comment
-                    if (line.size() < 2 ) continue;
+                    if (line.size() < 2 || line[0] == '#' || line[0] == ';') continue;
 
                     if (const size_t left_delim = line.find(TDelimiters::values.prefix);
                         left_delim == 0)
@@ -104,7 +104,7 @@ namespace utils::ini {
 
             ConfigReader(ConfigReader&&) = delete;
 
-            void save(std::string name = "") const {
+            void save(std::string name = "") {
                 if (name == ""){
                     if (this->read_from_file) {
                         name = this->filename;
@@ -122,13 +122,52 @@ namespace utils::ini {
                 } CATCH_AND_LOG_ERROR_TRACE();
             }
 
+            template<class F>
+            void ForEachSection(F&& callback) {
+                static_assert(std::is_invocable_v<F, const std::string&>, "ForEachSection: Callable function required.");
+
+                for (const auto& [section, mapped_values] : this->settings_map) {
+                    (void)mapped_values;
+                    std::invoke(std::forward<F>(callback), section);
+                }
+            }
+
+            template<class F>
+            void ForEachSectionKey(const std::string& section, F&& callback) {
+                static_assert(std::is_invocable_v<F, const std::string&, const Value&>, "ForEachSectionKey: Callable function required.");
+
+                if (const auto it = this->settings_map.find(section);
+                    it != this->settings_map.end())
+                {
+                    for (const auto& [key, value] : it->second) {
+                        std::invoke(std::forward<F>(callback), key, value);
+                    }
+                }
+            }
+
+            inline size_t SectionSize() const {
+                return this->settings_map.size();
+            }
+
+            inline size_t SectionKeySize(const std::string& section) const {
+                return this->settings_map.at(section).size();
+            }
+
             inline bool hasSection(const std::string& section) const {
                 return this->settings_map.count(section) == 1;
+            }
+
+            inline bool operator[](const std::string& section) const {
+                return this->hasSection(section);
             }
 
             inline bool hasSectionKey(const std::string& section, const std::string& key) const {
                 return this->hasSection(section)
                     && this->settings_map.at(section).count(key) == 1;
+            }
+
+            inline bool operator()(const std::string& section, const std::string& key) const {
+                return this->hasSectionKey(section, key);
             }
 
             void CreateSection(const std::string& section) {
@@ -160,12 +199,16 @@ namespace utils::ini {
                 this->settings_map.at(section).emplace(key, Value());
             }
 
-            void RemoveSectionKey(const std::string& section, const std::string& key) {
+            void RemoveSectionKey(const std::string& section, const std::string& key, bool delete_section_if_empty = false) {
                 if (const auto it = this->settings_map.find(section);
                     it != this->settings_map.end())
                 {
                     // Exists
                     it->second.erase(key);
+                }
+
+                if (delete_section_if_empty && this->SectionKeySize(section) == 0) {
+                    this->RemoveSection(section);
                 }
             }
 
@@ -195,7 +238,7 @@ namespace utils::ini {
                 typename T,
                 typename std::enable_if<isVariantMember<T, Value>::value, int>::type = 0
             >
-            T GetValue(const std::string& section, const std::string& key) const {
+            T GetValue(const std::string& section, const std::string& key, const T default_value = T()) const {
                 if (const auto it = this->settings_map.find(section);
                     it != this->settings_map.end())
                 {
@@ -215,18 +258,34 @@ namespace utils::ini {
                             // Print to string or cast to value
                             if constexpr(std::is_same_v<T, std::string>) {
                                 return ss.str();
+                            } else if constexpr(std::is_same_v<T, bool>) {
+                                std::string str = ss.str();
+                                utils::string::strToLower(str);
+
+                                if (str == "true" || str == "yes"
+                                 || str == "on"   || str == "1")
+                                {
+                                    return true;
+                                }
+                                if (str == "false" || str == "no"
+                                 || str == "off"   || str == "0")
+                                {
+                                    return false;
+                                }
                             } else {
                                 return utils::misc::lexical_cast<T>(ss.str().c_str());
                             }
                         }
                     } else {
+                        // Possibly return default_value instead?
                         throw utils::exceptions::KeyDoesNotExistException("ConfigReader[" + section + "]", key);
                     }
                 } else {
+                    // Possibly return default_value instead?
                     throw utils::exceptions::KeyDoesNotExistException("ConfigReader", section);
                 }
 
-                return T();
+                return default_value;
             }
 
             template<typename TChar, typename TCharTraits, typename TDelimiters_ = TDelimiters>
@@ -236,19 +295,21 @@ namespace utils::ini {
                 const utils::ini::ConfigReader<TDelimiters_>& cfgreader)
             {
                 for (auto [section, mapped_values] : cfgreader.settings_map) {
-                    stream << TDelimiters_::values.prefix
-                           << section
-                           << TDelimiters_::values.postfix
-                           << std::endl;
+                    if (mapped_values.size() > 0) {
+                        stream << TDelimiters_::values.prefix
+                               << section
+                               << TDelimiters_::values.postfix
+                               << std::endl;
 
-                    for (auto [key, value] : mapped_values) {
-                        stream << key
-                               << TDelimiters_::values.delimiter;
-                        std::visit([&](auto&& arg){ stream << arg; }, value);
+                        for (auto [key, value] : mapped_values) {
+                            stream << key
+                                   << TDelimiters_::values.delimiter;
+                            std::visit([&](auto&& arg){ stream << std::boolalpha << arg; }, value);
+                            stream << std::endl;
+                        }
+
                         stream << std::endl;
                     }
-
-                    stream << std::endl;
                 }
 
                 return stream;
