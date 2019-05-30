@@ -6,6 +6,7 @@
 #include "utils_os.hpp"
 #include "utils_time.hpp"
 #include "utils_catch.hpp"
+#include "utils_threading.hpp"
 
 #include <iostream>
 #include <ostream>
@@ -78,7 +79,7 @@ namespace utils {
             }
 
             inline void write_to_screen(const std::string& text) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                 if (this->canLogScreen()) {
                     this->screen_output << text;
@@ -86,7 +87,7 @@ namespace utils {
             }
 
             inline void write_to_file(const std::string& text) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
 
                 if (this->canLogFile()) {
                     try {
@@ -109,7 +110,7 @@ namespace utils {
                                    const std::string& format,
                                    const Type& ...args)
             {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().logger_mutex);
+                LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
                 if (this->canLog(level)) {
                     this->Command(  utils::os::Console::FG
@@ -175,7 +176,7 @@ namespace utils {
             {
                 utils::Logger::DestroyFile();
                 utils::Logger::SetFileLogLevel(level);
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
                 bool enable_file = false;
 
                 if (fileName.length() > 0) {
@@ -196,7 +197,7 @@ namespace utils {
             {
                 utils::Logger::DestroyScreen();
                 utils::Logger::SetScreenLogLevel(level);
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                 if (console_stream.bad()) {
                     utils::Logger::get().screen_output.tie(&std::cerr);
@@ -231,7 +232,7 @@ namespace utils {
              *  \brief  Destroy the file Logging instance by closing the output file.
              */
             static void DestroyFile() {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
 
                 if (utils::Logger::get().file_enabled) {
                     utils::Logger::get().log_file.close();
@@ -243,7 +244,7 @@ namespace utils {
              *  \brief  Destroy the screen Logging instance.
              */
             static void DestroyScreen() {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                 if (utils::Logger::get().screen_enabled) {
                     utils::os::Command(utils::os::Console::RESET, utils::Logger::get().screen_output);
@@ -393,7 +394,7 @@ namespace utils {
             }
 
             static void ErrorTrace(const char* file, const int line, const char* function, const std::exception& e) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().logger_mutex);
+                LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
                 if (utils::Logger::get().canLog()) {
                     utils::Logger::Command(  utils::os::Console::FG
@@ -458,7 +459,7 @@ namespace utils {
                     const float progress = float(iteration) / total;
 
                     const size_t filled_len = std::min(LEN, size_t(LEN * progress));
-                    std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                    LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                     utils::Logger::GetConsoleStream()
                         << "\r" << prefix << "|"
@@ -508,7 +509,7 @@ namespace utils {
             }
 
             static inline void Command(const utils::os::command_t cmd) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                 if (utils::Logger::get().canLogScreen()) {
                     utils::os::Command(cmd, utils::Logger::GetConsoleStream());
@@ -516,16 +517,16 @@ namespace utils {
             }
 
             static inline void SetScreenTitle(const std::string& title) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::os::SetScreenTitle(title, utils::Logger::GetConsoleStream());
             }
 
             static inline void PauseScreen(void) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::Logger::get().screen_paused = true;
             }
             static inline void PauseFile(void) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_paused = true;
             }
             static inline void Pause(void) {
@@ -534,11 +535,11 @@ namespace utils {
             }
 
             static inline void ResumeScreen(void) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::Logger::get().screen_paused = false;
             }
             static inline void ResumeFile(void) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_paused = false;
             }
             static inline void Resume(void) {
@@ -547,7 +548,7 @@ namespace utils {
             }
 
             static inline void SetFileTimestamp(const bool stamp) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_timestamp = stamp;
             }
             static inline bool GetFileTimestamp(void) {
@@ -555,14 +556,14 @@ namespace utils {
             }
 
             static inline void SetScreenLogLevel(const utils::Logger::Level level) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().screen_mutex);
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::Logger::get().level_screen = level;
             }
             static inline utils::Logger::Level GetScreenLogLevel(void) {
                 return utils::Logger::get().level_screen;
             }
             static inline void SetFileLogLevel(const utils::Logger::Level level) {
-                std::unique_lock<std::mutex> lock(utils::Logger::get().file_mutex);
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
                 utils::Logger::get().level_file = level;
             }
             static inline utils::Logger::Level GetFileLogLevel(void) {

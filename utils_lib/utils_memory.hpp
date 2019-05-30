@@ -35,7 +35,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T, class ... Type> [[maybe_unused]]
+    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline T* allocVar(Type &&... args) {
         return new T(std::forward<Type>(args)...);
     }
@@ -47,7 +47,7 @@ namespace utils::memory {
      *	\param	*v
      *		A pointer to the object to deallocate.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static inline void deallocVar(T* v) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[deallocVar] at 0x%p\n", v);
@@ -69,7 +69,7 @@ namespace utils::memory {
      *  \param  Type... args
      *      Variable argument list passed down to ctor of T.
      */
-    template <class T, class ... Type> [[maybe_unused]]
+    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline auto new_unique_var(Type &&... args) {
         return unique_t<T, decltype(&deallocVar<T>)>(
             allocVar<T>(std::forward<Type>(args)...),
@@ -89,7 +89,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline T* allocArray(size_t x) {
         return new T[x]();
     }
@@ -104,7 +104,7 @@ namespace utils::memory {
      *  \return
      *      A pointer to the newly allocated object.
      */
-    template <class T, typename ... size_t> [[maybe_unused]]
+    template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline T* allocFlatArray(size_t ... dims) {
         return allocArray<T>(utils::algorithm::multiply<size_t...>(dims...));
     }
@@ -116,7 +116,7 @@ namespace utils::memory {
      *	\param	*a
      *		A pointer to the object to deallocate.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static inline void deallocArray(T* a) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[deallocArray] at 0x%p\n", a);
@@ -137,7 +137,7 @@ namespace utils::memory {
      *	\param	new_size
      *		The new length of the array in the first dimension.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static void reallocArray(T*& a, size_t& old_size, size_t new_size) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[reallocArray] at 0x%p from %lld to %lld\n", a, old_size, new_size);
@@ -168,7 +168,7 @@ namespace utils::memory {
      *  \return
      *      A unique_arr_t instance with the newly allocated object.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline unique_arr_t<T> new_unique_array(size_t x) {
         return unique_arr_t<T>(allocArray<T>(x), &deallocArray<T>);
     }
@@ -181,7 +181,7 @@ namespace utils::memory {
      *  \return
      *      A unique_arr_t instance with the newly allocated object.
      */
-    template <class T, typename ... size_t> [[maybe_unused]]
+    template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline unique_arr_t<T> new_unique_flat_array(size_t ... dims) {
         return unique_arr_t<T>(allocFlatArray<T>(dims...), &deallocArray<T>);
     }
@@ -197,7 +197,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static T** allocArray(size_t x, size_t y) {
         T **arr = new T*[x];
         for(size_t i = 0; i < x; i++) arr[i] = utils::memory::allocArray<T>(y);
@@ -213,7 +213,7 @@ namespace utils::memory {
      *	\param	y
      *		The length of the array in the second dimension.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static void deallocArray(T** a, size_t y) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[deallocArrayXY] at 0x%p\n", a);
@@ -235,7 +235,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static T*** allocArray(size_t x, size_t y, size_t z) {
         T ***arr = new T**[x];
         for(size_t i = 0; i < x; i++) arr[i] = utils::memory::allocArray<T>(y, z);
@@ -253,7 +253,7 @@ namespace utils::memory {
      *	\param	z
      *		The length of the array in the third dimension.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static void deallocArray(T*** a, size_t y, size_t z) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[deallocArrayXYZ] at 0x%p\n", a);
@@ -273,7 +273,7 @@ namespace utils::memory {
      *	\param	*v
      *		A pointer to the object to deallocate.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static void deallocVector(std::vector<T*> *v) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[deallocVector] at 0x%p\n", v);
@@ -294,7 +294,7 @@ namespace utils::memory {
      * @brief allocVector
      * @param args
      */
-    template <class T, class ... Type> [[maybe_unused]]
+    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline auto new_unique_vector(Type &&... args) {
         return unique_vect_t<T>(
             allocVar<std::vector<T*>>(std::forward<Type>(args)...),
@@ -312,7 +312,7 @@ namespace utils::memory {
      *	\param	*m
      *		A pointer to the object to deallocate.
      */
-    template <class FIRST, class SECOND> [[maybe_unused]]
+    template <class FIRST, class SECOND> ATTR_MAYBE_UNUSED
     static void deallocMap(std::unordered_map<FIRST, SECOND> *m) {
         #ifdef ALLOC_LOG
             std::fprintf(stderr, "[deallocMap] at 0x%p\n", m);

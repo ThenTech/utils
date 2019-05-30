@@ -4,40 +4,31 @@
 #include "utils_exceptions.hpp"
 #include "utils_memory.hpp"
 #include "utils_print.hpp"
+#include "utils_traits.hpp"
 
 #include <iomanip>
 
 
 namespace utils::misc {
-    /**
-     *  \brief   Cast enum type to underlining data type.
-     *  \param   e
-     *      The enum value to cast.
-     */
-    template <typename E>
-    inline constexpr auto to_underlying(const E e) noexcept {
-        return static_cast<std::underlying_type_t<E>>(e);
-    }
-
-    /**	\brief
-     *		Convert the given char* to a variable of type T.
-     *		Use this method instead of the raw C functions: atoi, atof, atol, atoll.
+    /** \brief
+     *      Convert the given char* to a variable of type T.
+     *      Use this method instead of the raw C functions: atoi, atof, atol, atoll.
      *
      *      Also check for hex number.
      *
-     *	\tparam	T
-     *		The type of object to cast to.
-     *	\param	buffer
-     *		The character buffer to convert.
-     *	\return
-     *		Returns a variable of type T with the value as given in buffer.
+     *  \tparam T
+     *      The type of object to cast to.
+     *  \param  buffer
+     *      The character buffer to convert.
+     *  \return
+     *      Returns a variable of type T with the value as given in buffer.
      */
-    template <class T> [[maybe_unused]]
-    static T lexical_cast(const char* buffer) {
+    template <class T> ATTR_MAYBE_UNUSED
+    static T lexical_cast(const char *buffer) {
         T out;
         std::stringstream cast;
 
-        if (buffer[0] == '0' && buffer[1] != '.'){
+        if (buffer[0] == '0' && buffer[1] != '.') {
             if (buffer[1] == 'x' || buffer[1] == 'X') {
                 // Hex literal
                 cast << std::hex << buffer;
@@ -45,7 +36,7 @@ namespace utils::misc {
                 // Binary literal
                 try {
                     cast << std::stoll(buffer + 2, nullptr, 2);
-                } catch(std::invalid_argument const&) {
+                } catch (std::invalid_argument const&) {
                     throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));
                 }
             } else {

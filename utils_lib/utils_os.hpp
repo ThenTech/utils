@@ -3,7 +3,7 @@
 
 #include "utils_bits.hpp"
 #include "utils_string.hpp"
-#include "utils_misc.hpp"
+#include "utils_traits.hpp"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     #include <windows.h>
@@ -40,22 +40,22 @@ namespace utils::os {
 
         inline constexpr _Console_commands
         operator&(const _Console_commands __a, const _Console_commands __b) {
-            return _Console_commands(utils::misc::to_underlying(__a) & utils::misc::to_underlying(__b));
+            return _Console_commands(utils::traits::to_underlying(__a) & utils::traits::to_underlying(__b));
         }
 
         inline constexpr _Console_commands
         operator|(const _Console_commands __a, const _Console_commands __b) {
-            return _Console_commands(utils::misc::to_underlying(__a) | utils::misc::to_underlying(__b));
+            return _Console_commands(utils::traits::to_underlying(__a) | utils::traits::to_underlying(__b));
         }
 
         inline constexpr _Console_commands
         operator^(const _Console_commands __a, const _Console_commands __b) {
-            return _Console_commands(utils::misc::to_underlying(__a) ^ utils::misc::to_underlying(__b));
+            return _Console_commands(utils::traits::to_underlying(__a) ^ utils::traits::to_underlying(__b));
         }
 
         inline constexpr _Console_commands
         operator~(const _Console_commands __a) {
-            return _Console_commands(~utils::misc::to_underlying(__a));
+            return _Console_commands(~utils::traits::to_underlying(__a));
         }
 
         inline const _Console_commands&
@@ -117,7 +117,7 @@ namespace utils::os {
      *  \param out
      *      The stream to write the virtual codes to. (default: std::cout)
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static void Command(const command_t cmd, std::ostream& out = std::cout) {
         #define BASE_ "\033["
         std::string cmd_str = "";
@@ -176,7 +176,7 @@ namespace utils::os {
      *  \param  out
      *      The stream to write the virtual codes to. (default: std::cout)
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static void SetScreenTitle(const std::string& title, std::ostream& out = std::cout) {
         out << "\033]2;" << title << "\007";
     }
@@ -185,7 +185,7 @@ namespace utils::os {
      *  \brief  Enable virtual commands processing for the default output handle
      *          on Windows. Unix is supported by default.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static void EnableVirtualConsole() {
         #ifdef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
             // Set-up Windows terminal

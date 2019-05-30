@@ -3,6 +3,7 @@
 
 #include "utils_exceptions.hpp"
 #include "utils_memory.hpp"
+#include "utils_traits.hpp"
 
 #include <string>
 #include <cstring>
@@ -16,7 +17,7 @@ namespace utils::string {
      *	\param	s
      *		A reference to the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void ltrim(std::string &s) {
         s.erase(s.begin(), std::find_if(s.begin(), s.end(),
                 [](int c) {return !std::isspace(c);}));
@@ -27,7 +28,7 @@ namespace utils::string {
      *	\param	s
      *		A reference to the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void rtrim(std::string &s) {
         s.erase(std::find_if(s.rbegin(), s.rend(),
                 [](int c) {return !std::isspace(c);}).base(), s.end());
@@ -38,7 +39,7 @@ namespace utils::string {
      *	\param	s
      *		A reference to the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void trim(std::string &s) {
         ltrim(s);
         rtrim(s);
@@ -49,7 +50,7 @@ namespace utils::string {
      *	\param	s
      *		A string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string trimmed(std::string s) {
         trim(s);
         return s;
@@ -63,7 +64,7 @@ namespace utils::string {
      *  \param  erase_from
      *      The substring to look for and start erasing from.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strEraseFrom(std::string &str, const std::string& erase_from) {
         const size_t pos = str.find(erase_from);
 
@@ -81,7 +82,7 @@ namespace utils::string {
      *  \param  erase_to
      *      The substring to look for and erase to.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strEraseTo(std::string &str, const std::string& erase_to) {
         const size_t pos = str.find(erase_to);
 
@@ -99,7 +100,7 @@ namespace utils::string {
      *      The substring to look for and start erasing from.
      *  \return Returns a copy where the appropriate parts were erased.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string strErasedFrom(std::string str, const std::string& erase_from) {
         strEraseFrom(str, erase_from);
         return str;
@@ -114,7 +115,7 @@ namespace utils::string {
      *  \param  erase_to
      *      The substring to look for and erase to.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string strErasedTo(std::string str, const std::string& erase_to) {
         strEraseTo(str, erase_to);
         return str;
@@ -127,7 +128,7 @@ namespace utils::string {
      *	\param	str
      *		A reference to the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strToUpper(std::string &str) {
         std::transform(str.begin(), str.end(), str.begin(),
             [](std::string::value_type ch) {
@@ -143,7 +144,7 @@ namespace utils::string {
      *	\param	str
      *		A copy of the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string strToUppercase(std::string str) {
         strToUpper(str);
         return str;
@@ -156,7 +157,7 @@ namespace utils::string {
      *	\param	str
      *		A reference to the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strToLower(std::string &str) {
         std::transform(str.begin(), str.end(), str.begin(),
             [](std::string::value_type ch) {
@@ -172,13 +173,13 @@ namespace utils::string {
      *	\param	str
      *		A copy of the string to perform the operation.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string strToLowercase(std::string str) {
         strToLower(str);
         return str;
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline bool strHasChar(const std::string &str, const char ch) {
         // string.h : strchr(str.c_str(), ch)
         return str.find(ch) != std::string::npos;
@@ -193,7 +194,7 @@ namespace utils::string {
      *	\param	ch
      *		The characters to replace.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strEraseConsecutive(std::string &str, const char ch) {
         str.erase(std::unique(str.begin(), str.end(),
                                 [&](const char lhs, const char rhs) {
@@ -212,7 +213,7 @@ namespace utils::string {
      *	\param	to
      *		A reference to a string to replace with.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strReplaceAll(std::string &str, const std::string& from, const std::string& to) {
         if (from.size() == 0) return;
 
@@ -233,7 +234,7 @@ namespace utils::string {
      *	\param	to
      *		A reference to a string to replace with.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strReplaceAll(std::string &str, const char from, const std::string& to = "") {
         utils::string::strReplaceAll(str, std::string(1, from), to);
     }
@@ -248,7 +249,7 @@ namespace utils::string {
      *	\param	to
      *		A char to replace with.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strReplaceAll(std::string &str, const char from, const char to) {
         size_t start_pos = 0;
         while((start_pos = str.find(from, start_pos)) != std::string::npos) {
@@ -264,7 +265,7 @@ namespace utils::string {
      *	\param	erase
      *		A char to erase.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strEraseAll(std::string &str, const char erase) {
         str.erase(std::remove(str.begin(), str.end(), erase), str.end());
     }
@@ -276,7 +277,7 @@ namespace utils::string {
      *	\param	erase
      *		A string to erase.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void strEraseAll(std::string &str, const std::string& erase) {
         if (erase.size() == 0) return;
 
@@ -293,7 +294,7 @@ namespace utils::string {
      *	\return
      *		Returns L##buffer : each char is replaced with its wide version.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline wchar_t* convert2WSTR(const char* buffer) {
         const size_t size = std::strlen(buffer) * 2 + 1;
         wchar_t* WSTRbuff = new wchar_t[size];
@@ -322,7 +323,7 @@ namespace utils::string {
      *      The char the strings are quoted in.
      *  \return Returns the list of quoted strings, without quotes.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static void strExtractQuotedStrings(std::vector<std::string> &v, const std::string& s, const char str_char='\'') {
         const size_t len = s.length() - 1u;
         v.clear();
@@ -355,7 +356,7 @@ namespace utils::string {
      *  \return Returns one string containing all the strings in \p v appended
      *          to eachother, joined by \p join_with.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static std::string strJoin(const std::vector<std::string> &v, const std::string& join_with=",") {
         std::string joined;
         const auto end = v.end();
@@ -381,7 +382,7 @@ namespace utils::string {
      *  \return Returns one string containing all the strings in \p v appended
      *          to eachother, joined by \p join_with.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string strJoin(const std::vector<std::string> &v, const char join_with) {
         return utils::string::strJoin(v, std::string(1, join_with));
     }
@@ -405,7 +406,7 @@ namespace utils::string {
                                   || std::is_same<CharT, char16_t>::value
                                   || std::is_same<CharT, char32_t>::value,
                                      int> = 0
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static std::string strJoin(const std::vector<CharT> &v, const char join_with='\0') {
         std::string joined;
         const auto end = v.end();
@@ -439,7 +440,7 @@ namespace utils::string {
      *      The character delimiter.
      *  \return Returns a list of seperate strings that were delimited by \p delim.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static void strSplit(std::vector<std::string> &v, const std::string &s, const char delim = ',') {
         std::stringstream ss(s);
         v.clear();
@@ -463,7 +464,7 @@ namespace utils::string {
      *  \return
      *      Returns the format expanded with the args.
      */
-    template<typename ... Type> [[maybe_unused]]
+    template<typename ... Type> ATTR_MAYBE_UNUSED
     static std::string format(const std::string& format, Type&& ...args) {
         if constexpr(sizeof...(Type) != 0) {
             const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
@@ -493,7 +494,7 @@ namespace utils::string {
      *  \return
      *      Returns true if _base64_chars.find(c) != npos
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline bool is_base64(uint8_t c) {
         return (std::isalnum(c) || (c == '+') || (c == '/'));
     }
@@ -509,7 +510,7 @@ namespace utils::string {
      *  \return
      *      Returns true if buffer contains a valid base64 encoded string.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static bool is_base64(const uint8_t *buffer, size_t length) {
         if (length % 4) return false;
         const uint8_t *end = --buffer + length + 1;
@@ -543,7 +544,7 @@ namespace utils::string {
      *  \return
      *      Returns true if string contains a valid base64 encoded string.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline bool is_base64(const std::string& str) {
         return utils::string::is_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
@@ -557,7 +558,7 @@ namespace utils::string {
      *      The length of the buffer to encode.
      *  \return Return an std::string containing the encoded buffer.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static std::string base64_encode(const uint8_t *buffer, size_t length) {
         std::string encoded;
         const uint8_t mod = length % 3;
@@ -603,7 +604,7 @@ namespace utils::string {
      *      The string to encode.
      *  \return Return an std::string containing the encoded string.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string base64_encode(const std::string& str) {
         return utils::string::base64_encode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
@@ -617,7 +618,7 @@ namespace utils::string {
      *      The length of the buffer to decode.
      *  \return Return an std::string containing the decoded buffer.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static std::string base64_decode(const uint8_t *buffer, size_t length) {
         if (length % 4) {
             throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid size)");
@@ -681,7 +682,7 @@ namespace utils::string {
      *      The string to decode.
      *  \return Return an std::string containing the decoded string.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string base64_decode(const std::string& str) {
         return utils::string::base64_decode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }

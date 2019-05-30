@@ -2,6 +2,7 @@
 #define UTILS_MATH_HPP
 
 #include "utils_catch.hpp"
+#include "utils_traits.hpp"
 
 #include <cmath>
 
@@ -21,7 +22,7 @@ namespace utils::math {
         template<
             typename T,
             typename std::enable_if<std::is_integral_v<T>, int>::type = 0
-        > [[maybe_unused]]
+        > ATTR_MAYBE_UNUSED
         static inline constexpr T _gcd_recur(const T x, const T y) noexcept {
             return (y == T(0) ? x : _gcd_recur(y, x % y));
         }
@@ -39,7 +40,7 @@ namespace utils::math {
         template<
             typename T,
             typename std::enable_if<std::is_integral_v<T>, int>::type = 0
-        > [[maybe_unused]]
+        > ATTR_MAYBE_UNUSED
         static inline constexpr T _lcm(const T x, const T y) noexcept {
             return x * (y / _gcd_recur(x, y));
         }
@@ -55,7 +56,7 @@ namespace utils::math {
      *  \return
      *      Returns -1, 0, or 1 according to the sign of value.
      */
-    template <class T> [[maybe_unused]]
+    template <class T> ATTR_MAYBE_UNUSED
     static inline constexpr T sign(const T& value) {
         static_assert(std::is_signed_v<T>, "utils::math::sign: Signed type required.");
         return (T(0) < value) - (value < T(0));
@@ -77,7 +78,7 @@ namespace utils::math {
         typename A,
         typename B,
         typename C = typename std::common_type<A, B>::type
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr C gcd(const A x, const B y) noexcept {
         if constexpr(std::is_integral_v<C>) {
             return utils::math::internal::_gcd_recur(static_cast<C>(std::abs(x)),
@@ -104,7 +105,7 @@ namespace utils::math {
         typename A,
         typename B,
         typename C = typename std::common_type<A, B>::type
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr C lcm(const A x, const B y) {
         ASSERT(x != C(0) && y != C(0));
 
@@ -136,7 +137,7 @@ namespace utils::math {
         typename B,
         typename ...Args,
         typename C = typename std::common_type<A, B, Args...>::type
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr C lcm_chain(const A x, const B y, const Args... args) {
         if constexpr (sizeof...(Args) == 0) {
             return utils::math::lcm(x, y);
@@ -159,10 +160,10 @@ namespace utils::math {
      *	\return	bool
      *		Returns whether x equals y within the given epsilon precision.
      */
-    template<typename T> [[maybe_unused]]
+    template<typename T> ATTR_MAYBE_UNUSED
     static inline constexpr bool epsilon_equals(const T x, const T y, const double epsilon = 1e-4) {
         if constexpr (std::is_integral_v<T>) {
-            (void) epsilon;
+            UNUSED(epsilon);
             return x == y;
         } else {
             // TODO Use std::numeric_limits<T>::epsilon() ?

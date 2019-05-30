@@ -9,7 +9,7 @@ OUTPUT = ./bin
 LIBS = -lstdc++fs
 
 # Use a g++ executable with c++17 support (see install_g++.sh)
-CC = g++-7
+CC = g++
 
 # Extra flags to strip unused symbols: -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
 # Debug

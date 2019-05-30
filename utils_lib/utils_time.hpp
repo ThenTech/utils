@@ -1,6 +1,8 @@
 #ifndef UTILS_TIME_HPP
 #define UTILS_TIME_HPP
 
+#include "utils_traits.hpp"
+
 #include <chrono>
 #include <iomanip>
 #include <ctime>
@@ -16,7 +18,7 @@ namespace utils::time {
         /**
          *  \brief  Return a timepoint at the current time.
          */
-        [[maybe_unused]]
+        ATTR_MAYBE_UNUSED
         static inline timepoint_t Start(void) {
             return std::chrono::steady_clock::now();
         }
@@ -66,7 +68,7 @@ namespace utils::time {
             class duration_struct = utils::time::Timer::time_ns,
             class F,
             class... Args
-        > [[maybe_unused]]
+        > ATTR_MAYBE_UNUSED
         static inline double time(F&& f, Args&& ... args) {
             static_assert(std::is_invocable_v<F, Args...>, "utils::time::Timer::time: Callable function required.");
 
@@ -96,7 +98,7 @@ namespace utils::time {
             class duration_struct = utils::time::Timer::time_ns,
             class F,
             class... Args
-        > [[maybe_unused]]
+        > ATTR_MAYBE_UNUSED
         static inline double time_n(F&& f, Args&& ... args) {
             static_assert(std::is_invocable_v<F, Args...>, "utils::time::Timer::time: Callable function required.");
             static_assert(N > 0, "utils::time::Timer::time: Time at least 1 run.");
@@ -133,7 +135,7 @@ namespace utils::time {
      *      Will be set to the current time if nullptr.
      *  \return Returns a string type with the formatted time.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline auto Timestamp(const char* frmt="%Y-%m-%d %H:%M:%S", const std::time_t *epoch_time = nullptr) {
         const std::time_t stamp = (epoch_time == nullptr
                                   ? std::time(nullptr)

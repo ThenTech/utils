@@ -3,9 +3,12 @@
 /**
  *  Generic printing to an outputstream.
  *  Reference: https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
+ *
+ *  TODO Also look at https://github.com/p-ranav/pprint
  */
 
 #include "utils_string.hpp"
+#include "utils_traits.hpp"
 
 #include <iostream>
 #include <iterator>
@@ -25,50 +28,7 @@
 #define UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES 1
 
 
-namespace std {
-    // Pre-declarations of container types so we don't actually have to include the relevant headers if not needed, speeding up compilation time.
-    // These aren't necessary if you do actually include the headers.
-    template<typename T, typename TAllocator> class vector;
-    template<typename T, typename TAllocator> class list;
-    template<typename T, typename TTraits, typename TAllocator> class set;
-    template<typename TKey, typename TValue, typename TTraits, typename TAllocator> class map;
-    template<typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator> class unordered_map;
-    template<typename T, std::size_t N> struct array;
-}
-
-
 namespace utils::print {
-    ////////////////////////////////////////////////////////////////////////////
-    /// Mark std:: types as container
-    ////////////////////////////////////////////////////////////////////////////
-    // Basic is_container template; specialize to derive from std::true_type for all desired container types
-    template<typename T>
-    struct is_container : public std::false_type { };
-
-    // Mark vector as a container
-    template<typename T, typename TAllocator>
-    struct is_container<std::vector<T, TAllocator>> : public std::true_type { };
-
-    // Mark list as a container
-    template<typename T, typename TAllocator>
-    struct is_container<std::list<T, TAllocator>> : public std::true_type { };
-
-    // Mark set as a container
-    template<typename T, typename TTraits, typename TAllocator>
-    struct is_container<std::set<T, TTraits, TAllocator>> : public std::true_type { };
-
-    // Mark map as a container
-    template<typename TKey, typename TValue, typename TTraits, typename TAllocator>
-    struct is_container<std::map<TKey, TValue, TTraits, TAllocator>> : public std::true_type { };
-
-    // Mark unordered_map as a container
-    template<typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator>
-    struct is_container<std::unordered_map<TKey, TValue, THash, TPred, TAllocator>> : public std::true_type { };
-
-    // Mark std::array as a container
-    template<typename T, std::size_t N>
-    struct is_container<std::array<T, N>> : public std::true_type { };
-
     ////////////////////////////////////////////////////////////////////////////
     /// pretty_ostream_iterator
     ////////////////////////////////////////////////////////////////////////////
@@ -306,12 +266,15 @@ namespace utils::print {
             inline const_iterator begin() const { return _array; }
             inline const_iterator end()   const { return _array + N; }
     };
+}
 
+namespace utils::traits {
     // Mark array_wrapper as a container
     template<typename T, size_t N>
     struct is_container<utils::print::array_wrapper<T, N>> : public std::true_type { };
+}
 
-
+namespace utils::print {
     template <typename T, size_t N>
     utils::print::array_wrapper<T, N> print_array_helper(const T (&a)[N]) {
         return utils::print::array_wrapper<T, N>(a);
@@ -340,7 +303,7 @@ namespace utils::print {
         class T, typename ...Strings,
         std::enable_if_t<(std::is_convertible_v<Strings const&, std::string_view> && ...), int> = 0
     >
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static const std::string type2name(T const& o, const Strings& ...filter) {
         #ifdef _CXXABI_H
             // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
@@ -379,7 +342,7 @@ namespace std {
 
     // Prints a container to the stream using default delimiters
     template<typename T, typename TChar, typename TCharTraits>
-    typename std::enable_if<utils::print::is_container<T>::value, std::basic_ostream<TChar, TCharTraits>&>::type
+    typename std::enable_if<utils::traits::is_container<T>::value, std::basic_ostream<TChar, TCharTraits>&>::type
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const T& container)

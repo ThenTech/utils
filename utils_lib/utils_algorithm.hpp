@@ -1,7 +1,7 @@
 #ifndef UTILS_ALGORITHM_HPP
 #define UTILS_ALGORITHM_HPP
 
-#include "external/random.hpp"
+#include "utils_traits.hpp"
 
 #include <algorithm>
 #include <functional>
@@ -14,7 +14,7 @@ namespace utils::algorithm {
      *  \return
      *      True if arg1 && ... && argn == true
      */
-    template<typename... T> [[maybe_unused]]
+    template<typename... T> ATTR_MAYBE_UNUSED
     static inline constexpr bool all(T const&... args) {
         return (... && args);
     }
@@ -25,7 +25,7 @@ namespace utils::algorithm {
      *  \return
      *      True if arg1 || ... || argn == true
      */
-    template<typename... T> [[maybe_unused]]
+    template<typename... T> ATTR_MAYBE_UNUSED
     static inline constexpr bool any(T const&... args) {
         return (... || args);
     }
@@ -36,7 +36,7 @@ namespace utils::algorithm {
      *  \return
      *      True if !(arg1 || ... || argn) == true
      */
-    template<typename... T> [[maybe_unused]]
+    template<typename... T> ATTR_MAYBE_UNUSED
     static inline constexpr bool none(T const&... args) {
         return !any(args...);
     }
@@ -47,7 +47,7 @@ namespace utils::algorithm {
      *  \return
      *      True if arg1 == ... == argn
      */
-    template <typename... T> [[maybe_unused]]
+    template <typename... T> ATTR_MAYBE_UNUSED
     static inline constexpr bool all_equal(T const&... args) {
         if constexpr (sizeof...(T) == 0) {
             return true;
@@ -64,10 +64,10 @@ namespace utils::algorithm {
      *  \return
      *      True if (min <= arg1 && arg1 <= max) && ...
      */
-    template <typename T, typename... Ts> [[maybe_unused]]
+    template <typename T, typename... Ts> ATTR_MAYBE_UNUSED
     static inline constexpr bool all_within(T min, T max, const Ts&... ts) {
         if constexpr (sizeof...(Ts) == 0) {
-            (void)min; (void)max;
+            UNUSED(min, max);
             return true;
         } else {
             if (max < min) // Allow range from higher to lower
@@ -83,9 +83,9 @@ namespace utils::algorithm {
      *  \return
      *      True if (min <= arg1 && arg1 <= max) && ...
      */
-    template <typename T, typename Container> [[maybe_unused]]
+    template <typename T, typename Container> ATTR_MAYBE_UNUSED
     static inline constexpr bool within(T min, T max, const Container& cont) {
-        static_assert (effolkronium::details::is_iterator<decltype(std::begin(cont))>::value,
+        static_assert (is_iterable_v(cont),
                        "utils::bits::all_within: Container must have iterator support.");
         if (max < min) // Allow range from higher to lower
             std::swap(min, max);
@@ -101,7 +101,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns arg1 + ... + argn
      */
-    template<typename... T> [[maybe_unused]]
+    template<typename... T> ATTR_MAYBE_UNUSED
     static inline constexpr auto sum(T const&... args) {
         return (args + ... + 0);
     }
@@ -112,7 +112,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns arg1 * ... * argn
      */
-    template<typename... T> [[maybe_unused]]
+    template<typename... T> ATTR_MAYBE_UNUSED
     static inline constexpr auto multiply(T const&... args) {
         return (args * ... * 1);
     }
@@ -123,7 +123,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns std::min(arg1, std::min(..., argn))
      */
-    template<typename T, typename... Args> [[maybe_unused]]
+    template<typename T, typename... Args> ATTR_MAYBE_UNUSED
     static inline constexpr auto min(T const& first, T const& second, Args const&... args) {
         if constexpr (sizeof...(Args) == 0) {
             return std::min(first, second);
@@ -139,7 +139,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns std::max(arg1, std::max(..., argn))
      */
-    template<typename T, typename... Args> [[maybe_unused]]
+    template<typename T, typename... Args> ATTR_MAYBE_UNUSED
     static inline constexpr auto max(T const& first, T const& second, Args const&... args) {
         if constexpr (sizeof...(Args) == 0) {
             return std::max(first, second);

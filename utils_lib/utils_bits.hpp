@@ -2,10 +2,10 @@
 #define UTILS_BITS_HPP
 
 #include "utils_catch.hpp"
+#include "utils_traits.hpp"
 
 #include <cstdint>
 #include <limits>
-#include <type_traits>
 
 
 /*
@@ -62,7 +62,7 @@ namespace utils::bits {
     template<
         typename... T,
         typename C = std::common_type_t<T...>
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr C and_all(T const&... args) {
         static_assert(std::is_integral_v<C>, "utils::bits::and_all: Integrals required.");
         return (... & args);
@@ -76,7 +76,7 @@ namespace utils::bits {
     template<
         typename... T,
         typename C = std::common_type_t<T...>
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr C or_all(T const&... args) {
         static_assert(std::is_integral_v<C>, "utils::bits::or_all: Integrals required.");
         return (... | args);
@@ -90,7 +90,7 @@ namespace utils::bits {
     template<
         typename... T,
         typename C = std::common_type_t<T...>
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr C xor_all(T const&... args) {
         static_assert(std::is_integral_v<C>, "utils::bits::xor_all: Integrals required.");
         return (... ^ args);
@@ -107,7 +107,7 @@ namespace utils::bits {
      * \retval bitIndex
      *      Index of least significat bit at one
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline constexpr uint_fast32_t ffs(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::ffs: Integral required.");
         using uT = typename std::make_unsigned<T>::type;
@@ -123,7 +123,7 @@ namespace utils::bits {
      * \retval bitIndex
      *      Index of msb
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline constexpr uint_fast32_t msb(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::msb: Integral required.");
         using uT = typename std::make_unsigned<T>::type;
@@ -139,7 +139,7 @@ namespace utils::bits {
      * \retval bitIndex
      *      The amount of bits that are `1`.
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline constexpr uint_fast32_t popcount(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::popcount: Integral required.");
         using uT = typename std::make_unsigned<T>::type;
@@ -161,7 +161,7 @@ namespace utils::bits {
     template <
         class T,
         size_t bit_length = utils::bits::size_of<T>()
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr T rotl(const T value, const int_fast32_t n = 1) {
         static_assert(std::is_integral_v<T>, "utils::bits::rotl: Integral required.");
 
@@ -185,7 +185,7 @@ namespace utils::bits {
     template <
         class T,
         size_t bit_length = utils::bits::size_of<T>()
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline constexpr T rotr(const T value, const int_fast32_t n = 1) {
         static_assert(std::is_integral_v<T>, "utils::bits::rotr: Integral required.");
 
@@ -201,7 +201,7 @@ namespace utils::bits {
      *      The value to check.
      *  \return Returns true if value is the result of (1 << x).
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline constexpr bool is_power_of_2(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::is_power_of_2: Integral required.");
         return value && !(value & (value - 1));
@@ -214,7 +214,7 @@ namespace utils::bits {
      *      The value to check.
      *  \return Returns true if the value is odd.
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline constexpr bool is_odd(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::is_odd: Integral required.");
         return (value & T(1)) != T(0);
@@ -227,7 +227,7 @@ namespace utils::bits {
      *      The value to check.
      *  \return Returns true if the value is even (divisable by 2).
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline constexpr bool is_even(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::is_even: Integral required.");
         return !utils::bits::is_odd(value);
@@ -243,7 +243,7 @@ namespace utils::bits {
      *      The multiple to round to.
      *  \return Returns the nearest multiple greater than \p value.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline constexpr int64_t round_to_multiple(const int64_t value, const int64_t multiple) noexcept(false) {
         ASSERT(multiple);
         const int64_t isPositive = int64_t(value >= 0ll);
@@ -258,7 +258,7 @@ namespace utils::bits {
      *  @return Returns the next byte if bits has 1-7 surplus bits
      *          or the current byte if no surplus bits.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline constexpr size_t round_to_byte(const size_t bits) {
         return (bits + 7ull) / 8ull;
     }
@@ -282,7 +282,7 @@ namespace utils::bits {
     template<
         class T,
         size_t Tlen = utils::bits::size_of<T>()
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline T shift_signed(const size_t value, const size_t src_bits) {
         #if 0 // ASSERT that src_bits is not bigger than sizeof(T)
             ASSERT(src_bits <= Tlen);
@@ -306,7 +306,7 @@ namespace utils::bits {
      *  @return Returns a signed or unsigned number,
      *          depending on whether value[src_bits : 0] was considered signed.
      */
-    template<class T, uint_fast8_t bits> [[maybe_unused]]
+    template<class T, uint_fast8_t bits> ATTR_MAYBE_UNUSED
     static inline T extend_sign(const size_t value) {
         static_assert(bits > 0, "utils::bits::extend_sign: Amount of bits greater than 0 required.");
         struct { T value:bits; } s;
@@ -321,7 +321,7 @@ namespace utils::bits {
      *  \return
      *      Returns the amount of bits required to represent the value if reshifted to size_of<T> bits.
      */
-    template<class T> [[maybe_unused]]
+    template<class T> ATTR_MAYBE_UNUSED
     static inline uint_fast32_t bits_needed(T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::bits_needed: Integral required.");
 

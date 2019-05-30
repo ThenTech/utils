@@ -29,6 +29,7 @@
 
 #include "utils_string.hpp"
 #include "utils_misc.hpp"
+#include "utils_traits.hpp"
 
 #include <cmath>
 #include <array>
@@ -152,7 +153,7 @@ namespace utils::colour {
         return { s *c[0], s *c[1], s *c[2] };
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetHeatColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -172,7 +173,7 @@ namespace utils::colour {
         return (1.0 - t) * c0 + t * c1;
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetJetColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -196,7 +197,7 @@ namespace utils::colour {
         return (1.0 - t) * c0 + t * c1;
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetHotColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -216,13 +217,13 @@ namespace utils::colour {
         }
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline Colour GetGrayColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
         return (1.0 - x) * Colour{ 1.0, 1.0, 1.0 };
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetMagmaColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -488,7 +489,7 @@ namespace utils::colour {
         return data[static_cast<size_t>(std::round(x * 255.0))];
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetInfernoColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -754,7 +755,7 @@ namespace utils::colour {
         return data[static_cast<size_t>(std::round(x * 255.0))];
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetPlasmaColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -1020,7 +1021,7 @@ namespace utils::colour {
         return data[static_cast<size_t>(std::round(x * 255.0))];
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetViridisColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -1286,7 +1287,7 @@ namespace utils::colour {
         return data[static_cast<size_t>(std::round(x * 255.0))];
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static Colour GetGithubColor(double x) {
         x = std::clamp(x, 0.0, 1.0);
 
@@ -1306,7 +1307,7 @@ namespace utils::colour {
         return (1.0 - t) * c0 + t * c1;
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline Colour GetColor(double x, ColourmapType type = ColourmapType::Viridis) {
         switch (type) {
             case ColourmapType::Heat:
@@ -1331,7 +1332,7 @@ namespace utils::colour {
     }
 
 #if defined(TINYCOLORMAP_WITH_QT5) and defined(TINYCOLORMAP_WITH_EIGEN)
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static QImage CreateMatrixVisualization(const Eigen::MatrixXd& matrix) {
         const int w = matrix.cols();
         const int h = matrix.rows();
@@ -1351,7 +1352,7 @@ namespace utils::colour {
         return image;
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline void ExportMatrixVisualization(const Eigen::MatrixXd& matrix, const std::string& path) {
         CreateMatrixVisualization(matrix).save(QString::fromStdString(path));
     }

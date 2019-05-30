@@ -15,7 +15,8 @@
 #include <memory>
 
 
-#define LOCK_BLOCK(MTX) std::unique_lock<std::mutex> __lock(MTX)
+#define LOCK_BLOCK(MTX)         std::lock_guard<std::mutex> __lock(MTX)
+#define LOCK_UNIQUE_BLOCK(MTX)  std::unique_lock<std::mutex> __lock(MTX)
 
 
 namespace utils::threading {
@@ -54,7 +55,7 @@ namespace utils::threading {
                                 std::packaged_task<void()> task;
 
                                 {
-                                    LOCK_BLOCK(this->queue_mutex);
+                                    LOCK_UNIQUE_BLOCK(this->queue_mutex);
 
                                     this->condition.wait(__lock, [this]{
                                         return this->stop || !this->tasks.empty();

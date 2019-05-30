@@ -4,6 +4,7 @@
 #include "external/random.hpp"
 #include "utils_catch.hpp"
 #include "utils_string.hpp"
+#include "utils_traits.hpp"
 
 #include <sstream>
 #include <iomanip>
@@ -52,12 +53,9 @@ namespace utils::random {
      *      the reserve and push_back methods implemented.
      *  \return Returns a Container instance with the picked items.
      */
-    template<typename Container> [[maybe_unused]]
+    template<typename Container> ATTR_MAYBE_UNUSED
     static auto pick_x_from(size_t amount, const Container& container) ->
-        typename std::enable_if<effolkronium::details::is_iterator<
-                    decltype(std::begin(container))>::value
-                  , Container
-        >::type
+        typename std::enable_if<is_iterable_v(container), Container>::type
     {
         Container picked;
         picked.reserve(amount);
@@ -100,7 +98,7 @@ namespace utils::random {
     template<
         typename T,
         typename Container = std::vector<T>
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static typename std::enable_if<
         (   effolkronium::details::is_supported_number<T>::value
          || effolkronium::details::is_supported_character<T>::value
@@ -166,7 +164,7 @@ namespace utils::random {
     template<
         typename T = char,
         typename Container = typename std::enable_if<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>::type
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline Container generate_string(
             const size_t amount,
             const T from = std::numeric_limits<T>::min(),
@@ -194,7 +192,7 @@ namespace utils::random {
     template<
         typename T = bool,
         typename Container = typename std::enable_if<std::is_same<T, bool>::value, std::vector<T>>::type
-    > [[maybe_unused]]
+    > ATTR_MAYBE_UNUSED
     static inline Container generate_bool(
             const size_t amount,
             const double probability = 0.5)
@@ -218,7 +216,7 @@ namespace utils::random {
      *
      *  \return Returns a formatted string (groups with `-`) with a randon UUID.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static inline std::string generate_uuid(void) {
         auto dist = Random::integer_dist_t<uint8_t> {
             static_cast<uint8_t>(0x00),

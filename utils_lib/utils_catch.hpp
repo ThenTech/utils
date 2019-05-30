@@ -2,6 +2,7 @@
 #define CATCH_ABORT_HPP
 
 #include "../utils_test/test_settings.hpp"
+#include "utils_traits.hpp"
 
 #include <iostream>
 #include <functional>
@@ -15,10 +16,15 @@
     /**
      *  Defines for catching aborts when calling a function.
      */
-    #define REQUIRE_FUNCTION_ABORTS(F, ...) REQUIRE(utils::Catch::Function_Aborts(F, __VA_ARGS__))
-    #define REQUIRE_FUNCTION_ABORTS_FALSE(F, ...) REQUIRE_FALSE(utils::Catch::Function_Aborts(F, __VA_ARGS__))
-    #define CHECK_FUNCTION_ABORTS(F, ...) CHECK(utils::Catch::Function_Aborts(F, __VA_ARGS__))
-    #define CHECK_FUNCTION_ABORTS_FALSE(F, ...) CHECK_FALSE(utils::Catch::Function_Aborts(F, __VA_ARGS__))
+    #define REQUIRE_FUNCTION_ABORTS(F, ...)         REQUIRE(utils::Catch::Function_Aborts(F, __VA_ARGS__))
+    #define REQUIRE_FUNCTION_ABORTS_FALSE(F, ...)   REQUIRE_FALSE(utils::Catch::Function_Aborts(F, __VA_ARGS__))
+    #define CHECK_FUNCTION_ABORTS(F, ...)           CHECK(utils::Catch::Function_Aborts(F, __VA_ARGS__))
+    #define CHECK_FUNCTION_ABORTS_FALSE(F, ...)     CHECK_FALSE(utils::Catch::Function_Aborts(F, __VA_ARGS__))
+#else
+    #define REQUIRE_FUNCTION_ABORTS(F, ...)
+    #define REQUIRE_FUNCTION_ABORTS_FALSE(F, ...)
+    #define CHECK_FUNCTION_ABORTS(F, ...)
+    #define CHECK_FUNCTION_ABORTS_FALSE(F, ...)
 #endif
 
 /**
@@ -106,7 +112,7 @@ namespace utils::Catch {
          *  \param  signal
          *      The signal id to check.
          */
-        [[maybe_unused]]
+        ATTR_MAYBE_UNUSED
         static void _function_abort_signal_handler(int signal)  {
             if (signal == SIGABRT) {
                 #if UTILS_CATCH_REPORT_SIG_HANDLER

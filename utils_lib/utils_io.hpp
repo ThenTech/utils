@@ -5,6 +5,7 @@
 #include "utils_bits.hpp"
 #include "utils_string.hpp"
 #include "utils_memory.hpp"
+#include "utils_traits.hpp"
 
 #include <fstream>
 #include <vector>
@@ -13,20 +14,36 @@
  *  Enable FileSystem
  *  Currently only included when linking with -lstdc++fs.
  */
-#if __cplusplus <= 201703L
-    #include <experimental/filesystem>
-#else
-    #include <filesystem>
+#if __cplusplus >= 201703L
+    #if defined(__GNUC__) && __GNUC__ < 9
+        #include <experimental/filesystem>
+    #else
+        #include <filesystem>
+    #endif
+    #define UTILS_IO_FS_SUPPORTED
 #endif
 
 namespace utils::io {
-    #ifdef __cpp_lib_experimental_filesystem
-        namespace fs = std::experimental::filesystem;
-    #else
-        namespace fs = std::filesystem;
+    #ifdef UTILS_IO_FS_SUPPORTED
+        #ifdef __cpp_lib_experimental_filesystem
+            namespace fs = std::experimental::filesystem;
+        #else
+            namespace fs = std::filesystem;
+        #endif
+
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static auto list_contents(const std::string& folder) {
+            auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
+
+            for (const auto& entry : fs::directory_iterator(folder)) {
+                contents->emplace_back(entry.path().string());
+            }
+
+            return contents;
+        }
     #endif
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static void safe_filename(std::string& filename) {
         static constexpr std::string_view invalid_chars = "\"<>?!*|/:\\\n";
 
@@ -35,22 +52,11 @@ namespace utils::io {
         }
     }
 
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED
     static std::string safe_filename(const std::string& filename) {
         std::string str(filename);
         utils::io::safe_filename(str);
         return str;
-    }
-
-    [[maybe_unused]]
-    static auto list_contents(const std::string& folder) {
-        auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
-
-        for (const auto& entry : fs::directory_iterator(folder)) {
-            contents->emplace_back(entry.path().string());
-        }
-
-        return contents;
     }
 
     /**	\brief	Read the given file and return a pointer to a string containing its contents.
@@ -63,7 +69,7 @@ namespace utils::io {
      *	\exception	FileReadException
      *		Throws FileReadException if the file could not be read properly.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static auto readStringFromFile(const std::string& filename) {
         auto str = utils::memory::new_unique_var<std::string>();
         std::ifstream file(filename, std::fstream::in | std::fstream::ate);
@@ -88,7 +94,8 @@ namespace utils::io {
      *	\param filename
      *	\param str
      */
-    [[maybe_unused]] static void writeStringToFile(const std::string& filename, const std::string& str) {
+    ATTR_MAYBE_UNUSED
+    static void writeStringToFile(const std::string& filename, const std::string& str) {
         std::ofstream file(filename);
 
         try {
@@ -114,7 +121,7 @@ namespace utils::io {
      *	\exception	FileReadException
      *		Throws FileReadException if the file could not be read properly.
      */
-    [[maybe_unused]]
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static auto readBinaryFile(const std::string& filename) {
         std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);
 
@@ -153,7 +160,8 @@ namespace utils::io {
      *	\exception	FileWriteException
      *		Throws FileWriteException if the file could not be written properly.
      */
-    [[maybe_unused]] static void writeBinaryFile(const std::string& filename, const uint8_t* buffer, size_t length) {
+    ATTR_MAYBE_UNUSED
+    static void writeBinaryFile(const std::string& filename, const uint8_t* buffer, size_t length) {
         std::ofstream file(filename, std::ofstream::binary);
 
         try {

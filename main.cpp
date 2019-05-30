@@ -1,4 +1,8 @@
 #include "utils_test/test_settings.hpp"
+#include "utils_lib/utils_version.hpp"
+
+// Minor version is git commit count: git rev-list --all --count
+static constexpr utils::Version VERSION(0, 32, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
     #warning "TESTS ENABLED"
@@ -16,7 +20,6 @@
     #include "utils_lib/utils_bits.hpp"
     #include "utils_lib/utils_catch.hpp"
     #include "utils_lib/utils_colour.hpp"
-    #include "utils_lib/utils_string.hpp"
     #include "utils_lib/utils_ini.hpp"
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
@@ -27,9 +30,11 @@
     #include "utils_lib/utils_os.hpp"
     #include "utils_lib/utils_print.hpp"
     #include "utils_lib/utils_random.hpp"
-    #include "utils_lib/utils_time.hpp"
-    #include "utils_lib/utils_xorstring.hpp"
+    #include "utils_lib/utils_string.hpp"
     #include "utils_lib/utils_threading.hpp"
+    #include "utils_lib/utils_time.hpp"
+    #include "utils_lib/utils_traits.hpp"
+    #include "utils_lib/utils_xorstring.hpp"
 
     #include "utils_lib/algo/algo_huffman.hpp"
     #include "utils_lib/algo/algo_bstree.hpp"
@@ -38,7 +43,6 @@
 
 /*
  *  Possible others:
- *      - Config reader with sections?
  *      - csv lib
  *      - Floating/Signed-Bitset
  *      - Other threading/future features
@@ -54,11 +58,14 @@
  *
  * TODO Doxygen
  * TODO ErrorTrace + Stacktrace?
+ *
+ *  GCC >= 9:
+ *      https://github.com/Neargye/magic_enum
  */
 int main(int argc, char* argv[]) {
 
 #ifdef ENABLE_TESTS
-    utils::Logger::SetScreenTitle("Testing C++ Utility library");
+    utils::Logger::SetScreenTitle("Testing C++ Utility library " + VERSION.ToString());
     utils::Logger::WriteLn("Running tests...");
 
     int status = 0;
@@ -70,9 +77,9 @@ int main(int argc, char* argv[]) {
 
     return status;
 #else
-    (void)argc; (void)argv;
+    UNUSED(argc, argv);
     utils::Logger::Create("test.log", utils::Logger::Level::LOG_DEBUG);
-    utils::Logger::SetScreenTitle("C++ Utility library");
+    utils::Logger::SetScreenTitle("C++ Utility library " + VERSION.ToString());
 
     utils::Logger::WriteLn("Start");
 
