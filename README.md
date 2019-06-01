@@ -1,7 +1,7 @@
 # C++ Utility library
 
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18531.svg)](https://scan.coverity.com/projects/wosser1sproductions-utils)
-![Travis (.com)](https://img.shields.io/travis/com/Wosser1sProductions/utils.svg)
+![Travis (.org)](https://img.shields.io/travis/wosser1sproductions/utils.svg)
 ![version](https://img.shields.io/badge/version-0.33.0--beta-brightgreen.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)
 ![c++-version](https://img.shields.io/badge/c%2B%2B-%3E%3D%20c%2B%2B17-brightgreen.svg)
