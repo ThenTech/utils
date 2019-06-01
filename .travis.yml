@@ -1,8 +1,18 @@
 language: cpp
 
+env:
+  global:
+    # COVERITY_SCAN_TOKEN
+    - secure: "ek8XdXiYRdTZZpVXpoDqKg"
+
 common_sources: &all_sources
   - ubuntu-toolchain-r-test
 
+addons:
+  coverity_scan:
+    build_command: make test
+    branch_pattern: coverity_scan
+  
 matrix:
   include:
     - os: linux
@@ -24,4 +34,4 @@ matrix:
 before_script:
   - export CXX=${COMPILER}
 
-script: make test
+script: if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make test ; fi
