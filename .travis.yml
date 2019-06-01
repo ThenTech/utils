@@ -3,13 +3,15 @@ language: cpp
 env:
   global:
     # COVERITY_SCAN_TOKEN
-    - secure: "ek8XdXiYRdTZZpVXpoDqKg"
+    - secure: "DZ9pZmAWAQTyNodZYxCgIZaxR0MA5KdVGBoQFL9SOFYy0NB4u9aqm8FPEstpioczZvv/m3CPmK7YeMIwVkagq+GuXBcvk3QXLORdxbH56yqhZzzTBMAciuGgTKwF+7XmcXs/kX56AGU+LJWw62XYdsYE7irulDDJPdv+nFXKE67yyxgqXmDv8PIfLf6iEkhSORjlF5MK8Sg1E8nwcLeHXOAy9AM7urm2ftfENC2yjxM2nRGmz7by+FdqC39rw8FwIzxq0vg2poZVq90KlhZVoxjdigGIDx/4BDQJkPo7iEWViP9PxP4lqgOjbrat9sE5NxScxt3teufKEeON7LFptr0tK+M3/PBDp9mKC0zQGyokPq7WTdNIhAUpeUt8LyQboOEP4gvAsaQmbYKqu2BPTrf5kC6+To4JXNqiobnhplJyU2bGVjE0G0Czuvj/L5EP3Ynz/6qN1FCQlP0WR137hWyYi9MMNeF6mnw7i8x6YBvVFRSBsS1VGao9wf3rMenG9yJqIcJCZw8oRgsOYf8iCMcNyKJW1OluU7LJjcE3e9NM1NC5xuHPbCLhZoJL4Hfgwz7SpXxmco72GefSq3Tg58k6ZC0JJBnN0FlOr4vzer45U+eZQYTSQ48fPtbuSr/6IffBVcDHjrFSAsUBTi6G3Lv2d9PysOuHQGvyd5uMpYs="
 
 common_sources: &all_sources
   - ubuntu-toolchain-r-test
 
 addons:
   coverity_scan:
+    project:
+      name: Wosser1sProductions/utils
     build_command: make test
     branch_pattern: coverity_scan
   
