@@ -36,4 +36,4 @@ matrix:
 before_script:
   - export CXX=${COMPILER}
 
-script: if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then make test ; fi
+script: if [[ ${COVERITY_SCAN_BRANCH} != 1 ]]; then make test ; fi
