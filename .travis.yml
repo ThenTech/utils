@@ -21,16 +21,6 @@ matrix:
           packages: ['g++-9']
       env: COMPILER='g++-9'
 
-    - os: linux
-      compiler: gcc
-      addons: *gcc7
-      env: COMPILER='g++-7'
-
-    - os: linux
-      compiler: gcc
-      addons: *gcc9
-      env: COMPILER='g++-9'
-
 before_script:
   - export CXX=${COMPILER}
 

@@ -8,8 +8,13 @@ OUTPUT = ./bin
 # Link libs such as: -pthread -lm -fopenmp
 LIBS = -lstdc++fs
 
-# Use a g++ executable with c++17 support (see install_g++.sh)
-CC = g++
+# Use a g++ executable with c++17 support
+#   Install: 
+#       sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+#       sudo apt update
+#       sudo apt install g++-9 -y
+#       sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9 
+# CXX = g++
 
 # Extra flags to strip unused symbols: -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
 # Debug
@@ -55,14 +60,14 @@ HEADERS = $(wildcard *.hpp)
 # Compile each .cpp file to its object
 %.o: %.cpp $(HEADERS)
 	@echo "Compile" $@
-	@$(CC) $(CFLAGS) $(CODE_DEF) -c $< -o $@
+	@$(CXX) $(CFLAGS) $(CODE_DEF) -c $< -o $@
 
 .PRECIOUS: $(TARGET) $(OBJECTS)
 
 # Call compiler for linking
 compile: $(OBJECTS)
 	@echo "Compiled and linking to" $(OUTPUT)/$(TARGET)
-	@$(CC) $(OBJECTS) -Wall $(CFLAGS) $(LIBS) -o $(OUTPUT)/$(TARGET)
+	@$(CXX) $(OBJECTS) -Wall $(CFLAGS) $(LIBS) -o $(OUTPUT)/$(TARGET)
 
 # Clean targets
 cleantg:
