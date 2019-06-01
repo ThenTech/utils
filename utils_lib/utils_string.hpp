@@ -6,6 +6,8 @@
 #include "utils_traits.hpp"
 
 #include <string>
+#include <locale>
+#include <codecvt>
 #include <cstring>
 #include <algorithm>
 #include <sstream>
@@ -287,25 +289,56 @@ namespace utils::string {
         }
     }
 
-    /**	\brief	Convert the given char* to a wchar_t* variable.
+    /**
+     *  \brief  Convert the given char* to an std::wstring.
      *
      *	\param	buffer
      *		The character buffer to convert.
-     *	\return
-     *		Returns L##buffer : each char is replaced with its wide version.
+     *  \return
+     *      Returns the converted data as an std::wstring.
      */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline wchar_t* convert2WSTR(const char* buffer) {
-        const size_t size = std::strlen(buffer) * 2 + 1;
-        wchar_t* WSTRbuff = new wchar_t[size];
+    ATTR_MAYBE_UNUSED
+    static inline std::wstring str2wstr(const char* buffer) {
+        return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().from_bytes(buffer);
+    }
 
-        #ifdef _MSC_VER
-            swprintf_s(WSTRbuff, size, L"%hs", buffer);
-        #else
-            swprintf(WSTRbuff, size, L"%hs", buffer);
-        #endif
+    /**
+     *  \brief  Convert the given std:string to an std::wstring.
+     *
+     *	\param	s
+     *		The std:string to convert.
+     *  \return
+     *      Returns the converted data as an std::wstring.
+     */
+    ATTR_MAYBE_UNUSED
+    static inline std::wstring str2wstr(const std::string& s) {
+        return utils::string::str2wstr(s.data());
+    }
 
-        return WSTRbuff;
+    /**
+     *  \brief  Convert the given wchar_t* to an std::string.
+     *
+     *	\param	buffer
+     *		The character buffer to convert.
+     *  \return
+     *      Returns the converted data as an std::string.
+     */
+    ATTR_MAYBE_UNUSED
+    static inline std::string wstr2str(const wchar_t* buffer) {
+        return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().to_bytes(buffer);
+    }
+
+    /**
+     *  \brief  Convert the given std::wstring to an std::string.
+     *
+     *	\param	s
+     *		The std::wstring to convert.
+     *  \return
+     *      Returns the converted data as an std::string.
+     */
+    ATTR_MAYBE_UNUSED
+    static inline std::string wstr2str(const std::wstring& s) {
+        return utils::string::wstr2str(s.data());
     }
 
     /**

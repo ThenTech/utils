@@ -10,6 +10,20 @@
 
 namespace utils::time {
     /**
+     *  Chrono time ranges aliases
+     */
+    using nanoseconds  = std::chrono::duration<double, std::nano>;
+    using milliseconds = std::chrono::duration<double, std::milli>;
+    using seconds      = std::chrono::duration<double>;
+    using minutes      = std::chrono::duration<double, std::ratio<60>>;
+    using hours        = std::chrono::duration<double, std::ratio<3600>>;
+    using days         = std::chrono::duration<double, std::ratio<86400>>;
+    using weeks        = std::chrono::duration<double, std::ratio<604800>>;
+    using months       = std::chrono::duration<double, std::ratio<2629746>>;
+    using years        = std::chrono::duration<double, std::ratio<31556952>>;
+
+
+    /**
      *  Chrono::time_point alias.
      */
     using timepoint_t = std::chrono::time_point<std::chrono::steady_clock>;

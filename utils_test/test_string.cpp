@@ -409,14 +409,34 @@ TEST_CASE("Test utils::string::strEraseAll", "[utils][utils::string]") {
     REQUIRE(test_2 == part1 + part2);
 }
 
-TEST_CASE("Test utils::string::convert2WSTR", "[utils][utils::string]") {
-    auto test = utils::memory::unique_t<wchar_t>(utils::string::convert2WSTR("\0"));
+TEST_CASE("Test utils::string::str2wstr", "[utils][utils::string]") {
+    std::wstring test = utils::string::str2wstr("\0");
+    REQUIRE(test == L"");
+    REQUIRE(std::wcscmp(test.data(), L"\0") == 0);
 
-    REQUIRE(std::wstring(test.get()) == L"");
-    REQUIRE(std::wcscmp(test.get(), L"\0") == 0);
+    test = utils::string::str2wstr("AbCdE\0");
+    REQUIRE(std::wcscmp(test.data(), L"AbCdE\0") == 0);
 
-    test = utils::memory::unique_t<wchar_t>(utils::string::convert2WSTR("AbCdE\0"));
-    REQUIRE(std::wcscmp(test.get(), L"AbCdE\0") == 0);
+    test = utils::string::str2wstr(std::string("\xEF\xBF\xBF"));
+    REQUIRE(std::wcscmp(test.data(), L"\xFFFF") == 0);
+
+    test = utils::string::str2wstr(std::string("\xE2\x82\xAC"));
+    REQUIRE(std::wcscmp(test.data(), L"\x20ac") == 0);
+}
+
+TEST_CASE("Test utils::string::wstr2str", "[utils][utils::string]") {
+    std::string test = utils::string::wstr2str(L"\0");
+    REQUIRE(test == "");
+    REQUIRE(std::strcmp(test.data(), "\0") == 0);
+
+    test = utils::string::wstr2str(L"AbCdE\0");
+    REQUIRE(std::strcmp(test.data(), "AbCdE\0") == 0);
+
+    test = utils::string::wstr2str(std::wstring(L"\xFFFF"));
+    REQUIRE(std::strcmp(test.data(), "\xEF\xBF\xBF") == 0);
+
+    test = utils::string::wstr2str(std::wstring(L"\x20ac"));
+    REQUIRE(std::strcmp(test.data(), "\xE2\x82\xAC") == 0);
 }
 
 TEST_CASE("Test utils::string::strExtractQuotedStrings", "[utils][utils::string]") {
