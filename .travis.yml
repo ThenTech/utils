@@ -1,8 +1,21 @@
 language: cpp
+cache: ccache
+
+env:
+  global:
+    # COVERITY_SCAN_TOKEN
+    - secure: "RXHCwVEJFUmQRj4w0e2hfNq5qlGdUzC1XeDv3BEUHkxMjKTUpdHfYTut907wPoczj6O47JHeVeEBZTXtNbVuX6qDlLZfK19gfJJiK+zRMluDj347uvxyZIJiYzBz9stn4UpNEsog/xEzdy4MX52k3lezOkKp7kjrEP7CxtbRsBOH29Q5TIqxWgGcfxCf+hoSLKFT/bkybVJWebm9N7zq3hidbPD1qEHu5Y0c/K6B0Jlbfc0QkvI+wZHe13MAoWEFAmlzzngDMAjXlsaLnho63CD+l/+i/Alxud8S5XxXfnrtnvu6RWt28GdT7VuwutP1FxdJrAQLZqn4CtzyFj/Toe45nVFr1GZkXWlOHG0SAocpQhcWLqL93WxbanrSbDcpu5cVihBllPiNAk5U8lyVHzhAhUYRzsf2O7pqVoyg1PGEAiddSqhAGHLOIql/kfHTDkPQqbXAUEDjIKhJpPgReFFq8lbZiz/g7ltK5TWEh5e4tEIWFcHrxUYgLvyQlBcXmejWOF1ekGWz8xNiYkRZfrgASYcdDLVaOGm4zut//V0PpaFCps+8LfKFvhof4LB8OBQ+E71CgIaKya4Gsa0t5BxXKbD3IrAcuU0ygRwbLOfShxO/M291sBTYNiSNwEap+TbGvFzxHDekIe1gGwg6Ig5GdnJ7GdV6Y93z6WAk/aQ="
 
 common_sources: &all_sources
   - ubuntu-toolchain-r-test
 
+addons:
+  coverity_scan:
+    project:
+      name: Wosser1sProductions/utils
+    build_command: "make test"
+    branch_pattern: coverity_scan
+  
 matrix:
   include:
     - os: linux
@@ -21,7 +34,10 @@ matrix:
           packages: ['g++-9']
       env: COMPILER='g++-9'
 
+before_install:
+  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+      
 before_script:
   - export CXX=${COMPILER}
 
-script: make test
+script: if [[ ${COVERITY_SCAN_BRANCH} != 1 ]]; then make test ; fi
