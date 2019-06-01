@@ -13,7 +13,7 @@ addons:
   coverity_scan:
     project:
       name: Wosser1sProductions/utils
-    build_command: make test
+    build_command: "make test"
     branch_pattern: coverity_scan
   
 matrix:
