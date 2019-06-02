@@ -33,8 +33,6 @@ install:
 
 before_script:
   - export CXX=${COMPILER}
-  # CODECOV_TOKEN
-  - export secret:NXbR0Z5pqv1gvOM6gL4VpgAHG6QFdvB9quZzOELtKC83MJYRWm0L8sCl8SVRadOLiVBxrgdqHoMbdodrFnLFWryPkd6s4w1kVRpZtB81HbAF0ScjZx97jsfMzjU5fKlt
 
 script:
   - fastcov --zerocounters
