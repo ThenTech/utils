@@ -1,5 +1,6 @@
 language: cpp
 cache: ccache
+dist: "trusty"
 
 common_sources: &all_sources
   - ubuntu-toolchain-r-test
@@ -18,7 +19,9 @@ addons:
   apt:
     packages:
       - lcov
-      
+      - "python3"
+      - "python3-pip"
+
 before_install:
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-9 90
 
