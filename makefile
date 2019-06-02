@@ -1,9 +1,10 @@
 # Extra options for encoder compilation
 # e.g.: global defines with -DNAME
-ECFLAGS =
+ECFLAGS = 
 
 # Output folder for binaries
-OUTPUT = ./bin
+OUTPUT      = ./bin
+OUTPUT_GCOV = ./code_coverage
 
 # Link libs such as: -pthread -lm -fopenmp
 LIBS = -lstdc++fs
@@ -25,10 +26,12 @@ CFLAGS = $(ECFLAGS) -std=c++17 -Wall -O3 -Wl,--strip-all,--gc-sections -fdata-se
 # Default target
 TARGET      = utils
 TARGET_TEST = test_utils
+TARGET_GCOV = gcov_utils
 
 # Tools
-createout = @mkdir -p $(OUTPUT)
-cleanobj  = @-rm -rf *.o
+createout     = @mkdir -p $(OUTPUT) $(OUTPUT_GCOV)
+cleanobj      = @-rm -rf *.o
+cleancoverage = @-rm -rf *.gcov *.gcno *.gcda
 
 ##################################################################
 
@@ -48,6 +51,15 @@ test: CFLAGS := -DENABLE_TESTS $(CFLAGS)
 test: TARGET  = $(TARGET_TEST)
 test: default
 	@./$(OUTPUT)/$(TARGET_TEST)
+    
+coverage: CFLAGS := -DENABLE_TESTS -coverage -std=c++17 -Wall -O0
+coverage: TARGET  = $(TARGET_GCOV)
+coverage: default
+	@fastcov --zerocounters
+	@./$(OUTPUT)/$(TARGET_GCOV)
+	@fastcov --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
+	@genhtml -o $(OUTPUT_GCOV) $(OUTPUT_GCOV)/report.info
+#	$(cleancoverage)
 
 $(TARGET): default
 
@@ -73,7 +85,11 @@ compile: $(OBJECTS)
 cleantg:
 	@-rm -r -f $(OUTPUT)/$(TARGET)
 	@-rm -r -f $(OUTPUT)/$(TARGET_TEST)
+    
+cleancov:
+	@-rm -r -f $(OUTPUT_GCOV)
 
 # Clean all?
 clean:
 	$(cleanobj)
+	$(cleancoverage)

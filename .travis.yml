@@ -1,48 +1,39 @@
 language: cpp
 cache: ccache
 
-env:
-  global:
-    # COVERITY_SCAN_TOKEN
-    - secure: "RXHCwVEJFUmQRj4w0e2hfNq5qlGdUzC1XeDv3BEUHkxMjKTUpdHfYTut907wPoczj6O47JHeVeEBZTXtNbVuX6qDlLZfK19gfJJiK+zRMluDj347uvxyZIJiYzBz9stn4UpNEsog/xEzdy4MX52k3lezOkKp7kjrEP7CxtbRsBOH29Q5TIqxWgGcfxCf+hoSLKFT/bkybVJWebm9N7zq3hidbPD1qEHu5Y0c/K6B0Jlbfc0QkvI+wZHe13MAoWEFAmlzzngDMAjXlsaLnho63CD+l/+i/Alxud8S5XxXfnrtnvu6RWt28GdT7VuwutP1FxdJrAQLZqn4CtzyFj/Toe45nVFr1GZkXWlOHG0SAocpQhcWLqL93WxbanrSbDcpu5cVihBllPiNAk5U8lyVHzhAhUYRzsf2O7pqVoyg1PGEAiddSqhAGHLOIql/kfHTDkPQqbXAUEDjIKhJpPgReFFq8lbZiz/g7ltK5TWEh5e4tEIWFcHrxUYgLvyQlBcXmejWOF1ekGWz8xNiYkRZfrgASYcdDLVaOGm4zut//V0PpaFCps+8LfKFvhof4LB8OBQ+E71CgIaKya4Gsa0t5BxXKbD3IrAcuU0ygRwbLOfShxO/M291sBTYNiSNwEap+TbGvFzxHDekIe1gGwg6Ig5GdnJ7GdV6Y93z6WAk/aQ="
-
-env:
-  global:
-    # COVERITY_SCAN_TOKEN
-    - secure: "ek8XdXiYRdTZZpVXpoDqKg"
-
 common_sources: &all_sources
   - ubuntu-toolchain-r-test
-
-addons:
-  coverity_scan:
-    project:
-      name: Wosser1sProductions/utils
-    build_command: "make test"
-    branch_pattern: coverity_scan
 
 matrix:
   include:
     - os: linux
       compiler: gcc
-      addons: &gcc7
-        apt:
-          sources: *all_sources
-          packages: ['g++-7']
-      env: COMPILER='g++-7'
-
-    - os: linux
-      compiler: gcc
       addons: &gcc9
         apt:
           sources: *all_sources
-          packages: ['g++-9']
+          packages: ['g++-9', 'lcov']
       env: COMPILER='g++-9'
 
+addons:
+  apt:
+    packages:
+      - lcov
+      
 before_install:
-  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-9 90
+
+install:
+  - pip3 install git+https://github.com/rpgillespie6/fastcov.git
 
 before_script:
   - export CXX=${COMPILER}
+  # CODECOV_TOKEN
+  - export secret:NXbR0Z5pqv1gvOM6gL4VpgAHG6QFdvB9quZzOELtKC83MJYRWm0L8sCl8SVRadOLiVBxrgdqHoMbdodrFnLFWryPkd6s4w1kVRpZtB81HbAF0ScjZx97jsfMzjU5fKlt
 
-script: if [[ ${COVERITY_SCAN_BRANCH} != 1 ]]; then make test ; fi
+script:
+  - fastcov --zerocounters
+  - make coverage
+  - fastcov --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
+
+after_success: 
+  - bash <(curl -s https://codecov.io/bash)

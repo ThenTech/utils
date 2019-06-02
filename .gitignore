@@ -40,3 +40,4 @@ Debug
 *.log
 .vscode
 bin
+code_coverage
