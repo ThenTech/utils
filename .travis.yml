@@ -28,7 +28,7 @@ before_install:
 install:
   - pyenv global 3.6
   - pip3.6 install --upgrade pip
-  - pip3.6 install setuptools
+  - pip3.6 install --upgrade setuptools
   - pip3.6 install git+https://github.com/rpgillespie6/fastcov.git
 
 before_script:
