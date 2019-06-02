@@ -32,6 +32,9 @@ TARGET_GCOV = gcov_utils
 createout     = @mkdir -p $(OUTPUT) $(OUTPUT_GCOV)
 cleanobj      = @-rm -rf *.o
 cleancoverage = @-rm -rf *.gcov *.gcno *.gcda
+ifndef fastcoverage
+fastcoverage  = @fastcov
+endif
 
 ##################################################################
 
@@ -55,9 +58,9 @@ test: default
 coverage: CFLAGS := -DENABLE_TESTS -coverage -std=c++17 -Wall -O0
 coverage: TARGET  = $(TARGET_GCOV)
 coverage: default
-	@fastcov --zerocounters
+	$(fastcoverage) --zerocounters
 	@./$(OUTPUT)/$(TARGET_GCOV)
-	@fastcov --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
+	$(fastcoverage) --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
 	@genhtml -o $(OUTPUT_GCOV) $(OUTPUT_GCOV)/report.info
 #	$(cleancoverage)
 

@@ -24,20 +24,19 @@ addons:
 
 before_install:
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-9 90
-
-install:
   - pyenv global 3.6
   - pip3.6 install --upgrade pip
   - pip3.6 install --upgrade setuptools
-  - pip3.6 install git+https://github.com/rpgillespie6/fastcov.git
+
+install:
+  - wget https://raw.githubusercontent.com/RPGillespie6/fastcov/master/fastcov.py
 
 before_script:
   - export CXX=${COMPILER}
+  - export fastcoverage=python3.6 fastcov.py
 
 script:
-  - fastcov --zerocounters
   - make coverage
-  - fastcov --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
 
-after_success: 
+after_success:
   - bash <(curl -s https://codecov.io/bash)
