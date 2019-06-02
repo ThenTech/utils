@@ -25,7 +25,7 @@ namespace utils::ini {
             using Contents = std::map<std::string, Value>;
 
         private:
-            const bool read_from_file;
+            bool read_from_file;
             const std::string filename;
             std::stringstream inifile;
 
@@ -80,26 +80,22 @@ namespace utils::ini {
                 try {
                     auto contents = utils::io::readStringFromFile(this->filename);
                     this->inifile << *contents;
+                    this->parse();
                 } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false;);
-
-                this->parse();
             }
 
             ConfigReader(const std::istream& input)
                 : read_from_file(false)
                 , filename("")
             {
-                try {
-                    this->inifile << input.rdbuf();
-                } CATCH_AND_LOG_ERROR_TRACE();
-
+                this->inifile << input.rdbuf();
                 this->parse();
             }
 
             ConfigReader(ConfigReader&&) = delete;
 
             void save(std::string name = "") {
-                if (name == ""){
+                if (name == "") {
                     if (this->read_from_file) {
                         name = this->filename;
                     } else {

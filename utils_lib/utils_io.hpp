@@ -72,20 +72,22 @@ namespace utils::io {
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static auto readStringFromFile(const std::string& filename) {
         auto str = utils::memory::new_unique_var<std::string>();
-        std::ifstream file(filename, std::fstream::in | std::fstream::ate);
+        std::ifstream file;
 
         try {
+            file.open(filename, std::fstream::in | std::fstream::ate);
+
             str->reserve(size_t(file.tellg()));
             file.seekg(0, std::ios::beg);
 
             str->assign(std::istreambuf_iterator<char>(file),
                         std::istreambuf_iterator<char>());
+            file.close();
         } catch (...) {
             file.close();
             throw utils::exceptions::FileReadException(filename);
         }
 
-        file.close();
         return str;
     }
 
@@ -96,16 +98,16 @@ namespace utils::io {
      */
     ATTR_MAYBE_UNUSED
     static void writeStringToFile(const std::string& filename, const std::string& str) {
-        std::ofstream file(filename);
+        std::ofstream file;
 
         try {
+            file.open(filename);
             file << str;
+            file.close();
         } catch (...) {
             file.close();
             throw utils::exceptions::FileWriteException(filename);
         }
-
-        file.close();
     }
 
     /**

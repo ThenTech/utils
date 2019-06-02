@@ -121,6 +121,7 @@ TEST_CASE("Test utils::algorithm::all_within", "[utils][utils::algorithm]") {
     c.push_back(12);
     CHECK_FALSE(utils::algorithm::within(0, 10, c));
     CHECK(utils::algorithm::within(0, 15, c));
+    CHECK(utils::algorithm::within(15, 0, c));
 }
 
 TEST_CASE("Test utils::algorithm::sum", "[utils][utils::algorithm]") {

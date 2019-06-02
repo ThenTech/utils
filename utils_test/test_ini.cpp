@@ -17,11 +17,13 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
 
     REQUIRE(reader.SectionSize() == 3);
     REQUIRE(reader.hasSection("TEST"));
+    REQUIRE(reader["TEST"]);
     REQUIRE(reader.hasSection("floats"));
     REQUIRE(reader.hasSection("str"));
 
     REQUIRE(reader.SectionKeySize("TEST") == 2);
     CHECK(reader.hasSectionKey("TEST", "een int"));
+    CHECK(reader("TEST", "een int"));
     CHECK(reader.hasSectionKey("TEST", "nog een int"));
     REQUIRE(reader.SectionKeySize("floats") == 2);
     CHECK(reader.hasSectionKey("floats", "f1"));
@@ -51,6 +53,15 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
     CHECK(reader2.hasSectionKey("floats", "pi"));
     CHECK(reader2.hasSectionKey("str", "s1"));
     CHECK(reader2.hasSectionKey("str", "path"));
+
+    reader2.ForEachSection([&](const std::string& s){
+        CHECK(reader2.hasSection(s));
+    });
+
+    reader2.ForEachSectionKey("TEST", [&](const std::string& k, const utils::ini::ConfigReader<>::Value& v){
+        CHECK(reader2.hasSectionKey("TEST", k));
+        CHECK(std::holds_alternative<std::string>(v));
+    });
 
     std::stringstream streamed2;
     streamed2 << reader2;
@@ -112,6 +123,7 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
     reader.SetValue<std::string>("FLAGS", "false5", "0");
     reader.SetValue("FLAGS", "false6", 0);
     reader.SetValue("FLAGS", "false7", false);
+    reader.SetValue<std::string>("FLAGS", "false8", "maybe");
     CHECK(reader.GetValue<bool>("FLAGS", "true1"));
     CHECK(reader.GetValue<bool>("FLAGS", "true2"));
     CHECK(reader.GetValue<bool>("FLAGS", "true3"));
@@ -126,12 +138,21 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
     CHECK_FALSE(reader.GetValue<bool>("FLAGS", "false5"));
     CHECK_FALSE(reader.GetValue<bool>("FLAGS", "false6"));
     CHECK_FALSE(reader.GetValue<bool>("FLAGS", "false7"));
+    CHECK_FALSE(reader.GetValue<bool>("FLAGS", "false8"));
 
     reader.RemoveSectionKey("FOO", "temp2", true);
     CHECK_FALSE(reader.hasSection("FOO"));
 
     REQUIRE_THROWS_AS(reader.GetValue<int>("TEST", "does not exist"), utils::exceptions::KeyDoesNotExistException);
     REQUIRE_THROWS_AS(reader.GetValue<int>("does not exist", "pi"), utils::exceptions::KeyDoesNotExistException);
+
+    // FIXME Why not throwing utils::exceptions::FileReadException ?
+    REQUIRE_THROWS_AS(utils::ini::ConfigReader(std::string("")), std::exception);
+
+    REQUIRE_THROWS_AS(reader.save(""), utils::exceptions::FileWriteException);
+
+    // FIXME Why not throwing utils::exceptions::FileReadException ?
+    REQUIRE_NOTHROW(reader.save("<\\:?//>"));
 }
 
 #endif

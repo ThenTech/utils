@@ -2,6 +2,8 @@ import subprocess
 import fileinput
 import re
 
+OFFSET = 22
+
 MAIN         = "./main.cpp"
 MAIN_MATCH   = "VERSION("
 
@@ -9,7 +11,7 @@ README       = "./README.md"
 README_MATCH = "badge/version-"
 
 GIT_COMMIT_CMD   = ['git', 'rev-list', '--all', '--count']
-GIT_COMMIT_COUNT = str(int(subprocess.check_output(GIT_COMMIT_CMD)) + 1)
+GIT_COMMIT_COUNT = str(int(subprocess.check_output(GIT_COMMIT_CMD)) + 1 - OFFSET)
 
 try:
     for line in fileinput.FileInput(MAIN, inplace=1):

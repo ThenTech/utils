@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/Wosser1sProductions/utils/branch/master/graph/badge.svg)](https://codecov.io/gh/Wosser1sProductions/utils)
 [![Travis (.org)](https://img.shields.io/travis/wosser1sproductions/utils.svg)](https://travis-ci.org/Wosser1sProductions/utils)
-![version](https://img.shields.io/badge/version-0.33.0--beta-brightgreen.svg)
+![version](https://img.shields.io/badge/version-0.34.0--beta-brightgreen.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)
 ![c++-version](https://img.shields.io/badge/c%2B%2B-%3E%3D%20c%2B%2B17-brightgreen.svg)
 ![tested-unix](https://img.shields.io/badge/tested%20with-g%2B%2B--9.1-orange.svg)

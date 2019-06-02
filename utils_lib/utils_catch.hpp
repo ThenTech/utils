@@ -53,7 +53,7 @@
 #define LOG_ERROR_TRACE(E) \
     do {                                                                     \
         std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  " \
-                  << e.what()                                                \
+                  << E.what()                                                \
                   << "\033[0m" "\n    in " "\033[36;1m"                      \
                   << __FILE__                                                \
                   << "\033[0m" ":" "\033[36;1m"                              \
@@ -67,11 +67,19 @@
  *  Macro to catch an exception, print an error trace
  *  and execute other code afterwards.
  */
-#define CATCH_AND_LOG_ERROR_TRACE(...)                                      \
-    catch (const std::exception& e) {                                       \
-        LOG_ERROR_TRACE(e);                                                 \
-        __VA_ARGS__                                                         \
-    }
+#if defined(ENABLE_TESTS)
+    #define CATCH_AND_LOG_ERROR_TRACE(...)                                     \
+        catch (const std::exception& e) {                                      \
+            __VA_ARGS__                                                        \
+            throw e;                                                           \
+        }
+#else
+    #define CATCH_AND_LOG_ERROR_TRACE(...)                                     \
+        catch (const std::exception& e) {                                      \
+            LOG_ERROR_TRACE(e);                                                \
+            __VA_ARGS__                                                        \
+        }
+#endif
 
 /**
  *  Assertion macro.
