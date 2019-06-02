@@ -33,7 +33,7 @@ install:
 
 before_script:
   - export CXX=${COMPILER}
-  - export fastcoverage=python3.6 fastcov.py
+  - export fastcoverage="python3.6 fastcov.py"
 
 script:
   - make coverage
