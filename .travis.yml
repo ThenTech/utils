@@ -26,7 +26,7 @@ before_install:
   - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-9 90
 
 install:
-  - pip3 install git+https://github.com/rpgillespie6/fastcov.git
+  - pip3.6 install git+https://github.com/rpgillespie6/fastcov.git
 
 before_script:
   - export CXX=${COMPILER}
