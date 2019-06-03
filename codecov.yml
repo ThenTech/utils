@@ -3,9 +3,10 @@ coverage:
     status:
         patch:
             default:
-                target: '100'
+                target: '90'
         project:
             default:
-                target: '100'
-codecov:
-  token: b5876245-49a1-4d59-8544-989a76f50289
+                target: '95'
+
+ignore:
+  - "utils_lib/external/"
