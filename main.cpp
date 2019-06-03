@@ -2,7 +2,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 35, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 36, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
     #warning "TESTS ENABLED"
@@ -121,9 +121,11 @@ int main(int argc, char* argv[]) {
 //    std::iota(arr.get(), arr.get()+100, 0);
 //    utils::Logger::Writef("sum: %d\n", std::accumulate(arr.get(), arr.get() + 100, 0));
 
-    auto file_list = utils::io::list_contents("./");
+    const auto file_list = utils::io::list_contents("./");
+    const auto rfile     = utils::random::Random::get(*file_list);
     utils::Logger::Stream("\n\nHello\n", *file_list, "\n");
-    utils::Logger::Stream(utils::random::Random::get(*file_list), "\n");
+    utils::Logger::Stream(rfile, " => ",
+                          utils::time::Timestamp(utils::io::file_last_modified(*rfile)), "\n");
 
     std::string s = utils::random::generate_string<char>(10, 'a', 'z');
     utils::Logger::Stream(s.size(), ", ", s.size() == 10, " => '", s, "'\n");

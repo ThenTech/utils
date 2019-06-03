@@ -87,6 +87,7 @@ compile: $(OBJECTS)
 cleantg:
 	@-rm -r -f $(OUTPUT)/$(TARGET)
 	@-rm -r -f $(OUTPUT)/$(TARGET_TEST)
+	@-rm -r -f $(OUTPUT)/$(TARGET_GCOV)
     
 cleancov:
 	@-rm -r -f $(OUTPUT_GCOV)

@@ -29,7 +29,8 @@
  *  ATTR_DEPRECATED indicates that the use of the name or entity declared
  *  with this attribute is allowed, but discouraged for some reason.
  */
-#define ATTR_DEPRECATED [[deprecated]]
+#define ATTR_DEPRECATED          [[deprecated]]
+#define ATTR_DEPRECATED_MSG(MSG) [[deprecated(MSG)]]
 
 /**
  *  ATTR_FALLTHROUGH indicates that the fall through from the previous

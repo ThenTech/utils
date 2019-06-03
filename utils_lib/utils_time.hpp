@@ -28,6 +28,11 @@ namespace utils::time {
      */
     using timepoint_t = std::chrono::time_point<std::chrono::steady_clock>;
 
+    /**
+     *  \brief  Default format for timestamp.
+     */
+    constexpr std::string_view TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S";
+
     namespace Timer {
         /**
          *  \brief  Return a timepoint at the current time.
@@ -149,8 +154,10 @@ namespace utils::time {
      *      Will be set to the current time if nullptr.
      *  \return Returns a string type with the formatted time.
      */
-    ATTR_MAYBE_UNUSED
-    static inline auto Timestamp(const char* frmt="%Y-%m-%d %H:%M:%S", const std::time_t *epoch_time = nullptr) {
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline auto Timestamp(const char* frmt = utils::time::TIMESTAMP_FORMAT.data(),
+                                 const std::time_t *epoch_time = nullptr)
+    {
         const std::time_t stamp = (epoch_time == nullptr
                                   ? std::time(nullptr)
                                   : *epoch_time);
@@ -164,6 +171,13 @@ namespace utils::time {
         #endif
 
         return std::put_time(tm, frmt);
+    }
+
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline auto Timestamp(const std::time_t stamp,
+                                 const char* frmt = utils::time::TIMESTAMP_FORMAT.data())
+    {
+        return utils::time::Timestamp(frmt, &stamp);
     }
 }
 

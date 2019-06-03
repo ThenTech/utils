@@ -10,3 +10,4 @@ coverage:
 
 ignore:
   - "utils_lib/external/"
+  - "/usr/include"

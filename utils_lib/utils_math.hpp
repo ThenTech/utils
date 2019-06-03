@@ -5,47 +5,10 @@
 #include "utils_traits.hpp"
 
 #include <cmath>
+#include <numeric>
 
 
 namespace utils::math {
-    namespace internal {
-        /**
-         *  brief   Greatest Common Divisor (Euclid)
-         *          Find the GCD of \p x and \p y, with \p T integral type.
-         *
-         *  param   x
-         *      The first number to check.
-         *  param   y
-         *      The second number to check.
-         *  return  Returns the GCD between \p x and \p y.
-         */
-        template<
-            typename T,
-            typename std::enable_if<std::is_integral_v<T>, int>::type = 0
-        > ATTR_MAYBE_UNUSED
-        static inline constexpr T _gcd_recur(const T x, const T y) noexcept {
-            return (y == T(0) ? x : _gcd_recur(y, x % y));
-        }
-
-        /**
-         *  brief   Least Common Multiple
-         *          Find the LCM of \p x and \p y, with \p T integral type.
-         *
-         *  param   x
-         *      The first number to check.
-         *  param   y
-         *      The second number to check.
-         *  return  Returns the LCM of \p x and \p y.
-         */
-        template<
-            typename T,
-            typename std::enable_if<std::is_integral_v<T>, int>::type = 0
-        > ATTR_MAYBE_UNUSED
-        static inline constexpr T _lcm(const T x, const T y) noexcept {
-            return x * (y / _gcd_recur(x, y));
-        }
-    }
-
     /**
      *  \brief  Return the sign of the given value.
      *
@@ -81,11 +44,9 @@ namespace utils::math {
     > ATTR_MAYBE_UNUSED
     static inline constexpr C gcd(const A x, const B y) noexcept {
         if constexpr(std::is_integral_v<C>) {
-            return utils::math::internal::_gcd_recur(static_cast<C>(std::abs(x)),
-                                                     static_cast<C>(std::abs(y)));
+            return std::gcd(static_cast<C>(x), static_cast<C>(y));
         } else {
-            return utils::math::internal::_gcd_recur(static_cast<size_t>(std::abs(x)),
-                                                     static_cast<size_t>(std::abs(y)));
+            return std::gcd(static_cast<int64_t>(x), static_cast<int64_t>(y));
         }
     }
 
@@ -107,14 +68,10 @@ namespace utils::math {
         typename C = typename std::common_type<A, B>::type
     > ATTR_MAYBE_UNUSED
     static inline constexpr C lcm(const A x, const B y) {
-        ASSERT(x != C(0) && y != C(0));
-
-        if constexpr (std::is_integral_v<C>) {
-            return utils::math::internal::_lcm(static_cast<C>(std::abs(x)),
-                                               static_cast<C>(std::abs(y)));
+        if constexpr(std::is_integral_v<C>) {
+            return std::lcm(static_cast<C>(x), static_cast<C>(y));
         } else {
-            return utils::math::internal::_lcm(static_cast<size_t>(std::abs(x)),
-                                               static_cast<size_t>(std::abs(y)));
+            return std::lcm(static_cast<int64_t>(x), static_cast<int64_t>(y));
         }
     }
 

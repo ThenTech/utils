@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <vector>
+#include <chrono>
 
 /**
  *  Enable FileSystem
@@ -31,28 +32,124 @@ namespace utils::io {
             namespace fs = std::filesystem;
         #endif
 
-        ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents(const std::string& folder) {
+        namespace filter {
+            struct all {
+                bool operator()(const fs::directory_entry&) {
+                    return true;
+                }
+            };
+
+            struct file {
+                bool operator()(const fs::directory_entry& entry) {
+                    return entry.status().type() == fs::file_type::regular;
+                }
+            };
+
+            struct directory {
+                bool operator()(const fs::directory_entry& entry) {
+                    return entry.status().type() == fs::file_type::directory;
+                }
+            };
+        }
+
+        template <
+            typename TFilter = decltype(utils::io::filter::all())
+        > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static auto list_contents(const std::string& folder, TFilter predicate = utils::io::filter::all())
+        {
+            static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>, "utils::io::list_contents: Callable function required.");
+
             auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
 
             for (const auto& entry : fs::directory_iterator(folder)) {
-                contents->emplace_back(entry.path().string());
+                if (predicate(entry))
+                    contents->emplace_back(entry.path().string());
             }
 
             return contents;
+        }
+
+        template <
+            typename TFilter = decltype(utils::io::filter::all())
+        > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static auto list_contents_recur(const std::string& folder, TFilter predicate = utils::io::filter::all()) {
+            auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
+
+            for (const auto& entry : fs::recursive_directory_iterator(folder)) {
+                if (predicate(entry))
+                    contents->emplace_back(entry.path().string());
+            }
+
+            return contents;
+        }
+
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static inline auto list_files(const std::string& folder) {
+            return list_contents(folder, utils::io::filter::file());
+        }
+
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static inline auto list_folders(const std::string& folder) {
+            return list_contents(folder, utils::io::filter::directory());
+        }
+
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static size_t file_size(const std::string& filename) {
+            if (fs::exists(filename) && fs::is_regular_file(filename)) {
+                return fs::file_size(filename);
+            }
+            return size_t(-1);
+        }
+
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static std::time_t file_last_modified(const std::string& filename) {
+            if (fs::exists(filename)) {
+                const auto modified = fs::last_write_time(filename);
+
+                // FIXME: No clock casting possible
+                // Could use:
+                //      decltype(modified)::clock::to_time_t(modified);
+                // instead, but clocks are different.
+                // C++20 will provide clock_cast to fix this.
+
+                return std::chrono::duration_cast<std::chrono::seconds>(modified.time_since_epoch()).count();
+            }
+
+            return std::time_t(0);
+        }
+
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static const std::string most_recent_file(const std::vector<std::string>& paths) {
+            std::string most_recent("");
+
+            if (paths.size()) {
+                std::time_t last_date(0);
+
+                for (const std::string& file : paths) {
+                    if (fs::is_regular_file(file))
+                    if (std::time_t mdate = utils::io::file_last_modified(file);
+                        mdate >= last_date)
+                    {
+                        last_date = mdate;
+                        most_recent = file;
+                    }
+                }
+            }
+
+            return most_recent;
         }
     #endif
 
     ATTR_MAYBE_UNUSED
     static void safe_filename(std::string& filename) {
-        static constexpr std::string_view invalid_chars = "\"<>?!*|/:\\\n";
+        static constexpr std::string_view invalid_chars = "\"<>?*|/:\\\n";
 
         for (const char& c : invalid_chars) {
             utils::string::strEraseAll(filename, c);
         }
     }
 
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string safe_filename(const std::string& filename) {
         std::string str(filename);
         utils::io::safe_filename(str);

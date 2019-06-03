@@ -54,9 +54,9 @@ TEST_CASE("Test utils::math::gcd", "[utils][utils::math]" ) {
 }
 
 TEST_CASE("Test utils::math::lcm", "[utils][utils::math]" ) {
-    REQUIRE_FUNCTION_ABORTS(utils::math::lcm<int, int>,  0,  0);
-    REQUIRE_FUNCTION_ABORTS(utils::math::lcm<int, int>,  0, 10);
-    REQUIRE_FUNCTION_ABORTS(utils::math::lcm<int, int>, 10,  0);
+    REQUIRE(utils::math::lcm<int, int>( 0,  0) == 0);
+    REQUIRE(utils::math::lcm<int, int>( 0, 10) == 0);
+    REQUIRE(utils::math::lcm<int, int>(10,  0) == 0);
 
     REQUIRE(utils::math::lcm(1, 1) == 1);
     REQUIRE(utils::math::lcm(10,  1) == 10);
@@ -67,8 +67,8 @@ TEST_CASE("Test utils::math::lcm", "[utils][utils::math]" ) {
     constexpr int imax = std::numeric_limits<int>::max();
     const int64_t irnd = utils::random::Random::get<int>(1);
 
-    REQUIRE_FUNCTION_ABORTS(utils::math::lcm<int, int>,    0, imax);
-    REQUIRE_FUNCTION_ABORTS(utils::math::lcm<int, int>, imax,    0);
+    REQUIRE(utils::math::lcm<int, int>(   0, imax) == 0);
+    REQUIRE(utils::math::lcm<int, int>(imax,    0) == 0);
     REQUIRE(utils::math::lcm(1, imax) == imax);
     REQUIRE(utils::math::lcm(imax, 1) == imax);
     REQUIRE(utils::math::lcm(imax, imax) == imax);
@@ -84,9 +84,7 @@ TEST_CASE("Test utils::math::lcm", "[utils][utils::math]" ) {
     REQUIRE(utils::math::lcm_chain(1, 2, 3, 4, 5)    ==  60);
     REQUIRE(utils::math::lcm_chain(2, 7, 11)         == 154);
     REQUIRE(utils::math::lcm_chain(irnd, irnd, irnd) == irnd);
-    REQUIRE_FUNCTION_ABORTS([&](int) {
-        return utils::math::lcm_chain(irnd, 2, 0, 3, 1);
-    }, 0);
+    REQUIRE(utils::math::lcm_chain(irnd, 2, 0, 3, 1) == 0);
 }
 
 TEST_CASE("Test utils::math::epsilon_equals", "[utils][utils::math]" ) {

@@ -412,12 +412,22 @@ namespace std {
         return stream;
     }
 
-    // WARNING: Hacky dereference iterator
-    template<typename T, typename Container, typename TChar, typename TCharTraits>
+    /**
+     *  \brief  operator <<
+     *          Triggered if T == __gnu_cxx::__normal_iterator<T, Container>
+     *          or another iterator type.
+     *  \param  stream
+     *  \param  it_value
+     *  \return
+     */
+    template<
+        typename T, typename TChar, typename TCharTraits,
+        std::enable_if_t<utils::traits::is_iterator_v<T>, int> = 0
+    >
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
-            const __gnu_cxx::__normal_iterator<T, Container>& it_value)
+            const T& it_value)
     {
         stream << *it_value;
         return stream;
