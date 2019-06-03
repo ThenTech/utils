@@ -2,7 +2,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 34, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 35, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
     #warning "TESTS ENABLED"
@@ -58,6 +58,9 @@ static constexpr utils::Version VERSION(0, 34, 0, utils::Version::PreReleaseType
  *
  * TODO Doxygen
  * TODO ErrorTrace + Stacktrace?
+ *
+ *  Extra:
+ *      https://github.com/jan-moeller/perlin
  *
  *  GCC >= 9:
  *      https://github.com/Neargye/magic_enum

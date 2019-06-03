@@ -14,6 +14,39 @@
 #include <vector>
 
 namespace utils::string {
+    /**
+     *  \brief  Test if the given string \p str contains the given char \p ch.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  ch
+     *      The char to look for.
+     *  \return Returns true if the string contains the char
+     *          and the position it was found at as a pair.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::pair<bool, size_t> contains(const std::string &str, const char ch, const size_t start = 0) {
+        // string.h : strchr(str.c_str(), ch)
+        const size_t pos = str.find(ch, start);
+        return { pos != std::string::npos, pos };
+    }
+
+    /**
+     *  \brief  Test if the given string \p str contains the other string \p part.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  part
+     *      The std::string to look for.
+     *  \return Returns true if the string contains the other string
+     *          and the position it was found at as a pair.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::pair<bool, size_t> contains(const std::string& str, const std::string& part, const size_t start = 0) {
+        const size_t pos = str.find(part, start);
+        return { pos != std::string::npos, pos };
+    }
+
     /**	\brief	Trim whitespace from the start of the given string (in-place).
      *
      *	\param	s
@@ -52,7 +85,7 @@ namespace utils::string {
      *	\param	s
      *		A string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string trimmed(std::string s) {
         trim(s);
         return s;
@@ -68,9 +101,9 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void strEraseFrom(std::string &str, const std::string& erase_from) {
-        const size_t pos = str.find(erase_from);
+        const auto &[found, pos] = utils::string::contains(str, erase_from);
 
-        if (pos != std::string::npos) {
+        if (found) {
             str = str.substr(0, pos);
         }
     }
@@ -86,9 +119,9 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void strEraseTo(std::string &str, const std::string& erase_to) {
-        const size_t pos = str.find(erase_to);
+        const auto &[found, pos] = utils::string::contains(str, erase_to);
 
-        if (pos != std::string::npos) {
+        if (found) {
             str = str.substr(pos);
         }
     }
@@ -102,7 +135,7 @@ namespace utils::string {
      *      The substring to look for and start erasing from.
      *  \return Returns a copy where the appropriate parts were erased.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string strErasedFrom(std::string str, const std::string& erase_from) {
         strEraseFrom(str, erase_from);
         return str;
@@ -117,7 +150,7 @@ namespace utils::string {
      *  \param  erase_to
      *      The substring to look for and erase to.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string strErasedTo(std::string str, const std::string& erase_to) {
         strEraseTo(str, erase_to);
         return str;
@@ -146,7 +179,7 @@ namespace utils::string {
      *	\param	str
      *		A copy of the string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string strToUppercase(std::string str) {
         strToUpper(str);
         return str;
@@ -175,16 +208,10 @@ namespace utils::string {
      *	\param	str
      *		A copy of the string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string strToLowercase(std::string str) {
         strToLower(str);
         return str;
-    }
-
-    ATTR_MAYBE_UNUSED
-    static inline bool strHasChar(const std::string &str, const char ch) {
-        // string.h : strchr(str.c_str(), ch)
-        return str.find(ch) != std::string::npos;
     }
 
     /**	\brief	Erase all consecutive occurrences of the given char
@@ -297,7 +324,7 @@ namespace utils::string {
      *  \return
      *      Returns the converted data as an std::wstring.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::wstring str2wstr(const char* buffer) {
         return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().from_bytes(buffer);
     }
@@ -310,7 +337,7 @@ namespace utils::string {
      *  \return
      *      Returns the converted data as an std::wstring.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::wstring str2wstr(const std::string& s) {
         return utils::string::str2wstr(s.data());
     }
@@ -323,7 +350,7 @@ namespace utils::string {
      *  \return
      *      Returns the converted data as an std::string.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string wstr2str(const wchar_t* buffer) {
         return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().to_bytes(buffer);
     }
@@ -336,7 +363,7 @@ namespace utils::string {
      *  \return
      *      Returns the converted data as an std::string.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string wstr2str(const std::wstring& s) {
         return utils::string::wstr2str(s.data());
     }
@@ -363,20 +390,21 @@ namespace utils::string {
 
         if (len < 2) return;
 
-        size_t start = 0, end;
+        bool   found_start  , found_end;
+        size_t pos_start = 0, pos_end = 0;
 
         do {
-            if (start = s.find(str_char, start);
-                start != std::string::npos)
-            {
-                if (end = s.find(str_char, ++start);
-                    end != std::string::npos)
-                {
-                    v.emplace_back(s.substr(start, end-start));
-                    start = end + 1u;
+            std::tie(found_start, pos_start) = utils::string::contains(s, str_char, pos_start);
+
+            if (found_start) {
+                std::tie(found_end, pos_end) = utils::string::contains(s, str_char, ++pos_start);
+
+                if (found_end) {
+                    v.emplace_back(s.substr(pos_start, pos_end - pos_start));
+                    pos_start = pos_end + 1u;
                 }
             }
-        } while (start != std::string::npos && start < len);
+        } while (found_start && pos_start < len);
     }
 
     /**
@@ -389,7 +417,7 @@ namespace utils::string {
      *  \return Returns one string containing all the strings in \p v appended
      *          to eachother, joined by \p join_with.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string strJoin(const std::vector<std::string> &v, const std::string& join_with=",") {
         std::string joined;
         const auto end = v.end();
@@ -397,7 +425,7 @@ namespace utils::string {
         if (auto start = v.begin(); start != end) {
             joined += *start;
 
-            while(++start != end) {
+            while (++start != end) {
                 joined += join_with + *start;
             }
         }
@@ -415,7 +443,7 @@ namespace utils::string {
      *  \return Returns one string containing all the strings in \p v appended
      *          to eachother, joined by \p join_with.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string strJoin(const std::vector<std::string> &v, const char join_with) {
         return utils::string::strJoin(v, std::string(1, join_with));
     }
@@ -439,7 +467,7 @@ namespace utils::string {
                                   || std::is_same<CharT, char16_t>::value
                                   || std::is_same<CharT, char32_t>::value,
                                      int> = 0
-    > ATTR_MAYBE_UNUSED
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string strJoin(const std::vector<CharT> &v, const char join_with='\0') {
         std::string joined;
         const auto end = v.end();
@@ -471,15 +499,29 @@ namespace utils::string {
      *      The string to split.
      *  \param  delim
      *      The character delimiter.
+     *  \param  max_splits
+     *      The maximum amount of splits to make.
+     *      `-1`    split on all delimiters
+     *      `0`     don't split: vector will contain the original string \p s
+     *      `1`     vector has the first splitted element,
+     *              and the rest of the string as second element
      *  \return Returns a list of seperate strings that were delimited by \p delim.
      */
     ATTR_MAYBE_UNUSED
-    static void strSplit(std::vector<std::string> &v, const std::string &s, const char delim = ',') {
+    static void strSplit(std::vector<std::string> &v, const std::string &s, const char delim = ',', int max_splits = -1) {
         std::stringstream ss(s);
+        std::string item;
+        size_t tail = 0;
         v.clear();
 
-        for(std::string item; std::getline(ss, item, delim); ) {
+        while (max_splits != 0 && std::getline(ss, item, delim)) {
             v.emplace_back(item);
+            max_splits--;
+            tail += item.size() + 1;
+        }
+
+        if (tail < s.size()) {
+            v.emplace_back(s.substr(tail));
         }
     }
 
@@ -497,7 +539,7 @@ namespace utils::string {
      *  \return
      *      Returns the format expanded with the args.
      */
-    template<typename ... Type> ATTR_MAYBE_UNUSED
+    template<typename ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string format(const std::string& format, Type&& ...args) {
         if constexpr(sizeof...(Type) != 0) {
             const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
@@ -527,7 +569,7 @@ namespace utils::string {
      *  \return
      *      Returns true if _base64_chars.find(c) != npos
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline bool is_base64(uint8_t c) {
         return (std::isalnum(c) || (c == '+') || (c == '/'));
     }
@@ -543,7 +585,7 @@ namespace utils::string {
      *  \return
      *      Returns true if buffer contains a valid base64 encoded string.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static bool is_base64(const uint8_t *buffer, size_t length) {
         if (length % 4) return false;
         const uint8_t *end = --buffer + length + 1;
@@ -577,7 +619,7 @@ namespace utils::string {
      *  \return
      *      Returns true if string contains a valid base64 encoded string.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline bool is_base64(const std::string& str) {
         return utils::string::is_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
@@ -591,7 +633,7 @@ namespace utils::string {
      *      The length of the buffer to encode.
      *  \return Return an std::string containing the encoded buffer.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string base64_encode(const uint8_t *buffer, size_t length) {
         std::string encoded;
         const uint8_t mod = length % 3;
@@ -637,7 +679,7 @@ namespace utils::string {
      *      The string to encode.
      *  \return Return an std::string containing the encoded string.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string base64_encode(const std::string& str) {
         return utils::string::base64_encode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
@@ -651,7 +693,7 @@ namespace utils::string {
      *      The length of the buffer to decode.
      *  \return Return an std::string containing the decoded buffer.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string base64_decode(const uint8_t *buffer, size_t length) {
         if (length % 4) {
             throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid size)");
@@ -715,7 +757,7 @@ namespace utils::string {
      *      The string to decode.
      *  \return Return an std::string containing the decoded string.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string base64_decode(const std::string& str) {
         return utils::string::base64_decode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }

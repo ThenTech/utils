@@ -49,6 +49,7 @@ namespace utils::ini {
                         {
                             // Found both delimiters, add section
                             current_section = line.substr(left_delim + 1, right_delim - 1);
+                            utils::string::trim(current_section);
                             this->settings_map.emplace(current_section, Contents());
                         }
                     } else if (current_section.size() > 0) {
@@ -140,7 +141,9 @@ namespace utils::ini {
             }
 
             inline size_t SectionKeySize(const std::string& section) const {
-                return this->settings_map.at(section).size();
+                return this->hasSection(section)
+                     ? this->settings_map.at(section).size()
+                     : 0;
             }
 
             inline bool hasSection(const std::string& section) const {
@@ -161,11 +164,13 @@ namespace utils::ini {
             }
 
             void CreateSection(const std::string& section) {
-                if (const auto it = this->settings_map.find(section);
+                const std::string strim = utils::string::trimmed(section);
+
+                if (const auto it = this->settings_map.find(strim);
                     it == this->settings_map.end())
                 {
                     // Does not exist yet
-                    this->settings_map.emplace(section, Contents());
+                    this->settings_map.emplace(strim, Contents());
                 }
             }
 
@@ -179,14 +184,17 @@ namespace utils::ini {
             }
 
             void CreateSectionKey(const std::string& section, const std::string& key) {
-                if (const auto it = this->settings_map.find(section);
+                const std::string strim = utils::string::trimmed(section);
+                const std::string ktrim = utils::string::trimmed(key);
+
+                if (const auto it = this->settings_map.find(strim);
                     it == this->settings_map.end())
                 {
                     // Does not exist yet
-                    this->settings_map.emplace(section, Contents());
+                    this->settings_map.emplace(strim, Contents());
                 }
 
-                this->settings_map.at(section).emplace(key, Value());
+                this->settings_map.at(strim).emplace(ktrim, Value());
             }
 
             void RemoveSectionKey(const std::string& section, const std::string& key, bool delete_section_if_empty = false) {
@@ -207,20 +215,23 @@ namespace utils::ini {
                 typename std::enable_if<utils::traits::is_variant_member_v<T, Value>, int>::type = 0
             >
             void SetValue(const std::string& section, const std::string& key, T&& val) {
-                if (const auto it = this->settings_map.find(section);
+                const std::string strim = utils::string::trimmed(section);
+                const std::string ktrim = utils::string::trimmed(key);
+
+                if (const auto it = this->settings_map.find(strim);
                     it == this->settings_map.end())
                 {
                     // Does not exist yet
-                    this->settings_map.emplace(section, Contents());
+                    this->settings_map.emplace(strim, Contents());
                 }
 
-                if (const auto it = this->settings_map.at(section).find(key);
-                    it == this->settings_map.at(section).end())
+                if (const auto it = this->settings_map.at(strim).find(ktrim);
+                    it == this->settings_map.at(strim).end())
                 {
                     // Does not exist yet
-                    this->settings_map.at(section).emplace(key, Value(val));
+                    this->settings_map.at(strim).emplace(ktrim, Value(val));
                 } else {
-                    this->settings_map.at(section).at(key) = Value(val);
+                    this->settings_map.at(strim).at(ktrim) = Value(val);
                 }
             }
 

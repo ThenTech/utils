@@ -120,6 +120,8 @@ TEST_CASE("Test utils::algorithm::all_within", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::within(0, 10, c));
     c.push_back(12);
     CHECK_FALSE(utils::algorithm::within(0, 10, c));
+
+    c = utils::random::generate_x<int>(10, 15, 0);
     CHECK(utils::algorithm::within(0, 15, c));
     CHECK(utils::algorithm::within(15, 0, c));
 }
@@ -207,6 +209,19 @@ TEST_CASE("Test utils::algorithm::repeat", "[utils][utils::algorithm]") {
 
     utils::algorithm::repeat<0>([&](){ test--; });
     REQUIRE(test == 2);
+}
+
+TEST_CASE("Test utils::algorithm::enumerate", "[utils][utils::algorithm]") {
+    std::vector<int> test(10);
+    std::iota(test.begin(), test.end(), 0);
+    int cnt = 0;
+
+    for (auto [i, val] : utils::algorithm::enumerate(test)) {
+        CHECK(i == cnt++);
+        CHECK(i == val);
+    }
+
+    REQUIRE(cnt == 10);
 }
 
 #endif

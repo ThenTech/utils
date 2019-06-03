@@ -15,7 +15,7 @@
 
 #define PUT_SS(V)     std::stringstream().swap(test_op); test_op << (V);
 
-TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
+TEST_CASE("Test utils::print", "[utils][utils::print]") {
     std::stringstream test_op;
     std::stringstream formatter;
 
@@ -146,7 +146,6 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
         }
     }
 
-
 //    // Init vars
 //    int argc = 10;
 
@@ -187,6 +186,24 @@ TEST_CASE("Test utils::print", "[utils][utils::print]" ) {
 //              << "UMap: " << um << std::endl
 //              << "String: " << cs << std::endl
 //    ;
+}
+
+TEST_CASE("Test utils::print::type2name", "[utils][utils::print]") {
+    CHECK(utils::string::contains(utils::print::type2name(3)    , "int"     ).first);
+    CHECK(utils::string::contains(utils::print::type2name(3.0)  , "double"  ).first);
+    CHECK(utils::string::contains(utils::print::type2name(3.0f) , "float"   ).first);
+    CHECK(utils::string::contains(utils::print::type2name("")   , "char"    ).first);
+    CHECK(utils::string::contains(utils::print::type2name("")   , '['       ).first);
+
+    std::string name;
+
+    name = utils::print::type2name(std::string());
+    CHECK(utils::string::contains(name, "string").first);
+    CHECK(utils::string::contains(name, "std::").first);
+
+    name = utils::print::type2name(std::string(), "std::");
+    CHECK(utils::string::contains(name, "string").first);
+    CHECK_FALSE(utils::string::contains(name, "std::").first);
 }
 
 #endif

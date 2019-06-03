@@ -315,9 +315,9 @@ namespace utils::print {
             std::string s(typeid(o).name());
         #endif
 
-        // Remove every occurence in filter... list from output (e.g. std::out)
+        // Remove every occurence in filter... list from output (e.g. std::)
         if constexpr (sizeof...(filter) > 0) {
-            (utils::string::strReplaceAll(s, filter, ""), ...);
+            (utils::string::strEraseAll(s, filter), ...);
         }
 
         return s;

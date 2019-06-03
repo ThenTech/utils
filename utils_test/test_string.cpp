@@ -12,6 +12,78 @@ static const std::string SPACES { ' ', '\t', '\n' };
 static constexpr std::string_view alphabet_lower = "abcdefghijklmnopqrstuvwxyz";
 static constexpr std::string_view alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
+TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
+    bool found; size_t pos;
+
+
+    SECTION("Test with char") {
+        REQUIRE_FALSE(utils::string::contains("", '.').first);
+
+        std::tie(found, pos) = utils::string::contains("     abcd     ", 'd');
+        REQUIRE(found);
+        REQUIRE(pos == 8);
+
+        std::tie(found, pos) = utils::string::contains("abcd\t\t", '\t');
+        REQUIRE(found);
+        REQUIRE(pos == 4);
+
+        std::tie(found, pos) = utils::string::contains("\n\n\n\nabcd\n\n\n", 'd');
+        REQUIRE(found);
+        REQUIRE(pos == 7);
+
+        std::string test_1(alphabet_lower);
+        for (int i = 5; i--;) {
+            auto c = *utils::random::Random::get(test_1);
+
+            std::tie(found, pos) = utils::string::contains(test_1, c);
+            REQUIRE(found);
+            REQUIRE(pos == size_t(c - 'a'));
+        }
+
+        REQUIRE_FALSE(utils::string::contains(test_1, 'A').first);
+    }
+
+    SECTION("Test with string") {
+        REQUIRE_FALSE(utils::string::contains("", ".").first);
+
+        std::tie(found, pos) = utils::string::contains("     abcd     ", "d");
+        REQUIRE(found);
+        REQUIRE(pos == 8);
+        std::tie(found, pos) = utils::string::contains("     abcd     ", "  ab");
+        REQUIRE(found);
+        REQUIRE(pos == 3);
+
+        std::tie(found, pos) = utils::string::contains("abcd\t\t", "\t");
+        REQUIRE(found);
+        REQUIRE(pos == 4);
+        std::tie(found, pos) = utils::string::contains("abcd\t\t", "cd\t");
+        REQUIRE(found);
+        REQUIRE(pos == 2);
+
+        std::tie(found, pos) = utils::string::contains("\n\n\n\nabcd\n\n\n", "d");
+        REQUIRE(found);
+        REQUIRE(pos == 7);
+        std::tie(found, pos) = utils::string::contains("\n\n\n\nabcd\n\n\n", "d\n");
+        REQUIRE(found);
+        REQUIRE(pos == 7);
+
+        std::string test_1(alphabet_lower);
+        std::stringstream ss;
+        for (int i = 5; i--;) {
+            std::stringstream().swap(ss);
+            char c = utils::random::Random::get<char>('a', 'z' - 1);
+            ss << c << char(c + 1);
+
+            std::tie(found, pos) = utils::string::contains(test_1, ss.str());
+            REQUIRE(found);
+            REQUIRE(pos == size_t(c - 'a'));
+        }
+
+        REQUIRE_FALSE(utils::string::contains(test_1, "A").first);
+    }
+}
+
 TEST_CASE("Test utils::string::ltrim", "[utils][utils::string]") {
     std::string empty("");
     utils::string::ltrim(empty);
@@ -304,22 +376,6 @@ TEST_CASE("Test utils::string::strToLowercase", "[utils][utils::string]") {
     CHECK_FALSE(utils::string::strToLowercase(test_3) == "üêéè");
 }
 
-TEST_CASE("Test utils::string::strHasChar", "[utils][utils::string]") {
-    REQUIRE_FALSE(utils::string::strHasChar("", '.'));
-
-    REQUIRE(utils::string::strHasChar("     abcd     ", 'd'));
-    REQUIRE(utils::string::strHasChar("abcd\t\t", '\t'));
-    REQUIRE(utils::string::strHasChar("\n\n\n\nabcd\n\n\n", 'd'));
-
-    std::string test_1(alphabet_lower);
-    for (int i = 5; i--;) {
-        auto c = *utils::random::Random::get(test_1);
-        REQUIRE(utils::string::strHasChar(test_1, c));
-    }
-
-    REQUIRE_FALSE(utils::string::strHasChar(test_1, 'A'));
-}
-
 TEST_CASE("Test utils::string::strEraseConsecutive", "[utils][utils::string]") {
     std::string empty("");
     utils::string::strEraseConsecutive(empty, '.');
@@ -497,7 +553,7 @@ TEST_CASE("Test utils::string::strSplit", "[utils][utils::string]") {
     utils::string::strSplit(splitted, "");
     REQUIRE(splitted.empty());
 
-    utils::string::strSplit(splitted, "a,b,c");
+    utils::string::strSplit(splitted, "a,b,c", ',');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
 
@@ -505,13 +561,32 @@ TEST_CASE("Test utils::string::strSplit", "[utils][utils::string]") {
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
 
-    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;");
+    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;", ',');
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
     CHECK(splitted[2] == "a ");
     CHECK(splitted[3] == "\tb\n");
     CHECK(splitted[4] == " c ;");
+
+    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;", ',', 4);
+    REQUIRE(splitted.size() == 5);
+
+    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;", ',', 0);
+    REQUIRE(splitted.size() == 1);
+    CHECK(splitted[0] == ",,a ,\tb\n, c ;");
+
+    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;", ',', 1);
+    REQUIRE(splitted.size() == 2);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == ",a ,\tb\n, c ;");
+
+    utils::string::strSplit(splitted, ",,a ,\tb\n, c ;", ',', 3);
+    REQUIRE(splitted.size() == 4);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "");
+    CHECK(splitted[2] == "a ");
+    CHECK(splitted[3] == "\tb\n, c ;");
 }
 
 TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
@@ -579,6 +654,16 @@ TEST_CASE("Test utils::string::is_base64", "[utils][utils::string]") {
     REQUIRE(utils::string::is_base64("//8="));
     REQUIRE(utils::string::is_base64("////"));
     REQUIRE(utils::string::is_base64("/+8="));
+
+    REQUIRE_FALSE(utils::string::is_base64("^"    ));
+    REQUIRE_FALSE(utils::string::is_base64("A"    ));
+    REQUIRE_FALSE(utils::string::is_base64("A^"   ));
+    REQUIRE_FALSE(utils::string::is_base64("AA"   ));
+    REQUIRE_FALSE(utils::string::is_base64("AA="  ));
+    REQUIRE_FALSE(utils::string::is_base64("AA==="));
+    REQUIRE_FALSE(utils::string::is_base64("AAA"  ));
+    REQUIRE_FALSE(utils::string::is_base64("AAA^" ));
+    REQUIRE_FALSE(utils::string::is_base64("AA======"));
 }
 
 TEST_CASE("Test utils::string::base64_encode", "[utils][utils::string]") {
@@ -641,6 +726,7 @@ TEST_CASE("Test utils::string::base64_decode", "[utils][utils::string]") {
     CHECK_THROWS_AS(utils::string::base64_decode("AA===") == "", utils::exceptions::ConversionException);
     CHECK_THROWS_AS(utils::string::base64_decode("AAA"  ) == "", utils::exceptions::ConversionException);
     CHECK_THROWS_AS(utils::string::base64_decode("AAA^" ) == "", utils::exceptions::ConversionException);
+    CHECK_THROWS_AS(utils::string::base64_decode("AA======") == "", utils::exceptions::ConversionException);
 }
 
 #endif

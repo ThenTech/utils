@@ -62,7 +62,6 @@ coverage: default
 	@./$(OUTPUT)/$(TARGET_GCOV)
 	$(fastcoverage) --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
 	@genhtml -o $(OUTPUT_GCOV) $(OUTPUT_GCOV)/report.info
-#	$(cleancoverage)
 
 $(TARGET): default
 

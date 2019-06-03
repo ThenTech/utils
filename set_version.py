@@ -1,7 +1,10 @@
 import subprocess
 import fileinput
 import re
+import os
 
+LF = "\n" if os.name == "nt" else "\r\n"
+    
 OFFSET = 22
 
 MAIN         = "./main.cpp"
@@ -21,7 +24,7 @@ try:
             nline = ','.join(nline)
 
             line = nline
-        print(line, end="")
+        print(line.rstrip(), end=LF)
 except Exception as e:
     fileinput.close()
     print(e)
@@ -36,7 +39,7 @@ try:
             nline = README_MATCH.join(nline)
 
             line = nline
-        print(line, end="")
+        print(line.rstrip(), end=LF)
 except Exception as e:
     fileinput.close()
     print(e)
