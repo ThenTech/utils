@@ -322,6 +322,51 @@ namespace utils::print {
 
         return s;
     }
+
+    /**
+     *  \brief  Dump the given data to ascii output and hex view.
+     *
+     *  \param  stream
+     *      The stream to write to.
+     *  \param  data
+     *      The data to dump as raw `void*`, will be cast to `char*`.
+     *  \param  length
+     *      Length of \p data.
+     *  \param  width
+     *      Width for dump format, equal to amount of bytes on each line.
+     */
+    template<typename TChar, typename TCharTraits> ATTR_MAYBE_UNUSED
+    static void hexdump(std::basic_ostream<TChar, TCharTraits>& stream,
+                        const void* data, size_t length,
+                        size_t width = 16)
+    {
+        if (data == nullptr)
+            return;
+
+        const char* const start = static_cast<const char*>(data);
+        const char* const end   = start + length;
+        const char* line = start;
+        const auto locale = stream.getloc();
+
+        while (line != end) {
+            const size_t lineLength = std::min(width, static_cast<std::size_t>(end - line));
+
+            stream << utils::string::format("%04X : ", line - start);
+
+            for (const char* next = line; next != line + lineLength; ++next) {
+                stream << (!std::isprint(*next, locale) ? '.' : *next);
+            }
+
+            stream << std::string(width - lineLength, ' ');
+
+            for (const char* next = line; next != line + lineLength; ++next) {
+                stream << utils::string::format(" %02X", (*next) & 0xFF);
+            }
+
+            stream << std::endl;
+            line += lineLength;
+        }
+    }
 }
 
 namespace std {

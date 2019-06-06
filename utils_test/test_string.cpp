@@ -16,7 +16,6 @@ static constexpr std::string_view alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
     bool found; size_t pos;
 
-
     SECTION("Test with char") {
         REQUIRE_FALSE(utils::string::contains("", '.').first);
 
@@ -82,6 +81,65 @@ TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
 
         REQUIRE_FALSE(utils::string::contains(test_1, "A").first);
     }
+}
+
+TEST_CASE("Test utils::string::starts_with", "[utils][utils::string]") {
+    CHECK_FALSE(utils::string::starts_with(""   , '.'));
+    CHECK_FALSE(utils::string::starts_with(""   , '\0'));
+    CHECK_FALSE(utils::string::starts_with("abc", '\0'));
+    CHECK      (utils::string::starts_with("abc", 'a'));
+
+    CHECK_FALSE(utils::string::starts_with(""   , ""));
+    CHECK_FALSE(utils::string::starts_with(""   , "\0"));
+    CHECK_FALSE(utils::string::starts_with("abc", "\0"));
+    CHECK      (utils::string::starts_with("abc", "a"));
+    CHECK      (utils::string::starts_with("abc", "abc"));
+
+    CHECK_FALSE(utils::string::starts_with(""   , std::string("")));
+    CHECK_FALSE(utils::string::starts_with(""   , std::string("\0")));
+    CHECK_FALSE(utils::string::starts_with("abc", std::string("\0")));
+    CHECK      (utils::string::starts_with("abc", std::string("a")));
+    CHECK      (utils::string::starts_with("abc", std::string("abc")));
+
+    CHECK_FALSE(utils::string::starts_with(std::string("")   , std::string("")));
+    CHECK_FALSE(utils::string::starts_with(std::string("")   , std::string("\0")));
+    CHECK_FALSE(utils::string::starts_with(std::string("abc"), std::string("\0")));
+    CHECK      (utils::string::starts_with(std::string("abc"), std::string("a")));
+    CHECK      (utils::string::starts_with(std::string("abc"), std::string("abc")));
+
+    CHECK_FALSE(utils::string::starts_with(std::string("\t\n_?abcd"), std::string("ab")));
+    CHECK      (utils::string::starts_with(std::string("\t\n_?abcd"), std::string("\t\n")));
+}
+
+TEST_CASE("Test utils::string::ends_with", "[utils][utils::string]") {
+    CHECK_FALSE(utils::string::ends_with(""   , '.'));
+    CHECK_FALSE(utils::string::ends_with(""   , '\0'));
+    CHECK_FALSE(utils::string::ends_with("abc", '\0'));
+    CHECK      (utils::string::ends_with("abc", 'c'));
+
+    CHECK_FALSE(utils::string::ends_with(""   , "."));
+    CHECK_FALSE(utils::string::ends_with(""   , ""));
+    CHECK_FALSE(utils::string::ends_with(""   , "\0"));
+    CHECK_FALSE(utils::string::ends_with("abc", "\0"));
+    CHECK      (utils::string::ends_with("abc", "c"));
+    CHECK      (utils::string::ends_with("abc", "abc"));
+
+    CHECK_FALSE(utils::string::ends_with(""   , std::string(".")));
+    CHECK_FALSE(utils::string::ends_with(""   , std::string("")));
+    CHECK_FALSE(utils::string::ends_with(""   , std::string("\0")));
+    CHECK_FALSE(utils::string::ends_with("abc", std::string("\0")));
+    CHECK      (utils::string::ends_with("abc", std::string("c")));
+    CHECK      (utils::string::ends_with("abc", std::string("abc")));
+
+    CHECK_FALSE(utils::string::ends_with(std::string("")   , std::string(".")));
+    CHECK_FALSE(utils::string::ends_with(std::string("")   , std::string("")));
+    CHECK_FALSE(utils::string::ends_with(std::string("")   , std::string("\0")));
+    CHECK_FALSE(utils::string::ends_with(std::string("abc"), std::string("\0")));
+    CHECK      (utils::string::ends_with(std::string("abc"), std::string("c")));
+    CHECK      (utils::string::ends_with(std::string("abc"), std::string("abc")));
+
+    CHECK_FALSE(utils::string::ends_with(std::string("\t\n_?abcd"), std::string("ab")));
+    CHECK      (utils::string::ends_with(std::string("\t\n_?abcd"), std::string("cd")));
 }
 
 TEST_CASE("Test utils::string::ltrim", "[utils][utils::string]") {

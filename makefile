@@ -16,6 +16,7 @@ LIBS = -lstdc++fs
 #       sudo apt install g++-9 -y
 #       sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9 
 # CXX = g++
+# LD = ld
 
 # Extra flags to strip unused symbols: -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
 # Debug
@@ -30,7 +31,7 @@ TARGET_GCOV = gcov_utils
 
 # Tools
 createout     = @mkdir -p $(OUTPUT) $(OUTPUT_GCOV)
-cleanobj      = @-rm -rf *.o
+cleanobj      = @-rm -rf *.o **/*.o
 cleancoverage = @-rm -rf *.gcov *.gcno *.gcda
 ifndef fastcoverage
 fastcoverage  = @fastcov
@@ -68,20 +69,26 @@ $(TARGET): default
 ##################################################################
 
 # Look for .hpp/.cpp files to compile and link
-OBJECTS = $(patsubst ./%.cpp,./%.o, $(wildcard *.cpp **/*.cpp))
-HEADERS = $(wildcard *.hpp)
+OBJECTS   = $(patsubst %.cpp,%.o, $(wildcard *.cpp **/*.cpp))
+HEADERS   = $(wildcard *.hpp)
+RESOURCES = $(patsubst %.rc,%.o, $(wildcard *.rc **/*.rc))
 
 # Compile each .cpp file to its object
 %.o: %.cpp $(HEADERS)
-	@echo "Compile" $@
+	@echo "Compile" $< "->" $@
 	@$(CXX) $(CFLAGS) $(CODE_DEF) -c $< -o $@
 
-.PRECIOUS: $(TARGET) $(OBJECTS)
+# Dump each .rc file to a binary object
+%.o: %.rc
+	@echo "Compile" $< "->" $@
+	@$(LD) -r -b binary $< -o $@
+
+.PRECIOUS: $(TARGET) $(OBJECTS) $(RESOURCES)
 
 # Call compiler for linking
-compile: $(OBJECTS)
+compile: $(OBJECTS) $(RESOURCES)
 	@echo "Compiled and linking to" $(OUTPUT)/$(TARGET)
-	@$(CXX) $(OBJECTS) -Wall $(CFLAGS) $(LIBS) -o $(OUTPUT)/$(TARGET)
+	@$(CXX) $(OBJECTS) -Wall $(CFLAGS) $(LIBS) $(RESOURCES) -o $(OUTPUT)/$(TARGET)
 
 # Clean targets
 cleantg:

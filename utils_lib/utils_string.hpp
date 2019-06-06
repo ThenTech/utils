@@ -47,6 +47,104 @@ namespace utils::string {
         return { pos != std::string::npos, pos };
     }
 
+    /**
+     *  \brief  Check if \p str starts with the given char.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  ch
+     *      The char to look for.
+     *  \return Returns true if str[0] == ch.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline bool starts_with(const std::string &str, const char ch) {
+        return ch && str.front() == ch;
+    }
+
+    /**
+     *  \brief  Check if \p str starts with the given char string.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  start
+     *      The char* to look for.
+     *  \return Returns true if str[0:start.size()] == start.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline bool starts_with(const std::string &str, const char* start) {
+        const size_t length = std::strlen(start);
+        return !length || str.size() < length
+             ? false
+             : std::equal(start, start + length,
+                          str.begin());
+    }
+
+    /**
+     *  \brief  Check if \p str starts with the given string.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  start
+     *      The string to look for.
+     *  \return Returns true if str[0:start.size()] == start.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline bool starts_with(const std::string &str, const std::string& start) {
+        return !start.size() || str.size() < start.size()
+             ? false
+             : std::equal(start.begin(), start.end(),
+                          str.begin());
+    }
+
+    /**
+     *  \brief  Check if \p str ends with the given char.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  ch
+     *      The char to look for.
+     *  \return Returns true if str[-1] == ch.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline bool ends_with(const std::string &str, const char ch) {
+        return ch && str.back() == ch;
+    }
+
+    /**
+     *  \brief  Check if \p str ends with the given char string.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  start
+     *      The char* to look for.
+     *  \return Returns true if str[-end.size():] == end.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline bool ends_with(const std::string &str, const char* end) {
+        const size_t length = std::strlen(end);
+        return !length || str.size() < length
+             ? false
+             : std::equal(end, end + length,
+                          str.end() - static_cast<std::string::difference_type>(length));
+    }
+
+    /**
+     *  \brief  Check if \p str ends with the given string.
+     *
+     *  \param  str
+     *      The std::string to check.
+     *  \param  start
+     *      The char* to look for.
+     *  \return Returns true if str[-end.size():] == end.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline bool ends_with(const std::string &str, const std::string& end) {
+        return !end.size() || str.size() < end.size()
+             ? false
+             : std::equal(end.begin(), end.end(),
+                          str.end() - static_cast<std::string::difference_type>(end.size()));
+    }
+
     /**	\brief	Trim whitespace from the start of the given string (in-place).
      *
      *	\param	s

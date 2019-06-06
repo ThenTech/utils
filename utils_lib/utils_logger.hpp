@@ -21,7 +21,7 @@
 /**
  *  Macro to print an error trace to Logger.
  */
-#define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(UTILS_TRACE_LOCATION, e);
+#define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(UTILS_TRACE_LOCATION, E);
 
 
 namespace utils {

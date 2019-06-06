@@ -13,7 +13,7 @@
 #include "../utils_lib/utils_random.hpp"
 
 
-#define PUT_SS(V)     std::stringstream().swap(test_op); test_op << (V);
+#define PUT_SS(V)       std::stringstream().swap(test_op); test_op << (V);
 
 TEST_CASE("Test utils::print", "[utils][utils::print]") {
     std::stringstream test_op;
@@ -204,6 +204,25 @@ TEST_CASE("Test utils::print::type2name", "[utils][utils::print]") {
     name = utils::print::type2name(std::string(), "std::");
     CHECK(utils::string::contains(name, "string").first);
     CHECK_FALSE(utils::string::contains(name, "std::").first);
+}
+
+TEST_CASE("Test utils::print::hexDump", "[utils][utils::print]") {
+    std::ostringstream test_op;
+    #define STR_TEST(DATA, LEN, RESULT) \
+        utils::print::hexdump(test_op, DATA, LEN); \
+        CHECK(test_op.str() == RESULT); \
+        std::ostringstream().swap(test_op);
+
+    STR_TEST(nullptr, 0, "");
+    STR_TEST(nullptr, 1, "");
+    STR_TEST(""     , 0, "");
+    STR_TEST(""     , 1, "0000 : .                00\n");
+    STR_TEST("abc"  , 3, "0000 : abc              61 62 63\n");
+
+    const std::vector<int> v{'1', '2', '3', '4', '5', '6', '7', '8'};
+    STR_TEST(v.data(), v.size() * sizeof(int),
+             "0000 : 1...2...3...4... 31 00 00 00 32 00 00 00 33 00 00 00 34 00 00 00\n"
+             "0010 : 5...6...7...8... 35 00 00 00 36 00 00 00 37 00 00 00 38 00 00 00\n");
 }
 
 #endif

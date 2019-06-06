@@ -2,7 +2,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 36, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 37, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
     #warning "TESTS ENABLED"
@@ -64,6 +64,9 @@ static constexpr utils::Version VERSION(0, 36, 0, utils::Version::PreReleaseType
  *
  *  GCC >= 9:
  *      https://github.com/Neargye/magic_enum
+ *
+ *  Resources:
+ *      https://stackoverflow.com/Questions/4158900/embedding-resources-in-executable-using-gcc
  */
 int main(int argc, char* argv[]) {
 
