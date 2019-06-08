@@ -1,3 +1,0 @@
-[submodule "utils_lib/external/cppitertools"]
-	path = utils_lib/external/cppitertools
-	url = https://github.com/ryanhaining/cppitertools.git
