@@ -1,0 +1,26 @@
+var structutils_1_1colour_1_1_colour =
+[
+    [ "Colour", "structutils_1_1colour_1_1_colour.html#ac3b4fe3e28543791f0f66d9f08f565bc", null ],
+    [ "b", "structutils_1_1colour_1_1_colour.html#ae3e16f77bed306ef5a644fa57857d806", null ],
+    [ "b", "structutils_1_1colour_1_1_colour.html#a1c21d9759dca7d2ab317b078859617af", null ],
+    [ "b_hex", "structutils_1_1colour_1_1_colour.html#abde133ecc9333c7841716fb403bd4496", null ],
+    [ "b_int", "structutils_1_1colour_1_1_colour.html#a24b89b52cb0b7ed6cb7b36d5f8b0a02b", null ],
+    [ "from_hex", "structutils_1_1colour_1_1_colour.html#a27ea2a878d58ccfb14595df1e32127f2", null ],
+    [ "g", "structutils_1_1colour_1_1_colour.html#ab8e88461368130ae02a732367e6c6bff", null ],
+    [ "g", "structutils_1_1colour_1_1_colour.html#af42f14b11714bc0f5fb77283fdbfbe08", null ],
+    [ "g_hex", "structutils_1_1colour_1_1_colour.html#a71d0183d614b2363bd220f52b248bd38", null ],
+    [ "g_int", "structutils_1_1colour_1_1_colour.html#a4f3b12994013322d8954514db76b48c9", null ],
+    [ "operator *", "structutils_1_1colour_1_1_colour.html#acb2e3bec45465ec9bc92e204b852a437", null ],
+    [ "operator()", "structutils_1_1colour_1_1_colour.html#a05a062614268aebd8845f170aaa224b2", null ],
+    [ "operator()", "structutils_1_1colour_1_1_colour.html#a99b15aa99e9ceb42158e3088b3dde708", null ],
+    [ "operator+", "structutils_1_1colour_1_1_colour.html#aeb6ec264db06974ec2c14ae7beb56ec2", null ],
+    [ "operator[]", "structutils_1_1colour_1_1_colour.html#a7dbbb34f87dbc5689b5bb3c645bf1c5b", null ],
+    [ "operator[]", "structutils_1_1colour_1_1_colour.html#a8f923d99c8f0c896f48a28ebd4602436", null ],
+    [ "r", "structutils_1_1colour_1_1_colour.html#aa8cb3740ed0cc25249bbbc4648d9e20b", null ],
+    [ "r", "structutils_1_1colour_1_1_colour.html#aa3495cb82c875d3df1cd1b0b96279efe", null ],
+    [ "r_hex", "structutils_1_1colour_1_1_colour.html#a2974aa40bd3bd75d8d2dcaebd0c76343", null ],
+    [ "r_int", "structutils_1_1colour_1_1_colour.html#a9a6be8888f21271b817183a28ce83ad4", null ],
+    [ "to_hex", "structutils_1_1colour_1_1_colour.html#a9b82231ca6dc0c657aecc2ad7ae0da23", null ],
+    [ "operator<<", "structutils_1_1colour_1_1_colour.html#a24ac7fcf1be9d9347141c59eae1b56a5", null ],
+    [ "data", "structutils_1_1colour_1_1_colour.html#a7caa4aa9bcc50eea9e8c374f1351abd8", null ]
+];

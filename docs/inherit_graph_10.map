@@ -1,0 +1,13 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title="STL class." alt="" coords="5,274,109,301"/>
+<area shape="rect" id="node2" href="$classutils_1_1exceptions_1_1_exception.html" title="Generic exception with message." alt="" coords="157,267,283,308"/>
+<area shape="rect" id="node3" href="$classutils_1_1exceptions_1_1_casting_exception.html" title="Casting exception with message." alt="" coords="359,5,485,47"/>
+<area shape="rect" id="node4" href="$classutils_1_1exceptions_1_1_conversion_exception.html" title="Conversion exception." alt="" coords="351,71,493,112"/>
+<area shape="rect" id="node5" href="$classutils_1_1exceptions_1_1_divide_by_zero_exception.html" title="Divide by zero exception with message." alt="" coords="345,136,499,177"/>
+<area shape="rect" id="node6" href="$classutils_1_1exceptions_1_1_file_read_exception.html" title="File read exception." alt="" coords="357,201,487,243"/>
+<area shape="rect" id="node7" href="$classutils_1_1exceptions_1_1_file_write_exception.html" title="File write exception." alt="" coords="356,267,488,308"/>
+<area shape="rect" id="node8" href="$classutils_1_1exceptions_1_1_key_does_not_exist_exception.html" title="KeyDoesNotExist exception." alt="" coords="331,332,513,373"/>
+<area shape="rect" id="node9" href="$classutils_1_1exceptions_1_1_null_pointer_exception.html" title="Nullpointer exception with message." alt="" coords="351,397,493,439"/>
+<area shape="rect" id="node10" href="$classutils_1_1exceptions_1_1_out_of_bounds_exception.html" title="Out of bounds exception with message and index." alt="" coords="343,463,501,504"/>
+<area shape="rect" id="node11" href="$classutils_1_1exceptions_1_1_unexpected_extension.html" title="Unexpected file extension exception." alt="" coords="347,528,497,569"/>
+</map>

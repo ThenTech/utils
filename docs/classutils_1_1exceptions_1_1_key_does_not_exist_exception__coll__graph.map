@@ -1,0 +1,5 @@
+<map id="utils::exceptions::KeyDoesNotExistException" name="utils::exceptions::KeyDoesNotExistException">
+<area shape="rect" id="node1" title="KeyDoesNotExist exception." alt="" coords="5,169,188,211"/>
+<area shape="rect" id="node2" href="$classutils_1_1exceptions_1_1_exception.html" title="Generic exception with message." alt="" coords="34,80,159,121"/>
+<area shape="rect" id="node3" title="STL class." alt="" coords="45,5,149,32"/>
+</map>
