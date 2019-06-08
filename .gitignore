@@ -41,3 +41,4 @@ Debug
 .vscode
 bin
 code_coverage
+utils_test/test_settings.hpp
