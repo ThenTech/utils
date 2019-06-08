@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - report.info - utils/utils_test/test_ini.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_ini.cpp<span style="font-size: 80%;"> (source / <a href="test_ini.cpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">report.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">145</td>
+            <td class="headerCovTableEntry">145</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-06-08</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;test_settings.hpp&quot;</a>
+<span class="lineNum">       2 </span>            : 
+<span class="lineNum">       3 </span>            : #ifdef ENABLE_TESTS
+<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/utils_catch.hpp&quot;
+<span class="lineNum">       5 </span>            : 
+<a name="6"><span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_ini.hpp&quot;</a>
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span><span class="lineCov">         10 : TEST_CASE(&quot;Test utils::ini&quot;, &quot;[utils][utils::ini]&quot;) {</span>
+<span class="lineNum">       9 </span><span class="lineCov">         20 :     utils::ini::ConfigReader reader;</span>
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span><span class="lineCov">         10 :     reader.SetValue(&quot;   TEST    &quot;, &quot;een int&quot;, 6);</span>
+<span class="lineNum">      12 </span><span class="lineCov">         10 :     reader.SetValue(&quot; TEST &quot;, &quot;nog een int&quot;, -99);</span>
+<span class="lineNum">      13 </span><span class="lineCov">         10 :     reader.SetValue(&quot;floats&quot;, &quot;f1&quot;, 0.212);</span>
+<span class="lineNum">      14 </span><span class="lineCov">         10 :     reader.SetValue(&quot;  floats\n&quot;, &quot;pi&quot;, 3.141596);</span>
+<span class="lineNum">      15 </span><span class="lineCov">         10 :     reader.SetValue&lt;std::string&gt;(&quot;str&quot;, &quot;s1&quot;, &quot;verder met dit&quot;);</span>
+<span class="lineNum">      16 </span><span class="lineCov">         10 :     reader.SetValue&lt;std::string&gt;(&quot;str&quot;, &quot;path&quot;, &quot;./hier/volgt/een/file/kijk.txt&quot;);</span>
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini sections and keys are set&quot;) {</span>
+<span class="lineNum">      19 </span><span class="lineCov">          2 :         REQUIRE(reader.SectionSize() == 3);</span>
+<span class="lineNum">      20 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;TEST&quot;));</span>
+<span class="lineNum">      21 </span><span class="lineCov">          2 :         REQUIRE(reader[&quot;TEST&quot;]);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;floats&quot;));</span>
+<span class="lineNum">      23 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;str&quot;));</span>
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span><span class="lineCov">          2 :         REQUIRE(reader.SectionKeySize(&quot;TEST&quot;) == 2);</span>
+<span class="lineNum">      26 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;een int&quot;));</span>
+<span class="lineNum">      27 </span><span class="lineCov">          2 :         CHECK(reader(&quot;TEST&quot;, &quot;een int&quot;));</span>
+<span class="lineNum">      28 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;nog een int&quot;));</span>
+<span class="lineNum">      29 </span><span class="lineCov">          2 :         REQUIRE(reader.SectionKeySize(&quot;floats&quot;) == 2);</span>
+<span class="lineNum">      30 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;floats&quot;, &quot;f1&quot;));</span>
+<span class="lineNum">      31 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;floats&quot;, &quot;pi&quot;));</span>
+<span class="lineNum">      32 </span><span class="lineCov">          2 :         REQUIRE(reader.SectionKeySize(&quot;str&quot;) == 2);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;str&quot;, &quot;s1&quot;));</span>
+<span class="lineNum">      34 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;str&quot;, &quot;path&quot;));</span>
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span><span class="lineCov">          2 :         CHECK(  6 == reader.GetValue&lt;int&gt;(&quot;TEST&quot;, &quot;een int&quot;));</span>
+<span class="lineNum">      37 </span><span class="lineCov">          2 :         CHECK(-99 == reader.GetValue&lt;int&gt;(&quot;TEST&quot;, &quot;nog een int&quot;));</span>
+<span class="lineNum">      38 </span><span class="lineCov">          2 :         CHECK(Approx(0.212)    == reader.GetValue&lt;double&gt;(&quot;floats&quot;, &quot;f1&quot;));</span>
+<span class="lineNum">      39 </span><span class="lineCov">          2 :         CHECK(Approx(3.141596) == reader.GetValue&lt;double&gt;(&quot;floats&quot;, &quot;pi&quot;));</span>
+<span class="lineNum">      40 </span><span class="lineCov">          2 :         CHECK(&quot;verder met dit&quot; == reader.GetValue&lt;std::string&gt;(&quot;str&quot;, &quot;s1&quot;));</span>
+<span class="lineNum">      41 </span><span class="lineCov">          2 :         CHECK(&quot;./hier/volgt/een/file/kijk.txt&quot; == reader.GetValue&lt;std::string&gt;(&quot;str&quot;, &quot;path&quot;));</span>
+<span class="lineNum">      42 </span>            :     }
+<span class="lineNum">      43 </span>            : 
+<span class="lineNum">      44 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini creation from stream&quot;) {</span>
+<span class="lineNum">      45 </span><span class="lineCov">          2 :         std::stringstream streamed;</span>
+<span class="lineNum">      46 </span><span class="lineCov">          1 :         streamed &lt;&lt; reader;</span>
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span><span class="lineCov">          2 :         utils::ini::ConfigReader reader2(streamed);</span>
+<span class="lineNum">      49 </span><span class="lineCov">          2 :         REQUIRE(reader2.hasSection(&quot;TEST&quot;));</span>
+<span class="lineNum">      50 </span><span class="lineCov">          2 :         REQUIRE(reader2.hasSection(&quot;floats&quot;));</span>
+<span class="lineNum">      51 </span><span class="lineCov">          2 :         REQUIRE(reader2.hasSection(&quot;str&quot;));</span>
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span><span class="lineCov">          2 :         CHECK(reader2.hasSectionKey(&quot;TEST&quot;, &quot;een int&quot;));</span>
+<span class="lineNum">      54 </span><span class="lineCov">          2 :         CHECK(reader2.hasSectionKey(&quot;TEST&quot;, &quot;nog een int&quot;));</span>
+<span class="lineNum">      55 </span><span class="lineCov">          2 :         CHECK(reader2.hasSectionKey(&quot;floats&quot;, &quot;f1&quot;));</span>
+<span class="lineNum">      56 </span><span class="lineCov">          2 :         CHECK(reader2.hasSectionKey(&quot;floats&quot;, &quot;pi&quot;));</span>
+<span class="lineNum">      57 </span><span class="lineCov">          2 :         CHECK(reader2.hasSectionKey(&quot;str&quot;, &quot;s1&quot;));</span>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          2 :         CHECK(reader2.hasSectionKey(&quot;str&quot;, &quot;path&quot;));</span></a>
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span><span class="lineCov">          1 :         reader2.ForEachSection([&amp;](const std::string&amp; s){</span>
+<span class="lineNum">      61 </span><span class="lineCov">          6 :             CHECK(reader2.hasSection(s));</span>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">          3 :         });</span></a>
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span><span class="lineCov">          1 :         reader2.ForEachSectionKey(&quot;TEST&quot;, [&amp;](const std::string&amp; k, const utils::ini::ConfigReader&lt;&gt;::Value&amp; v){</span>
+<span class="lineNum">      65 </span><span class="lineCov">          4 :             CHECK(reader2.hasSectionKey(&quot;TEST&quot;, k));</span>
+<span class="lineNum">      66 </span><span class="lineCov">          4 :             CHECK(std::holds_alternative&lt;std::string&gt;(v));</span>
+<span class="lineNum">      67 </span><span class="lineCov">          2 :         });</span>
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span><span class="lineCov">          2 :         std::stringstream streamed2;</span>
+<span class="lineNum">      70 </span><span class="lineCov">          1 :         streamed2 &lt;&lt; reader2;</span>
+<span class="lineNum">      71 </span><span class="lineCov">          2 :         CHECK(streamed.str() == streamed2.str());</span>
+<span class="lineNum">      72 </span>            : 
+<span class="lineNum">      73 </span><span class="lineCov">          1 :         reader2.save(&quot;./tmp&quot;);</span>
+<span class="lineNum">      74 </span><span class="lineCov">          3 :         utils::ini::ConfigReader reader3(&quot;./tmp&quot;);</span>
+<span class="lineNum">      75 </span><span class="lineCov">          2 :         std::stringstream streamed3;</span>
+<span class="lineNum">      76 </span><span class="lineCov">          1 :         streamed3 &lt;&lt; reader3;</span>
+<span class="lineNum">      77 </span><span class="lineCov">          2 :         CHECK(streamed.str() == streamed3.str());</span>
+<span class="lineNum">      78 </span><span class="lineCov">          1 :         utils::io::fs::remove(&quot;./tmp&quot;);</span>
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span><span class="lineCov">          1 :         reader3.save();</span>
+<span class="lineNum">      81 </span><span class="lineCov">          1 :         std::stringstream().swap(streamed3);</span>
+<span class="lineNum">      82 </span><span class="lineCov">          2 :         auto fc = utils::io::readStringFromFile(&quot;./tmp&quot;);</span>
+<span class="lineNum">      83 </span><span class="lineCov">          1 :         streamed3 &lt;&lt; *fc;</span>
+<span class="lineNum">      84 </span><span class="lineCov">          2 :         CHECK(streamed.str() == streamed3.str());</span>
+<span class="lineNum">      85 </span><span class="lineCov">          1 :         utils::io::fs::remove(&quot;./tmp&quot;);</span>
+<span class="lineNum">      86 </span>            :     }
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini section&quot;) {</span>
+<span class="lineNum">      89 </span><span class="lineCov">          1 :         reader.CreateSection(&quot;add_section&quot;);</span>
+<span class="lineNum">      90 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;add_section&quot;));</span>
+<span class="lineNum">      91 </span><span class="lineCov">          1 :         reader.RemoveSection(&quot;add_section&quot;);</span>
+<span class="lineNum">      92 </span><span class="lineCov">          2 :         REQUIRE_FALSE(reader.hasSection(&quot;add_section&quot;));</span>
+<span class="lineNum">      93 </span>            :     }
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini creation of key, and section that did not exist&quot;) {</span>
+<span class="lineNum">      96 </span><span class="lineCov">          1 :         reader.CreateSectionKey(&quot;add_section_and_key&quot;, &quot;sect_key&quot;);</span>
+<span class="lineNum">      97 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;add_section_and_key&quot;));</span>
+<span class="lineNum">      98 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;add_section_and_key&quot;, &quot;sect_key&quot;));</span>
+<span class="lineNum">      99 </span><span class="lineCov">          1 :         reader.RemoveSectionKey(&quot;add_section_and_key&quot;, &quot;sect_key&quot;);</span>
+<span class="lineNum">     100 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;add_section_and_key&quot;));</span>
+<span class="lineNum">     101 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.hasSectionKey(&quot;add_section_and_key&quot;, &quot;sect_key&quot;));</span>
+<span class="lineNum">     102 </span>            :     }
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini creation of key, and section that did exist&quot;) {</span>
+<span class="lineNum">     105 </span><span class="lineCov">          1 :         reader.CreateSectionKey(&quot;TEST&quot;, &quot;temp&quot;);</span>
+<span class="lineNum">     106 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;TEST&quot;));</span>
+<span class="lineNum">     107 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;een int&quot;));</span>
+<span class="lineNum">     108 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;nog een int&quot;));</span>
+<span class="lineNum">     109 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;temp&quot;));</span>
+<span class="lineNum">     110 </span><span class="lineCov">          1 :         reader.RemoveSectionKey(&quot;TEST&quot;, &quot;temp&quot;);</span>
+<span class="lineNum">     111 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;een int&quot;));</span>
+<span class="lineNum">     112 </span><span class="lineCov">          2 :         CHECK(reader.hasSectionKey(&quot;TEST&quot;, &quot;nog een int&quot;));</span>
+<span class="lineNum">     113 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.hasSectionKey(&quot;TEST&quot;, &quot;temp&quot;));</span>
+<span class="lineNum">     114 </span>            :     }
+<span class="lineNum">     115 </span>            : 
+<span class="lineNum">     116 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini value&quot;) {</span>
+<span class="lineNum">     117 </span><span class="lineCov">          1 :         reader.CreateSectionKey(&quot;TEST&quot;, &quot;temp&quot;);</span>
+<span class="lineNum">     118 </span><span class="lineCov">          2 :         REQUIRE(reader.GetValue&lt;int&gt;(&quot;TEST&quot;, &quot;temp&quot;) == 0);</span>
+<span class="lineNum">     119 </span><span class="lineCov">          1 :         reader.SetValue(&quot;TEST&quot;, &quot;temp&quot;, 889879);</span>
+<span class="lineNum">     120 </span><span class="lineCov">          2 :         REQUIRE(reader.GetValue&lt;int&gt;(&quot;TEST&quot;, &quot;temp&quot;) == 889879);</span>
+<span class="lineNum">     121 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;TEST&quot;, &quot;temp&quot;, &quot;Hello World!&quot;);</span>
+<span class="lineNum">     122 </span><span class="lineCov">          2 :         REQUIRE(reader.GetValue&lt;std::string&gt;(&quot;TEST&quot;, &quot;temp&quot;) == &quot;Hello World!&quot;);</span>
+<span class="lineNum">     123 </span>            : 
+<span class="lineNum">     124 </span><span class="lineCov">          1 :         reader.SetValue(&quot;FOO&quot;, &quot;temp2&quot;, 0.2f);</span>
+<span class="lineNum">     125 </span><span class="lineCov">          2 :         REQUIRE(reader.SectionKeySize(&quot;FOO&quot;) == 1);</span>
+<span class="lineNum">     126 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSection(&quot;FOO&quot;));</span>
+<span class="lineNum">     127 </span><span class="lineCov">          2 :         REQUIRE(reader.hasSectionKey(&quot;FOO&quot;, &quot;temp2&quot;));</span>
+<span class="lineNum">     128 </span><span class="lineCov">          2 :         REQUIRE(Approx(0.2f) == reader.GetValue&lt;float&gt;(&quot;FOO&quot;, &quot;temp2&quot;));</span>
+<span class="lineNum">     129 </span><span class="lineCov">          2 :         REQUIRE(&quot;0.2&quot; == reader.GetValue&lt;std::string&gt;(&quot;FOO&quot;, &quot;temp2&quot;));</span>
+<span class="lineNum">     130 </span><span class="lineCov">          2 :         REQUIRE(0  == reader.GetValue&lt;int&gt;(&quot;FOO&quot;, &quot;temp2&quot;));</span>
+<span class="lineNum">     131 </span><span class="lineCov">          2 :         REQUIRE(3  == reader.GetValue&lt;int&gt;(&quot;floats&quot;, &quot;pi&quot;));</span>
+<span class="lineNum">     132 </span>            :     }
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini boolean value&quot;) {</span>
+<span class="lineNum">     135 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;true1&quot;, &quot;true&quot;);</span>
+<span class="lineNum">     136 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;true2&quot;, &quot;True&quot;);</span>
+<span class="lineNum">     137 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;true3&quot;, &quot;YES&quot;);</span>
+<span class="lineNum">     138 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;true4&quot;, &quot;on&quot;);</span>
+<span class="lineNum">     139 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;true5&quot;, &quot;1&quot;);</span>
+<span class="lineNum">     140 </span><span class="lineCov">          1 :         reader.SetValue(&quot;FLAGS&quot;, &quot;true6&quot;, 1);</span>
+<span class="lineNum">     141 </span><span class="lineCov">          1 :         reader.SetValue(&quot;FLAGS&quot;, &quot;true7&quot;, true);</span>
+<span class="lineNum">     142 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;false1&quot;, &quot;false&quot;);</span>
+<span class="lineNum">     143 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;false2&quot;, &quot;False&quot;);</span>
+<span class="lineNum">     144 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;false3&quot;, &quot;NO&quot;);</span>
+<span class="lineNum">     145 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;false4&quot;, &quot;off&quot;);</span>
+<span class="lineNum">     146 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;false5&quot;, &quot;0&quot;);</span>
+<span class="lineNum">     147 </span><span class="lineCov">          1 :         reader.SetValue(&quot;FLAGS&quot;, &quot;false6&quot;, 0);</span>
+<span class="lineNum">     148 </span><span class="lineCov">          1 :         reader.SetValue(&quot;FLAGS&quot;, &quot;false7&quot;, false);</span>
+<span class="lineNum">     149 </span><span class="lineCov">          1 :         reader.SetValue&lt;std::string&gt;(&quot;FLAGS&quot;, &quot;false8&quot;, &quot;maybe&quot;);</span>
+<span class="lineNum">     150 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true1&quot;));</span>
+<span class="lineNum">     151 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true2&quot;));</span>
+<span class="lineNum">     152 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true3&quot;));</span>
+<span class="lineNum">     153 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true4&quot;));</span>
+<span class="lineNum">     154 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true5&quot;));</span>
+<span class="lineNum">     155 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true6&quot;));</span>
+<span class="lineNum">     156 </span><span class="lineCov">          2 :         CHECK(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;true7&quot;));</span>
+<span class="lineNum">     157 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false1&quot;));</span>
+<span class="lineNum">     158 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false2&quot;));</span>
+<span class="lineNum">     159 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false3&quot;));</span>
+<span class="lineNum">     160 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false4&quot;));</span>
+<span class="lineNum">     161 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false5&quot;));</span>
+<span class="lineNum">     162 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false6&quot;));</span>
+<span class="lineNum">     163 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false7&quot;));</span>
+<span class="lineNum">     164 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.GetValue&lt;bool&gt;(&quot;FLAGS&quot;, &quot;false8&quot;));</span>
+<span class="lineNum">     165 </span>            :     }
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini remove empty section&quot;) {</span>
+<span class="lineNum">     168 </span><span class="lineCov">          1 :         reader.SetValue(&quot;FOO&quot;, &quot;temp2&quot;, 0.2f);</span>
+<span class="lineNum">     169 </span><span class="lineCov">          1 :         reader.RemoveSectionKey(&quot;FOO&quot;, &quot;temp2&quot;, true);</span>
+<span class="lineNum">     170 </span><span class="lineCov">          2 :         CHECK_FALSE(reader.hasSection(&quot;FOO&quot;));</span>
+<span class="lineNum">     171 </span>            :     }
+<span class="lineNum">     172 </span>            : 
+<span class="lineNum">     173 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini get non existing value&quot;) {</span>
+<span class="lineNum">     174 </span><span class="lineCov">          7 :         REQUIRE_THROWS_AS(reader.GetValue&lt;int&gt;(&quot;TEST&quot;, &quot;does not exist&quot;), utils::exceptions::KeyDoesNotExistException);</span>
+<span class="lineNum">     175 </span><span class="lineCov">          7 :         REQUIRE_THROWS_AS(reader.GetValue&lt;int&gt;(&quot;does not exist&quot;, &quot;pi&quot;), utils::exceptions::KeyDoesNotExistException);</span>
+<span class="lineNum">     176 </span>            :     }
+<span class="lineNum">     177 </span>            : 
+<span class="lineNum">     178 </span><span class="lineCov">         11 :     SECTION(&quot;Test utils::ini invalid file input/output&quot;) {</span>
+<span class="lineNum">     179 </span>            :         // FIXME Why not throwing utils::exceptions::FileReadException ?
+<span class="lineNum">     180 </span><span class="lineCov">          5 :         REQUIRE_THROWS_AS(utils::ini::ConfigReader(std::string(&quot;&quot;)), std::exception);</span>
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span><span class="lineCov">          5 :         REQUIRE_THROWS_AS(reader.save(&quot;&quot;), utils::exceptions::FileWriteException);</span>
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span>            :         // FIXME Why not throwing utils::exceptions::FileReadException ?
+<span class="lineNum">     185 </span><span class="lineCov">          2 :         REQUIRE_NOTHROW(reader.save(&quot;&lt;\\:?//&gt;&quot;));</span>
+<span class="lineNum">     186 </span>            :     }
+<span class="lineNum">     187 </span><span class="lineCov">         10 : }</span>
+<span class="lineNum">     188 </span>            : 
+<span class="lineNum">     189 </span>            : #endif
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

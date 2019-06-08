@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - report.info - utils/utils_lib/utils_misc.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_misc.hpp<span style="font-size: 80%;"> (source / <a href="utils_misc.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">report.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">18</td>
+            <td class="headerCovTableEntryLo">38.9 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-06-08</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">33.3 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef UTILS_MISC_HPP</a>
+<span class="lineNum">       2 </span>            : #define UTILS_MISC_HPP
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;utils_exceptions.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;utils_memory.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;utils_print.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;utils_traits.hpp&quot;
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;iomanip&gt;
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : namespace utils::misc {
+<span class="lineNum">      13 </span>            :     /** \brief
+<span class="lineNum">      14 </span>            :      *      Convert the given char* to a variable of type T.
+<span class="lineNum">      15 </span>            :      *      Use this method instead of the raw C functions: atoi, atof, atol, atoll.
+<span class="lineNum">      16 </span>            :      *
+<span class="lineNum">      17 </span>            :      *      Also check for hex number.
+<span class="lineNum">      18 </span>            :      *
+<span class="lineNum">      19 </span>            :      *  \tparam T
+<span class="lineNum">      20 </span>            :      *      The type of object to cast to.
+<span class="lineNum">      21 </span>            :      *  \param  buffer
+<span class="lineNum">      22 </span>            :      *      The character buffer to convert.
+<span class="lineNum">      23 </span>            :      *  \return
+<span class="lineNum">      24 </span>            :      *      Returns a variable of type T with the value as given in buffer.
+<a name="25"><span class="lineNum">      25 </span>            :      */</a>
+<span class="lineNum">      26 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      27 </span><span class="lineCov">          2 :     static T lexical_cast(const char *buffer) {</span>
+<span class="lineNum">      28 </span>            :         T out;
+<span class="lineNum">      29 </span><span class="lineCov">          2 :         std::stringstream cast;</span>
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span><span class="lineCov">          2 :         if (buffer[0] == '0' &amp;&amp; buffer[1] != '.') {</span>
+<span class="lineNum">      32 </span><span class="lineNoCov">          0 :             if (buffer[1] == 'x' || buffer[1] == 'X') {</span>
+<span class="lineNum">      33 </span>            :                 // Hex literal
+<span class="lineNum">      34 </span><span class="lineNoCov">          0 :                 cast &lt;&lt; std::hex &lt;&lt; buffer;</span>
+<span class="lineNum">      35 </span><span class="lineNoCov">          0 :             } else if (buffer[1] == 'b' || buffer[1] == 'B') {</span>
+<span class="lineNum">      36 </span>            :                 // Binary literal
+<span class="lineNum">      37 </span>            :                 try {
+<span class="lineNum">      38 </span><span class="lineNoCov">          0 :                     cast &lt;&lt; std::stoll(buffer + 2, nullptr, 2);</span>
+<span class="lineNum">      39 </span><span class="lineNoCov">          0 :                 } catch (std::invalid_argument const&amp;) {</span>
+<span class="lineNum">      40 </span><span class="lineNoCov">          0 :                     throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));</span>
+<span class="lineNum">      41 </span><span class="lineNoCov">          0 :                 }</span>
+<span class="lineNum">      42 </span>            :             } else {
+<span class="lineNum">      43 </span>            :                 // Octal literal
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 :                 cast &lt;&lt; std::oct &lt;&lt; buffer;</span>
+<span class="lineNum">      45 </span><span class="lineNoCov">          0 :             }</span>
+<span class="lineNum">      46 </span><span class="lineCov">          2 :         } else if (buffer[0] == '#') {</span>
+<span class="lineNum">      47 </span>            :             // Hex colour string
+<span class="lineNum">      48 </span><span class="lineNoCov">          0 :             cast &lt;&lt; std::hex &lt;&lt; ++buffer;</span>
+<span class="lineNum">      49 </span>            :         } else {
+<span class="lineNum">      50 </span>            :             // Decimal/float/...
+<span class="lineNum">      51 </span><span class="lineCov">          2 :             cast &lt;&lt; buffer;</span>
+<span class="lineNum">      52 </span>            :         }
+<span class="lineNum">      53 </span>            : 
+<span class="lineNum">      54 </span><span class="lineCov">          2 :         if (!(cast &gt;&gt; out))</span>
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :             throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));</span>
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span><span class="lineCov">          4 :         return out;</span>
+<span class="lineNum">      58 </span>            :     }
+<span class="lineNum">      59 </span>            : }
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            : #endif // UTILS_MISC_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

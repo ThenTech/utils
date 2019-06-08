@@ -1,0 +1,591 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - report.info - utils/utils_lib/utils_print.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_print.hpp<span style="font-size: 80%;"> (source / <a href="utils_print.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">report.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">101</td>
+            <td class="headerCovTableEntry">101</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-06-08</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">61</td>
+            <td class="headerCovTableEntry">62</td>
+            <td class="headerCovTableEntryHi">98.4 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef UTILS_PRINT_HPP</a>
+<span class="lineNum">       2 </span>            : #define UTILS_PRINT_HPP
+<span class="lineNum">       3 </span>            : /**
+<span class="lineNum">       4 </span>            :  *  Generic printing to an outputstream.
+<span class="lineNum">       5 </span>            :  *  Reference: https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
+<span class="lineNum">       6 </span>            :  *
+<span class="lineNum">       7 </span>            :  *  TODO Also look at https://github.com/p-ranav/pprint
+<span class="lineNum">       8 </span>            :  */
+<span class="lineNum">       9 </span>            : 
+<span class="lineNum">      10 </span>            : #include &quot;utils_string.hpp&quot;
+<span class="lineNum">      11 </span>            : #include &quot;utils_traits.hpp&quot;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      14 </span>            : #include &lt;iterator&gt;
+<span class="lineNum">      15 </span>            : #include &lt;type_traits&gt;
+<span class="lineNum">      16 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      17 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : #ifdef _MSC_VER
+<span class="lineNum">      20 </span>            :     #include &lt;intrin.h&gt;
+<span class="lineNum">      21 </span>            :     #include &lt;typeinfo&gt;
+<span class="lineNum">      22 </span>            : #else
+<span class="lineNum">      23 </span>            :     #include &lt;cxxabi.h&gt;
+<span class="lineNum">      24 </span>            : #endif
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : 
+<span class="lineNum">      27 </span>            : #define UTILS_PRINT_VECTOR_STRINGS_QUOTED              1
+<span class="lineNum">      28 </span>            : #define UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES 1
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span>            : namespace utils::print {
+<span class="lineNum">      32 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      33 </span>            :     /// pretty_ostream_iterator
+<span class="lineNum">      34 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      35 </span>            :     // This works similar to ostream_iterator, but doesn't print a delimiter after the final item
+<span class="lineNum">      36 </span>            :     template&lt;typename T, typename TChar = char, typename TCharTraits = std::char_traits&lt;TChar&gt; &gt;
+<span class="lineNum">      37 </span>            :     class pretty_ostream_iterator : public std::iterator&lt;std::output_iterator_tag, void, void, void, void&gt; {
+<span class="lineNum">      38 </span>            :         public:
+<span class="lineNum">      39 </span>            :             typedef TChar char_type;
+<span class="lineNum">      40 </span>            :             typedef TCharTraits traits_type;
+<span class="lineNum">      41 </span>            :             typedef std::basic_ostream&lt;TChar, TCharTraits&gt; ostream_type;
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :         private:
+<span class="lineNum">      44 </span>            :             ostream_type *_stream;
+<span class="lineNum">      45 </span>            :             const char_type *_delim;
+<span class="lineNum">      46 </span>            :             bool _insertDelim;
+<a name="47"><span class="lineNum">      47 </span>            : </a>
+<span class="lineNum">      48 </span>            :         public:
+<span class="lineNum">      49 </span><span class="lineCov">          4 :             pretty_ostream_iterator(ostream_type&amp; stream, const char_type *delim = NULL)</span>
+<span class="lineNum">      50 </span><span class="lineCov">          4 :                 : _stream(&amp;stream), _delim(delim), _insertDelim(false) {</span>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">          4 :             }</span></a>
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span><span class="lineCov">        113 :             pretty_ostream_iterator&lt;T, TChar, TCharTraits&gt;&amp; operator=(const T&amp; value) {</span>
+<span class="lineNum">      54 </span><span class="lineCov">        113 :                 if (_delim != NULL) {</span>
+<span class="lineNum">      55 </span>            :                     // Don't insert a delimiter if this is the first time the function is called
+<span class="lineNum">      56 </span><span class="lineCov">        113 :                     if (_insertDelim)</span>
+<span class="lineNum">      57 </span><span class="lineCov">        109 :                         (*_stream) &lt;&lt; _delim;</span>
+<span class="lineNum">      58 </span>            :                     else
+<span class="lineNum">      59 </span><span class="lineCov">          4 :                         _insertDelim = true;</span>
+<span class="lineNum">      60 </span>            :                 }
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span><span class="lineCov">        113 :                 (*_stream) &lt;&lt; value;</span>
+<span class="lineNum">      63 </span><span class="lineCov">        113 :                 return *this;</span>
+<a name="64"><span class="lineNum">      64 </span>            :             }</a>
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span><span class="lineCov">        113 :             pretty_ostream_iterator&lt;T, TChar, TCharTraits&gt;&amp; operator*() {</span>
+<span class="lineNum">      67 </span><span class="lineCov">        113 :                 return *this;</span>
+<a name="68"><span class="lineNum">      68 </span>            :             }</a>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineCov">        113 :             pretty_ostream_iterator&lt;T, TChar, TCharTraits&gt;&amp; operator++() {</span>
+<span class="lineNum">      71 </span><span class="lineCov">        113 :                 return *this;</span>
+<span class="lineNum">      72 </span>            :             }
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :             pretty_ostream_iterator&lt;T, TChar, TCharTraits&gt;&amp; operator++(int) {
+<span class="lineNum">      75 </span>            :                 return *this;
+<span class="lineNum">      76 </span>            :             }
+<span class="lineNum">      77 </span>            :     };
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            :     #if defined(_MSC_VER) &amp;&amp; _MSC_VER &gt;= 1400
+<span class="lineNum">      80 </span>            :         // Declare pretty_ostream_iterator as checked
+<span class="lineNum">      81 </span>            :         template&lt;typename T, typename TChar, typename TCharTraits&gt;
+<span class="lineNum">      82 </span>            :         struct std::_Is_checked_helper&lt;pretty_ostream_iterator&lt;T, TChar, TCharTraits&gt;&gt;
+<span class="lineNum">      83 </span>            :                 : public std::tr1::true_type
+<span class="lineNum">      84 </span>            :         {
+<span class="lineNum">      85 </span>            :             // Empty
+<span class="lineNum">      86 </span>            :         };
+<span class="lineNum">      87 </span>            :     #endif // _MSC_VER &gt;= 1400
+<span class="lineNum">      88 </span>            : 
+<span class="lineNum">      89 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      90 </span>            :     /// Delimiters
+<span class="lineNum">      91 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      92 </span>            :     // Holds the delimiter values for a specific character type
+<span class="lineNum">      93 </span>            :     template&lt;typename TChar&gt;
+<span class="lineNum">      94 </span>            :     struct delimiters_values {
+<span class="lineNum">      95 </span>            :         typedef TChar char_type;
+<span class="lineNum">      96 </span>            :         const TChar *prefix;
+<span class="lineNum">      97 </span>            :         const TChar *delimiter;
+<span class="lineNum">      98 </span>            :         const TChar *postfix;
+<span class="lineNum">      99 </span>            :     };
+<span class="lineNum">     100 </span>            : 
+<span class="lineNum">     101 </span>            :     // Defines the delimiter values for a specific container and character type
+<span class="lineNum">     102 </span>            :     template&lt;typename T, typename TChar&gt;
+<span class="lineNum">     103 </span>            :     struct delimiters {
+<span class="lineNum">     104 </span>            :         static inline delimiters_values&lt;TChar&gt; values;
+<span class="lineNum">     105 </span>            :     };
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            :     // Default delimiters
+<span class="lineNum">     108 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     109 </span>            :     struct delimiters&lt;T, char&gt; {
+<span class="lineNum">     110 </span>            :         static inline constexpr delimiters_values&lt;char&gt; values = { &quot;[ &quot;, &quot;, &quot;, &quot; ]&quot; };
+<span class="lineNum">     111 </span>            :     };
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     114 </span>            :     struct delimiters&lt;T, wchar_t&gt; {
+<span class="lineNum">     115 </span>            :         static inline constexpr delimiters_values&lt;wchar_t&gt; values = { L&quot;[ &quot;, L&quot;, &quot;, L&quot; ]&quot; };
+<span class="lineNum">     116 </span>            :     };
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     119 </span>            :     /// vector&lt;string&gt; newline
+<span class="lineNum">     120 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     121 </span>            :     #if (UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES || UTILS_PRINT_VECTOR_STRINGS_QUOTED)
+<span class="lineNum">     122 </span>            :         template&lt;&gt;
+<span class="lineNum">     123 </span>            :         struct delimiters&lt;std::vector&lt;std::string&gt;, char&gt; {
+<span class="lineNum">     124 </span>            :             static inline constexpr delimiters_values&lt;char&gt; values = {
+<span class="lineNum">     125 </span>            :                 #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+<span class="lineNum">     126 </span>            :                     &quot;[\n    \&quot;&quot;, &quot;\&quot;,\n    \&quot;&quot;, &quot;\&quot;\n]&quot;
+<span class="lineNum">     127 </span>            :                 #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
+<span class="lineNum">     128 </span>            :                     &quot;[\&quot;&quot;, &quot;\&quot;, \&quot;&quot;, &quot;\&quot;]&quot;
+<span class="lineNum">     129 </span>            :                 #endif
+<span class="lineNum">     130 </span>            :             };
+<span class="lineNum">     131 </span>            :         };
+<span class="lineNum">     132 </span>            : 
+<span class="lineNum">     133 </span>            :         template&lt;&gt;
+<span class="lineNum">     134 </span>            :         struct delimiters&lt;std::vector&lt;std::string&gt;, wchar_t&gt; {
+<span class="lineNum">     135 </span>            :             static inline constexpr delimiters_values&lt;wchar_t&gt; values = {
+<span class="lineNum">     136 </span>            :                 #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+<span class="lineNum">     137 </span>            :                     L&quot;[\n    \&quot;&quot;, L&quot;\&quot;,\n    \&quot;&quot;, L&quot;\&quot;\n]&quot;
+<span class="lineNum">     138 </span>            :                 #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
+<span class="lineNum">     139 </span>            :                     L&quot;[\&quot;&quot;, L&quot;\&quot;, \&quot;&quot;, L&quot;\&quot;]&quot;
+<span class="lineNum">     140 </span>            :                 #endif
+<span class="lineNum">     141 </span>            :             };
+<span class="lineNum">     142 </span>            :         };
+<span class="lineNum">     143 </span>            :     #endif
+<span class="lineNum">     144 </span>            : 
+<span class="lineNum">     145 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     146 </span>            :     // Delimiters for set
+<span class="lineNum">     147 </span>            :     template&lt;typename T, typename TTraits, typename TAllocator&gt;
+<span class="lineNum">     148 </span>            :     struct delimiters&lt;std::set&lt;T, TTraits, TAllocator&gt;, char&gt; {
+<span class="lineNum">     149 </span>            :             static inline constexpr delimiters_values&lt;char&gt; values = { &quot;{ &quot;, &quot;, &quot;, &quot; }&quot; };
+<span class="lineNum">     150 </span>            :     };
+<span class="lineNum">     151 </span>            : 
+<span class="lineNum">     152 </span>            :     template&lt;typename T, typename TTraits, typename TAllocator&gt;
+<span class="lineNum">     153 </span>            :     struct delimiters&lt;std::set&lt;T, TTraits, TAllocator&gt;, wchar_t&gt; {
+<span class="lineNum">     154 </span>            :             static inline constexpr delimiters_values&lt;wchar_t&gt; values = { L&quot;{ &quot;, L&quot;, &quot;, L&quot; }&quot; };
+<span class="lineNum">     155 </span>            :     };
+<span class="lineNum">     156 </span>            : 
+<span class="lineNum">     157 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     158 </span>            :     // Delimiters for pair
+<span class="lineNum">     159 </span>            :     template&lt;typename T1, typename T2&gt;
+<span class="lineNum">     160 </span>            :     struct delimiters&lt;std::pair&lt;T1, T2&gt;, char&gt; {
+<span class="lineNum">     161 </span>            :             static inline constexpr delimiters_values&lt;char&gt; values = { &quot;(&quot;, &quot;, &quot;, &quot;)&quot; };
+<span class="lineNum">     162 </span>            :     };
+<span class="lineNum">     163 </span>            : 
+<span class="lineNum">     164 </span>            :     template&lt;typename T1, typename T2&gt;
+<span class="lineNum">     165 </span>            :     struct delimiters&lt;std::pair&lt;T1, T2&gt;, wchar_t&gt; {
+<span class="lineNum">     166 </span>            :             static inline constexpr delimiters_values&lt;wchar_t&gt; values = { L&quot;(&quot;, L&quot;, &quot;, L&quot;)&quot; };
+<span class="lineNum">     167 </span>            :     };
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     170 </span>            :     // Delimiters for tuple
+<span class="lineNum">     171 </span>            :     template&lt;typename ...Args&gt;
+<span class="lineNum">     172 </span>            :     struct delimiters&lt;std::tuple&lt;Args...&gt;, char&gt; {
+<span class="lineNum">     173 </span>            :             static inline constexpr delimiters_values&lt;char&gt; values = { &quot;(&quot;, &quot;, &quot;, &quot;)&quot; };
+<span class="lineNum">     174 </span>            :     };
+<span class="lineNum">     175 </span>            : 
+<span class="lineNum">     176 </span>            :     template&lt;typename ...Args&gt;
+<span class="lineNum">     177 </span>            :     struct delimiters&lt;std::tuple&lt;Args...&gt;, wchar_t&gt; {
+<span class="lineNum">     178 </span>            :             static inline constexpr delimiters_values&lt;wchar_t&gt; values = { L&quot;(&quot;, L&quot;, &quot;, L&quot;)&quot; };
+<span class="lineNum">     179 </span>            :     };
+<span class="lineNum">     180 </span>            : 
+<span class="lineNum">     181 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     182 </span>            :     // Delimiters for optional
+<span class="lineNum">     183 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     184 </span>            :     struct delimiters&lt;std::optional&lt;T&gt;, char&gt; {
+<span class="lineNum">     185 </span>            :             static inline constexpr delimiters_values&lt;char&gt; values = { &quot;&quot;, &quot;(?)&quot;, &quot;&quot; };
+<span class="lineNum">     186 </span>            :     };
+<span class="lineNum">     187 </span>            : 
+<span class="lineNum">     188 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     189 </span>            :     struct delimiters&lt;std::optional&lt;T&gt;, wchar_t&gt; {
+<span class="lineNum">     190 </span>            :             static inline constexpr delimiters_values&lt;wchar_t&gt; values = { L&quot;&quot;, L&quot;(?)&quot;, L&quot;&quot; };
+<span class="lineNum">     191 </span>            :     };
+<span class="lineNum">     192 </span>            : 
+<span class="lineNum">     193 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     194 </span>            :     /// Functor to print containers. You can use this directly if you
+<span class="lineNum">     195 </span>            :     /// want to specificy a non-default delimiters type.
+<span class="lineNum">     196 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     197 </span>            :     template&lt;typename T,
+<span class="lineNum">     198 </span>            :              typename TChar = char,
+<span class="lineNum">     199 </span>            :              typename TCharTraits = std::char_traits&lt;TChar&gt;,
+<span class="lineNum">     200 </span>            :              typename TDelimiters = delimiters&lt;T, TChar&gt; &gt;
+<span class="lineNum">     201 </span>            :     struct print_container_helper {
+<span class="lineNum">     202 </span>            :         private:
+<span class="lineNum">     203 </span>            :             const T *_container;
+<span class="lineNum">     204 </span>            : 
+<span class="lineNum">     205 </span>            :         public:
+<span class="lineNum">     206 </span>            :             typedef TChar char_type;
+<span class="lineNum">     207 </span>            :             typedef TDelimiters delimiters_type;
+<a name="208"><span class="lineNum">     208 </span>            :             typedef std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; ostream_type;</a>
+<span class="lineNum">     209 </span>            : 
+<span class="lineNum">     210 </span><span class="lineCov">          4 :             print_container_helper(const T&amp; container)</span>
+<span class="lineNum">     211 </span><span class="lineCov">          4 :                 : _container(&amp;container) {</span>
+<a name="212"><span class="lineNum">     212 </span><span class="lineCov">          4 :             }</span></a>
+<span class="lineNum">     213 </span>            : 
+<span class="lineNum">     214 </span><span class="lineCov">          4 :             void operator()(ostream_type&amp; stream) const {</span>
+<span class="lineNum">     215 </span><span class="lineCov">          4 :                 if (delimiters_type::values.prefix != NULL)</span>
+<span class="lineNum">     216 </span><span class="lineCov">          4 :                     stream &lt;&lt; delimiters_type::values.prefix;</span>
+<span class="lineNum">     217 </span>            : 
+<span class="lineNum">     218 </span><span class="lineCov">          4 :                 std::copy(_container-&gt;begin(),</span>
+<span class="lineNum">     219 </span><span class="lineCov">          4 :                           _container-&gt;end(),</span>
+<span class="lineNum">     220 </span>            :                           pretty_ostream_iterator&lt;typename T::value_type, TChar, TCharTraits&gt;(
+<span class="lineNum">     221 </span><span class="lineCov">          4 :                               stream, delimiters_type::values.delimiter)</span>
+<span class="lineNum">     222 </span>            :                 );
+<span class="lineNum">     223 </span>            : 
+<span class="lineNum">     224 </span><span class="lineCov">          4 :                 if (delimiters_type::values.postfix != NULL)</span>
+<span class="lineNum">     225 </span><span class="lineCov">          4 :                     stream &lt;&lt; delimiters_type::values.postfix;</span>
+<span class="lineNum">     226 </span><span class="lineCov">          4 :             }</span>
+<span class="lineNum">     227 </span>            :     };
+<span class="lineNum">     228 </span>            : 
+<span class="lineNum">     229 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     230 </span>            :     /// Functor to print tuples.
+<span class="lineNum">     231 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     232 </span>            :     template&lt;typename Tuple,
+<span class="lineNum">     233 </span>            :              size_t N,
+<span class="lineNum">     234 </span>            :              typename TChar = char,
+<span class="lineNum">     235 </span>            :              typename TCharTraits = std::char_traits&lt;TChar&gt;,
+<span class="lineNum">     236 </span>            :              typename TDelimiters = delimiters&lt;Tuple, TChar&gt; &gt;
+<span class="lineNum">     237 </span>            :     struct print_tuple_helper {
+<span class="lineNum">     238 </span>            :         private:
+<span class="lineNum">     239 </span>            :             const Tuple&amp; _tuple;
+<span class="lineNum">     240 </span>            : 
+<span class="lineNum">     241 </span>            :         public:
+<span class="lineNum">     242 </span>            :             typedef TChar char_type;
+<span class="lineNum">     243 </span>            :             typedef TDelimiters delimiters_type;
+<a name="244"><span class="lineNum">     244 </span>            :             typedef std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; ostream_type;</a>
+<span class="lineNum">     245 </span>            : 
+<span class="lineNum">     246 </span><span class="lineCov">          7 :             print_tuple_helper(const Tuple&amp; tuple)</span>
+<span class="lineNum">     247 </span><span class="lineCov">          7 :                 : _tuple(tuple) {</span>
+<a name="248"><span class="lineNum">     248 </span><span class="lineCov">          7 :             }</span></a>
+<span class="lineNum">     249 </span>            : 
+<span class="lineNum">     250 </span><span class="lineCov">          7 :             void operator()(ostream_type&amp; stream) const {</span>
+<span class="lineNum">     251 </span>            :                 if constexpr(N == 1) {
+<span class="lineNum">     252 </span><span class="lineCov">          3 :                     stream &lt;&lt; std::get&lt;0&gt;(_tuple);</span>
+<span class="lineNum">     253 </span>            :                 } else {
+<span class="lineNum">     254 </span><span class="lineCov">          4 :                     (print_tuple_helper&lt;Tuple, N - 1, TChar, TCharTraits&gt;(_tuple))(stream);</span>
+<span class="lineNum">     255 </span>            : 
+<span class="lineNum">     256 </span><span class="lineCov">          4 :                     if (delimiters_type::values.delimiter != NULL)</span>
+<span class="lineNum">     257 </span><span class="lineCov">          4 :                         stream &lt;&lt; delimiters_type::values.delimiter;</span>
+<span class="lineNum">     258 </span>            : 
+<span class="lineNum">     259 </span><span class="lineCov">          4 :                     stream &lt;&lt; std::get&lt;N - 1&gt;(_tuple);</span>
+<span class="lineNum">     260 </span>            :                 }
+<span class="lineNum">     261 </span><span class="lineCov">          7 :             }</span>
+<span class="lineNum">     262 </span>            :     };
+<span class="lineNum">     263 </span>            : 
+<span class="lineNum">     264 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     265 </span>            :     /// Functor to print raw arrays.
+<span class="lineNum">     266 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     267 </span>            :     template &lt;typename T, size_t N&gt;
+<span class="lineNum">     268 </span>            :     struct array_wrapper {
+<span class="lineNum">     269 </span>            :         private:
+<span class="lineNum">     270 </span>            :             const T* const _array;
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :         public:
+<span class="lineNum">     273 </span>            :             typedef const T * const_iterator;
+<a name="274"><span class="lineNum">     274 </span>            :             typedef T value_type;</a>
+<a name="275"><span class="lineNum">     275 </span>            : </a>
+<a name="276"><span class="lineNum">     276 </span><span class="lineCov">          1 :             array_wrapper(const T (&amp;a)[N]) : _array(a) { }</span></a>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">          2 :             array_wrapper(const T*&amp; a)     : _array(a) { }</span></a>
+<span class="lineNum">     278 </span><span class="lineCov">          3 :             inline const_iterator begin() const { return _array; }</span>
+<span class="lineNum">     279 </span><span class="lineCov">          3 :             inline const_iterator end()   const { return _array + N; }</span>
+<span class="lineNum">     280 </span>            :     };
+<span class="lineNum">     281 </span>            : }
+<span class="lineNum">     282 </span>            : 
+<span class="lineNum">     283 </span>            : namespace utils::traits {
+<span class="lineNum">     284 </span>            :     // Mark array_wrapper as a container
+<span class="lineNum">     285 </span>            :     template&lt;typename T, size_t N&gt;
+<span class="lineNum">     286 </span>            :     struct is_container&lt;utils::print::array_wrapper&lt;T, N&gt;&gt; : public std::true_type { };
+<span class="lineNum">     287 </span>            : }
+<span class="lineNum">     288 </span>            : 
+<a name="289"><span class="lineNum">     289 </span>            : namespace utils::print {</a>
+<span class="lineNum">     290 </span>            :     template &lt;typename T, size_t N&gt;
+<span class="lineNum">     291 </span><span class="lineCov">          1 :     utils::print::array_wrapper&lt;T, N&gt; print_array_helper(const T (&amp;a)[N]) {</span>
+<span class="lineNum">     292 </span><span class="lineCov">          1 :         return utils::print::array_wrapper&lt;T, N&gt;(a);</span>
+<span class="lineNum">     293 </span>            :     }
+<a name="294"><span class="lineNum">     294 </span>            : </a>
+<span class="lineNum">     295 </span>            :     template &lt;typename T, size_t N = 0&gt;
+<span class="lineNum">     296 </span><span class="lineCov">          1 :     utils::print::array_wrapper&lt;T, N&gt; print_array_helper(const T* a) {</span>
+<span class="lineNum">     297 </span>            :         static_assert(N &gt; 0, &quot;print_array_helper requires N!&quot;);
+<span class="lineNum">     298 </span><span class="lineCov">          1 :         return utils::print::array_wrapper&lt;T, N&gt;(a);</span>
+<span class="lineNum">     299 </span>            :     }
+<span class="lineNum">     300 </span>            : 
+<span class="lineNum">     301 </span>            :     /** \brief  Returns the internal actual class name of the given object o.
+<span class="lineNum">     302 </span>            :      *
+<span class="lineNum">     303 </span>            :      *  **Uses __abi::__cxa_demangle__ which is part of &lt;cxxabi.h&gt; included in all GCC compilers.**
+<span class="lineNum">     304 </span>            :      *
+<span class="lineNum">     305 </span>            :      *  If GCC is not used, type2name will revert to typeid(o).name() instead.
+<span class="lineNum">     306 </span>            :      *
+<span class="lineNum">     307 </span>            :      *  \tparam T
+<span class="lineNum">     308 </span>            :      *          The type of object to get the name demangled from.
+<span class="lineNum">     309 </span>            :      *  \param  o
+<span class="lineNum">     310 </span>            :      *          The object to demangle the name from.
+<span class="lineNum">     311 </span>            :      *  \param  filter
+<span class="lineNum">     312 </span>            :      *      A list of strings to filter (remove) from the output type name.
+<span class="lineNum">     313 </span>            :      *  \return
+<span class="lineNum">     314 </span>            :      *          Returns the class name of o.
+<span class="lineNum">     315 </span>            :      */
+<span class="lineNum">     316 </span>            :     template &lt;
+<span class="lineNum">     317 </span>            :         class T, typename ...Strings,
+<span class="lineNum">     318 </span>            :         std::enable_if_t&lt;(std::is_convertible_v&lt;Strings const&amp;, std::string_view&gt; &amp;&amp; ...), int&gt; = 0
+<a name="319"><span class="lineNum">     319 </span>            :     &gt;</a>
+<span class="lineNum">     320 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     321 </span><span class="lineCov">          7 :     static const std::string type2name(T const&amp; o, const Strings&amp; ...filter) {</span>
+<span class="lineNum">     322 </span>            :         #ifdef _CXXABI_H
+<span class="lineNum">     323 </span>            :             // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
+<span class="lineNum">     324 </span>            :             utils::memory::unique_t&lt;char, decltype (&amp;std::free)&gt;
+<span class="lineNum">     325 </span><span class="lineCov">         14 :                     demang(abi::__cxa_demangle(typeid(o).name(), nullptr, nullptr, nullptr),</span>
+<span class="lineNum">     326 </span><span class="lineCov">          7 :                            &amp;std::free);</span>
+<span class="lineNum">     327 </span><span class="lineCov">          7 :             std::string s(demang.get());</span>
+<span class="lineNum">     328 </span>            :         #else
+<span class="lineNum">     329 </span>            :             std::string s(typeid(o).name());
+<span class="lineNum">     330 </span>            :         #endif
+<span class="lineNum">     331 </span>            : 
+<span class="lineNum">     332 </span>            :         // Remove every occurence in filter... list from output (e.g. std::)
+<span class="lineNum">     333 </span>            :         if constexpr (sizeof...(filter) &gt; 0) {
+<span class="lineNum">     334 </span><span class="lineCov">          1 :             (utils::string::strEraseAll(s, filter), ...);</span>
+<span class="lineNum">     335 </span>            :         }
+<span class="lineNum">     336 </span>            : 
+<span class="lineNum">     337 </span><span class="lineCov">         14 :         return s;</span>
+<span class="lineNum">     338 </span>            :     }
+<span class="lineNum">     339 </span>            : 
+<span class="lineNum">     340 </span>            :     /**
+<span class="lineNum">     341 </span>            :      *  \brief  Dump the given data to ascii output and hex view.
+<span class="lineNum">     342 </span>            :      *
+<span class="lineNum">     343 </span>            :      *  \param  stream
+<span class="lineNum">     344 </span>            :      *      The stream to write to.
+<span class="lineNum">     345 </span>            :      *  \param  data
+<span class="lineNum">     346 </span>            :      *      The data to dump as raw `void*`, will be cast to `char*`.
+<span class="lineNum">     347 </span>            :      *  \param  length
+<span class="lineNum">     348 </span>            :      *      Length of \p data.
+<span class="lineNum">     349 </span>            :      *  \param  width
+<span class="lineNum">     350 </span>            :      *      Width for dump format, equal to amount of bytes on each line.
+<a name="351"><span class="lineNum">     351 </span>            :      */</a>
+<span class="lineNum">     352 </span>            :     template&lt;typename TChar, typename TCharTraits&gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     353 </span><span class="lineCov">          6 :     static void hexdump(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     354 </span>            :                         const void* data, size_t length,
+<span class="lineNum">     355 </span>            :                         size_t width = 16)
+<span class="lineNum">     356 </span>            :     {
+<span class="lineNum">     357 </span><span class="lineCov">          6 :         if (data == nullptr)</span>
+<span class="lineNum">     358 </span><span class="lineCov">          2 :             return;</span>
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span><span class="lineCov">          4 :         const char* const start = static_cast&lt;const char*&gt;(data);</span>
+<span class="lineNum">     361 </span><span class="lineCov">          4 :         const char* const end   = start + length;</span>
+<span class="lineNum">     362 </span><span class="lineCov">          4 :         const char* line = start;</span>
+<span class="lineNum">     363 </span><span class="lineCov">          8 :         const auto locale = stream.getloc();</span>
+<span class="lineNum">     364 </span>            : 
+<span class="lineNum">     365 </span><span class="lineCov">          8 :         while (line != end) {</span>
+<span class="lineNum">     366 </span><span class="lineCov">          4 :             const size_t lineLength = std::min(width, static_cast&lt;std::size_t&gt;(end - line));</span>
+<span class="lineNum">     367 </span>            : 
+<span class="lineNum">     368 </span><span class="lineCov">          4 :             stream &lt;&lt; utils::string::format(&quot;%04X : &quot;, line - start);</span>
+<span class="lineNum">     369 </span>            : 
+<span class="lineNum">     370 </span><span class="lineCov">         40 :             for (const char* next = line; next != line + lineLength; ++next) {</span>
+<span class="lineNum">     371 </span><span class="lineCov">         36 :                 stream &lt;&lt; (!std::isprint(*next, locale) ? '.' : *next);</span>
+<span class="lineNum">     372 </span>            :             }
+<span class="lineNum">     373 </span>            : 
+<span class="lineNum">     374 </span><span class="lineCov">          4 :             stream &lt;&lt; std::string(width - lineLength, ' ');</span>
+<span class="lineNum">     375 </span>            : 
+<span class="lineNum">     376 </span><span class="lineCov">         40 :             for (const char* next = line; next != line + lineLength; ++next) {</span>
+<span class="lineNum">     377 </span><span class="lineCov">         36 :                 stream &lt;&lt; utils::string::format(&quot; %02X&quot;, (*next) &amp; 0xFF);</span>
+<span class="lineNum">     378 </span>            :             }
+<span class="lineNum">     379 </span>            : 
+<span class="lineNum">     380 </span><span class="lineCov">          4 :             stream &lt;&lt; std::endl;</span>
+<span class="lineNum">     381 </span><span class="lineCov">          4 :             line += lineLength;</span>
+<span class="lineNum">     382 </span>            :         }
+<span class="lineNum">     383 </span>            :     }
+<span class="lineNum">     384 </span>            : }
+<span class="lineNum">     385 </span>            : 
+<span class="lineNum">     386 </span>            : namespace std {
+<span class="lineNum">     387 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     388 </span>            :     /// operator&lt;&lt;() overloads
+<span class="lineNum">     389 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     390 </span>            : 
+<span class="lineNum">     391 </span>            :     // Prints a print_container_helper to the specified stream.
+<a name="392"><span class="lineNum">     392 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits, typename TDelimiters&gt;</a>
+<span class="lineNum">     393 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     394 </span><span class="lineCov">          4 :     operator&lt;&lt;(</span>
+<span class="lineNum">     395 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     396 </span>            :             const utils::print::print_container_helper&lt;T, TChar, TCharTraits, TDelimiters&gt;&amp; helper)
+<span class="lineNum">     397 </span>            :     {
+<span class="lineNum">     398 </span><span class="lineCov">          4 :         helper(stream);</span>
+<span class="lineNum">     399 </span><span class="lineCov">          4 :         return stream;</span>
+<span class="lineNum">     400 </span>            :     }
+<span class="lineNum">     401 </span>            : 
+<span class="lineNum">     402 </span>            :     // Prints a container to the stream using default delimiters
+<span class="lineNum">     403 </span>            :     template&lt;
+<span class="lineNum">     404 </span>            :         typename T, typename TChar, typename TCharTraits,
+<span class="lineNum">     405 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_container&lt;T&gt;::value&gt;
+<a name="406"><span class="lineNum">     406 </span>            :     &gt;</a>
+<span class="lineNum">     407 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     408 </span><span class="lineCov">          4 :     operator&lt;&lt;(</span>
+<span class="lineNum">     409 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     410 </span>            :             const T&amp; container)
+<span class="lineNum">     411 </span>            :     {
+<span class="lineNum">     412 </span><span class="lineCov">          4 :         stream &lt;&lt; utils::print::print_container_helper&lt;T, TChar, TCharTraits&gt;(container);</span>
+<span class="lineNum">     413 </span><span class="lineCov">          4 :         return stream;</span>
+<span class="lineNum">     414 </span>            :     }
+<span class="lineNum">     415 </span>            : 
+<span class="lineNum">     416 </span>            :     // Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.
+<a name="417"><span class="lineNum">     417 </span>            :     template&lt;typename T1, typename T2, typename TChar, typename TCharTraits&gt;</a>
+<span class="lineNum">     418 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     419 </span><span class="lineCov">          6 :     operator&lt;&lt;(</span>
+<span class="lineNum">     420 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     421 </span>            :             const std::pair&lt;T1, T2&gt;&amp; value)
+<span class="lineNum">     422 </span>            :     {
+<span class="lineNum">     423 </span><span class="lineCov">          6 :         if (utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values.prefix != NULL)</span>
+<span class="lineNum">     424 </span><span class="lineCov">          6 :             stream &lt;&lt; utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values.prefix;</span>
+<span class="lineNum">     425 </span>            : 
+<span class="lineNum">     426 </span><span class="lineCov">          6 :         stream &lt;&lt; value.first;</span>
+<span class="lineNum">     427 </span>            : 
+<span class="lineNum">     428 </span><span class="lineCov">          6 :         if (utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values.delimiter != NULL)</span>
+<span class="lineNum">     429 </span><span class="lineCov">          6 :             stream &lt;&lt; utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values.delimiter;</span>
+<span class="lineNum">     430 </span>            : 
+<span class="lineNum">     431 </span><span class="lineCov">          6 :         stream &lt;&lt; value.second;</span>
+<span class="lineNum">     432 </span>            : 
+<span class="lineNum">     433 </span><span class="lineCov">          6 :         if (utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values.postfix != NULL)</span>
+<span class="lineNum">     434 </span><span class="lineCov">          6 :             stream &lt;&lt; utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values.postfix;</span>
+<span class="lineNum">     435 </span>            : 
+<span class="lineNum">     436 </span><span class="lineCov">          6 :         return stream;</span>
+<span class="lineNum">     437 </span>            :     }
+<span class="lineNum">     438 </span>            : 
+<a name="439"><span class="lineNum">     439 </span>            :     template&lt;typename ...Args, typename TChar, typename TCharTraits, typename TDelimiters&gt;</a>
+<span class="lineNum">     440 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     441 </span><span class="lineCov">          3 :     operator&lt;&lt;(</span>
+<span class="lineNum">     442 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     443 </span>            :             const utils::print::print_tuple_helper&lt;std::tuple&lt;Args...&gt;, sizeof...(Args), TChar, TDelimiters&gt;&amp; helper)
+<span class="lineNum">     444 </span>            :     {
+<span class="lineNum">     445 </span><span class="lineCov">          3 :         helper(stream);</span>
+<span class="lineNum">     446 </span><span class="lineCov">          3 :         return stream;</span>
+<span class="lineNum">     447 </span>            :     }
+<span class="lineNum">     448 </span>            : 
+<span class="lineNum">     449 </span>            :     // Prints a tuple to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.
+<a name="450"><span class="lineNum">     450 </span>            :     template&lt;typename ...Args, typename TChar, typename TCharTraits&gt;</a>
+<span class="lineNum">     451 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     452 </span><span class="lineCov">          3 :     operator&lt;&lt;(</span>
+<span class="lineNum">     453 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     454 </span>            :             const std::tuple&lt;Args...&gt;&amp; value)
+<span class="lineNum">     455 </span>            :     {
+<span class="lineNum">     456 </span><span class="lineCov">          3 :         if (utils::print::delimiters&lt;std::tuple&lt;Args...&gt;, TChar&gt;::values.prefix != NULL)</span>
+<span class="lineNum">     457 </span><span class="lineCov">          3 :             stream &lt;&lt; utils::print::delimiters&lt;std::tuple&lt;Args...&gt;, TChar&gt;::values.prefix;</span>
+<span class="lineNum">     458 </span>            : 
+<span class="lineNum">     459 </span><span class="lineCov">          3 :         stream &lt;&lt; utils::print::print_tuple_helper&lt;std::tuple&lt;Args...&gt;, sizeof...(Args), TChar, TCharTraits&gt;(value);</span>
+<span class="lineNum">     460 </span>            : 
+<span class="lineNum">     461 </span><span class="lineCov">          3 :         if (utils::print::delimiters&lt;std::tuple&lt;Args...&gt;, TChar&gt;::values.postfix != NULL)</span>
+<span class="lineNum">     462 </span><span class="lineCov">          3 :             stream &lt;&lt; utils::print::delimiters&lt;std::tuple&lt;Args...&gt;, TChar&gt;::values.postfix;</span>
+<span class="lineNum">     463 </span>            : 
+<span class="lineNum">     464 </span><span class="lineCov">          3 :         return stream;</span>
+<span class="lineNum">     465 </span>            :     }
+<span class="lineNum">     466 </span>            : 
+<span class="lineNum">     467 </span>            :     template&lt;typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters&gt;
+<span class="lineNum">     468 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     469 </span>            :     operator&lt;&lt;(
+<span class="lineNum">     470 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     471 </span>            :             const utils::print::array_wrapper&lt;T, N&gt;&amp; helper)
+<span class="lineNum">     472 </span>            :     {
+<span class="lineNum">     473 </span>            :         stream &lt;&lt; utils::print::print_container_helper&lt;utils::print::array_wrapper&lt;T, N&gt;, TChar, TCharTraits&gt;(helper);
+<span class="lineNum">     474 </span>            :         return stream;
+<span class="lineNum">     475 </span>            :     }
+<span class="lineNum">     476 </span>            : 
+<span class="lineNum">     477 </span>            : 
+<a name="478"><span class="lineNum">     478 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits&gt;</a>
+<span class="lineNum">     479 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     480 </span><span class="lineCov">          2 :     operator&lt;&lt;(</span>
+<span class="lineNum">     481 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     482 </span>            :             const std::optional&lt;T&gt;&amp; optional)
+<span class="lineNum">     483 </span>            :     {
+<span class="lineNum">     484 </span><span class="lineCov">          2 :         if (optional.has_value())</span>
+<span class="lineNum">     485 </span><span class="lineCov">          1 :             stream &lt;&lt; optional.value();</span>
+<span class="lineNum">     486 </span>            :         else
+<span class="lineNum">     487 </span><span class="lineCov">          1 :             stream &lt;&lt; utils::print::delimiters&lt;std::optional&lt;T&gt;, TChar&gt;::values.delimiter;</span>
+<span class="lineNum">     488 </span><span class="lineCov">          2 :         return stream;</span>
+<span class="lineNum">     489 </span>            :     }
+<span class="lineNum">     490 </span>            : 
+<span class="lineNum">     491 </span>            :     /**
+<span class="lineNum">     492 </span>            :      *  \brief  operator &lt;&lt;
+<span class="lineNum">     493 </span>            :      *          Triggered if T == __gnu_cxx::__normal_iterator&lt;T, Container&gt;
+<span class="lineNum">     494 </span>            :      *          or another iterator type.
+<span class="lineNum">     495 </span>            :      *  \param  stream
+<span class="lineNum">     496 </span>            :      *  \param  it_value
+<span class="lineNum">     497 </span>            :      *  \return
+<span class="lineNum">     498 </span>            :      */
+<span class="lineNum">     499 </span>            :     template&lt;
+<span class="lineNum">     500 </span>            :         typename T, typename TChar, typename TCharTraits,
+<span class="lineNum">     501 </span>            :         std::enable_if_t&lt;utils::traits::is_iterator_v&lt;T&gt;, int&gt; = 0
+<a name="502"><span class="lineNum">     502 </span>            :     &gt;</a>
+<span class="lineNum">     503 </span>            :     std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     504 </span><span class="lineCov">          1 :     operator&lt;&lt;(</span>
+<span class="lineNum">     505 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     506 </span>            :             const T&amp; it_value)
+<span class="lineNum">     507 </span>            :     {
+<span class="lineNum">     508 </span><span class="lineCov">          1 :         stream &lt;&lt; *it_value;</span>
+<span class="lineNum">     509 </span><span class="lineCov">          1 :         return stream;</span>
+<span class="lineNum">     510 </span>            :     }
+<span class="lineNum">     511 </span>            : }
+<span class="lineNum">     512 </span>            : 
+<span class="lineNum">     513 </span>            : #undef UTILS_PRINT_VECTOR_STRINGS_QUOTED
+<span class="lineNum">     514 </span>            : #undef UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+<span class="lineNum">     515 </span>            : #endif // UTILS_PRINT_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

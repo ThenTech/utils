@@ -40,6 +40,5 @@ Debug
 *.log
 .vscode
 bin
-code_coverage
 utils_test/test_settings.hpp
 make.bat

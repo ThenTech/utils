@@ -1,0 +1,945 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - report.info - utils/utils_lib/utils_string.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_string.hpp<span style="font-size: 80%;"> (source / <a href="utils_string.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">report.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">260</td>
+            <td class="headerCovTableEntry">260</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2019-06-08</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">55</td>
+            <td class="headerCovTableEntry">58</td>
+            <td class="headerCovTableEntryHi">94.8 %</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #ifndef UTILS_STRING_HPP</a>
+<span class="lineNum">       2 </span>            : #define UTILS_STRING_HPP
+<span class="lineNum">       3 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;utils_exceptions.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;utils_memory.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;utils_traits.hpp&quot;
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #include &lt;string&gt;
+<span class="lineNum">       9 </span>            : #include &lt;locale&gt;
+<span class="lineNum">      10 </span>            : #include &lt;codecvt&gt;
+<span class="lineNum">      11 </span>            : #include &lt;cstring&gt;
+<span class="lineNum">      12 </span>            : #include &lt;algorithm&gt;
+<span class="lineNum">      13 </span>            : #include &lt;sstream&gt;
+<span class="lineNum">      14 </span>            : #include &lt;vector&gt;
+<span class="lineNum">      15 </span>            : #include &lt;optional&gt;
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : namespace utils::string {
+<span class="lineNum">      19 </span>            :     /**
+<span class="lineNum">      20 </span>            :      *  \brief  Test if the given string \p str contains the given char \p ch.
+<span class="lineNum">      21 </span>            :      *
+<span class="lineNum">      22 </span>            :      *  \param  str
+<span class="lineNum">      23 </span>            :      *      The std::string to check.
+<span class="lineNum">      24 </span>            :      *  \param  ch
+<span class="lineNum">      25 </span>            :      *      The char to look for.
+<span class="lineNum">      26 </span>            :      *  \param  start
+<span class="lineNum">      27 </span>            :      *      The starting offset to start looking. (default: 0)
+<span class="lineNum">      28 </span>            :      *  \return Returns an `std:optional&lt;size_t&gt;` holding the offset from
+<span class="lineNum">      29 </span>            :      *          `str.begin()` if the char was found, or nothing if not.
+<a name="30"><span class="lineNum">      30 </span>            :      */</a>
+<span class="lineNum">      31 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      32 </span><span class="lineCov">         24 :     static inline std::optional&lt;size_t&gt; contains(const std::string &amp;str, const char ch, const size_t start = 0) {</span>
+<span class="lineNum">      33 </span>            :         // string.h : strchr(str.c_str(), ch)
+<span class="lineNum">      34 </span><span class="lineCov">         24 :         if (const size_t pos = str.find(ch, start);</span>
+<span class="lineNum">      35 </span><span class="lineCov">         24 :             pos != std::string::npos)</span>
+<span class="lineNum">      36 </span>            :         {
+<span class="lineNum">      37 </span><span class="lineCov">         20 :             return { pos };</span>
+<span class="lineNum">      38 </span>            :         }
+<span class="lineNum">      39 </span><span class="lineCov">          4 :         return {};</span>
+<span class="lineNum">      40 </span>            :     }
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            :     /**
+<span class="lineNum">      43 </span>            :      *  \brief  Test if the given string \p str contains the other string \p part.
+<span class="lineNum">      44 </span>            :      *
+<span class="lineNum">      45 </span>            :      *  \param  str
+<span class="lineNum">      46 </span>            :      *      The std::string to check.
+<span class="lineNum">      47 </span>            :      *  \param  part
+<span class="lineNum">      48 </span>            :      *      The std::string to look for.
+<span class="lineNum">      49 </span>            :      *  \param  start
+<span class="lineNum">      50 </span>            :      *      The starting offset to start looking. (default: 0)
+<span class="lineNum">      51 </span>            :      *  \return Returns an `std:optional&lt;size_t&gt;` holding the offset from
+<span class="lineNum">      52 </span>            :      *          `str.begin()` if the part was found, or nothing if not.
+<a name="53"><span class="lineNum">      53 </span>            :      */</a>
+<span class="lineNum">      54 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      55 </span><span class="lineCov">         41 :     static inline std::optional&lt;size_t&gt; contains(const std::string&amp; str, const std::string&amp; part, const size_t start = 0) {</span>
+<span class="lineNum">      56 </span><span class="lineCov">         41 :         if (const size_t pos = str.find(part, start);</span>
+<span class="lineNum">      57 </span><span class="lineCov">         41 :             pos != std::string::npos)</span>
+<span class="lineNum">      58 </span>            :         {
+<span class="lineNum">      59 </span><span class="lineCov">         30 :             return { pos };</span>
+<span class="lineNum">      60 </span>            :         }
+<span class="lineNum">      61 </span><span class="lineCov">         11 :         return {};</span>
+<span class="lineNum">      62 </span>            :     }
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :     /**
+<span class="lineNum">      65 </span>            :      *  \brief  Check if \p str starts with the given char.
+<span class="lineNum">      66 </span>            :      *
+<span class="lineNum">      67 </span>            :      *  \param  str
+<span class="lineNum">      68 </span>            :      *      The std::string to check.
+<span class="lineNum">      69 </span>            :      *  \param  ch
+<span class="lineNum">      70 </span>            :      *      The char to look for.
+<span class="lineNum">      71 </span>            :      *  \return Returns true if str[0] == ch.
+<a name="72"><span class="lineNum">      72 </span>            :      */</a>
+<span class="lineNum">      73 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      74 </span><span class="lineCov">          4 :     static inline bool starts_with(const std::string &amp;str, const char ch) {</span>
+<span class="lineNum">      75 </span><span class="lineCov">          4 :         return ch &amp;&amp; str.front() == ch;</span>
+<span class="lineNum">      76 </span>            :     }
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span>            :     /**
+<span class="lineNum">      79 </span>            :      *  \brief  Check if \p str starts with the given char string.
+<span class="lineNum">      80 </span>            :      *
+<span class="lineNum">      81 </span>            :      *  \param  str
+<span class="lineNum">      82 </span>            :      *      The std::string to check.
+<span class="lineNum">      83 </span>            :      *  \param  start
+<span class="lineNum">      84 </span>            :      *      The char* to look for.
+<span class="lineNum">      85 </span>            :      *  \return Returns true if str[0:start.size()] == start.
+<a name="86"><span class="lineNum">      86 </span>            :      */</a>
+<span class="lineNum">      87 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      88 </span><span class="lineCov">          5 :     static inline bool starts_with(const std::string &amp;str, const char* start) {</span>
+<span class="lineNum">      89 </span><span class="lineCov">          5 :         const size_t length = std::strlen(start);</span>
+<span class="lineNum">      90 </span><span class="lineCov">          2 :         return !length || str.size() &lt; length</span>
+<span class="lineNum">      91 </span><span class="lineCov">          7 :              ? false</span>
+<span class="lineNum">      92 </span><span class="lineCov">          2 :              : std::equal(start, start + length,</span>
+<span class="lineNum">      93 </span><span class="lineCov">          5 :                           str.begin());</span>
+<span class="lineNum">      94 </span>            :     }
+<span class="lineNum">      95 </span>            : 
+<span class="lineNum">      96 </span>            :     /**
+<span class="lineNum">      97 </span>            :      *  \brief  Check if \p str starts with the given string.
+<span class="lineNum">      98 </span>            :      *
+<span class="lineNum">      99 </span>            :      *  \param  str
+<span class="lineNum">     100 </span>            :      *      The std::string to check.
+<span class="lineNum">     101 </span>            :      *  \param  start
+<span class="lineNum">     102 </span>            :      *      The string to look for.
+<span class="lineNum">     103 </span>            :      *  \return Returns true if str[0:start.size()] == start.
+<a name="104"><span class="lineNum">     104 </span>            :      */</a>
+<span class="lineNum">     105 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     106 </span><span class="lineCov">         12 :     static inline bool starts_with(const std::string &amp;str, const std::string&amp; start) {</span>
+<span class="lineNum">     107 </span><span class="lineCov">         18 :         return !start.size() || str.size() &lt; start.size()</span>
+<span class="lineNum">     108 </span><span class="lineCov">         18 :              ? false</span>
+<span class="lineNum">     109 </span><span class="lineCov">          6 :              : std::equal(start.begin(), start.end(),</span>
+<span class="lineNum">     110 </span><span class="lineCov">         12 :                           str.begin());</span>
+<span class="lineNum">     111 </span>            :     }
+<span class="lineNum">     112 </span>            : 
+<span class="lineNum">     113 </span>            :     /**
+<span class="lineNum">     114 </span>            :      *  \brief  Check if \p str ends with the given char.
+<span class="lineNum">     115 </span>            :      *
+<span class="lineNum">     116 </span>            :      *  \param  str
+<span class="lineNum">     117 </span>            :      *      The std::string to check.
+<span class="lineNum">     118 </span>            :      *  \param  ch
+<span class="lineNum">     119 </span>            :      *      The char to look for.
+<span class="lineNum">     120 </span>            :      *  \return Returns true if str[-1] == ch.
+<a name="121"><span class="lineNum">     121 </span>            :      */</a>
+<span class="lineNum">     122 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     123 </span><span class="lineCov">          4 :     static inline bool ends_with(const std::string &amp;str, const char ch) {</span>
+<span class="lineNum">     124 </span><span class="lineCov">          4 :         return ch &amp;&amp; str.back() == ch;</span>
+<span class="lineNum">     125 </span>            :     }
+<span class="lineNum">     126 </span>            : 
+<span class="lineNum">     127 </span>            :     /**
+<span class="lineNum">     128 </span>            :      *  \brief  Check if \p str ends with the given char string.
+<span class="lineNum">     129 </span>            :      *
+<span class="lineNum">     130 </span>            :      *  \param  str
+<span class="lineNum">     131 </span>            :      *      The std::string to check.
+<span class="lineNum">     132 </span>            :      *  \param  end
+<span class="lineNum">     133 </span>            :      *      The char* to look for.
+<span class="lineNum">     134 </span>            :      *  \return Returns true if str[-end.size():] == end.
+<a name="135"><span class="lineNum">     135 </span>            :      */</a>
+<span class="lineNum">     136 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     137 </span><span class="lineCov">          6 :     static inline bool ends_with(const std::string &amp;str, const char* end) {</span>
+<span class="lineNum">     138 </span><span class="lineCov">          6 :         const size_t length = std::strlen(end);</span>
+<span class="lineNum">     139 </span><span class="lineCov">          3 :         return !length || str.size() &lt; length</span>
+<span class="lineNum">     140 </span><span class="lineCov">          9 :              ? false</span>
+<span class="lineNum">     141 </span><span class="lineCov">          2 :              : std::equal(end, end + length,</span>
+<span class="lineNum">     142 </span><span class="lineCov">          8 :                           str.end() - static_cast&lt;std::string::difference_type&gt;(length));</span>
+<span class="lineNum">     143 </span>            :     }
+<span class="lineNum">     144 </span>            : 
+<span class="lineNum">     145 </span>            :     /**
+<span class="lineNum">     146 </span>            :      *  \brief  Check if \p str ends with the given string.
+<span class="lineNum">     147 </span>            :      *
+<span class="lineNum">     148 </span>            :      *  \param  str
+<span class="lineNum">     149 </span>            :      *      The std::string to check.
+<span class="lineNum">     150 </span>            :      *  \param  end
+<span class="lineNum">     151 </span>            :      *      The char* to look for.
+<span class="lineNum">     152 </span>            :      *  \return Returns true if str[-end.size():] == end.
+<a name="153"><span class="lineNum">     153 </span>            :      */</a>
+<span class="lineNum">     154 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     155 </span><span class="lineCov">         14 :     static inline bool ends_with(const std::string &amp;str, const std::string&amp; end) {</span>
+<span class="lineNum">     156 </span><span class="lineCov">         22 :         return !end.size() || str.size() &lt; end.size()</span>
+<span class="lineNum">     157 </span><span class="lineCov">         22 :              ? false</span>
+<span class="lineNum">     158 </span><span class="lineCov">          6 :              : std::equal(end.begin(), end.end(),</span>
+<span class="lineNum">     159 </span><span class="lineCov">         20 :                           str.end() - static_cast&lt;std::string::difference_type&gt;(end.size()));</span>
+<span class="lineNum">     160 </span>            :     }
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span>            :     /** \brief  Trim whitespace from the start of the given string (in-place).
+<span class="lineNum">     163 </span>            :      *
+<span class="lineNum">     164 </span>            :      *  \param  s
+<span class="lineNum">     165 </span>            :      *          A reference to the string to perform the operation.
+<a name="166"><span class="lineNum">     166 </span>            :      */</a>
+<span class="lineNum">     167 </span>            :     ATTR_MAYBE_UNUSED
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        216 :     static inline void ltrim(std::string &amp;s) {</span></a>
+<span class="lineNum">     169 </span>            :         s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+<span class="lineNum">     170 </span><span class="lineCov">        543 :                 [](int c) {return !std::isspace(c);}));</span>
+<span class="lineNum">     171 </span><span class="lineCov">        216 :     }</span>
+<span class="lineNum">     172 </span>            : 
+<span class="lineNum">     173 </span>            :     /** \brief  Trim whitespace from the end of the given string (in-place).
+<span class="lineNum">     174 </span>            :      *
+<span class="lineNum">     175 </span>            :      *  \param  s
+<span class="lineNum">     176 </span>            :      *          A reference to the string to perform the operation.
+<a name="177"><span class="lineNum">     177 </span>            :      */</a>
+<span class="lineNum">     178 </span>            :     ATTR_MAYBE_UNUSED
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">        204 :     static inline void rtrim(std::string &amp;s) {</span></a>
+<span class="lineNum">     180 </span><span class="lineCov">        204 :         s.erase(std::find_if(s.rbegin(), s.rend(),</span>
+<span class="lineNum">     181 </span><span class="lineCov">        709 :                 [](int c) {return !std::isspace(c);}).base(), s.end());</span>
+<span class="lineNum">     182 </span><span class="lineCov">        204 :     }</span>
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span>            :     /** \brief  Trim whitespace from both start and end of the given string (in-place).
+<span class="lineNum">     185 </span>            :      *
+<span class="lineNum">     186 </span>            :      *  \param  s
+<span class="lineNum">     187 </span>            :      *          A reference to the string to perform the operation.
+<a name="188"><span class="lineNum">     188 </span>            :      */</a>
+<span class="lineNum">     189 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     190 </span><span class="lineCov">        185 :     static inline void trim(std::string &amp;s) {</span>
+<span class="lineNum">     191 </span><span class="lineCov">        185 :         ltrim(s);</span>
+<span class="lineNum">     192 </span><span class="lineCov">        185 :         rtrim(s);</span>
+<span class="lineNum">     193 </span><span class="lineCov">        185 :     }</span>
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span>            :     /** \brief  Trim whitespace from both start and end of the given string (copy).
+<span class="lineNum">     196 </span>            :      *
+<span class="lineNum">     197 </span>            :      *  \param  s
+<span class="lineNum">     198 </span>            :      *          A string to perform the operation.
+<a name="199"><span class="lineNum">     199 </span>            :      */</a>
+<span class="lineNum">     200 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     201 </span><span class="lineCov">        172 :     static inline std::string trimmed(std::string s) {</span>
+<span class="lineNum">     202 </span><span class="lineCov">        172 :         trim(s);</span>
+<span class="lineNum">     203 </span><span class="lineCov">        172 :         return s;</span>
+<span class="lineNum">     204 </span>            :     }
+<span class="lineNum">     205 </span>            : 
+<span class="lineNum">     206 </span>            :     /**
+<span class="lineNum">     207 </span>            :      *  \brief  Erase everything starting from erase_from (inclusive; in place).
+<span class="lineNum">     208 </span>            :      *
+<span class="lineNum">     209 </span>            :      *  \param  str
+<span class="lineNum">     210 </span>            :      *      The string to erase characters from.
+<span class="lineNum">     211 </span>            :      *  \param  erase_from
+<span class="lineNum">     212 </span>            :      *      The substring to look for and start erasing from.
+<a name="213"><span class="lineNum">     213 </span>            :      */</a>
+<span class="lineNum">     214 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     215 </span><span class="lineCov">         10 :     static inline void strEraseFrom(std::string &amp;str, const std::string&amp; erase_from) {</span>
+<span class="lineNum">     216 </span><span class="lineCov">         10 :         if (const auto found = utils::string::contains(str, erase_from)) {</span>
+<span class="lineNum">     217 </span><span class="lineCov">          6 :             str = str.substr(0, found.value());</span>
+<span class="lineNum">     218 </span>            :         }
+<span class="lineNum">     219 </span><span class="lineCov">         10 :     }</span>
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span>            :     /**
+<span class="lineNum">     222 </span>            :      *  \brief  Erase everything starting from the beginning of the string
+<span class="lineNum">     223 </span>            :      *          to erase_to (exclusive; in place).
+<span class="lineNum">     224 </span>            :      *
+<span class="lineNum">     225 </span>            :      *  \param  str
+<span class="lineNum">     226 </span>            :      *      The string to erase characters from.
+<span class="lineNum">     227 </span>            :      *  \param  erase_to
+<span class="lineNum">     228 </span>            :      *      The substring to look for and erase to.
+<a name="229"><span class="lineNum">     229 </span>            :      */</a>
+<span class="lineNum">     230 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     231 </span><span class="lineCov">         10 :     static inline void strEraseTo(std::string &amp;str, const std::string&amp; erase_to) {</span>
+<span class="lineNum">     232 </span><span class="lineCov">         10 :         if (const auto found = utils::string::contains(str, erase_to)) {</span>
+<span class="lineNum">     233 </span><span class="lineCov">          6 :             str = str.substr(found.value());</span>
+<span class="lineNum">     234 </span>            :         }
+<span class="lineNum">     235 </span><span class="lineCov">         10 :     }</span>
+<span class="lineNum">     236 </span>            : 
+<span class="lineNum">     237 </span>            :     /**
+<span class="lineNum">     238 </span>            :      *  \brief  Erase everything starting from erase_from (inclusive; copy).
+<span class="lineNum">     239 </span>            :      *
+<span class="lineNum">     240 </span>            :      *  \param  str
+<span class="lineNum">     241 </span>            :      *      The string to erase characters from.
+<span class="lineNum">     242 </span>            :      *  \param  erase_from
+<span class="lineNum">     243 </span>            :      *      The substring to look for and start erasing from.
+<span class="lineNum">     244 </span>            :      *  \return Returns a copy where the appropriate parts were erased.
+<a name="245"><span class="lineNum">     245 </span>            :      */</a>
+<span class="lineNum">     246 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     247 </span><span class="lineCov">          5 :     static inline std::string strErasedFrom(std::string str, const std::string&amp; erase_from) {</span>
+<span class="lineNum">     248 </span><span class="lineCov">          5 :         strEraseFrom(str, erase_from);</span>
+<span class="lineNum">     249 </span><span class="lineCov">          5 :         return str;</span>
+<span class="lineNum">     250 </span>            :     }
+<span class="lineNum">     251 </span>            : 
+<span class="lineNum">     252 </span>            :     /**
+<span class="lineNum">     253 </span>            :      *  \brief  Erase everything starting from the beginning of the string
+<span class="lineNum">     254 </span>            :      *          to erase_to (exclusive; copy).
+<span class="lineNum">     255 </span>            :      *
+<span class="lineNum">     256 </span>            :      *  \param  str
+<span class="lineNum">     257 </span>            :      *      The string to erase characters from.
+<span class="lineNum">     258 </span>            :      *  \param  erase_to
+<span class="lineNum">     259 </span>            :      *      The substring to look for and erase to.
+<a name="260"><span class="lineNum">     260 </span>            :      */</a>
+<span class="lineNum">     261 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     262 </span><span class="lineCov">          5 :     static inline std::string strErasedTo(std::string str, const std::string&amp; erase_to) {</span>
+<span class="lineNum">     263 </span><span class="lineCov">          5 :         strEraseTo(str, erase_to);</span>
+<span class="lineNum">     264 </span><span class="lineCov">          5 :         return str;</span>
+<span class="lineNum">     265 </span>            :     }
+<span class="lineNum">     266 </span>            : 
+<span class="lineNum">     267 </span>            :     /** \brief  Transform the string contents to uppercase (within the current locale) (in-place).
+<span class="lineNum">     268 </span>            :      *
+<span class="lineNum">     269 </span>            :      *          WARNING: ASCII only
+<span class="lineNum">     270 </span>            :      *
+<span class="lineNum">     271 </span>            :      *  \param  str
+<span class="lineNum">     272 </span>            :      *          A reference to the string to perform the operation.
+<a name="273"><span class="lineNum">     273 </span>            :      */</a>
+<span class="lineNum">     274 </span>            :     ATTR_MAYBE_UNUSED
+<a name="275"><span class="lineNum">     275 </span><span class="lineCov">          8 :     static inline void strToUpper(std::string &amp;str) {</span></a>
+<span class="lineNum">     276 </span>            :         std::transform(str.begin(), str.end(), str.begin(),
+<span class="lineNum">     277 </span><span class="lineCov">        122 :             [](std::string::value_type ch) {</span>
+<span class="lineNum">     278 </span><span class="lineCov">        122 :                 return std::use_facet&lt;std::ctype&lt;std::string::value_type&gt;&gt;(std::locale()).toupper(ch);</span>
+<span class="lineNum">     279 </span>            :             }
+<span class="lineNum">     280 </span><span class="lineCov">          8 :         );</span>
+<span class="lineNum">     281 </span><span class="lineCov">          8 :     }</span>
+<span class="lineNum">     282 </span>            : 
+<span class="lineNum">     283 </span>            :     /** \brief  Transform the string contents to uppercase (within the current locale) (copying).
+<span class="lineNum">     284 </span>            :      *
+<span class="lineNum">     285 </span>            :      *          WARNING: ASCII only
+<span class="lineNum">     286 </span>            :      *
+<span class="lineNum">     287 </span>            :      *  \param  str
+<span class="lineNum">     288 </span>            :      *          A copy of the string to perform the operation.
+<a name="289"><span class="lineNum">     289 </span>            :      */</a>
+<span class="lineNum">     290 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     291 </span><span class="lineCov">          4 :     static inline std::string strToUppercase(std::string str) {</span>
+<span class="lineNum">     292 </span><span class="lineCov">          4 :         strToUpper(str);</span>
+<span class="lineNum">     293 </span><span class="lineCov">          4 :         return str;</span>
+<span class="lineNum">     294 </span>            :     }
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span>            :     /** \brief  Transform the string contents to lowercase (within the current locale) (in-place).
+<span class="lineNum">     297 </span>            :      *
+<span class="lineNum">     298 </span>            :      *          WARNING: ASCII only
+<span class="lineNum">     299 </span>            :      *
+<span class="lineNum">     300 </span>            :      *  \param  str
+<span class="lineNum">     301 </span>            :      *          A reference to the string to perform the operation.
+<a name="302"><span class="lineNum">     302 </span>            :      */</a>
+<span class="lineNum">     303 </span>            :     ATTR_MAYBE_UNUSED
+<a name="304"><span class="lineNum">     304 </span><span class="lineCov">         21 :     static inline void strToLower(std::string &amp;str) {</span></a>
+<span class="lineNum">     305 </span>            :         std::transform(str.begin(), str.end(), str.begin(),
+<span class="lineNum">     306 </span><span class="lineCov">        159 :             [](std::string::value_type ch) {</span>
+<span class="lineNum">     307 </span><span class="lineCov">        159 :                 return std::use_facet&lt;std::ctype&lt;std::string::value_type&gt;&gt;(std::locale()).tolower(ch);</span>
+<span class="lineNum">     308 </span>            :             }
+<span class="lineNum">     309 </span><span class="lineCov">         21 :         );</span>
+<span class="lineNum">     310 </span><span class="lineCov">         21 :     }</span>
+<span class="lineNum">     311 </span>            : 
+<span class="lineNum">     312 </span>            :     /** \brief  Transform the string contents to lowercase (within the current locale) (copying).
+<span class="lineNum">     313 </span>            :      *
+<span class="lineNum">     314 </span>            :      *          WARNING: ASCII only
+<span class="lineNum">     315 </span>            :      *
+<span class="lineNum">     316 </span>            :      *  \param  str
+<span class="lineNum">     317 </span>            :      *          A copy of the string to perform the operation.
+<a name="318"><span class="lineNum">     318 </span>            :      */</a>
+<span class="lineNum">     319 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     320 </span><span class="lineCov">          4 :     static inline std::string strToLowercase(std::string str) {</span>
+<span class="lineNum">     321 </span><span class="lineCov">          4 :         strToLower(str);</span>
+<span class="lineNum">     322 </span><span class="lineCov">          4 :         return str;</span>
+<span class="lineNum">     323 </span>            :     }
+<span class="lineNum">     324 </span>            : 
+<span class="lineNum">     325 </span>            :     /** \brief  Erase all consecutive occurrences of the given char
+<span class="lineNum">     326 </span>            :      *          within the given string (in-place).
+<span class="lineNum">     327 </span>            :      *          Only erase consecutive and repeating chars, keep unique.
+<span class="lineNum">     328 </span>            :      *
+<span class="lineNum">     329 </span>            :      *  \param  str
+<span class="lineNum">     330 </span>            :      *          A reference to the string to replace the character.
+<span class="lineNum">     331 </span>            :      *  \param  ch
+<span class="lineNum">     332 </span>            :      *          The characters to replace.
+<a name="333"><span class="lineNum">     333 </span>            :      */</a>
+<span class="lineNum">     334 </span>            :     ATTR_MAYBE_UNUSED
+<a name="335"><span class="lineNum">     335 </span><span class="lineCov">          5 :     static inline void strEraseConsecutive(std::string &amp;str, const char ch) {</span></a>
+<span class="lineNum">     336 </span>            :         str.erase(std::unique(str.begin(), str.end(),
+<span class="lineNum">     337 </span><span class="lineCov">         54 :                                 [&amp;](const char lhs, const char rhs) {</span>
+<span class="lineNum">     338 </span><span class="lineCov">         54 :                                     return (lhs == ch) &amp;&amp; (lhs == rhs);</span>
+<span class="lineNum">     339 </span>            :                                 }
+<span class="lineNum">     340 </span><span class="lineCov">          5 :                              ), str.end());</span>
+<span class="lineNum">     341 </span><span class="lineCov">          5 :     }</span>
+<span class="lineNum">     342 </span>            : 
+<span class="lineNum">     343 </span>            :     /** \brief  Replace all occurrences of from with to in the given
+<span class="lineNum">     344 </span>            :      *          std::string str.
+<span class="lineNum">     345 </span>            :      *
+<span class="lineNum">     346 </span>            :      *  \param  str
+<span class="lineNum">     347 </span>            :      *          A reference to the string to replace a substring.
+<span class="lineNum">     348 </span>            :      *  \param  from
+<span class="lineNum">     349 </span>            :      *          A reference to a string to replace.
+<span class="lineNum">     350 </span>            :      *  \param  to
+<span class="lineNum">     351 </span>            :      *          A reference to a string to replace with.
+<a name="352"><span class="lineNum">     352 </span>            :      */</a>
+<span class="lineNum">     353 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     354 </span><span class="lineCov">          4 :     static inline void strReplaceAll(std::string &amp;str, const std::string&amp; from, const std::string&amp; to) {</span>
+<span class="lineNum">     355 </span><span class="lineCov">          4 :         if (from.size() == 0) return;</span>
+<span class="lineNum">     356 </span>            : 
+<span class="lineNum">     357 </span><span class="lineCov">          3 :         size_t start_pos = 0;</span>
+<span class="lineNum">     358 </span><span class="lineCov">         16 :         while((start_pos = str.find(from, start_pos)) != std::string::npos) {</span>
+<span class="lineNum">     359 </span><span class="lineCov">         13 :             str.replace(start_pos, from.length(), to);</span>
+<span class="lineNum">     360 </span><span class="lineCov">         13 :             start_pos += to.length();</span>
+<span class="lineNum">     361 </span>            :         }
+<span class="lineNum">     362 </span>            :     }
+<span class="lineNum">     363 </span>            : 
+<span class="lineNum">     364 </span>            :     /** \brief  Replace all occurrences of from with to in the given
+<span class="lineNum">     365 </span>            :      *          std::string str.
+<span class="lineNum">     366 </span>            :      *
+<span class="lineNum">     367 </span>            :      *  \param  str
+<span class="lineNum">     368 </span>            :      *          A reference to the string to replace a substring.
+<span class="lineNum">     369 </span>            :      *  \param  from
+<span class="lineNum">     370 </span>            :      *          A char to replace.
+<span class="lineNum">     371 </span>            :      *  \param  to
+<span class="lineNum">     372 </span>            :      *          A reference to a string to replace with.
+<a name="373"><span class="lineNum">     373 </span>            :      */</a>
+<span class="lineNum">     374 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     375 </span><span class="lineCov">          2 :     static inline void strReplaceAll(std::string &amp;str, const char from, const std::string&amp; to = &quot;&quot;) {</span>
+<span class="lineNum">     376 </span><span class="lineCov">          2 :         utils::string::strReplaceAll(str, std::string(1, from), to);</span>
+<span class="lineNum">     377 </span><span class="lineCov">          2 :     }</span>
+<span class="lineNum">     378 </span>            : 
+<span class="lineNum">     379 </span>            :     /** \brief  Replace all occurrences of from with to in the given
+<span class="lineNum">     380 </span>            :      *          std::string str.
+<span class="lineNum">     381 </span>            :      *
+<span class="lineNum">     382 </span>            :      *  \param  str
+<span class="lineNum">     383 </span>            :      *          A reference to the string to replace a substring.
+<span class="lineNum">     384 </span>            :      *  \param  from
+<span class="lineNum">     385 </span>            :      *          A char to replace.
+<span class="lineNum">     386 </span>            :      *  \param  to
+<span class="lineNum">     387 </span>            :      *          A char to replace with.
+<a name="388"><span class="lineNum">     388 </span>            :      */</a>
+<span class="lineNum">     389 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     390 </span><span class="lineCov">          2 :     static inline void strReplaceAll(std::string &amp;str, const char from, const char to) {</span>
+<span class="lineNum">     391 </span><span class="lineCov">          2 :         size_t start_pos = 0;</span>
+<span class="lineNum">     392 </span><span class="lineCov">         18 :         while((start_pos = str.find(from, start_pos)) != std::string::npos) {</span>
+<span class="lineNum">     393 </span><span class="lineCov">         16 :             str.replace(start_pos, 1, 1, to);</span>
+<span class="lineNum">     394 </span><span class="lineCov">         16 :             start_pos++;</span>
+<span class="lineNum">     395 </span>            :         }
+<span class="lineNum">     396 </span><span class="lineCov">          2 :     }</span>
+<span class="lineNum">     397 </span>            : 
+<span class="lineNum">     398 </span>            :     /** \brief  Erase all occurrences of erase in the given std::string str.
+<span class="lineNum">     399 </span>            :      *
+<span class="lineNum">     400 </span>            :      *  \param  str
+<span class="lineNum">     401 </span>            :      *          A reference to the string to erase a char.
+<span class="lineNum">     402 </span>            :      *  \param  erase
+<span class="lineNum">     403 </span>            :      *          A char to erase.
+<a name="404"><span class="lineNum">     404 </span>            :      */</a>
+<span class="lineNum">     405 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     406 </span><span class="lineCov">          4 :     static inline void strEraseAll(std::string &amp;str, const char erase) {</span>
+<span class="lineNum">     407 </span><span class="lineCov">          4 :         str.erase(std::remove(str.begin(), str.end(), erase), str.end());</span>
+<span class="lineNum">     408 </span><span class="lineCov">          4 :     }</span>
+<span class="lineNum">     409 </span>            : 
+<span class="lineNum">     410 </span>            :     /** \brief  Erase all occurrences of erase in the given std::string str.
+<span class="lineNum">     411 </span>            :      *
+<span class="lineNum">     412 </span>            :      *  \param  str
+<span class="lineNum">     413 </span>            :      *          A reference to the string to erase a string.
+<span class="lineNum">     414 </span>            :      *  \param  erase
+<span class="lineNum">     415 </span>            :      *          A string to erase.
+<a name="416"><span class="lineNum">     416 </span>            :      */</a>
+<span class="lineNum">     417 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     418 </span><span class="lineCov">          3 :     static inline void strEraseAll(std::string &amp;str, const std::string&amp; erase) {</span>
+<span class="lineNum">     419 </span><span class="lineCov">          3 :         if (erase.size() == 0) return;</span>
+<span class="lineNum">     420 </span>            : 
+<span class="lineNum">     421 </span><span class="lineCov">          2 :         size_t start_pos = 0;</span>
+<span class="lineNum">     422 </span><span class="lineCov">          4 :         while((start_pos = str.find(erase, start_pos)) != std::string::npos) {</span>
+<span class="lineNum">     423 </span><span class="lineCov">          2 :             str.erase(start_pos, erase.length());</span>
+<span class="lineNum">     424 </span>            :         }
+<span class="lineNum">     425 </span>            :     }
+<span class="lineNum">     426 </span>            : 
+<span class="lineNum">     427 </span>            :     /**
+<span class="lineNum">     428 </span>            :      *  \brief  Convert the given char* to an std::wstring.
+<span class="lineNum">     429 </span>            :      *
+<span class="lineNum">     430 </span>            :      *  \param  buffer
+<span class="lineNum">     431 </span>            :      *          The character buffer to convert.
+<span class="lineNum">     432 </span>            :      *  \return
+<span class="lineNum">     433 </span>            :      *      Returns the converted data as an std::wstring.
+<a name="434"><span class="lineNum">     434 </span>            :      */</a>
+<span class="lineNum">     435 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     436 </span><span class="lineCov">          4 :     static inline std::wstring str2wstr(const char* buffer) {</span>
+<span class="lineNum">     437 </span><span class="lineCov">          8 :         return std::wstring_convert&lt;std::codecvt_utf8_utf16&lt;wchar_t&gt;, wchar_t&gt;().from_bytes(buffer);</span>
+<span class="lineNum">     438 </span>            :     }
+<span class="lineNum">     439 </span>            : 
+<span class="lineNum">     440 </span>            :     /**
+<span class="lineNum">     441 </span>            :      *  \brief  Convert the given std:string to an std::wstring.
+<span class="lineNum">     442 </span>            :      *
+<span class="lineNum">     443 </span>            :      *  \param  s
+<span class="lineNum">     444 </span>            :      *          The std:string to convert.
+<span class="lineNum">     445 </span>            :      *  \return
+<span class="lineNum">     446 </span>            :      *      Returns the converted data as an std::wstring.
+<a name="447"><span class="lineNum">     447 </span>            :      */</a>
+<span class="lineNum">     448 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     449 </span><span class="lineCov">          2 :     static inline std::wstring str2wstr(const std::string&amp; s) {</span>
+<span class="lineNum">     450 </span><span class="lineCov">          2 :         return utils::string::str2wstr(s.data());</span>
+<span class="lineNum">     451 </span>            :     }
+<span class="lineNum">     452 </span>            : 
+<span class="lineNum">     453 </span>            :     /**
+<span class="lineNum">     454 </span>            :      *  \brief  Convert the given wchar_t* to an std::string.
+<span class="lineNum">     455 </span>            :      *
+<span class="lineNum">     456 </span>            :      *  \param  buffer
+<span class="lineNum">     457 </span>            :      *          The character buffer to convert.
+<span class="lineNum">     458 </span>            :      *  \return
+<span class="lineNum">     459 </span>            :      *      Returns the converted data as an std::string.
+<a name="460"><span class="lineNum">     460 </span>            :      */</a>
+<span class="lineNum">     461 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     462 </span><span class="lineCov">          4 :     static inline std::string wstr2str(const wchar_t* buffer) {</span>
+<span class="lineNum">     463 </span><span class="lineCov">          8 :         return std::wstring_convert&lt;std::codecvt_utf8_utf16&lt;wchar_t&gt;, wchar_t&gt;().to_bytes(buffer);</span>
+<span class="lineNum">     464 </span>            :     }
+<span class="lineNum">     465 </span>            : 
+<span class="lineNum">     466 </span>            :     /**
+<span class="lineNum">     467 </span>            :      *  \brief  Convert the given std::wstring to an std::string.
+<span class="lineNum">     468 </span>            :      *
+<span class="lineNum">     469 </span>            :      *  \param  s
+<span class="lineNum">     470 </span>            :      *          The std::wstring to convert.
+<span class="lineNum">     471 </span>            :      *  \return
+<span class="lineNum">     472 </span>            :      *      Returns the converted data as an std::string.
+<a name="473"><span class="lineNum">     473 </span>            :      */</a>
+<span class="lineNum">     474 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     475 </span><span class="lineCov">          2 :     static inline std::string wstr2str(const std::wstring&amp; s) {</span>
+<span class="lineNum">     476 </span><span class="lineCov">          2 :         return utils::string::wstr2str(s.data());</span>
+<span class="lineNum">     477 </span>            :     }
+<span class="lineNum">     478 </span>            : 
+<span class="lineNum">     479 </span>            :     /**
+<span class="lineNum">     480 </span>            :      *  \brief  Extract a vector of strings from the given string \p s that have
+<span class="lineNum">     481 </span>            :      *          been quoted with char \p str_char.
+<span class="lineNum">     482 </span>            :      *
+<span class="lineNum">     483 </span>            :      *          e.g. 'str1', 'str2' =&gt; extract every string between 2 `'`
+<span class="lineNum">     484 </span>            :      *                  =&gt; returns [ &quot;str1&quot;, &quot;str2&quot; ]
+<span class="lineNum">     485 </span>            :      *
+<span class="lineNum">     486 </span>            :      *  \param  v
+<span class="lineNum">     487 </span>            :      *      The vector to add the strings to. Will be cleared on start.
+<span class="lineNum">     488 </span>            :      *  \param  s
+<span class="lineNum">     489 </span>            :      *      The string to look for quoted strings in.
+<span class="lineNum">     490 </span>            :      *  \param  str_char
+<span class="lineNum">     491 </span>            :      *      The char the strings are quoted in.
+<span class="lineNum">     492 </span>            :      *  \return Returns the list of quoted strings, without quotes.
+<a name="493"><span class="lineNum">     493 </span>            :      */</a>
+<span class="lineNum">     494 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     495 </span><span class="lineCov">          5 :     static void strExtractQuotedStrings(std::vector&lt;std::string&gt; &amp;v, const std::string&amp; s, const char str_char='\'') {</span>
+<span class="lineNum">     496 </span><span class="lineCov">          5 :         const size_t len = s.length() - 1u;</span>
+<span class="lineNum">     497 </span><span class="lineCov">          5 :         v.clear();</span>
+<span class="lineNum">     498 </span>            : 
+<span class="lineNum">     499 </span><span class="lineCov">          5 :         if (len &lt; 2) return;</span>
+<span class="lineNum">     500 </span>            : 
+<span class="lineNum">     501 </span><span class="lineCov">          4 :         std::optional&lt;size_t&gt; found_start = 0, found_end = 0;</span>
+<span class="lineNum">     502 </span>            : 
+<span class="lineNum">     503 </span><span class="lineCov">          3 :         do {</span>
+<span class="lineNum">     504 </span><span class="lineCov">          7 :             if ((found_start = utils::string::contains(s, str_char, *found_start))) {</span>
+<span class="lineNum">     505 </span><span class="lineCov">          6 :                 if ((found_end = utils::string::contains(s, str_char, ++(*found_start)))) {</span>
+<span class="lineNum">     506 </span><span class="lineCov">          5 :                     v.emplace_back(s.substr(*found_start, *found_end - *found_start));</span>
+<span class="lineNum">     507 </span><span class="lineCov">          5 :                     found_start = *found_end + 1u;</span>
+<span class="lineNum">     508 </span>            :                 }
+<span class="lineNum">     509 </span>            :             }
+<span class="lineNum">     510 </span><span class="lineCov">          7 :         } while (found_start &amp;&amp; *found_start &lt; len);</span>
+<span class="lineNum">     511 </span>            :     }
+<span class="lineNum">     512 </span>            : 
+<span class="lineNum">     513 </span>            :     /**
+<span class="lineNum">     514 </span>            :      *  \brief  Join the strings in \p v with the string \p join_with between them.
+<span class="lineNum">     515 </span>            :      *
+<span class="lineNum">     516 </span>            :      *  \param  v
+<span class="lineNum">     517 </span>            :      *      The list of strings to join.
+<span class="lineNum">     518 </span>            :      *  \param  join_with
+<span class="lineNum">     519 </span>            :      *      The string to join with.
+<span class="lineNum">     520 </span>            :      *  \return Returns one string containing all the strings in \p v appended
+<span class="lineNum">     521 </span>            :      *          to eachother, joined by \p join_with.
+<a name="522"><span class="lineNum">     522 </span>            :      */</a>
+<span class="lineNum">     523 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     524 </span><span class="lineCov">          9 :     static std::string strJoin(const std::vector&lt;std::string&gt; &amp;v, const std::string&amp; join_with=&quot;,&quot;) {</span>
+<span class="lineNum">     525 </span><span class="lineCov">          9 :         std::string joined;</span>
+<span class="lineNum">     526 </span><span class="lineCov">          9 :         const auto end = v.end();</span>
+<span class="lineNum">     527 </span>            : 
+<span class="lineNum">     528 </span><span class="lineCov">          9 :         if (auto start = v.begin(); start != end) {</span>
+<span class="lineNum">     529 </span><span class="lineCov">          8 :             joined += *start;</span>
+<span class="lineNum">     530 </span>            : 
+<span class="lineNum">     531 </span><span class="lineCov">         17 :             while (++start != end) {</span>
+<span class="lineNum">     532 </span><span class="lineCov">          9 :                 joined += join_with + *start;</span>
+<span class="lineNum">     533 </span>            :             }
+<span class="lineNum">     534 </span>            :         }
+<span class="lineNum">     535 </span>            : 
+<span class="lineNum">     536 </span><span class="lineCov">         18 :         return joined;</span>
+<span class="lineNum">     537 </span>            :     }
+<span class="lineNum">     538 </span>            : 
+<span class="lineNum">     539 </span>            :     /**
+<span class="lineNum">     540 </span>            :      *  \brief  Join the strings in \p v with the char \p join_with between them.
+<span class="lineNum">     541 </span>            :      *
+<span class="lineNum">     542 </span>            :      *  \param  v
+<span class="lineNum">     543 </span>            :      *      The list of strings to join.
+<span class="lineNum">     544 </span>            :      *  \param  join_with
+<span class="lineNum">     545 </span>            :      *      The char to join with.
+<span class="lineNum">     546 </span>            :      *  \return Returns one string containing all the strings in \p v appended
+<span class="lineNum">     547 </span>            :      *          to eachother, joined by \p join_with.
+<a name="548"><span class="lineNum">     548 </span>            :      */</a>
+<span class="lineNum">     549 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     550 </span><span class="lineCov">          1 :     static inline std::string strJoin(const std::vector&lt;std::string&gt; &amp;v, const char join_with) {</span>
+<span class="lineNum">     551 </span><span class="lineCov">          2 :         return utils::string::strJoin(v, std::string(1, join_with));</span>
+<span class="lineNum">     552 </span>            :     }
+<span class="lineNum">     553 </span>            : 
+<span class="lineNum">     554 </span>            :     /**
+<span class="lineNum">     555 </span>            :      *  \brief  Join the chars in \p v with the char \p join_with between them.
+<span class="lineNum">     556 </span>            :      *
+<span class="lineNum">     557 </span>            :      *  \param  v
+<span class="lineNum">     558 </span>            :      *      The list of chars to join (a compatible char type).
+<span class="lineNum">     559 </span>            :      *  \param  join_with
+<span class="lineNum">     560 </span>            :      *      The char to join with. If \p join_with == '\0', just concatenate all chars.
+<span class="lineNum">     561 </span>            :      *  \return Returns one string containing all the chars in \p v appended
+<span class="lineNum">     562 </span>            :      *          to eachother, joined by \p join_with.
+<span class="lineNum">     563 </span>            :      */
+<span class="lineNum">     564 </span>            :     template&lt;
+<span class="lineNum">     565 </span>            :         class CharT,
+<span class="lineNum">     566 </span>            :         typename std::enable_if_t&lt;   std::is_same&lt;CharT, char&gt;::value
+<span class="lineNum">     567 </span>            :                                   || std::is_same&lt;CharT, int8_t&gt;::value
+<span class="lineNum">     568 </span>            :                                   || std::is_same&lt;CharT, uint8_t&gt;::value
+<span class="lineNum">     569 </span>            :                                   || std::is_same&lt;CharT, wchar_t&gt;::value
+<span class="lineNum">     570 </span>            :                                   || std::is_same&lt;CharT, char16_t&gt;::value
+<span class="lineNum">     571 </span>            :                                   || std::is_same&lt;CharT, char32_t&gt;::value,
+<a name="572"><span class="lineNum">     572 </span>            :                                      int&gt; = 0</a>
+<span class="lineNum">     573 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     574 </span><span class="lineCov">          7 :     static std::string strJoin(const std::vector&lt;CharT&gt; &amp;v, const char join_with='\0') {</span>
+<span class="lineNum">     575 </span><span class="lineCov">          7 :         std::string joined;</span>
+<span class="lineNum">     576 </span><span class="lineCov">          7 :         const auto end = v.end();</span>
+<span class="lineNum">     577 </span>            : 
+<span class="lineNum">     578 </span><span class="lineCov">          7 :         if (auto start = v.begin(); start != end) {</span>
+<span class="lineNum">     579 </span><span class="lineCov">          6 :             if (join_with == '\0') {</span>
+<span class="lineNum">     580 </span><span class="lineCov">          3 :                 joined.reserve(v.size());</span>
+<span class="lineNum">     581 </span><span class="lineCov">          3 :                 joined.assign(v.begin(), v.end());</span>
+<span class="lineNum">     582 </span>            :             } else {
+<span class="lineNum">     583 </span><span class="lineCov">          3 :                 joined.reserve(v.size() * 2 - 1);</span>
+<span class="lineNum">     584 </span><span class="lineCov">          3 :                 joined.push_back(*start);</span>
+<span class="lineNum">     585 </span>            : 
+<span class="lineNum">     586 </span><span class="lineCov">          7 :                 while(++start != end) {</span>
+<span class="lineNum">     587 </span><span class="lineCov">          4 :                     joined.push_back(join_with);</span>
+<span class="lineNum">     588 </span><span class="lineCov">          4 :                     joined.push_back(*start);</span>
+<span class="lineNum">     589 </span>            :                 }
+<span class="lineNum">     590 </span>            :             }
+<span class="lineNum">     591 </span>            :         }
+<span class="lineNum">     592 </span>            : 
+<span class="lineNum">     593 </span><span class="lineCov">         14 :         return joined;</span>
+<span class="lineNum">     594 </span>            :     }
+<span class="lineNum">     595 </span>            : 
+<span class="lineNum">     596 </span>            :     /**
+<span class="lineNum">     597 </span>            :      *  \brief  Split the given string \p s into parts delimited by \p delim.
+<span class="lineNum">     598 </span>            :      *
+<span class="lineNum">     599 </span>            :      *  \param  v
+<span class="lineNum">     600 </span>            :      *      The vector to add the splitted strings to.
+<span class="lineNum">     601 </span>            :      *  \param  s
+<span class="lineNum">     602 </span>            :      *      The string to split.
+<span class="lineNum">     603 </span>            :      *  \param  delim
+<span class="lineNum">     604 </span>            :      *      The character delimiter.
+<span class="lineNum">     605 </span>            :      *  \param  max_splits
+<span class="lineNum">     606 </span>            :      *      The maximum amount of splits to make.
+<span class="lineNum">     607 </span>            :      *      `-1`    split on all delimiters
+<span class="lineNum">     608 </span>            :      *      `0`     don't split: vector will contain the original string \p s
+<span class="lineNum">     609 </span>            :      *      `1`     vector has the first splitted element,
+<span class="lineNum">     610 </span>            :      *              and the rest of the string as second element
+<span class="lineNum">     611 </span>            :      *  \return Returns a list of seperate strings that were delimited by \p delim.
+<a name="612"><span class="lineNum">     612 </span>            :      */</a>
+<span class="lineNum">     613 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     614 </span><span class="lineCov">          8 :     static void strSplit(std::vector&lt;std::string&gt; &amp;v, const std::string &amp;s, const char delim = ',', int max_splits = -1) {</span>
+<span class="lineNum">     615 </span><span class="lineCov">         16 :         std::stringstream ss(s);</span>
+<span class="lineNum">     616 </span><span class="lineCov">         16 :         std::string item;</span>
+<span class="lineNum">     617 </span><span class="lineCov">          8 :         size_t tail = 0;</span>
+<span class="lineNum">     618 </span><span class="lineCov">          8 :         v.clear();</span>
+<span class="lineNum">     619 </span>            : 
+<span class="lineNum">     620 </span><span class="lineCov">         27 :         while (max_splits != 0 &amp;&amp; std::getline(ss, item, delim)) {</span>
+<span class="lineNum">     621 </span><span class="lineCov">         19 :             v.emplace_back(item);</span>
+<span class="lineNum">     622 </span><span class="lineCov">         19 :             max_splits--;</span>
+<span class="lineNum">     623 </span><span class="lineCov">         19 :             tail += item.size() + 1;</span>
+<span class="lineNum">     624 </span>            :         }
+<span class="lineNum">     625 </span>            : 
+<span class="lineNum">     626 </span><span class="lineCov">          8 :         if (tail &lt; s.size()) {</span>
+<span class="lineNum">     627 </span><span class="lineCov">          4 :             v.emplace_back(s.substr(tail));</span>
+<span class="lineNum">     628 </span>            :         }
+<span class="lineNum">     629 </span><span class="lineCov">          8 :     }</span>
+<span class="lineNum">     630 </span>            : 
+<span class="lineNum">     631 </span>            :     /**
+<span class="lineNum">     632 </span>            :      *  \brief  Format the given args into the format string.
+<span class="lineNum">     633 </span>            :      *          If no arguments are given, the given format string
+<span class="lineNum">     634 </span>            :      *          will be returned as-is.
+<span class="lineNum">     635 </span>            :      *
+<span class="lineNum">     636 </span>            :      *  \tparam ...Type
+<span class="lineNum">     637 </span>            :      *      Variable argument list of params to expand in the format string.
+<span class="lineNum">     638 </span>            :      *  \param  format
+<span class="lineNum">     639 </span>            :      *      The format string to expand.
+<span class="lineNum">     640 </span>            :      *  \param  args
+<span class="lineNum">     641 </span>            :      *      The args tro fill in.
+<span class="lineNum">     642 </span>            :      *  \return
+<span class="lineNum">     643 </span>            :      *      Returns the format expanded with the args.
+<a name="644"><span class="lineNum">     644 </span>            :      */</a>
+<span class="lineNum">     645 </span>            :     template&lt;typename ... Type&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     646 </span><span class="lineCov">         55 :     static std::string format(const std::string&amp; format, Type&amp;&amp; ...args) {</span>
+<span class="lineNum">     647 </span>            :         if constexpr(sizeof...(Type) != 0) {
+<span class="lineNum">     648 </span><span class="lineCov">         51 :             const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'</span>
+<span class="lineNum">     649 </span><span class="lineCov">         51 :             auto buf = utils::memory::new_unique_array&lt;char&gt;(size);</span>
+<span class="lineNum">     650 </span>            : 
+<span class="lineNum">     651 </span><span class="lineCov">         51 :             std::snprintf(buf.get(), size, format.c_str(), args...);</span>
+<span class="lineNum">     652 </span>            : 
+<span class="lineNum">     653 </span><span class="lineCov">        102 :             return std::string(buf.get(), buf.get() + size - 1 ); // Strip '\0'</span>
+<span class="lineNum">     654 </span>            :         } else {
+<span class="lineNum">     655 </span><span class="lineCov">          4 :             return format;</span>
+<span class="lineNum">     656 </span>            :         }
+<span class="lineNum">     657 </span>            :     }
+<span class="lineNum">     658 </span>            : 
+<span class="lineNum">     659 </span>            : 
+<span class="lineNum">     660 </span>            :     /**
+<span class="lineNum">     661 </span>            :      *  \brief  Static buffer with all valid base64 chars.
+<span class="lineNum">     662 </span>            :      */
+<span class="lineNum">     663 </span>            :     static constexpr std::string_view _base64_chars = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;
+<span class="lineNum">     664 </span>            :                                                       &quot;abcdefghijklmnopqrstuvwxyz&quot;
+<span class="lineNum">     665 </span>            :                                                       &quot;0123456789+/&quot;;
+<span class="lineNum">     666 </span>            : 
+<span class="lineNum">     667 </span>            :     /**
+<span class="lineNum">     668 </span>            :      *  \brief  Check if given char is a valid base64 char (without `=` pad).
+<span class="lineNum">     669 </span>            :      *
+<span class="lineNum">     670 </span>            :      *  \param  c
+<span class="lineNum">     671 </span>            :      *      The character to check.
+<span class="lineNum">     672 </span>            :      *  \return
+<span class="lineNum">     673 </span>            :      *      Returns true if _base64_chars.find(c) != npos
+<a name="674"><span class="lineNum">     674 </span>            :      */</a>
+<span class="lineNum">     675 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     676 </span><span class="lineCov">       7308 :     static inline bool is_base64(uint8_t c) {</span>
+<span class="lineNum">     677 </span><span class="lineCov">       7308 :         return (std::isalnum(c) || (c == '+') || (c == '/'));</span>
+<span class="lineNum">     678 </span>            :     }
+<span class="lineNum">     679 </span>            : 
+<span class="lineNum">     680 </span>            :     /**
+<span class="lineNum">     681 </span>            :      *  \brief  Check if given buffer contains a valid base64
+<span class="lineNum">     682 </span>            :      *          encoded string.
+<span class="lineNum">     683 </span>            :      *
+<span class="lineNum">     684 </span>            :      *  \param  buffer
+<span class="lineNum">     685 </span>            :      *      The buffer to check.
+<span class="lineNum">     686 </span>            :      *  \param  length
+<span class="lineNum">     687 </span>            :      *      The length of the buffer.
+<span class="lineNum">     688 </span>            :      *  \return
+<span class="lineNum">     689 </span>            :      *      Returns true if buffer contains a valid base64 encoded string.
+<a name="690"><span class="lineNum">     690 </span>            :      */</a>
+<span class="lineNum">     691 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     692 </span><span class="lineCov">         30 :     static bool is_base64(const uint8_t *buffer, size_t length) {</span>
+<span class="lineNum">     693 </span><span class="lineCov">         30 :         if (length % 4) return false;</span>
+<span class="lineNum">     694 </span><span class="lineCov">         23 :         const uint8_t *end = --buffer + length + 1;</span>
+<span class="lineNum">     695 </span>            : 
+<span class="lineNum">     696 </span><span class="lineCov">       7330 :         while (++buffer != end) {</span>
+<span class="lineNum">     697 </span><span class="lineCov">       7325 :             if (*buffer == '=') {</span>
+<span class="lineNum">     698 </span><span class="lineCov">         17 :                 break;</span>
+<span class="lineNum">     699 </span><span class="lineCov">       7308 :             } else if (!utils::string::is_base64(*buffer)) {</span>
+<span class="lineNum">     700 </span><span class="lineCov">          1 :                 return false;</span>
+<span class="lineNum">     701 </span>            :             }
+<span class="lineNum">     702 </span>            :         }
+<span class="lineNum">     703 </span>            : 
+<span class="lineNum">     704 </span><span class="lineCov">         22 :         switch (end - buffer) {</span>
+<span class="lineNum">     705 </span><span class="lineCov">          5 :             case 0:</span>
+<span class="lineNum">     706 </span><span class="lineCov">          5 :                 return true;</span>
+<span class="lineNum">     707 </span><span class="lineCov">          6 :             case 1:</span>
+<span class="lineNum">     708 </span><span class="lineCov">          6 :                 return buffer[0] == '=';</span>
+<span class="lineNum">     709 </span><span class="lineCov">         10 :             case 2:</span>
+<span class="lineNum">     710 </span><span class="lineCov">         10 :                 return buffer[0] == '=' &amp;&amp; buffer[1] == '=';</span>
+<span class="lineNum">     711 </span><span class="lineCov">          1 :             default:</span>
+<span class="lineNum">     712 </span><span class="lineCov">          1 :                 return false;</span>
+<span class="lineNum">     713 </span>            :         }
+<span class="lineNum">     714 </span>            :     }
+<span class="lineNum">     715 </span>            : 
+<span class="lineNum">     716 </span>            :     /**
+<span class="lineNum">     717 </span>            :      *  \brief  Check if given string contains is a valid base64
+<span class="lineNum">     718 </span>            :      *          encoded string.
+<span class="lineNum">     719 </span>            :      *
+<span class="lineNum">     720 </span>            :      *  \param  str
+<span class="lineNum">     721 </span>            :      *      The string to check.
+<span class="lineNum">     722 </span>            :      *  \return
+<span class="lineNum">     723 </span>            :      *      Returns true if string contains a valid base64 encoded string.
+<a name="724"><span class="lineNum">     724 </span>            :      */</a>
+<span class="lineNum">     725 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     726 </span><span class="lineCov">         30 :     static inline bool is_base64(const std::string&amp; str) {</span>
+<span class="lineNum">     727 </span><span class="lineCov">         30 :         return utils::string::is_base64(reinterpret_cast&lt;const uint8_t*&gt;(str.data()), str.length());</span>
+<span class="lineNum">     728 </span>            :     }
+<span class="lineNum">     729 </span>            : 
+<span class="lineNum">     730 </span>            :     /**
+<span class="lineNum">     731 </span>            :      *  \brief  Encode the given buffer with base64.
+<span class="lineNum">     732 </span>            :      *
+<span class="lineNum">     733 </span>            :      *  \param  buffer
+<span class="lineNum">     734 </span>            :      *      The buffer to encode.
+<span class="lineNum">     735 </span>            :      *  \param  length
+<span class="lineNum">     736 </span>            :      *      The length of the buffer to encode.
+<span class="lineNum">     737 </span>            :      *  \return Return an std::string containing the encoded buffer.
+<a name="738"><span class="lineNum">     738 </span>            :      */</a>
+<span class="lineNum">     739 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     740 </span><span class="lineCov">         21 :     static std::string base64_encode(const uint8_t *buffer, size_t length) {</span>
+<span class="lineNum">     741 </span><span class="lineCov">         21 :         std::string encoded;</span>
+<span class="lineNum">     742 </span><span class="lineCov">         21 :         const uint8_t mod = length % 3;</span>
+<span class="lineNum">     743 </span><span class="lineCov">         21 :         encoded.reserve(((length / 3) + (mod &gt; 0)) * 4);</span>
+<span class="lineNum">     744 </span>            :         uint32_t temp;
+<span class="lineNum">     745 </span>            : 
+<span class="lineNum">     746 </span><span class="lineCov">       1837 :         for (const uint8_t *end = --buffer + length - mod; buffer != end;) {</span>
+<span class="lineNum">     747 </span><span class="lineCov">       1816 :             temp = (uint32_t(buffer[1]) &lt;&lt; 16) | (uint32_t(buffer[2]) &lt;&lt; 8) | (buffer[3]);</span>
+<span class="lineNum">     748 </span><span class="lineCov">       1816 :             buffer += 3;</span>
+<span class="lineNum">     749 </span>            : 
+<span class="lineNum">     750 </span><span class="lineCov">       1816 :             encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x00FC0000) &gt;&gt; 18]);</span>
+<span class="lineNum">     751 </span><span class="lineCov">       1816 :             encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x0003F000) &gt;&gt; 12]);</span>
+<span class="lineNum">     752 </span><span class="lineCov">       1816 :             encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x00000FC0) &gt;&gt; 6]);</span>
+<span class="lineNum">     753 </span><span class="lineCov">       1816 :             encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x0000003F)]);</span>
+<span class="lineNum">     754 </span>            :         }
+<span class="lineNum">     755 </span>            : 
+<span class="lineNum">     756 </span><span class="lineCov">         21 :         switch (mod) {</span>
+<span class="lineNum">     757 </span><span class="lineCov">         10 :             case 1:</span>
+<span class="lineNum">     758 </span><span class="lineCov">         10 :                 temp = (uint32_t(buffer[1]) &lt;&lt; 16);</span>
+<span class="lineNum">     759 </span>            : 
+<span class="lineNum">     760 </span><span class="lineCov">         10 :                 encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x00FC0000) &gt;&gt; 18]);</span>
+<span class="lineNum">     761 </span><span class="lineCov">         10 :                 encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x0003F000) &gt;&gt; 12]);</span>
+<span class="lineNum">     762 </span><span class="lineCov">         10 :                 encoded.push_back('=');</span>
+<span class="lineNum">     763 </span><span class="lineCov">         10 :                 encoded.push_back('=');</span>
+<span class="lineNum">     764 </span><span class="lineCov">         10 :                 break;</span>
+<span class="lineNum">     765 </span><span class="lineCov">          6 :             case 2:</span>
+<span class="lineNum">     766 </span><span class="lineCov">          6 :                 temp = (uint32_t(buffer[1]) &lt;&lt; 16) | (uint32_t(buffer[2]) &lt;&lt; 8);</span>
+<span class="lineNum">     767 </span>            : 
+<span class="lineNum">     768 </span><span class="lineCov">          6 :                 encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x00FC0000) &gt;&gt; 18]);</span>
+<span class="lineNum">     769 </span><span class="lineCov">          6 :                 encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x0003F000) &gt;&gt; 12]);</span>
+<span class="lineNum">     770 </span><span class="lineCov">          6 :                 encoded.push_back(utils::string::_base64_chars[(temp &amp; 0x00000FC0) &gt;&gt; 6]);</span>
+<span class="lineNum">     771 </span><span class="lineCov">          6 :                 encoded.push_back('=');</span>
+<span class="lineNum">     772 </span><span class="lineCov">          6 :                 break;</span>
+<span class="lineNum">     773 </span>            :         }
+<span class="lineNum">     774 </span>            : 
+<span class="lineNum">     775 </span><span class="lineCov">         21 :         return encoded;</span>
+<span class="lineNum">     776 </span>            :     }
+<span class="lineNum">     777 </span>            : 
+<span class="lineNum">     778 </span>            :     /**
+<span class="lineNum">     779 </span>            :      *  \brief  Encode the given string with base64.
+<span class="lineNum">     780 </span>            :      *
+<span class="lineNum">     781 </span>            :      *  \param  str
+<span class="lineNum">     782 </span>            :      *      The string to encode.
+<span class="lineNum">     783 </span>            :      *  \return Return an std::string containing the encoded string.
+<a name="784"><span class="lineNum">     784 </span>            :      */</a>
+<span class="lineNum">     785 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     786 </span><span class="lineCov">         13 :     static inline std::string base64_encode(const std::string&amp; str) {</span>
+<span class="lineNum">     787 </span><span class="lineCov">         13 :         return utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(str.data()), str.length());</span>
+<span class="lineNum">     788 </span>            :     }
+<span class="lineNum">     789 </span>            : 
+<span class="lineNum">     790 </span>            :     /**
+<span class="lineNum">     791 </span>            :      *  \brief  Decode the given buffer with base64.
+<span class="lineNum">     792 </span>            :      *
+<span class="lineNum">     793 </span>            :      *  \param  buffer
+<span class="lineNum">     794 </span>            :      *      The buffer to decode.
+<span class="lineNum">     795 </span>            :      *  \param  length
+<span class="lineNum">     796 </span>            :      *      The length of the buffer to decode.
+<span class="lineNum">     797 </span>            :      *  \return Return an std::string containing the decoded buffer.
+<a name="798"><span class="lineNum">     798 </span>            :      */</a>
+<span class="lineNum">     799 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     800 </span><span class="lineCov">         30 :     static std::string base64_decode(const uint8_t *buffer, size_t length) {</span>
+<span class="lineNum">     801 </span><span class="lineCov">         30 :         if (length % 4) {</span>
+<span class="lineNum">     802 </span><span class="lineCov">          7 :             throw utils::exceptions::ConversionException(&quot;utils::string::base64_decode (invalid size)&quot;);</span>
+<span class="lineNum">     803 </span>            :         }
+<span class="lineNum">     804 </span>            : 
+<span class="lineNum">     805 </span><span class="lineCov">         23 :         const uint8_t *const buffer_end = buffer + length;</span>
+<span class="lineNum">     806 </span><span class="lineCov">         23 :         size_t decoded_length = (length / 4) * 3;</span>
+<span class="lineNum">     807 </span>            : 
+<span class="lineNum">     808 </span><span class="lineCov">         23 :         if (length) {</span>
+<span class="lineNum">     809 </span><span class="lineCov">         22 :             decoded_length -= (*(buffer_end - 2) == '=') + (*(buffer_end - 1) == '=');</span>
+<span class="lineNum">     810 </span>            :         }
+<span class="lineNum">     811 </span>            : 
+<span class="lineNum">     812 </span><span class="lineCov">         23 :         std::string decoded;</span>
+<span class="lineNum">     813 </span><span class="lineCov">         23 :         decoded.resize(decoded_length);</span>
+<span class="lineNum">     814 </span><span class="lineCov">         23 :         char *iter = decoded.data() - 1;</span>
+<span class="lineNum">     815 </span>            : 
+<span class="lineNum">     816 </span><span class="lineCov">       1839 :         while (buffer &lt; buffer_end) {</span>
+<span class="lineNum">     817 </span><span class="lineCov">       1834 :             int32_t temp = 0;</span>
+<span class="lineNum">     818 </span>            : 
+<span class="lineNum">     819 </span><span class="lineCov">       9141 :             for (uint8_t i = 0; i &lt; 4; ++i, ++buffer) {</span>
+<span class="lineNum">     820 </span><span class="lineCov">       7325 :                 temp &lt;&lt;= 6;</span>
+<span class="lineNum">     821 </span><span class="lineCov">       7325 :                 if (*buffer &gt;= 'A' &amp;&amp; *buffer &lt;= 'Z') {</span>
+<span class="lineNum">     822 </span><span class="lineCov">       2981 :                     temp |= *buffer - 'A';</span>
+<span class="lineNum">     823 </span><span class="lineCov">       4344 :                 } else if (*buffer &gt;= 'a' &amp;&amp; *buffer &lt;= 'z') {</span>
+<span class="lineNum">     824 </span><span class="lineCov">       2967 :                     temp |= *buffer - 'a' + 26;</span>
+<span class="lineNum">     825 </span><span class="lineCov">       1377 :                 } else if (*buffer &gt;= '0' &amp;&amp; *buffer &lt;= '9') {</span>
+<span class="lineNum">     826 </span><span class="lineCov">       1151 :                     temp |= *buffer - '0' + 2 * 26;</span>
+<span class="lineNum">     827 </span><span class="lineCov">        226 :                 } else if (*buffer == '+') {</span>
+<span class="lineNum">     828 </span><span class="lineCov">        109 :                     temp |= 2 * 26 + 10;</span>
+<span class="lineNum">     829 </span><span class="lineCov">        117 :                 } else if (*buffer == '/') {</span>
+<span class="lineNum">     830 </span><span class="lineCov">         99 :                     temp |= 2 * 26 + 10 + 1;</span>
+<span class="lineNum">     831 </span><span class="lineCov">         18 :                 } else if (*buffer == '=') {</span>
+<span class="lineNum">     832 </span><span class="lineCov">         17 :                     switch (buffer_end - buffer) {</span>
+<span class="lineNum">     833 </span><span class="lineCov">          6 :                         case 1:</span>
+<span class="lineNum">     834 </span><span class="lineCov">          6 :                             *++iter = char((temp &gt;&gt; 16) &amp; 0xFF);</span>
+<span class="lineNum">     835 </span><span class="lineCov">          6 :                             *++iter = char((temp &gt;&gt;  8) &amp; 0xFF);</span>
+<span class="lineNum">     836 </span><span class="lineCov">          6 :                             return decoded;</span>
+<span class="lineNum">     837 </span><span class="lineCov">         10 :                         case 2:</span>
+<span class="lineNum">     838 </span><span class="lineCov">         10 :                             *++iter = char((temp &gt;&gt; 10) &amp; 0xFF);</span>
+<span class="lineNum">     839 </span><span class="lineCov">         10 :                             return decoded;</span>
+<span class="lineNum">     840 </span><span class="lineCov">          1 :                         default:</span>
+<span class="lineNum">     841 </span><span class="lineCov">          1 :                             throw utils::exceptions::ConversionException(&quot;utils::string::base64_decode (invalid padding)&quot;);</span>
+<span class="lineNum">     842 </span>            :                     }
+<span class="lineNum">     843 </span>            :                 } else {
+<span class="lineNum">     844 </span><span class="lineCov">          1 :                     throw utils::exceptions::ConversionException(&quot;utils::string::base64_decode (invalid character)&quot;);</span>
+<span class="lineNum">     845 </span>            :                 }
+<span class="lineNum">     846 </span>            :             }
+<span class="lineNum">     847 </span>            : 
+<span class="lineNum">     848 </span><span class="lineCov">       1816 :             *++iter = char((temp &gt;&gt; 16) &amp; 0xFF);</span>
+<span class="lineNum">     849 </span><span class="lineCov">       1816 :             *++iter = char((temp &gt;&gt;  8) &amp; 0xFF);</span>
+<span class="lineNum">     850 </span><span class="lineCov">       1816 :             *++iter = char((temp      ) &amp; 0xFF);</span>
+<span class="lineNum">     851 </span>            :         }
+<span class="lineNum">     852 </span>            : 
+<span class="lineNum">     853 </span><span class="lineCov">          5 :         return decoded;</span>
+<span class="lineNum">     854 </span>            :     }
+<span class="lineNum">     855 </span>            : 
+<span class="lineNum">     856 </span>            :     /**
+<span class="lineNum">     857 </span>            :      *  \brief  Decode the given string with base64.
+<span class="lineNum">     858 </span>            :      *
+<span class="lineNum">     859 </span>            :      *  \param  str
+<span class="lineNum">     860 </span>            :      *      The string to decode.
+<span class="lineNum">     861 </span>            :      *  \return Return an std::string containing the decoded string.
+<a name="862"><span class="lineNum">     862 </span>            :      */</a>
+<span class="lineNum">     863 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     864 </span><span class="lineCov">         30 :     static inline std::string base64_decode(const std::string&amp; str) {</span>
+<span class="lineNum">     865 </span><span class="lineCov">         30 :         return utils::string::base64_decode(reinterpret_cast&lt;const uint8_t*&gt;(str.data()), str.length());</span>
+<span class="lineNum">     866 </span>            :     }
+<span class="lineNum">     867 </span>            : }
+<span class="lineNum">     868 </span>            : 
+<span class="lineNum">     869 </span>            : #endif // UTILS_STRING_HPP
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
