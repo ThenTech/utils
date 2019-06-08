@@ -149,7 +149,7 @@ namespace utils::Catch {
      *          The args to pass on invocation.
      *  @return Returns whether the function called abort or not.
      */
-    template<class F, class... Args>
+    template<class F, class... Args> ATTR_NODISCARD
     bool Function_Aborts(F&& f, Args&& ... args) {
         static_assert(std::is_invocable_v<F, Args...>, "Function_Aborts: Callable function required.");
 

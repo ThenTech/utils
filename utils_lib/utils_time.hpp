@@ -37,7 +37,7 @@ namespace utils::time {
         /**
          *  \brief  Return a timepoint at the current time.
          */
-        ATTR_MAYBE_UNUSED
+        ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline timepoint_t Start(void) {
             return std::chrono::steady_clock::now();
         }

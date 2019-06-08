@@ -5,6 +5,7 @@ ECFLAGS =
 # Output folder for binaries
 OUTPUT      = ./bin
 OUTPUT_GCOV = ./code_coverage
+COV_IGNORE  = /usr/include utils_lib/external
 
 # Link libs such as: -pthread -lm -fopenmp
 LIBS = -lstdc++fs
@@ -32,7 +33,7 @@ TARGET_GCOV = gcov_utils
 # Tools
 createout     = @mkdir -p $(OUTPUT) $(OUTPUT_GCOV)
 cleanobj      = @-rm -rf *.o **/*.o
-cleancoverage = @-rm -rf *.gcov *.gcno *.gcda
+cleancoverage = @-rm -rf *.gcov *.gcno *.gcda **/*.gcov **/*.gcno **/*.gcda
 ifndef fastcoverage
 fastcoverage  = @fastcov
 endif
@@ -61,7 +62,7 @@ coverage: TARGET  = $(TARGET_GCOV)
 coverage: default
 	$(fastcoverage) --zerocounters
 	@./$(OUTPUT)/$(TARGET_GCOV)
-	$(fastcoverage) --exclude /usr/include utils_lib/external --lcov -o $(OUTPUT_GCOV)/report.info
+	$(fastcoverage) --exclude $(COV_IGNORE) --lcov -o $(OUTPUT_GCOV)/report.info
 	@genhtml -o $(OUTPUT_GCOV) $(OUTPUT_GCOV)/report.info
 
 $(TARGET): default
@@ -70,7 +71,7 @@ $(TARGET): default
 
 # Look for .hpp/.cpp files to compile and link
 OBJECTS   = $(patsubst %.cpp,%.o, $(wildcard *.cpp **/*.cpp))
-HEADERS   = $(wildcard *.hpp)
+HEADERS   = $(wildcard *.hpp **/*.hpp)
 RESOURCES = $(patsubst %.rc,%.o, $(wildcard *.rc **/*.rc))
 
 # Compile each .cpp file to its object

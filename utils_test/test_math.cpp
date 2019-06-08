@@ -22,6 +22,21 @@ TEST_CASE("Test utils::math::sign", "[utils][utils::math]" ) {
     REQUIRE(utils::math::sign(val_one) ==  1);
 }
 
+TEST_CASE("Test utils::math::pow", "[utils][utils::math]" ) {
+    REQUIRE(utils::math::pow( 0) ==  0);
+    REQUIRE(utils::math::pow( 1) ==  1);
+    REQUIRE(utils::math::pow<0>(42) == 1);
+    REQUIRE(utils::math::pow<1>(42) == 42);
+    REQUIRE(utils::math::pow<2>(42) == 1764);
+    REQUIRE(utils::math::pow   (42) == 1764);
+
+    REQUIRE(utils::math::pow<10>(2) == (1 << 10));
+    REQUIRE(utils::math::pow<12>(4) == (4*4*4*4*4*4*4*4*4*4*4*4));
+
+    REQUIRE(utils::math::pow   (1.9) == Approx(3.61));
+    REQUIRE(utils::math::pow<5>(2.5) == Approx(97.65625));
+}
+
 TEST_CASE("Test utils::math::gcd", "[utils][utils::math]" ) {
     REQUIRE(utils::math::gcd(10,  0) == 10);
     REQUIRE(utils::math::gcd( 0, 10) == 10);
@@ -102,5 +117,70 @@ TEST_CASE("Test utils::math::epsilon_equals", "[utils][utils::math]" ) {
     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));
 }
 
+TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" ) {
+    constexpr size_t len = 9;
+
+    std::vector<int> empty;
+    std::vector<int> one(1);
+    std::vector<int> two(2);
+    std::vector<int> test(len);
+    std::iota(test.begin(), test.end(), 0);
+
+    const std::vector<int> test2 = utils::random::generate_x<int>(3, -1000, 1000);
+
+    SECTION("utils::math::stats::mean") {
+        const double result = double(0+1+2+3+4+5+6+7+8) / len;
+        const double result1 = utils::math::stats::mean(test.begin(), test.end());
+        const double result2 = utils::math::stats::mean(test);
+        const double result3 = utils::math::stats::mean(test2);
+
+        CHECK(result == Approx(result1));
+        CHECK(result == Approx(result2));
+        CHECK((double(test2[0]+test2[1]+test2[2]) / 3.0) == Approx(result3));
+
+        CHECK_FUNCTION_ABORTS(utils::math::stats::mean<std::vector<int>>, empty);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::mean<std::vector<int>>, one);
+    }
+
+    SECTION("utils::math::stats::variance") {
+        const double result = 7.5;
+        const double result1 = utils::math::stats::variance(test.begin(), test.end());
+        const double result2 = utils::math::stats::variance(test);
+        const double result3 = utils::math::stats::variance(test2);
+        const double mean3   = utils::math::stats::mean(test2);
+        const double sd3 = (  (test2[0] - mean3) * (test2[0] - mean3)
+                            + (test2[1] - mean3) * (test2[1] - mean3)
+                            + (test2[2] - mean3) * (test2[2] - mean3)
+                           ) / 2.0;
+
+        CHECK(result == Approx(result1));
+        CHECK(result == Approx(result2));
+        CHECK(sd3    == Approx(result3));
+
+        CHECK_FUNCTION_ABORTS(utils::math::stats::variance<std::vector<int>>, empty);
+        CHECK_FUNCTION_ABORTS(utils::math::stats::variance<std::vector<int>>, one);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance<std::vector<int>>, two);
+    }
+
+    SECTION("utils::math::stats::stddev") {
+        const double result = 2.7386127875258;
+        const double result1 = utils::math::stats::stddev(test.begin(), test.end());
+        const double result2 = utils::math::stats::stddev(test);
+        const double result3 = utils::math::stats::stddev(test2);
+        const double mean3   = utils::math::stats::mean(test2);
+        const double sd3 = std::sqrt((  (test2[0] - mean3) * (test2[0] - mean3)
+                                      + (test2[1] - mean3) * (test2[1] - mean3)
+                                      + (test2[2] - mean3) * (test2[2] - mean3)
+                                     ) / 2.0);
+
+        CHECK(result == Approx(result1));
+        CHECK(result == Approx(result2));
+        CHECK(sd3    == Approx(result3));
+
+        CHECK_FUNCTION_ABORTS(utils::math::stats::stddev<std::vector<int>>, empty);
+        CHECK_FUNCTION_ABORTS(utils::math::stats::stddev<std::vector<int>>, one);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev<std::vector<int>>, two);
+    }
+}
 
 #endif

@@ -14,58 +14,51 @@ static constexpr std::string_view alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
 TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
-    bool found; size_t pos;
+    std::optional<size_t> found;
 
     SECTION("Test with char") {
-        REQUIRE_FALSE(utils::string::contains("", '.').first);
+        REQUIRE_FALSE(utils::string::contains("", '.'));
 
-        std::tie(found, pos) = utils::string::contains("     abcd     ", 'd');
-        REQUIRE(found);
-        REQUIRE(pos == 8);
+        REQUIRE((found = utils::string::contains("     abcd     ", 'd')));
+        REQUIRE(*found == 8);
 
-        std::tie(found, pos) = utils::string::contains("abcd\t\t", '\t');
-        REQUIRE(found);
-        REQUIRE(pos == 4);
+        REQUIRE((found = utils::string::contains("abcd\t\t", '\t')));
+        REQUIRE(*found == 4);
 
-        std::tie(found, pos) = utils::string::contains("\n\n\n\nabcd\n\n\n", 'd');
-        REQUIRE(found);
-        REQUIRE(pos == 7);
+        REQUIRE((found = utils::string::contains("\n\n\n\nabcd\n\n\n", 'd')));
+        REQUIRE(*found == 7);
 
         std::string test_1(alphabet_lower);
         for (int i = 5; i--;) {
             auto c = *utils::random::Random::get(test_1);
 
-            std::tie(found, pos) = utils::string::contains(test_1, c);
-            REQUIRE(found);
-            REQUIRE(pos == size_t(c - 'a'));
+            REQUIRE((found = utils::string::contains(test_1, c)));
+            REQUIRE(*found == size_t(c - 'a'));
         }
 
-        REQUIRE_FALSE(utils::string::contains(test_1, 'A').first);
+        REQUIRE_FALSE(utils::string::contains(test_1, 'A'));
     }
 
     SECTION("Test with string") {
-        REQUIRE_FALSE(utils::string::contains("", ".").first);
+        REQUIRE_FALSE(utils::string::contains("", "."));
 
-        std::tie(found, pos) = utils::string::contains("     abcd     ", "d");
-        REQUIRE(found);
-        REQUIRE(pos == 8);
-        std::tie(found, pos) = utils::string::contains("     abcd     ", "  ab");
-        REQUIRE(found);
-        REQUIRE(pos == 3);
+        REQUIRE((found = utils::string::contains("     abcd     ", "d")));
+        REQUIRE(*found == 8);
 
-        std::tie(found, pos) = utils::string::contains("abcd\t\t", "\t");
-        REQUIRE(found);
-        REQUIRE(pos == 4);
-        std::tie(found, pos) = utils::string::contains("abcd\t\t", "cd\t");
-        REQUIRE(found);
-        REQUIRE(pos == 2);
+        REQUIRE((found = utils::string::contains("     abcd     ", "  ab")));
+        REQUIRE(*found == 3);
 
-        std::tie(found, pos) = utils::string::contains("\n\n\n\nabcd\n\n\n", "d");
-        REQUIRE(found);
-        REQUIRE(pos == 7);
-        std::tie(found, pos) = utils::string::contains("\n\n\n\nabcd\n\n\n", "d\n");
-        REQUIRE(found);
-        REQUIRE(pos == 7);
+        REQUIRE((found = utils::string::contains("abcd\t\t", "\t")));
+        REQUIRE(*found == 4);
+
+        REQUIRE((found = utils::string::contains("abcd\t\t", "cd\t")));
+        REQUIRE(*found == 2);
+
+        REQUIRE((found = utils::string::contains("\n\n\n\nabcd\n\n\n", "d")));
+        REQUIRE(*found == 7);
+
+        REQUIRE((found = utils::string::contains("\n\n\n\nabcd\n\n\n", "d\n")));
+        REQUIRE(*found == 7);
 
         std::string test_1(alphabet_lower);
         std::stringstream ss;
@@ -74,12 +67,11 @@ TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
             char c = utils::random::Random::get<char>('a', 'z' - 1);
             ss << c << char(c + 1);
 
-            std::tie(found, pos) = utils::string::contains(test_1, ss.str());
-            REQUIRE(found);
-            REQUIRE(pos == size_t(c - 'a'));
+            REQUIRE((found = utils::string::contains(test_1, ss.str())));
+            REQUIRE(*found == size_t(c - 'a'));
         }
 
-        REQUIRE_FALSE(utils::string::contains(test_1, "A").first);
+        REQUIRE_FALSE(utils::string::contains(test_1, "A"));
     }
 }
 

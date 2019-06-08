@@ -1,20 +1,64 @@
 #ifndef UTILS_ALGORITHM_HPP
 #define UTILS_ALGORITHM_HPP
 
+#include "external/cppitertools/itertools.hpp"
 #include "utils_traits.hpp"
 
 #include <algorithm>
 #include <functional>
+#include <optional>
 
 
 namespace utils::algorithm {
+    /**
+     *  Wrap CPPItertools as ::iter
+     *  Reference: https://github.com/ryanhaining/cppitertools (08/06/2019)
+     */
+    namespace iter { using namespace ::iter; }
+
+    /**
+     *  \brief  Check if the given container contains the given item.
+     *          The type of item must be something that the container holds.
+     *              e.g.
+     *                  vector<int>  <- int
+     *                  string       <- char
+     *              and not:
+     *                  vector<Node> /- int
+     *
+     *  \param  container
+     *      The container to look in.
+     *  \param  item
+     *      The item to look for.
+     *  \return Returns an `std:optional<size_t>` holding the offset from
+     *          std::begin(container) if the item was found, or nothing if not.
+     */
+    template<
+        typename C, typename T,
+        typename = typename std::enable_if_t<utils::traits::is_container<C>::value>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr std::optional<size_t> contains(const C& container, const T& item) {
+        if constexpr (utils::traits::has_find_v<C, T>) {
+            if (const auto idx = container.find(item); std::end(container) != idx) {
+                return { std::distance(std::begin(container), idx) };
+            }
+        } else {
+            if (const auto idx = std::find(std::begin(container), std::end(container), item);
+                std::end(container) != idx)
+            {
+                return { std::distance(std::begin(container), idx) };
+            }
+        }
+
+        return {};
+    }
+
     /**
      *  \brief  Generic AND all args.
      *
      *  \return
      *      True if arg1 && ... && argn == true
      */
-    template<typename... T> ATTR_MAYBE_UNUSED
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool all(T const&... args) {
         return (... && args);
     }
@@ -25,7 +69,7 @@ namespace utils::algorithm {
      *  \return
      *      True if arg1 || ... || argn == true
      */
-    template<typename... T> ATTR_MAYBE_UNUSED
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool any(T const&... args) {
         return (... || args);
     }
@@ -36,7 +80,7 @@ namespace utils::algorithm {
      *  \return
      *      True if !(arg1 || ... || argn) == true
      */
-    template<typename... T> ATTR_MAYBE_UNUSED
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool none(T const&... args) {
         return !any(args...);
     }
@@ -47,7 +91,7 @@ namespace utils::algorithm {
      *  \return
      *      True if arg1 == ... == argn
      */
-    template <typename... T> ATTR_MAYBE_UNUSED
+    template <typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool all_equal(T const&... args) {
         if constexpr (sizeof...(T) == 0) {
             return true;
@@ -64,7 +108,7 @@ namespace utils::algorithm {
      *  \return
      *      True if (min <= arg1 && arg1 <= max) && ...
      */
-    template <typename T, typename... Ts> ATTR_MAYBE_UNUSED
+    template <typename T, typename... Ts> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool all_within(T min, T max, const Ts&... ts) {
         if constexpr (sizeof...(Ts) == 0) {
             UNUSED(min, max);
@@ -83,10 +127,10 @@ namespace utils::algorithm {
      *  \return
      *      True if (min <= arg1 && arg1 <= max) && ...
      */
-    template <typename T, typename Container> ATTR_MAYBE_UNUSED
+    template <typename T, typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool within(T min, T max, const Container& cont) {
         static_assert (is_iterable_v(cont),
-                       "utils::bits::all_within: Container must have iterator support.");
+                       "utils::algorithm::all_within: Container must have iterator support.");
         if (max < min) // Allow range from higher to lower
             std::swap(min, max);
 
@@ -101,7 +145,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns arg1 + ... + argn
      */
-    template<typename... T> ATTR_MAYBE_UNUSED
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr auto sum(T const&... args) {
         return (args + ... + 0);
     }
@@ -112,7 +156,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns arg1 * ... * argn
      */
-    template<typename... T> ATTR_MAYBE_UNUSED
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr auto multiply(T const&... args) {
         return (args * ... * 1);
     }
@@ -123,7 +167,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns std::min(arg1, std::min(..., argn))
      */
-    template<typename T, typename... Args> ATTR_MAYBE_UNUSED
+    template<typename T, typename... Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr auto min(T const& first, T const& second, Args const&... args) {
         if constexpr (sizeof...(Args) == 0) {
             return std::min(first, second);
@@ -139,7 +183,7 @@ namespace utils::algorithm {
      *  \return
      *      Returns std::max(arg1, std::max(..., argn))
      */
-    template<typename T, typename... Args> ATTR_MAYBE_UNUSED
+    template<typename T, typename... Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr auto max(T const& first, T const& second, Args const&... args) {
         if constexpr (sizeof...(Args) == 0) {
             return std::max(first, second);
@@ -162,19 +206,32 @@ namespace utils::algorithm {
      *      Arguments to be passed to fn.
      */
     template<size_t times = 1, typename F, typename... Args>
-    void repeat(F&& fn, Args &&... args) {
+    void repeat(F&& fn, Args&&... args) {
         static_assert(std::is_invocable_v<F, Args...>, "utils::algorithm::repeat: Callable function required.");
         for (size_t i = 0; i < times; i++) {
             std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
         }
     }
 
+    /**
+     *  \brief  Enumerate wrapper for containers.
+     *          Return an iterator that also holds an index, starting at \p start_t.
+     *
+     *          Does the same as the one from ::iter::enumerate, but includes
+     *          an offsetable start index.
+     *
+     *  \param  iterable
+     *      The container to wrap.
+     *  \param  start_i
+     *      The starting index when looping over the container.
+     *  \return Returns a wrapper to enumarete over \p iterable.
+     */
     template <
         typename T,
         typename TIter = decltype(std::begin(std::declval<T>())),
         typename       = decltype(std::end  (std::declval<T>()))
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto enumerate(T&& iterable) {
+    static inline constexpr auto enumerate(T&& iterable, size_t start_i = 0) {
         struct iterator {
             size_t i;
             TIter iter;
@@ -194,11 +251,12 @@ namespace utils::algorithm {
 
         struct iterable_wrapper {
             T iterable;
-            auto begin() { return iterator{ 0, std::begin(iterable) }; }
-            auto end()   { return iterator{ 0, std::end  (iterable) }; }
+            size_t start;
+            auto begin() { return iterator{ start, std::begin(iterable) }; }
+            auto end()   { return iterator{ start, std::end  (iterable) }; }
         };
 
-        return iterable_wrapper{ std::forward<T>(iterable) };
+        return iterable_wrapper{ std::forward<T>(iterable), start_i };
     }
 }
 

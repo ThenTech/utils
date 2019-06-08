@@ -28,16 +28,15 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         formatter << dels.prefix    << randomint
                   << dels.delimiter << randomint
                   << dels.postfix;
-        const std::string frmt(formatter.str());
 
         const std::pair<int, std::string> var1(randomint, randomstr);
         const auto var2 = std::make_pair(randomstr, randomint);
 
         PUT_SS(var1);
-        CHECK(test_op.str() == frmt);
+        CHECK(test_op.str() == formatter.str());
 
         PUT_SS(var2);
-        CHECK(test_op.str() == frmt);
+        CHECK(test_op.str() == formatter.str());
     }
 
     SECTION("Test std::array printing") {
@@ -49,12 +48,14 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
                   << dels.delimiter << 'l'
                   << dels.delimiter << 'o'
                   << dels.postfix;
-        const std::string frmt(formatter.str());
 
         std::array<char, 5> var{{ 'h', 'e', 'l', 'l', 'o' }};
 
         PUT_SS(var);
-        CHECK(test_op.str() == frmt);
+        CHECK(test_op.str() == formatter.str());
+
+        PUT_SS(var.data());
+        CHECK(test_op.str() == "h");
     }
 
     SECTION("Test c-style array printing") {
@@ -72,10 +73,13 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
                   << dels.delimiter << var[2]
                   << dels.delimiter << var[3]
                   << dels.postfix;
-        const std::string frmt(formatter.str());
 
         PUT_SS(utils::print::print_array_helper(var));
-        CHECK(test_op.str() == frmt);
+        CHECK(test_op.str() == formatter.str());
+
+        const int* var2 = &var[0];
+        PUT_SS( (utils::print::array_wrapper<int, 4>(var2)) );
+        CHECK(test_op.str() == formatter.str());
     }
 
     SECTION("Test flat array printing") {
@@ -89,10 +93,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
             formatter << dels.delimiter << var[i++];
         formatter << dels.postfix;
 
-        const std::string frmt(formatter.str());
-
         PUT_SS( (utils::print::print_array_helper<int, 100>(var.get())) );
-        CHECK(test_op.str() == frmt);
+        CHECK(test_op.str() == formatter.str());
     }
 
     SECTION("Test std::tuple printing") {
@@ -101,12 +103,10 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
                 utils::print::delimiters<std::tuple<int>, char>::values);
             formatter << dels.prefix    << randomint
                       << dels.postfix;
-            const std::string frmt(formatter.str());
-
             const auto var = std::make_tuple(randomint);
 
             PUT_SS(var);
-            CHECK(test_op.str() == frmt);
+            CHECK(test_op.str() == formatter.str());
         }
 
         SECTION("Test std::tuple<string, pair, int> printing") {
@@ -118,12 +118,10 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
                       << dels.delimiter << var1
                       << dels.delimiter << randomint
                       << dels.postfix;
-            const std::string frmt(formatter.str());
-
             const auto var2 = std::make_tuple(randomstr, var1, randomint);
 
             PUT_SS(var2);
-            CHECK(test_op.str() == frmt);
+            CHECK(test_op.str() == formatter.str());
         }
 
         SECTION("Test std::tuple<int, int, pair> printing") {
@@ -137,12 +135,34 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
                       << dels.delimiter << randomint2
                       << dels.delimiter << var1
                       << dels.postfix;
-            const std::string frmt(formatter.str());
-
             const auto var2 = std::make_tuple(randomint, randomint2, var1);
 
             PUT_SS(var2);
-            CHECK(test_op.str() == frmt);
+            CHECK(test_op.str() == formatter.str());
+        }
+    }
+
+    SECTION("Test std::optional printing") {
+        SECTION("Test empty std::optional printing") {
+            const std::optional<int> var1;
+
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::optional<int>, char>::values);
+            formatter << dels.prefix << dels.delimiter << dels.postfix;
+
+            PUT_SS(var1);
+            CHECK(test_op.str() == formatter.str());
+        }
+
+        SECTION("Test std::optional<int> printing") {
+            const std::optional<int> var1(randomint);
+
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::optional<int>, char>::values);
+            formatter << dels.prefix << randomint << dels.postfix;
+
+            PUT_SS(var1);
+            CHECK(test_op.str() == formatter.str());
         }
     }
 
@@ -189,21 +209,21 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 }
 
 TEST_CASE("Test utils::print::type2name", "[utils][utils::print]") {
-    CHECK(utils::string::contains(utils::print::type2name(3)    , "int"     ).first);
-    CHECK(utils::string::contains(utils::print::type2name(3.0)  , "double"  ).first);
-    CHECK(utils::string::contains(utils::print::type2name(3.0f) , "float"   ).first);
-    CHECK(utils::string::contains(utils::print::type2name("")   , "char"    ).first);
-    CHECK(utils::string::contains(utils::print::type2name("")   , '['       ).first);
+    CHECK(utils::string::contains(utils::print::type2name(3)    , "int"   ));
+    CHECK(utils::string::contains(utils::print::type2name(3.0)  , "double"));
+    CHECK(utils::string::contains(utils::print::type2name(3.0f) , "float" ));
+    CHECK(utils::string::contains(utils::print::type2name("")   , "char"  ));
+    CHECK(utils::string::contains(utils::print::type2name("")   , '['     ));
 
     std::string name;
 
     name = utils::print::type2name(std::string());
-    CHECK(utils::string::contains(name, "string").first);
-    CHECK(utils::string::contains(name, "std::").first);
+    CHECK(utils::string::contains(name, "string"));
+    CHECK(utils::string::contains(name, "std::"));
 
     name = utils::print::type2name(std::string(), "std::");
-    CHECK(utils::string::contains(name, "string").first);
-    CHECK_FALSE(utils::string::contains(name, "std::").first);
+    CHECK(utils::string::contains(name, "string"));
+    CHECK_FALSE(utils::string::contains(name, "std::"));
 }
 
 TEST_CASE("Test utils::print::hexDump", "[utils][utils::print]") {

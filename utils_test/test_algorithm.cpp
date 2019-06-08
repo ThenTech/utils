@@ -6,6 +6,35 @@
 #include "../utils_lib/utils_algorithm.hpp"
 
 #include "../utils_lib/utils_random.hpp"
+#include <map>
+
+
+TEST_CASE("Test utils::algorithm::contains", "[utils][utils::algorithm]") {
+    std::vector<int> empty, test(10);
+    std::iota(test.begin(), test.end(), 0);
+
+    CHECK_FALSE(utils::algorithm::contains(empty, 0));
+    CHECK_FALSE(utils::algorithm::contains(test, 11));
+
+    for (size_t i = 0; i < 10; i++) {
+        const auto found = utils::algorithm::contains(test, i);
+        CHECK(found);
+        CHECK(*found == i);
+    }
+
+    {
+        const auto found = utils::algorithm::contains("abcdefgh", 'e');
+        CHECK(found);
+        CHECK(*found == 4);
+    }
+
+    {
+        std::map<std::string, int> mfind{{"a", 0}, {"b", 1}, {"c", 2}, {"d", 3}};
+        const auto found = utils::algorithm::contains(mfind, std::string("c"));
+        CHECK(found);
+        CHECK(*found == 2);
+    }
+}
 
 TEST_CASE("Test utils::algorithm::all", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::all());
@@ -219,6 +248,12 @@ TEST_CASE("Test utils::algorithm::enumerate", "[utils][utils::algorithm]") {
     for (auto [i, val] : utils::algorithm::enumerate(test)) {
         CHECK(i == cnt++);
         CHECK(i == val);
+    }
+
+    const auto randoffset = utils::random::Random::get<size_t>(1, 100);
+
+    for (auto [i, val] : utils::algorithm::enumerate(test, randoffset)) {
+        CHECK(i == size_t(val) + randoffset);
     }
 
     REQUIRE(cnt == 10);

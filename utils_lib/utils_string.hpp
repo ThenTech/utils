@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <sstream>
 #include <vector>
+#include <optional>
+
 
 namespace utils::string {
     /**
@@ -21,14 +23,18 @@ namespace utils::string {
      *      The std::string to check.
      *  \param  ch
      *      The char to look for.
-     *  \return Returns true if the string contains the char
-     *          and the position it was found at as a pair.
+     *  \return Returns an `std:optional<size_t>` holding the offset from
+     *          `str.begin()` if the char was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::pair<bool, size_t> contains(const std::string &str, const char ch, const size_t start = 0) {
+    static inline std::optional<size_t> contains(const std::string &str, const char ch, const size_t start = 0) {
         // string.h : strchr(str.c_str(), ch)
-        const size_t pos = str.find(ch, start);
-        return { pos != std::string::npos, pos };
+        if (const size_t pos = str.find(ch, start);
+            pos != std::string::npos)
+        {
+            return { pos };
+        }
+        return {};
     }
 
     /**
@@ -38,13 +44,17 @@ namespace utils::string {
      *      The std::string to check.
      *  \param  part
      *      The std::string to look for.
-     *  \return Returns true if the string contains the other string
-     *          and the position it was found at as a pair.
+     *  \return Returns an `std:optional<size_t>` holding the offset from
+     *          `str.begin()` if the part was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::pair<bool, size_t> contains(const std::string& str, const std::string& part, const size_t start = 0) {
-        const size_t pos = str.find(part, start);
-        return { pos != std::string::npos, pos };
+    static inline std::optional<size_t> contains(const std::string& str, const std::string& part, const size_t start = 0) {
+        if (const size_t pos = str.find(part, start);
+            pos != std::string::npos)
+        {
+            return { pos };
+        }
+        return {};
     }
 
     /**
@@ -199,10 +209,8 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void strEraseFrom(std::string &str, const std::string& erase_from) {
-        const auto &[found, pos] = utils::string::contains(str, erase_from);
-
-        if (found) {
-            str = str.substr(0, pos);
+        if (const auto found = utils::string::contains(str, erase_from)) {
+            str = str.substr(0, found.value());
         }
     }
 
@@ -217,10 +225,8 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void strEraseTo(std::string &str, const std::string& erase_to) {
-        const auto &[found, pos] = utils::string::contains(str, erase_to);
-
-        if (found) {
-            str = str.substr(pos);
+        if (const auto found = utils::string::contains(str, erase_to)) {
+            str = str.substr(found.value());
         }
     }
 
@@ -488,21 +494,16 @@ namespace utils::string {
 
         if (len < 2) return;
 
-        bool   found_start  , found_end;
-        size_t pos_start = 0, pos_end = 0;
+        std::optional<size_t> found_start = 0, found_end = 0;
 
         do {
-            std::tie(found_start, pos_start) = utils::string::contains(s, str_char, pos_start);
-
-            if (found_start) {
-                std::tie(found_end, pos_end) = utils::string::contains(s, str_char, ++pos_start);
-
-                if (found_end) {
-                    v.emplace_back(s.substr(pos_start, pos_end - pos_start));
-                    pos_start = pos_end + 1u;
+            if ((found_start = utils::string::contains(s, str_char, *found_start))) {
+                if ((found_end = utils::string::contains(s, str_char, ++(*found_start)))) {
+                    v.emplace_back(s.substr(*found_start, *found_end - *found_start));
+                    found_start = *found_end + 1u;
                 }
             }
-        } while (found_start && pos_start < len);
+        } while (found_start && *found_start < len);
     }
 
     /**

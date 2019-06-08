@@ -23,7 +23,7 @@ namespace utils::misc {
      *  \return
      *      Returns a variable of type T with the value as given in buffer.
      */
-    template <class T> ATTR_MAYBE_UNUSED
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static T lexical_cast(const char *buffer) {
         T out;
         std::stringstream cast;

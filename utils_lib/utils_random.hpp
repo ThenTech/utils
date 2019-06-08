@@ -53,7 +53,7 @@ namespace utils::random {
      *      the reserve and push_back methods implemented.
      *  \return Returns a Container instance with the picked items.
      */
-    template<typename Container> ATTR_MAYBE_UNUSED
+    template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static auto pick_x_from(size_t amount, const Container& container) ->
         typename std::enable_if<is_iterable_v(container), Container>::type
     {
@@ -98,7 +98,7 @@ namespace utils::random {
     template<
         typename T,
         typename Container = std::vector<T>
-    > ATTR_MAYBE_UNUSED
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static typename std::enable_if<
         (   effolkronium::details::is_supported_number<T>::value
          || effolkronium::details::is_supported_character<T>::value
@@ -164,7 +164,7 @@ namespace utils::random {
     template<
         typename T = char,
         typename Container = typename std::enable_if<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>::type
-    > ATTR_MAYBE_UNUSED
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline Container generate_string(
             const size_t amount,
             const T from = std::numeric_limits<T>::min(),
@@ -216,7 +216,7 @@ namespace utils::random {
      *
      *  \return Returns a formatted string (groups with `-`) with a randon UUID.
      */
-    ATTR_MAYBE_UNUSED
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string generate_uuid(void) {
         auto dist = Random::integer_dist_t<uint8_t> {
             static_cast<uint8_t>(0x00),

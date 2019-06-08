@@ -3,6 +3,7 @@
 
 #include "utils_catch.hpp"
 #include "utils_traits.hpp"
+#include "utils_algorithm.hpp"
 
 #include <cmath>
 #include <numeric>
@@ -19,10 +20,34 @@ namespace utils::math {
      *  \return
      *      Returns -1, 0, or 1 according to the sign of value.
      */
-    template <class T> ATTR_MAYBE_UNUSED
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr T sign(const T& value) {
         static_assert(std::is_signed_v<T>, "utils::math::sign: Signed type required.");
         return (T(0) < value) - (value < T(0));
+    }
+
+    /**
+     *  \brief  Calculate \p value raised to the power \p Exp,
+     *          where \p Exp must be an unsigned int.
+     *
+     *          The result is calulated by unpacking \p value times itself \p Exp times.
+     *
+     *  \tparam Exp
+     *      The power to raise to as template parameter. Default is squared.
+     *  \param  value
+     *      The value to raise.
+     *  \return Returns the result of \p Exp times multiplying \value with itself.
+     */
+    template <size_t Exp = 2ull, typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T pow(const T value) {
+        if constexpr(Exp == 0ull) {
+            UNUSED(value);
+            return T(1);
+        } else if constexpr(Exp == 1ull) {
+            return value;
+        } else {
+            return value * utils::math::pow<Exp - 1>(value);
+        }
     }
 
     /**
@@ -41,7 +66,7 @@ namespace utils::math {
         typename A,
         typename B,
         typename C = typename std::common_type<A, B>::type
-    > ATTR_MAYBE_UNUSED
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr C gcd(const A x, const B y) noexcept {
         if constexpr(std::is_integral_v<C>) {
             return std::gcd(static_cast<C>(x), static_cast<C>(y));
@@ -66,7 +91,7 @@ namespace utils::math {
         typename A,
         typename B,
         typename C = typename std::common_type<A, B>::type
-    > ATTR_MAYBE_UNUSED
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr C lcm(const A x, const B y) {
         if constexpr(std::is_integral_v<C>) {
             return std::lcm(static_cast<C>(x), static_cast<C>(y));
@@ -94,7 +119,7 @@ namespace utils::math {
         typename B,
         typename ...Args,
         typename C = typename std::common_type<A, B, Args...>::type
-    > ATTR_MAYBE_UNUSED
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr C lcm_chain(const A x, const B y, const Args... args) {
         if constexpr (sizeof...(Args) == 0) {
             return utils::math::lcm(x, y);
@@ -117,7 +142,7 @@ namespace utils::math {
      *	\return	bool
      *		Returns whether x equals y within the given epsilon precision.
      */
-    template<typename T> ATTR_MAYBE_UNUSED
+    template<typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool epsilon_equals(const T x, const T y, const double epsilon = 1e-4) {
         if constexpr (std::is_integral_v<T>) {
             UNUSED(epsilon);
@@ -125,6 +150,115 @@ namespace utils::math {
         } else {
             // TODO Use std::numeric_limits<T>::epsilon() ?
             return std::abs(x - y) < epsilon;
+        }
+    }
+
+    namespace stats {
+        /**
+         *  \brief  Calculate sample mean between \p first and \p last.
+         *          (`std::distance(first, last)` elements)
+         *
+         *  \param  first
+         *      The iterator to start from.
+         *  \param  last
+         *      The end iterator.
+         *  \return Returns the mean of the items [first, ..., last].
+         */
+        template<
+            typename Iterator,
+            typename DiffType = typename std::iterator_traits<Iterator>::difference_type
+        > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static inline double mean(Iterator first, Iterator last) {
+            const DiffType size = std::distance(first, last);
+            ASSERT(size > 0);
+
+            return std::accumulate(first, last, 0.0) / size;
+        }
+
+        /**
+         *  \brief  Calculate sample mean of \p cont.
+         *
+         *  \param  cont
+         *      The container to calculate from.
+         *  \return Return the sample mean of \p cont.
+         */
+        template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static inline double mean(const Container& cont) {
+            static_assert(is_iterable_v(cont),
+                          "utils::algorithm::mean: Container must have iterator support.");
+            return utils::math::stats::mean(std::begin(cont), std::end(cont));
+        }
+
+        /**
+         *  \brief  Calculate sample variance between \p first and \p last.
+         *          (`std::distance(first, last)` elements)
+         *
+         *  \param  first
+         *      The iterator to start from.
+         *  \param  last
+         *      The end iterator.
+         *  \return Returns the variance of the items [first, ..., last].
+         */
+        template<
+            typename Iterator,
+            typename DiffType = typename std::iterator_traits<Iterator>::difference_type
+        > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static double variance(Iterator first, Iterator last) {
+            const DiffType size = std::distance(first, last);
+            ASSERT(size > 1);
+
+            const double mean   = utils::math::stats::mean(first, last);
+            const double sq_sum = std::inner_product(first, last, first, 0.0,
+                [    ](const double& x, const double& y) { return x + y; },
+                [mean](const double& x, const double& y) { return (x - mean) * (y - mean); });
+
+            return sq_sum / (size - 1);
+        }
+
+        /**
+         *  \brief  Calculate sample variance of \p cont.
+         *
+         *  \param  cont
+         *      The container to calculate from.
+         *  \return Return the sample variance of \p cont.
+         */
+        template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static inline double variance(const Container& cont) {
+            static_assert(is_iterable_v(cont),
+                          "utils::algorithm::variance: Container must have iterator support.");
+            return utils::math::stats::variance(std::begin(cont), std::end(cont));
+        }
+
+        /**
+         *  \brief  Calculate sample stddev between \p first and \p last.
+         *          (`std::distance(first, last)` elements)
+         *
+         *  \param  first
+         *      The iterator to start from.
+         *  \param  last
+         *      The end iterator.
+         *  \return Returns the stddev of the items [first, ..., last].
+         */
+        template<
+            typename Iterator,
+            typename DiffType = typename std::iterator_traits<Iterator>::difference_type
+        > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static double stddev(Iterator first, Iterator last) {
+            return std::sqrt(utils::math::stats::variance(first, last));
+        }
+
+        /**
+         *  \brief  Calculate sample stddev of \p cont.
+         *
+         *  \param  cont
+         *      The container to calculate from.
+         *  \return Return the sample stddev of \p cont.
+         */
+        template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        static inline double stddev(const Container& cont) {
+            static_assert(is_iterable_v(cont),
+                          "utils::algorithm::stddev: Container must have iterator support.");
+            return utils::math::stats::stddev(std::begin(cont), std::end(cont));
         }
     }
 }

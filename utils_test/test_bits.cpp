@@ -214,20 +214,22 @@ TEST_CASE("Test utils::bits::shift_signed", "[utils][utils::bits]" ) {
     CHECK(utils::bits::shift_signed<uint16_t>(0x7FFF, 15) == 0x7FFF);
     CHECK(utils::bits::shift_signed<uint16_t>(0xDEAD, 16) == 0xDEAD);
 
-    if (utils::Catch::Function_Aborts(utils::bits::shift_signed<int16_t>, 0, 17)) {
-        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<int8_t>, 0, 8);
-        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<int8_t>, 0, 9);
+    #if UTILS_BITS_ASSERT_SHIFT_SIGNED_SIZE
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed< int8_t>, 0, 8);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed< int8_t>, 0, 9);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<int16_t>, 0, 16);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<int16_t>, 0, 17);
         CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<int32_t>, 0, 32);
         CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<int32_t>, 0, 33);
 
-        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<uint8_t>, 0, 8);
-        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<uint8_t>, 0, 9);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed< uint8_t>, 0, 8);
+        CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed< uint8_t>, 0, 9);
         CHECK_FUNCTION_ABORTS_FALSE(utils::bits::shift_signed<uint32_t>, 0, 32);
         CHECK_FUNCTION_ABORTS      (utils::bits::shift_signed<uint32_t>, 0, 33);
-    } else {
+    #else
         CHECK(utils::bits::shift_signed< int16_t>(0xBEEF, 17) ==  int16_t(0xBEEF));
         CHECK(utils::bits::shift_signed<uint16_t>(0xBEEF, 17) == uint16_t(0xBEEF));
-    }
+    #endif
 }
 
 TEST_CASE("Test utils::bits::extend_sign", "[utils][utils::bits]" ) {

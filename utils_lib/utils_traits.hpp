@@ -3,7 +3,16 @@
 
 #include <type_traits>
 #include <iterator>
+
+#include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <unordered_map>
+#include <array>
 #include <variant>
+#include <tuple>
+#include <optional>
 
 ////////////////////////////////////////////////////////////////////////////
 /// Macro helpers
@@ -50,18 +59,6 @@
  */
 #define ATTR_MAYBE_UNUSED [[maybe_unused]]
 
-
-namespace std {
-    // Pre-declarations of container types so we don't actually have to
-    // include the relevant headers if not needed, speeding up compilation time.
-    // These aren't necessary if you do actually include the headers.
-    template<typename T, typename TAllocator> class vector;
-    template<typename T, typename TAllocator> class list;
-    template<typename T, typename TTraits, typename TAllocator> class set;
-    template<typename TKey, typename TValue, typename TTraits, typename TAllocator> class map;
-    template<typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator> class unordered_map;
-    template<typename T, std::size_t N> struct array;
-}
 
 namespace utils::traits {
     ////////////////////////////////////////////////////////////////////////////
@@ -164,8 +161,36 @@ namespace utils::traits {
     struct is_container<std::unordered_map<TKey, TValue, THash, TPred, TAllocator>> : public std::true_type { };
 
     // Mark std::array as a container
-    template<typename T, std::size_t N>
+    template<typename T, size_t N>
     struct is_container<std::array<T, N>> : public std::true_type { };
+
+    // Mark T[N] as a container
+    template<typename T, size_t N>
+    struct is_container<T[N]> : public std::true_type { };
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// Check if function can be called on Type
+    ////////////////////////////////////////////////////////////////////////////
+    namespace internal {
+        template<template<class...> class, class, class...>
+        struct can_apply : std::false_type{};
+
+        template<template<class...>class Z, class...Ts>
+        struct can_apply<Z, std::void_t<Z<Ts...>>, Ts...> : std::true_type{};
+    }
+
+    template<template<class...>class Z, class...Ts>
+    using can_apply = internal::can_apply<Z, void, Ts...>;
+
+    #define CREATE_HAS_FUNCTION(F) \
+        template<class T, class U> \
+        using dot_ ## F ## _r = decltype(std::declval<T>().F(U())); \
+        template<class T, class U> \
+        using has_ ## F = can_apply<dot_ ## F ## _r, T, U>; \
+        template<typename T, class U> \
+        inline constexpr bool has_ ## F ## _v = has_ ## F<T, U>::value;
+
+    CREATE_HAS_FUNCTION(find)
 
     ////////////////////////////////////////////////////////////////////////////
     /**
@@ -173,8 +198,8 @@ namespace utils::traits {
      *  \param   e
      *      The enum value to cast.
      */
-    template <typename E>
-    inline constexpr auto to_underlying(const E e) noexcept {
+    template <typename E> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto to_underlying(const E e) noexcept {
         return static_cast<std::underlying_type_t<E>>(e);
     }
 }

@@ -179,6 +179,18 @@ namespace utils::print {
     };
 
     ////////////////////////////////////////////////////////////////////////////
+    // Delimiters for optional
+    template<typename T>
+    struct delimiters<std::optional<T>, char> {
+            static inline constexpr delimiters_values<char> values = { "", "(?)", "" };
+    };
+
+    template<typename T>
+    struct delimiters<std::optional<T>, wchar_t> {
+            static inline constexpr delimiters_values<wchar_t> values = { L"", L"(?)", L"" };
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
     /// Functor to print containers. You can use this directly if you
     /// want to specificy a non-default delimiters type.
     ////////////////////////////////////////////////////////////////////////////
@@ -386,8 +398,11 @@ namespace std {
     }
 
     // Prints a container to the stream using default delimiters
-    template<typename T, typename TChar, typename TCharTraits>
-    typename std::enable_if<utils::traits::is_container<T>::value, std::basic_ostream<TChar, TCharTraits>&>::type
+    template<
+        typename T, typename TChar, typename TCharTraits,
+        typename = typename std::enable_if_t<utils::traits::is_container<T>::value>
+    >
+    std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const T& container)
@@ -454,6 +469,20 @@ namespace std {
             const utils::print::array_wrapper<T, N>& helper)
     {
         stream << utils::print::print_container_helper<utils::print::array_wrapper<T, N>, TChar, TCharTraits>(helper);
+        return stream;
+    }
+
+
+    template<typename T, typename TChar, typename TCharTraits>
+    std::basic_ostream<TChar, TCharTraits>&
+    operator<<(
+            std::basic_ostream<TChar, TCharTraits>& stream,
+            const std::optional<T>& optional)
+    {
+        if (optional.has_value())
+            stream << optional.value();
+        else
+            stream << utils::print::delimiters<std::optional<T>, TChar>::values.delimiter;
         return stream;
     }
 
