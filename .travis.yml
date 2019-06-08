@@ -36,7 +36,7 @@ before_script:
   - export fastcoverage="python3.6 fastcov.py"
 
 script:
-  - make coverage
+  - make -f makefile.old coverage
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
