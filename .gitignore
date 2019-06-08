@@ -41,3 +41,5 @@ Debug
 .vscode
 bin
 make.bat
+Doxyfile
+icon.ico
