@@ -308,6 +308,8 @@ namespace utils::print {
      *		The type of object to get the name demangled from.
      *	\param	o
      *		The object to demangle the name from.
+     *  \param  filter
+     *      A list of strings to filter (remove) from the output type name.
      *	\return
      *		Returns the class name of o.
      */

@@ -7,7 +7,7 @@
 #error A C++17 compiler is required!
 #endif
 
-#include "utils_algorithm.hpp"
+#include "utils_traits.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -30,7 +30,7 @@ namespace utils::memory {
      *
      *	\tparam	T
      *		The type of object to allocate.
-     *	\param	Type... args
+     *	\param	args
      *		Variable argument list passed down to ctor of T.
      *	\return
      *		A pointer to the newly allocated object.
@@ -66,7 +66,7 @@ namespace utils::memory {
     /**
      *  \brief  Create a unique_t<T> variable that deletes itself.
      *
-     *  \param  Type... args
+     *  \param  args
      *      Variable argument list passed down to ctor of T.
      */
     template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
@@ -106,7 +106,7 @@ namespace utils::memory {
      */
     template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline T* allocFlatArray(size_t ... dims) {
-        return allocArray<T>(utils::algorithm::multiply<size_t...>(dims...));
+        return allocArray<T>((dims * ... * 1));
     }
 
     /**	\brief	Deallocate an array of type T that was allocated using SysUtils::allocArray<T>(size_t).
@@ -291,8 +291,11 @@ namespace utils::memory {
     using unique_vect_t = unique_t<std::vector<T*>, decltype(&deallocVector<T>)>;
 
     /**
-     * @brief allocVector
-     * @param args
+     *  \brief  Create a unique_vect_t<T> variable that deletes
+     *          its contents and itself. The vector will contain T* items.
+     *
+     *  \param  args
+     *      Variable argument list passed down to ctor of std::vector<T>.
      */
     template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline auto new_unique_vector(Type &&... args) {

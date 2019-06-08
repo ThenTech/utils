@@ -23,6 +23,8 @@ namespace utils::string {
      *      The std::string to check.
      *  \param  ch
      *      The char to look for.
+     *  \param  start
+     *      The starting offset to start looking. (default: 0)
      *  \return Returns an `std:optional<size_t>` holding the offset from
      *          `str.begin()` if the char was found, or nothing if not.
      */
@@ -44,6 +46,8 @@ namespace utils::string {
      *      The std::string to check.
      *  \param  part
      *      The std::string to look for.
+     *  \param  start
+     *      The starting offset to start looking. (default: 0)
      *  \return Returns an `std:optional<size_t>` holding the offset from
      *          `str.begin()` if the part was found, or nothing if not.
      */
@@ -125,7 +129,7 @@ namespace utils::string {
      *
      *  \param  str
      *      The std::string to check.
-     *  \param  start
+     *  \param  end
      *      The char* to look for.
      *  \return Returns true if str[-end.size():] == end.
      */
@@ -143,7 +147,7 @@ namespace utils::string {
      *
      *  \param  str
      *      The std::string to check.
-     *  \param  start
+     *  \param  end
      *      The char* to look for.
      *  \return Returns true if str[-end.size():] == end.
      */
@@ -679,7 +683,7 @@ namespace utils::string {
      *
      *  \param  buffer
      *      The buffer to check.
-     *  \param  buffer
+     *  \param  length
      *      The length of the buffer.
      *  \return
      *      Returns true if buffer contains a valid base64 encoded string.
