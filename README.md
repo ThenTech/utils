@@ -13,9 +13,9 @@
 Compile with: `-std=c++17`
 And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 
-[Doxygen documentation can be found here.](https://wosser1sproductions.github.io/utils/)
+[Doxygen documentation can be found here.](https://wosser1sproductions.github.io/utils/docs/)
 
-[Code coverage (lcov) report can be found here.](https://wosser1sproductions.github.io/utils/code_coverage)
+[Code coverage (lcov) report can be found here.](https://wosser1sproductions.github.io/utils/docs/code_coverage)
 
 ## Contents
 
