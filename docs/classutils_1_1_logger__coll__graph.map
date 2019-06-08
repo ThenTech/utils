@@ -1,5 +1,0 @@
-<map id="utils::Logger" name="utils::Logger">
-<area shape="rect" id="node1" title="A class with static methods for logging to std::cout and a log file. Create the Loging instance with ..." alt="" coords="22,229,115,256"/>
-<area shape="rect" id="node2" title="STL class." alt="" coords="29,96,109,123"/>
-<area shape="rect" id="node3" title="STL class." alt="" coords="5,5,132,47"/>
-</map>
