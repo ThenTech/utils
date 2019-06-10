@@ -31,7 +31,7 @@ var utils__os_8hpp =
     [ "operator|", "utils__os_8hpp.html#ac67bd043950d71cb4562d2f18b39a8f4", null ],
     [ "operator|=", "utils__os_8hpp.html#a976cd1c3ca41af8004eab9b515bf2878", null ],
     [ "operator~", "utils__os_8hpp.html#a299c46ef905b35319b9ef96e73682765", null ],
-    [ "SetScreenTitle", "utils__os_8hpp.html#af5c360ec0391d5e841959a77035a355a", null ],
+    [ "SetScreenTitle", "utils__os_8hpp.html#a6634f1194346db636740ec73a06b78d5", null ],
     [ "BG", "utils__os_8hpp.html#a3329a645f96d0dc294b9c48809baf83d", null ],
     [ "BLACK", "utils__os_8hpp.html#ad8d5af40fd928995b68510cab4650fbe", null ],
     [ "BLUE", "utils__os_8hpp.html#a3e2a0f7f1b41455500d5e2f5c5c92cc0", null ],

@@ -1,7 +1,6 @@
 var namespaceutils =
 [
     [ "algo", "namespaceutils_1_1algo.html", "namespaceutils_1_1algo" ],
-    [ "algorithm", "namespaceutils_1_1algorithm.html", null ],
     [ "bits", "namespaceutils_1_1bits.html", null ],
     [ "Catch", "namespaceutils_1_1_catch.html", null ],
     [ "colour", "namespaceutils_1_1colour.html", "namespaceutils_1_1colour" ],

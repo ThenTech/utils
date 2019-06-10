@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-08</td>
+            <td class="headerValue">2019-06-10</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">27</td>
@@ -76,7 +76,7 @@
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <span class="lineNum">      15 </span>            : 
 <span class="lineNum">      16 </span><span class="lineCov">          2 : TEST_CASE(&quot;Test utils::string::contains&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">      17 </span><span class="lineCov">          2 :     std::optional&lt;size_t&gt; found;</span>
+<span class="lineNum">      17 </span><span class="lineCov">          2 :     utils::traits::found_t found;</span>
 <span class="lineNum">      18 </span>            : 
 <span class="lineNum">      19 </span><span class="lineCov">          3 :     SECTION(&quot;Test with char&quot;) {</span>
 <span class="lineNum">      20 </span><span class="lineCov">          2 :         REQUIRE_FALSE(utils::string::contains(&quot;&quot;, '.'));</span>
@@ -332,173 +332,173 @@
 <span class="lineNum">     270 </span><span class="lineCov">          2 :     REQUIRE(utils::string::trimmed(charstr) == charstr);</span>
 <a name="271"><span class="lineNum">     271 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     272 </span>            : 
-<span class="lineNum">     273 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strEraseFrom&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     273 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::erase_from&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     274 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     275 </span><span class="lineCov">          1 :     utils::string::strEraseFrom(empty, &quot;.&quot;);</span>
+<span class="lineNum">     275 </span><span class="lineCov">          1 :     utils::string::erase_from(empty, &quot;.&quot;);</span>
 <span class="lineNum">     276 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     277 </span>            : 
 <span class="lineNum">     278 </span><span class="lineCov">          2 :     std::string test_1(&quot;     abcd     &quot;);</span>
-<span class="lineNum">     279 </span><span class="lineCov">          1 :     utils::string::strEraseFrom(test_1, &quot;d&quot;);</span>
+<span class="lineNum">     279 </span><span class="lineCov">          1 :     utils::string::erase_from(test_1, &quot;d&quot;);</span>
 <span class="lineNum">     280 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     abc&quot;);</span>
 <span class="lineNum">     281 </span>            : 
 <span class="lineNum">     282 </span><span class="lineCov">          2 :     std::string test_2(&quot;\t\t\t\tabcd\t\t&quot;);</span>
-<span class="lineNum">     283 </span><span class="lineCov">          1 :     utils::string::strEraseFrom(test_2, &quot;\ta&quot;);</span>
+<span class="lineNum">     283 </span><span class="lineCov">          1 :     utils::string::erase_from(test_2, &quot;\ta&quot;);</span>
 <span class="lineNum">     284 </span><span class="lineCov">          2 :     REQUIRE(test_2 == &quot;\t\t\t&quot;);</span>
 <span class="lineNum">     285 </span>            : 
 <span class="lineNum">     286 </span><span class="lineCov">          2 :     std::string test_3(&quot;\n\n\n\nabcd\n\n\n&quot;);</span>
-<span class="lineNum">     287 </span><span class="lineCov">          1 :     utils::string::strEraseFrom(test_3, &quot;dcba&quot;);</span>
+<span class="lineNum">     287 </span><span class="lineCov">          1 :     utils::string::erase_from(test_3, &quot;dcba&quot;);</span>
 <span class="lineNum">     288 </span><span class="lineCov">          2 :     REQUIRE(test_3 == &quot;\n\n\n\nabcd\n\n\n&quot;);</span>
 <span class="lineNum">     289 </span>            : 
 <span class="lineNum">     290 </span><span class="lineCov">          2 :     std::string test_4(alphabet_lower);</span>
 <span class="lineNum">     291 </span><span class="lineCov">          1 :     const size_t erase_index = utils::random::Random::get&lt;size_t&gt;(0, alphabet_lower.size() - 1);</span>
 <span class="lineNum">     292 </span><span class="lineCov">          2 :     const std::string erase_char(1, test_4[erase_index]);</span>
 <span class="lineNum">     293 </span>            : 
-<span class="lineNum">     294 </span><span class="lineCov">          1 :     utils::string::strEraseFrom(test_4, erase_char);</span>
+<span class="lineNum">     294 </span><span class="lineCov">          1 :     utils::string::erase_from(test_4, erase_char);</span>
 <span class="lineNum">     295 </span><span class="lineCov">          2 :     REQUIRE(test_4.size() == erase_index);</span>
 <a name="296"><span class="lineNum">     296 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     297 </span>            : 
-<span class="lineNum">     298 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strErasedFrom&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     298 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::erased_from&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     299 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     300 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedFrom(empty, &quot;.&quot;).size() == 0);</span>
+<span class="lineNum">     300 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_from(empty, &quot;.&quot;).size() == 0);</span>
 <span class="lineNum">     301 </span>            : 
 <span class="lineNum">     302 </span><span class="lineCov">          2 :     std::string test_1(&quot;     abcd     &quot;);</span>
-<span class="lineNum">     303 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedFrom(test_1, &quot;d&quot;) == &quot;     abc&quot;);</span>
+<span class="lineNum">     303 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_from(test_1, &quot;d&quot;) == &quot;     abc&quot;);</span>
 <span class="lineNum">     304 </span>            : 
 <span class="lineNum">     305 </span><span class="lineCov">          2 :     std::string test_2(&quot;\t\t\t\tabcd\t\t&quot;);</span>
-<span class="lineNum">     306 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedFrom(test_2, &quot;\ta&quot;) == &quot;\t\t\t&quot;);</span>
+<span class="lineNum">     306 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_from(test_2, &quot;\ta&quot;) == &quot;\t\t\t&quot;);</span>
 <span class="lineNum">     307 </span>            : 
 <span class="lineNum">     308 </span><span class="lineCov">          2 :     std::string test_3(&quot;\n\n\n\nabcd\n\n\n&quot;);</span>
-<span class="lineNum">     309 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedFrom(test_3, &quot;dcba&quot;) == &quot;\n\n\n\nabcd\n\n\n&quot;);</span>
+<span class="lineNum">     309 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_from(test_3, &quot;dcba&quot;) == &quot;\n\n\n\nabcd\n\n\n&quot;);</span>
 <span class="lineNum">     310 </span>            : 
 <span class="lineNum">     311 </span><span class="lineCov">          2 :     std::string test_4(alphabet_lower);</span>
 <span class="lineNum">     312 </span><span class="lineCov">          1 :     const size_t erase_index = utils::random::Random::get&lt;size_t&gt;(0, alphabet_lower.size() - 1);</span>
 <span class="lineNum">     313 </span><span class="lineCov">          2 :     const std::string erase_char(1, test_4[erase_index]);</span>
 <span class="lineNum">     314 </span>            : 
-<span class="lineNum">     315 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedFrom(test_4, erase_char).size() == erase_index);</span>
+<span class="lineNum">     315 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_from(test_4, erase_char).size() == erase_index);</span>
 <a name="316"><span class="lineNum">     316 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     317 </span>            : 
-<span class="lineNum">     318 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strEraseTo&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     318 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::erase_to&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     319 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     320 </span><span class="lineCov">          1 :     utils::string::strEraseTo(empty, &quot;.&quot;);</span>
+<span class="lineNum">     320 </span><span class="lineCov">          1 :     utils::string::erase_to(empty, &quot;.&quot;);</span>
 <span class="lineNum">     321 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     322 </span>            : 
 <span class="lineNum">     323 </span><span class="lineCov">          2 :     std::string test_1(&quot;     abcd     &quot;);</span>
-<span class="lineNum">     324 </span><span class="lineCov">          1 :     utils::string::strEraseTo(test_1, &quot;d&quot;);</span>
+<span class="lineNum">     324 </span><span class="lineCov">          1 :     utils::string::erase_to(test_1, &quot;d&quot;);</span>
 <span class="lineNum">     325 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;d     &quot;);</span>
 <span class="lineNum">     326 </span>            : 
 <span class="lineNum">     327 </span><span class="lineCov">          2 :     std::string test_2(&quot;\t\t\t\tabcd\t\t&quot;);</span>
-<span class="lineNum">     328 </span><span class="lineCov">          1 :     utils::string::strEraseTo(test_2, &quot;\ta&quot;);</span>
+<span class="lineNum">     328 </span><span class="lineCov">          1 :     utils::string::erase_to(test_2, &quot;\ta&quot;);</span>
 <span class="lineNum">     329 </span><span class="lineCov">          2 :     REQUIRE(test_2 == &quot;\tabcd\t\t&quot;);</span>
 <span class="lineNum">     330 </span>            : 
 <span class="lineNum">     331 </span><span class="lineCov">          2 :     std::string test_3(&quot;\n\n\n\nabcd\n\n\n&quot;);</span>
-<span class="lineNum">     332 </span><span class="lineCov">          1 :     utils::string::strEraseTo(test_3, &quot;dcba&quot;);</span>
+<span class="lineNum">     332 </span><span class="lineCov">          1 :     utils::string::erase_to(test_3, &quot;dcba&quot;);</span>
 <span class="lineNum">     333 </span><span class="lineCov">          2 :     REQUIRE(test_3 == &quot;\n\n\n\nabcd\n\n\n&quot;);</span>
 <span class="lineNum">     334 </span>            : 
 <span class="lineNum">     335 </span><span class="lineCov">          2 :     std::string test_4(alphabet_lower);</span>
 <span class="lineNum">     336 </span><span class="lineCov">          1 :     const size_t erase_index = utils::random::Random::get&lt;size_t&gt;(0, alphabet_lower.size() - 1);</span>
 <span class="lineNum">     337 </span><span class="lineCov">          2 :     const std::string erase_char(1, test_4[erase_index]);</span>
 <span class="lineNum">     338 </span>            : 
-<span class="lineNum">     339 </span><span class="lineCov">          1 :     utils::string::strEraseTo(test_4, erase_char);</span>
+<span class="lineNum">     339 </span><span class="lineCov">          1 :     utils::string::erase_to(test_4, erase_char);</span>
 <span class="lineNum">     340 </span><span class="lineCov">          2 :     REQUIRE(test_4.size() == alphabet_lower.size() - erase_index);</span>
 <a name="341"><span class="lineNum">     341 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     342 </span>            : 
-<span class="lineNum">     343 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strErasedTo&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     343 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::erased_to&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     344 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     345 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedTo(empty, &quot;.&quot;).size() == 0);</span>
+<span class="lineNum">     345 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_to(empty, &quot;.&quot;).size() == 0);</span>
 <span class="lineNum">     346 </span>            : 
 <span class="lineNum">     347 </span><span class="lineCov">          2 :     std::string test_1(&quot;     abcd     &quot;);</span>
-<span class="lineNum">     348 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedTo(test_1, &quot;d&quot;) == &quot;d     &quot;);</span>
+<span class="lineNum">     348 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_to(test_1, &quot;d&quot;) == &quot;d     &quot;);</span>
 <span class="lineNum">     349 </span>            : 
 <span class="lineNum">     350 </span><span class="lineCov">          2 :     std::string test_2(&quot;\t\t\t\tabcd\t\t&quot;);</span>
-<span class="lineNum">     351 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedTo(test_2, &quot;\ta&quot;) == &quot;\tabcd\t\t&quot;);</span>
+<span class="lineNum">     351 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_to(test_2, &quot;\ta&quot;) == &quot;\tabcd\t\t&quot;);</span>
 <span class="lineNum">     352 </span>            : 
 <span class="lineNum">     353 </span><span class="lineCov">          2 :     std::string test_3(&quot;\n\n\n\nabcd\n\n\n&quot;);</span>
-<span class="lineNum">     354 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedTo(test_3, &quot;dcba&quot;) == &quot;\n\n\n\nabcd\n\n\n&quot;);</span>
+<span class="lineNum">     354 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_to(test_3, &quot;dcba&quot;) == &quot;\n\n\n\nabcd\n\n\n&quot;);</span>
 <span class="lineNum">     355 </span>            : 
 <span class="lineNum">     356 </span><span class="lineCov">          2 :     std::string test_4(alphabet_lower);</span>
 <span class="lineNum">     357 </span><span class="lineCov">          1 :     const size_t erase_index = utils::random::Random::get&lt;size_t&gt;(0, alphabet_lower.size() - 1);</span>
 <span class="lineNum">     358 </span><span class="lineCov">          2 :     const std::string erase_char(1, test_4[erase_index]);</span>
 <span class="lineNum">     359 </span>            : 
-<span class="lineNum">     360 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strErasedTo(test_4, erase_char).size() == alphabet_lower.size() - erase_index);</span>
+<span class="lineNum">     360 </span><span class="lineCov">          2 :     REQUIRE(utils::string::erased_to(test_4, erase_char).size() == alphabet_lower.size() - erase_index);</span>
 <a name="361"><span class="lineNum">     361 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     362 </span>            : 
-<span class="lineNum">     363 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strToUpper&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     363 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_upper&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     364 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     365 </span><span class="lineCov">          1 :     utils::string::strToUpper(empty);</span>
+<span class="lineNum">     365 </span><span class="lineCov">          1 :     utils::string::to_upper(empty);</span>
 <span class="lineNum">     366 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     367 </span>            : 
 <span class="lineNum">     368 </span><span class="lineCov">          2 :     std::string test_1(&quot; \t\n\rabcd\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
-<span class="lineNum">     369 </span><span class="lineCov">          1 :     utils::string::strToUpper(test_1);</span>
+<span class="lineNum">     369 </span><span class="lineCov">          1 :     utils::string::to_upper(test_1);</span>
 <span class="lineNum">     370 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot; \t\n\rABCD\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
 <span class="lineNum">     371 </span>            : 
 <span class="lineNum">     372 </span><span class="lineCov">          2 :     std::string test_2(alphabet_lower);</span>
-<span class="lineNum">     373 </span><span class="lineCov">          1 :     utils::string::strToUpper(test_2);</span>
+<span class="lineNum">     373 </span><span class="lineCov">          1 :     utils::string::to_upper(test_2);</span>
 <span class="lineNum">     374 </span><span class="lineCov">          2 :     REQUIRE(test_2.size() == alphabet_lower.size());</span>
 <span class="lineNum">     375 </span><span class="lineCov">          2 :     REQUIRE(test_2 == alphabet_upper);</span>
 <span class="lineNum">     376 </span>            : 
 <span class="lineNum">     377 </span><span class="lineCov">          2 :     std::string test_3(&quot;üêéè&quot;);</span>
-<span class="lineNum">     378 </span><span class="lineCov">          1 :     utils::string::strToUpper(test_3);</span>
+<span class="lineNum">     378 </span><span class="lineCov">          1 :     utils::string::to_upper(test_3);</span>
 <span class="lineNum">     379 </span><span class="lineCov">          2 :     CHECK_FALSE(test_3 == &quot;ÜÊÉÈ&quot;);</span>
 <a name="380"><span class="lineNum">     380 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     381 </span>            : 
-<span class="lineNum">     382 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strToUppercase&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     382 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_uppercase&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     383 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     384 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strToUppercase(empty).size() == 0);</span>
+<span class="lineNum">     384 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_uppercase(empty).size() == 0);</span>
 <span class="lineNum">     385 </span>            : 
 <span class="lineNum">     386 </span><span class="lineCov">          2 :     std::string test_1(&quot; \t\n\rabcd\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
-<span class="lineNum">     387 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strToUppercase(test_1) == &quot; \t\n\rABCD\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
+<span class="lineNum">     387 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_uppercase(test_1) == &quot; \t\n\rABCD\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
 <span class="lineNum">     388 </span>            : 
 <span class="lineNum">     389 </span><span class="lineCov">          2 :     std::string test_2(alphabet_lower);</span>
-<span class="lineNum">     390 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strToUppercase(test_2) == alphabet_upper);</span>
+<span class="lineNum">     390 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_uppercase(test_2) == alphabet_upper);</span>
 <span class="lineNum">     391 </span>            : 
 <span class="lineNum">     392 </span><span class="lineCov">          2 :     std::string test_3(&quot;üêéè&quot;);</span>
-<span class="lineNum">     393 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::string::strToUppercase(test_3) == &quot;ÜÊÉÈ&quot;);</span>
+<span class="lineNum">     393 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::string::to_uppercase(test_3) == &quot;ÜÊÉÈ&quot;);</span>
 <a name="394"><span class="lineNum">     394 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     395 </span>            : 
-<span class="lineNum">     396 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strToLower&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     396 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_lower&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     397 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     398 </span><span class="lineCov">          1 :     utils::string::strToLower(empty);</span>
+<span class="lineNum">     398 </span><span class="lineCov">          1 :     utils::string::to_lower(empty);</span>
 <span class="lineNum">     399 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     400 </span>            : 
 <span class="lineNum">     401 </span><span class="lineCov">          2 :     std::string test_1(&quot; \t\n\rABCD\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
-<span class="lineNum">     402 </span><span class="lineCov">          1 :     utils::string::strToLower(test_1);</span>
+<span class="lineNum">     402 </span><span class="lineCov">          1 :     utils::string::to_lower(test_1);</span>
 <span class="lineNum">     403 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot; \t\n\rabcd\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
 <span class="lineNum">     404 </span>            : 
 <span class="lineNum">     405 </span><span class="lineCov">          2 :     std::string test_2(alphabet_upper);</span>
-<span class="lineNum">     406 </span><span class="lineCov">          1 :     utils::string::strToLower(test_2);</span>
+<span class="lineNum">     406 </span><span class="lineCov">          1 :     utils::string::to_lower(test_2);</span>
 <span class="lineNum">     407 </span><span class="lineCov">          2 :     REQUIRE(test_2.size() == alphabet_upper.size());</span>
 <span class="lineNum">     408 </span><span class="lineCov">          2 :     REQUIRE(test_2 == alphabet_lower);</span>
 <span class="lineNum">     409 </span>            : 
 <span class="lineNum">     410 </span><span class="lineCov">          2 :     std::string test_3(&quot;ÜÊÉÈ&quot;);</span>
-<span class="lineNum">     411 </span><span class="lineCov">          1 :     utils::string::strToLower(test_3);</span>
+<span class="lineNum">     411 </span><span class="lineCov">          1 :     utils::string::to_lower(test_3);</span>
 <span class="lineNum">     412 </span><span class="lineCov">          2 :     CHECK_FALSE(test_3 == &quot;üêéè&quot;);</span>
 <a name="413"><span class="lineNum">     413 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     414 </span>            : 
-<span class="lineNum">     415 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strToLowercase&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     415 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_lowercase&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     416 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     417 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strToLowercase(empty).size() == 0);</span>
+<span class="lineNum">     417 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_lowercase(empty).size() == 0);</span>
 <span class="lineNum">     418 </span>            : 
 <span class="lineNum">     419 </span><span class="lineCov">          2 :     std::string test_1(&quot; \t\n\rABCD\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
-<span class="lineNum">     420 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strToLowercase(test_1) == &quot; \t\n\rabcd\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
+<span class="lineNum">     420 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_lowercase(test_1) == &quot; \t\n\rabcd\t-=_+[]'#;/,.&lt;&gt;?:@~&quot;);</span>
 <span class="lineNum">     421 </span>            : 
 <span class="lineNum">     422 </span><span class="lineCov">          2 :     std::string test_2(alphabet_upper);</span>
-<span class="lineNum">     423 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strToLowercase(test_2) == alphabet_lower);</span>
+<span class="lineNum">     423 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_lowercase(test_2) == alphabet_lower);</span>
 <span class="lineNum">     424 </span>            : 
 <span class="lineNum">     425 </span><span class="lineCov">          2 :     std::string test_3(&quot;ÜÊÉÈ&quot;);</span>
-<span class="lineNum">     426 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::string::strToLowercase(test_3) == &quot;üêéè&quot;);</span>
+<span class="lineNum">     426 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::string::to_lowercase(test_3) == &quot;üêéè&quot;);</span>
 <a name="427"><span class="lineNum">     427 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     428 </span>            : 
-<span class="lineNum">     429 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strEraseConsecutive&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     429 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::erase_consecutive&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     430 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     431 </span><span class="lineCov">          1 :     utils::string::strEraseConsecutive(empty, '.');</span>
+<span class="lineNum">     431 </span><span class="lineCov">          1 :     utils::string::erase_consecutive(empty, '.');</span>
 <span class="lineNum">     432 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     433 </span>            : 
 <span class="lineNum">     434 </span><span class="lineCov">          2 :     std::string test_1(&quot;     aabcd     &quot;);</span>
-<span class="lineNum">     435 </span><span class="lineCov">          1 :     utils::string::strEraseConsecutive(test_1, 'a');</span>
+<span class="lineNum">     435 </span><span class="lineCov">          1 :     utils::string::erase_consecutive(test_1, 'a');</span>
 <span class="lineNum">     436 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     abcd     &quot;);</span>
-<span class="lineNum">     437 </span><span class="lineCov">          1 :     utils::string::strEraseConsecutive(test_1, 'b');</span>
+<span class="lineNum">     437 </span><span class="lineCov">          1 :     utils::string::erase_consecutive(test_1, 'b');</span>
 <span class="lineNum">     438 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     abcd     &quot;);</span>
-<span class="lineNum">     439 </span><span class="lineCov">          1 :     utils::string::strEraseConsecutive(test_1, ' ');</span>
+<span class="lineNum">     439 </span><span class="lineCov">          1 :     utils::string::erase_consecutive(test_1, ' ');</span>
 <span class="lineNum">     440 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot; abcd &quot;);</span>
 <span class="lineNum">     441 </span>            : 
 <span class="lineNum">     442 </span><span class="lineCov">          2 :     std::string test_2, charstr;</span>
@@ -513,24 +513,24 @@
 <span class="lineNum">     451 </span><span class="lineCov">          1 :                                              'a', 'z');</span>
 <span class="lineNum">     452 </span>            : 
 <span class="lineNum">     453 </span><span class="lineCov">          1 :     const size_t prelen(test_2.size());</span>
-<span class="lineNum">     454 </span><span class="lineCov">          1 :     utils::string::strEraseConsecutive(test_2, '.');</span>
+<span class="lineNum">     454 </span><span class="lineCov">          1 :     utils::string::erase_consecutive(test_2, '.');</span>
 <span class="lineNum">     455 </span>            :     // Only repeated are removed, unique is kept =&gt; +1
 <span class="lineNum">     456 </span><span class="lineCov">          2 :     REQUIRE(test_2.size() == prelen - charstr.size() + 1);</span>
 <a name="457"><span class="lineNum">     457 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     458 </span>            : 
-<span class="lineNum">     459 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strReplaceAll&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     459 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::replace_all&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     460 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     461 </span><span class="lineCov">          1 :     utils::string::strReplaceAll(empty, &quot;&quot;, &quot;&quot;);</span>
+<span class="lineNum">     461 </span><span class="lineCov">          1 :     utils::string::replace_all(empty, &quot;&quot;, &quot;&quot;);</span>
 <span class="lineNum">     462 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     463 </span>            : 
 <span class="lineNum">     464 </span><span class="lineCov">          2 :     std::string test_1(&quot;     abcad     &quot;);</span>
-<span class="lineNum">     465 </span><span class="lineCov">          1 :     utils::string::strReplaceAll(test_1, 'a');</span>
+<span class="lineNum">     465 </span><span class="lineCov">          1 :     utils::string::replace_all(test_1, 'a');</span>
 <span class="lineNum">     466 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     bcd     &quot;);</span>
-<span class="lineNum">     467 </span><span class="lineCov">          1 :     utils::string::strReplaceAll(test_1, &quot;bc&quot;, &quot;cb&quot;);</span>
+<span class="lineNum">     467 </span><span class="lineCov">          1 :     utils::string::replace_all(test_1, &quot;bc&quot;, &quot;cb&quot;);</span>
 <span class="lineNum">     468 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     cbd     &quot;);</span>
-<span class="lineNum">     469 </span><span class="lineCov">          1 :     utils::string::strReplaceAll(test_1, ' ', &quot;&lt;&gt;&quot;);</span>
+<span class="lineNum">     469 </span><span class="lineCov">          1 :     utils::string::replace_all(test_1, ' ', &quot;&lt;&gt;&quot;);</span>
 <span class="lineNum">     470 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;cbd&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&lt;&gt;&quot;);</span>
-<span class="lineNum">     471 </span><span class="lineCov">          1 :     utils::string::strReplaceAll(test_1, '&lt;', '?');</span>
+<span class="lineNum">     471 </span><span class="lineCov">          1 :     utils::string::replace_all(test_1, '&lt;', '?');</span>
 <span class="lineNum">     472 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;?&gt;?&gt;?&gt;?&gt;?&gt;cbd?&gt;?&gt;?&gt;?&gt;?&gt;&quot;);</span>
 <span class="lineNum">     473 </span>            : 
 <span class="lineNum">     474 </span><span class="lineCov">          2 :     std::string test_2, part1, charstr, part2;</span>
@@ -543,24 +543,24 @@
 <span class="lineNum">     481 </span>            : 
 <span class="lineNum">     482 </span><span class="lineCov">          1 :     test_2 = part1 + charstr + part2;</span>
 <span class="lineNum">     483 </span>            : 
-<span class="lineNum">     484 </span><span class="lineCov">          1 :     utils::string::strReplaceAll(test_2, '.', '=');</span>
+<span class="lineNum">     484 </span><span class="lineCov">          1 :     utils::string::replace_all(test_2, '.', '=');</span>
 <span class="lineNum">     485 </span><span class="lineCov">          2 :     REQUIRE(test_2 == part1 + std::string(charstr.size(), '=') + part2);</span>
 <a name="486"><span class="lineNum">     486 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     487 </span>            : 
-<span class="lineNum">     488 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strEraseAll&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     488 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::erase_all&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     489 </span><span class="lineCov">          2 :     std::string empty(&quot;&quot;);</span>
-<span class="lineNum">     490 </span><span class="lineCov">          1 :     utils::string::strEraseAll(empty, &quot;&quot;);</span>
+<span class="lineNum">     490 </span><span class="lineCov">          1 :     utils::string::erase_all(empty, &quot;&quot;);</span>
 <span class="lineNum">     491 </span><span class="lineCov">          2 :     REQUIRE(empty.size() == 0);</span>
 <span class="lineNum">     492 </span>            : 
 <span class="lineNum">     493 </span><span class="lineCov">          2 :     std::string test_1(&quot;     abcad     &quot;);</span>
-<span class="lineNum">     494 </span><span class="lineCov">          1 :     utils::string::strEraseAll(test_1, 'a');</span>
+<span class="lineNum">     494 </span><span class="lineCov">          1 :     utils::string::erase_all(test_1, 'a');</span>
 <span class="lineNum">     495 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     bcd     &quot;);</span>
-<span class="lineNum">     496 </span><span class="lineCov">          1 :     utils::string::strEraseAll(test_1, &quot;bc&quot;);</span>
+<span class="lineNum">     496 </span><span class="lineCov">          1 :     utils::string::erase_all(test_1, &quot;bc&quot;);</span>
 <span class="lineNum">     497 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;     d     &quot;);</span>
-<span class="lineNum">     498 </span><span class="lineCov">          1 :     utils::string::strEraseAll(test_1, ' ');</span>
+<span class="lineNum">     498 </span><span class="lineCov">          1 :     utils::string::erase_all(test_1, ' ');</span>
 <span class="lineNum">     499 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;d&quot;);</span>
 <span class="lineNum">     500 </span><span class="lineCov">          1 :     test_1 += std::string(5, '0');</span>
-<span class="lineNum">     501 </span><span class="lineCov">          1 :     utils::string::strEraseAll(test_1, '0');</span>
+<span class="lineNum">     501 </span><span class="lineCov">          1 :     utils::string::erase_all(test_1, '0');</span>
 <span class="lineNum">     502 </span><span class="lineCov">          2 :     REQUIRE(test_1 == &quot;d&quot;);</span>
 <span class="lineNum">     503 </span>            : 
 <span class="lineNum">     504 </span><span class="lineCov">          2 :     std::string test_2, part1, charstr, part2;</span>
@@ -573,107 +573,107 @@
 <span class="lineNum">     511 </span>            : 
 <span class="lineNum">     512 </span><span class="lineCov">          1 :     test_2 = part1 + charstr + part2;</span>
 <span class="lineNum">     513 </span>            : 
-<span class="lineNum">     514 </span><span class="lineCov">          1 :     utils::string::strEraseAll(test_2, '.');</span>
+<span class="lineNum">     514 </span><span class="lineCov">          1 :     utils::string::erase_all(test_2, '.');</span>
 <span class="lineNum">     515 </span><span class="lineCov">          2 :     REQUIRE(test_2 == part1 + part2);</span>
 <a name="516"><span class="lineNum">     516 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     517 </span>            : 
-<span class="lineNum">     518 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::str2wstr&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">     519 </span><span class="lineCov">          2 :     std::wstring test = utils::string::str2wstr(&quot;\0&quot;);</span>
+<span class="lineNum">     518 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_wstring&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     519 </span><span class="lineCov">          2 :     std::wstring test = utils::string::to_wstring(&quot;\0&quot;);</span>
 <span class="lineNum">     520 </span><span class="lineCov">          2 :     REQUIRE(test == L&quot;&quot;);</span>
 <span class="lineNum">     521 </span><span class="lineCov">          2 :     REQUIRE(std::wcscmp(test.data(), L&quot;\0&quot;) == 0);</span>
 <span class="lineNum">     522 </span>            : 
-<span class="lineNum">     523 </span><span class="lineCov">          1 :     test = utils::string::str2wstr(&quot;AbCdE\0&quot;);</span>
+<span class="lineNum">     523 </span><span class="lineCov">          1 :     test = utils::string::to_wstring(&quot;AbCdE\0&quot;);</span>
 <span class="lineNum">     524 </span><span class="lineCov">          2 :     REQUIRE(std::wcscmp(test.data(), L&quot;AbCdE\0&quot;) == 0);</span>
 <span class="lineNum">     525 </span>            : 
-<span class="lineNum">     526 </span><span class="lineCov">          1 :     test = utils::string::str2wstr(std::string(&quot;\xEF\xBF\xBF&quot;));</span>
+<span class="lineNum">     526 </span><span class="lineCov">          1 :     test = utils::string::to_wstring(std::string(&quot;\xEF\xBF\xBF&quot;));</span>
 <span class="lineNum">     527 </span><span class="lineCov">          2 :     REQUIRE(std::wcscmp(test.data(), L&quot;\xFFFF&quot;) == 0);</span>
 <span class="lineNum">     528 </span>            : 
-<span class="lineNum">     529 </span><span class="lineCov">          1 :     test = utils::string::str2wstr(std::string(&quot;\xE2\x82\xAC&quot;));</span>
+<span class="lineNum">     529 </span><span class="lineCov">          1 :     test = utils::string::to_wstring(std::string(&quot;\xE2\x82\xAC&quot;));</span>
 <span class="lineNum">     530 </span><span class="lineCov">          2 :     REQUIRE(std::wcscmp(test.data(), L&quot;\x20ac&quot;) == 0);</span>
 <a name="531"><span class="lineNum">     531 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     532 </span>            : 
-<span class="lineNum">     533 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::wstr2str&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">     534 </span><span class="lineCov">          2 :     std::string test = utils::string::wstr2str(L&quot;\0&quot;);</span>
+<span class="lineNum">     533 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_string&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     534 </span><span class="lineCov">          2 :     std::string test = utils::string::to_string(L&quot;\0&quot;);</span>
 <span class="lineNum">     535 </span><span class="lineCov">          2 :     REQUIRE(test == &quot;&quot;);</span>
 <span class="lineNum">     536 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(test.data(), &quot;\0&quot;) == 0);</span>
 <span class="lineNum">     537 </span>            : 
-<span class="lineNum">     538 </span><span class="lineCov">          1 :     test = utils::string::wstr2str(L&quot;AbCdE\0&quot;);</span>
+<span class="lineNum">     538 </span><span class="lineCov">          1 :     test = utils::string::to_string(L&quot;AbCdE\0&quot;);</span>
 <span class="lineNum">     539 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(test.data(), &quot;AbCdE\0&quot;) == 0);</span>
 <span class="lineNum">     540 </span>            : 
-<span class="lineNum">     541 </span><span class="lineCov">          1 :     test = utils::string::wstr2str(std::wstring(L&quot;\xFFFF&quot;));</span>
+<span class="lineNum">     541 </span><span class="lineCov">          1 :     test = utils::string::to_string(std::wstring(L&quot;\xFFFF&quot;));</span>
 <span class="lineNum">     542 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(test.data(), &quot;\xEF\xBF\xBF&quot;) == 0);</span>
 <span class="lineNum">     543 </span>            : 
-<span class="lineNum">     544 </span><span class="lineCov">          1 :     test = utils::string::wstr2str(std::wstring(L&quot;\x20ac&quot;));</span>
+<span class="lineNum">     544 </span><span class="lineCov">          1 :     test = utils::string::to_string(std::wstring(L&quot;\x20ac&quot;));</span>
 <span class="lineNum">     545 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(test.data(), &quot;\xE2\x82\xAC&quot;) == 0);</span>
 <a name="546"><span class="lineNum">     546 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     547 </span>            : 
-<span class="lineNum">     548 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strExtractQuotedStrings&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">     549 </span><span class="lineCov">          2 :     std::vector&lt;std::string&gt; list;</span>
+<span class="lineNum">     548 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::extract_quoted&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     549 </span><span class="lineCov">          2 :     std::vector&lt;std::string_view&gt; list;</span>
 <span class="lineNum">     550 </span><span class="lineCov">          2 :     std::string quoted;</span>
 <span class="lineNum">     551 </span>            : 
 <span class="lineNum">     552 </span><span class="lineCov">          1 :     quoted = &quot;'Hello', 'World'&quot;;</span>
-<span class="lineNum">     553 </span><span class="lineCov">          1 :     utils::string::strExtractQuotedStrings(list, quoted);</span>
+<span class="lineNum">     553 </span><span class="lineCov">          1 :     utils::string::extract_quoted(list, quoted);</span>
 <span class="lineNum">     554 </span><span class="lineCov">          2 :     REQUIRE(list.size() == 2);</span>
 <span class="lineNum">     555 </span><span class="lineCov">          2 :     REQUIRE((list[0] == &quot;Hello&quot; &amp;&amp; list[1] == &quot;World&quot;));</span>
 <span class="lineNum">     556 </span>            : 
 <span class="lineNum">     557 </span><span class="lineCov">          1 :     quoted = &quot;'Hello', 'Wo\'rld'&quot;;</span>
-<span class="lineNum">     558 </span><span class="lineCov">          1 :     utils::string::strExtractQuotedStrings(list, quoted);</span>
+<span class="lineNum">     558 </span><span class="lineCov">          1 :     utils::string::extract_quoted(list, quoted);</span>
 <span class="lineNum">     559 </span><span class="lineCov">          2 :     REQUIRE(list.size() == 2);</span>
 <span class="lineNum">     560 </span><span class="lineCov">          2 :     REQUIRE((list[0] == &quot;Hello&quot; &amp;&amp; list[1] == &quot;Wo&quot;));</span>
 <span class="lineNum">     561 </span>            : 
 <span class="lineNum">     562 </span><span class="lineCov">          1 :     quoted = &quot;''&quot;;</span>
-<span class="lineNum">     563 </span><span class="lineCov">          1 :     utils::string::strExtractQuotedStrings(list, quoted);</span>
+<span class="lineNum">     563 </span><span class="lineCov">          1 :     utils::string::extract_quoted(list, quoted);</span>
 <span class="lineNum">     564 </span><span class="lineCov">          2 :     REQUIRE(list.size() == 0);</span>
 <span class="lineNum">     565 </span>            : 
 <span class="lineNum">     566 </span><span class="lineCov">          1 :     quoted = &quot;' '&quot;;</span>
-<span class="lineNum">     567 </span><span class="lineCov">          1 :     utils::string::strExtractQuotedStrings(list, quoted);</span>
+<span class="lineNum">     567 </span><span class="lineCov">          1 :     utils::string::extract_quoted(list, quoted);</span>
 <span class="lineNum">     568 </span><span class="lineCov">          2 :     REQUIRE(list.size() == 1);</span>
 <span class="lineNum">     569 </span><span class="lineCov">          2 :     REQUIRE(list[0] == &quot; &quot;);</span>
 <span class="lineNum">     570 </span>            : 
 <span class="lineNum">     571 </span><span class="lineCov">          1 :     quoted = &quot;abcdef&quot;;</span>
-<span class="lineNum">     572 </span><span class="lineCov">          1 :     utils::string::strExtractQuotedStrings(list, quoted);</span>
+<span class="lineNum">     572 </span><span class="lineCov">          1 :     utils::string::extract_quoted(list, quoted);</span>
 <span class="lineNum">     573 </span><span class="lineCov">          2 :     REQUIRE(list.size() == 0);</span>
 <a name="574"><span class="lineNum">     574 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     575 </span>            : 
-<span class="lineNum">     576 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strJoin&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">     577 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strJoin({}) == &quot;&quot;);</span>
-<span class="lineNum">     578 </span><span class="lineCov">          3 :     REQUIRE(utils::string::strJoin({&quot;test&quot;}) == &quot;test&quot;);</span>
-<span class="lineNum">     579 </span><span class="lineCov">          4 :     REQUIRE(utils::string::strJoin({&quot;test&quot;, &quot;tset&quot;}, &quot;,&quot;)  == &quot;test,tset&quot;);</span>
-<span class="lineNum">     580 </span><span class="lineCov">          4 :     REQUIRE(utils::string::strJoin({&quot;test&quot;, &quot;tset&quot;}, &quot;, &quot;) == &quot;test, tset&quot;);</span>
-<span class="lineNum">     581 </span><span class="lineCov">          4 :     REQUIRE(utils::string::strJoin({&quot;test&quot;, &quot;tset&quot;}, '.')  == &quot;test.tset&quot;);</span>
-<span class="lineNum">     582 </span><span class="lineCov">          4 :     REQUIRE(utils::string::strJoin({&quot;test&quot;, &quot;tset&quot;}, &quot;&quot;)   == &quot;testtset&quot;);</span>
-<span class="lineNum">     583 </span><span class="lineCov">          4 :     REQUIRE(utils::string::strJoin({&quot;&quot;, &quot;tset&quot;}, &quot;+&quot;)      == &quot;+tset&quot;);</span>
-<span class="lineNum">     584 </span><span class="lineCov">          4 :     REQUIRE(utils::string::strJoin({&quot;test&quot;, &quot;&quot;}, &quot;+&quot;)      == &quot;test+&quot;);</span>
-<span class="lineNum">     585 </span><span class="lineCov">          6 :     REQUIRE(utils::string::strJoin({&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;}, &quot; * &quot;) == &quot;1 * 2 * 3 * 4&quot;);</span>
+<span class="lineNum">     576 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::join&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     577 </span><span class="lineCov">          2 :     REQUIRE(utils::string::join({}) == &quot;&quot;);</span>
+<span class="lineNum">     578 </span><span class="lineCov">          3 :     REQUIRE(utils::string::join({&quot;test&quot;}) == &quot;test&quot;);</span>
+<span class="lineNum">     579 </span><span class="lineCov">          4 :     REQUIRE(utils::string::join({&quot;test&quot;, &quot;tset&quot;}, &quot;,&quot;)  == &quot;test,tset&quot;);</span>
+<span class="lineNum">     580 </span><span class="lineCov">          4 :     REQUIRE(utils::string::join({&quot;test&quot;, &quot;tset&quot;}, &quot;, &quot;) == &quot;test, tset&quot;);</span>
+<span class="lineNum">     581 </span><span class="lineCov">          4 :     REQUIRE(utils::string::join({&quot;test&quot;, &quot;tset&quot;}, '.')  == &quot;test.tset&quot;);</span>
+<span class="lineNum">     582 </span><span class="lineCov">          4 :     REQUIRE(utils::string::join({&quot;test&quot;, &quot;tset&quot;}, &quot;&quot;)   == &quot;testtset&quot;);</span>
+<span class="lineNum">     583 </span><span class="lineCov">          4 :     REQUIRE(utils::string::join({&quot;&quot;, &quot;tset&quot;}, &quot;+&quot;)      == &quot;+tset&quot;);</span>
+<span class="lineNum">     584 </span><span class="lineCov">          4 :     REQUIRE(utils::string::join({&quot;test&quot;, &quot;&quot;}, &quot;+&quot;)      == &quot;test+&quot;);</span>
+<span class="lineNum">     585 </span><span class="lineCov">          6 :     REQUIRE(utils::string::join({&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;}, &quot; * &quot;) == &quot;1 * 2 * 3 * 4&quot;);</span>
 <span class="lineNum">     586 </span>            : 
-<span class="lineNum">     587 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strJoin(std::vector&lt;char&gt;{}, ' ') == &quot;&quot;);</span>
-<span class="lineNum">     588 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strJoin(std::vector&lt;char&gt;{'x'}, '\0') == &quot;x&quot;);</span>
-<span class="lineNum">     589 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strJoin(std::vector&lt;char&gt;{'x'}, '_') == &quot;x&quot;);</span>
-<span class="lineNum">     590 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strJoin(std::vector&lt;char&gt;{'x', 'y'}, '_') == &quot;x_y&quot;);</span>
-<span class="lineNum">     591 </span><span class="lineCov">          2 :     REQUIRE(utils::string::strJoin(std::vector&lt;char&gt;{'1', '2', '3', '4'}, '*') == &quot;1*2*3*4&quot;);</span>
+<span class="lineNum">     587 </span><span class="lineCov">          2 :     REQUIRE(utils::string::join(std::vector&lt;char&gt;{}, ' ') == &quot;&quot;);</span>
+<span class="lineNum">     588 </span><span class="lineCov">          2 :     REQUIRE(utils::string::join(std::vector&lt;char&gt;{'x'}, '\0') == &quot;x&quot;);</span>
+<span class="lineNum">     589 </span><span class="lineCov">          2 :     REQUIRE(utils::string::join(std::vector&lt;char&gt;{'x'}, '_') == &quot;x&quot;);</span>
+<span class="lineNum">     590 </span><span class="lineCov">          2 :     REQUIRE(utils::string::join(std::vector&lt;char&gt;{'x', 'y'}, '_') == &quot;x_y&quot;);</span>
+<span class="lineNum">     591 </span><span class="lineCov">          2 :     REQUIRE(utils::string::join(std::vector&lt;char&gt;{'1', '2', '3', '4'}, '*') == &quot;1*2*3*4&quot;);</span>
 <span class="lineNum">     592 </span>            : 
-<span class="lineNum">     593 </span><span class="lineCov">          3 :     std::string ds = utils::string::strJoin(std::vector&lt;uint8_t&gt;{'a', 'b', '\0', '\&quot;'}, '\0');</span>
+<span class="lineNum">     593 </span><span class="lineCov">          3 :     std::string ds = utils::string::join(std::vector&lt;uint8_t&gt;{'a', 'b', '\0', '\&quot;'}, '\0');</span>
 <span class="lineNum">     594 </span><span class="lineCov">          2 :     CHECK(int(ds[0]) == int('a'));</span>
 <span class="lineNum">     595 </span><span class="lineCov">          2 :     CHECK(int(ds[1]) == int('b'));</span>
 <span class="lineNum">     596 </span><span class="lineCov">          2 :     CHECK(int(ds[2]) == int('\0'));</span>
 <span class="lineNum">     597 </span><span class="lineCov">          2 :     CHECK(int(ds[3]) == int('\&quot;'));</span>
 <a name="598"><span class="lineNum">     598 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     599 </span>            : 
-<span class="lineNum">     600 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::strSplit&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">     601 </span><span class="lineCov">          2 :     std::vector&lt;std::string&gt; splitted;</span>
+<span class="lineNum">     600 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::split&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     601 </span><span class="lineCov">          2 :     std::vector&lt;std::string_view&gt; splitted;</span>
 <span class="lineNum">     602 </span>            : 
-<span class="lineNum">     603 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;&quot;);</span>
+<span class="lineNum">     603 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;&quot;);</span>
 <span class="lineNum">     604 </span><span class="lineCov">          2 :     REQUIRE(splitted.empty());</span>
 <span class="lineNum">     605 </span>            : 
-<span class="lineNum">     606 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;a,b,c&quot;, ',');</span>
+<span class="lineNum">     606 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;a,b,c&quot;, ',');</span>
 <span class="lineNum">     607 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 3);</span>
 <span class="lineNum">     608 </span><span class="lineCov">          2 :     REQUIRE((splitted[0] == &quot;a&quot; &amp;&amp; splitted[1] == &quot;b&quot; &amp;&amp; splitted[2] == &quot;c&quot;));</span>
 <span class="lineNum">     609 </span>            : 
-<span class="lineNum">     610 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;a\\b\\c&quot;, '\\');</span>
+<span class="lineNum">     610 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;a\\b\\c&quot;, '\\');</span>
 <span class="lineNum">     611 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 3);</span>
 <span class="lineNum">     612 </span><span class="lineCov">          2 :     REQUIRE((splitted[0] == &quot;a&quot; &amp;&amp; splitted[1] == &quot;b&quot; &amp;&amp; splitted[2] == &quot;c&quot;));</span>
 <span class="lineNum">     613 </span>            : 
-<span class="lineNum">     614 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',');</span>
+<span class="lineNum">     614 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',');</span>
 <span class="lineNum">     615 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 5);</span>
 <span class="lineNum">     616 </span><span class="lineCov">          2 :     CHECK(splitted[0] == &quot;&quot;);</span>
 <span class="lineNum">     617 </span><span class="lineCov">          2 :     CHECK(splitted[1] == &quot;&quot;);</span>
@@ -681,19 +681,19 @@
 <span class="lineNum">     619 </span><span class="lineCov">          2 :     CHECK(splitted[3] == &quot;\tb\n&quot;);</span>
 <span class="lineNum">     620 </span><span class="lineCov">          2 :     CHECK(splitted[4] == &quot; c ;&quot;);</span>
 <span class="lineNum">     621 </span>            : 
-<span class="lineNum">     622 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 4);</span>
+<span class="lineNum">     622 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 4);</span>
 <span class="lineNum">     623 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 5);</span>
 <span class="lineNum">     624 </span>            : 
-<span class="lineNum">     625 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 0);</span>
+<span class="lineNum">     625 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 0);</span>
 <span class="lineNum">     626 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 1);</span>
 <span class="lineNum">     627 </span><span class="lineCov">          2 :     CHECK(splitted[0] == &quot;,,a ,\tb\n, c ;&quot;);</span>
 <span class="lineNum">     628 </span>            : 
-<span class="lineNum">     629 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 1);</span>
+<span class="lineNum">     629 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 1);</span>
 <span class="lineNum">     630 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 2);</span>
 <span class="lineNum">     631 </span><span class="lineCov">          2 :     CHECK(splitted[0] == &quot;&quot;);</span>
 <span class="lineNum">     632 </span><span class="lineCov">          2 :     CHECK(splitted[1] == &quot;,a ,\tb\n, c ;&quot;);</span>
 <span class="lineNum">     633 </span>            : 
-<span class="lineNum">     634 </span><span class="lineCov">          1 :     utils::string::strSplit(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 3);</span>
+<span class="lineNum">     634 </span><span class="lineCov">          1 :     utils::string::split(splitted, &quot;,,a ,\tb\n, c ;&quot;, ',', 3);</span>
 <span class="lineNum">     635 </span><span class="lineCov">          2 :     REQUIRE(splitted.size() == 4);</span>
 <span class="lineNum">     636 </span><span class="lineCov">          2 :     CHECK(splitted[0] == &quot;&quot;);</span>
 <span class="lineNum">     637 </span><span class="lineCov">          2 :     CHECK(splitted[1] == &quot;&quot;);</span>
@@ -778,67 +778,67 @@
 <span class="lineNum">     716 </span><span class="lineCov">          2 :     REQUIRE_FALSE(utils::string::is_base64(&quot;AA======&quot;));</span>
 <a name="717"><span class="lineNum">     717 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     718 </span>            : 
-<span class="lineNum">     719 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::base64_encode&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     719 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::to_base64&quot;, &quot;[utils][utils::string]&quot;) {</span>
 <span class="lineNum">     720 </span><span class="lineCov">          2 :     std::string enc, dec, str;</span>
 <span class="lineNum">     721 </span>            : 
-<span class="lineNum">     722 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;&quot;      ) == &quot;&quot;);</span>
-<span class="lineNum">     723 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;f&quot;     ) == &quot;Zg==&quot;);</span>
-<span class="lineNum">     724 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;fo&quot;    ) == &quot;Zm8=&quot;);</span>
-<span class="lineNum">     725 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;foo&quot;   ) == &quot;Zm9v&quot;);</span>
-<span class="lineNum">     726 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;foob&quot;  ) == &quot;Zm9vYg==&quot;);</span>
-<span class="lineNum">     727 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;fooba&quot; ) == &quot;Zm9vYmE=&quot;);</span>
-<span class="lineNum">     728 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(&quot;foobar&quot;) == &quot;Zm9vYmFy&quot;);</span>
+<span class="lineNum">     722 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;&quot;      ) == &quot;&quot;);</span>
+<span class="lineNum">     723 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;f&quot;     ) == &quot;Zg==&quot;);</span>
+<span class="lineNum">     724 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;fo&quot;    ) == &quot;Zm8=&quot;);</span>
+<span class="lineNum">     725 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;foo&quot;   ) == &quot;Zm9v&quot;);</span>
+<span class="lineNum">     726 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;foob&quot;  ) == &quot;Zm9vYg==&quot;);</span>
+<span class="lineNum">     727 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;fooba&quot; ) == &quot;Zm9vYmE=&quot;);</span>
+<span class="lineNum">     728 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(&quot;foobar&quot;) == &quot;Zm9vYmFy&quot;);</span>
 <span class="lineNum">     729 </span>            : 
-<span class="lineNum">     730 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\0&quot;)          , 1) == &quot;AA==&quot;);</span>
-<span class="lineNum">     731 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\0\0&quot;)        , 2) == &quot;AAA=&quot;);</span>
-<span class="lineNum">     732 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\0\0\0&quot;)      , 3) == &quot;AAAA&quot;);</span>
-<span class="lineNum">     733 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\377&quot;)        , 1) == &quot;/w==&quot;);</span>
-<span class="lineNum">     734 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\377\377&quot;)    , 2) == &quot;//8=&quot;);</span>
-<span class="lineNum">     735 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\377\377\377&quot;), 3) == &quot;////&quot;);</span>
-<span class="lineNum">     736 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_encode(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\xff\xef&quot;)    , 2) == &quot;/+8=&quot;);</span>
+<span class="lineNum">     730 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\0&quot;)          , 1) == &quot;AA==&quot;);</span>
+<span class="lineNum">     731 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\0\0&quot;)        , 2) == &quot;AAA=&quot;);</span>
+<span class="lineNum">     732 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\0\0\0&quot;)      , 3) == &quot;AAAA&quot;);</span>
+<span class="lineNum">     733 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\377&quot;)        , 1) == &quot;/w==&quot;);</span>
+<span class="lineNum">     734 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\377\377&quot;)    , 2) == &quot;//8=&quot;);</span>
+<span class="lineNum">     735 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\377\377\377&quot;), 3) == &quot;////&quot;);</span>
+<span class="lineNum">     736 </span><span class="lineCov">          2 :     REQUIRE(utils::string::to_base64(reinterpret_cast&lt;const uint8_t*&gt;(&quot;\xff\xef&quot;)    , 2) == &quot;/+8=&quot;);</span>
 <span class="lineNum">     737 </span>            : 
 <span class="lineNum">     738 </span><span class="lineCov">          1 :     str = &quot;Hello World!!&quot;;</span>
-<span class="lineNum">     739 </span><span class="lineCov">          1 :     enc = utils::string::base64_encode(str);</span>
-<span class="lineNum">     740 </span><span class="lineCov">          1 :     dec = utils::string::base64_decode(enc);</span>
+<span class="lineNum">     739 </span><span class="lineCov">          1 :     enc = utils::string::to_base64(str);</span>
+<span class="lineNum">     740 </span><span class="lineCov">          1 :     dec = utils::string::from_base64(enc);</span>
 <span class="lineNum">     741 </span><span class="lineCov">          2 :     REQUIRE((enc.size() &gt; 0 &amp;&amp; enc.back() == '='));</span>
 <span class="lineNum">     742 </span><span class="lineCov">          2 :     REQUIRE(utils::string::is_base64(enc));</span>
 <span class="lineNum">     743 </span><span class="lineCov">          2 :     REQUIRE(dec == str);</span>
 <span class="lineNum">     744 </span>            : 
 <span class="lineNum">     745 </span><span class="lineCov">          6 :     for (int j = 0; j &lt; 5; ++j) {</span>
 <span class="lineNum">     746 </span><span class="lineCov">          5 :         str = utils::random::generate_string&lt;&gt;(1024);</span>
-<span class="lineNum">     747 </span><span class="lineCov">          5 :         enc = utils::string::base64_encode(str);</span>
-<span class="lineNum">     748 </span><span class="lineCov">          5 :         dec = utils::string::base64_decode(enc);</span>
+<span class="lineNum">     747 </span><span class="lineCov">          5 :         enc = utils::string::to_base64(str);</span>
+<span class="lineNum">     748 </span><span class="lineCov">          5 :         dec = utils::string::from_base64(enc);</span>
 <span class="lineNum">     749 </span><span class="lineCov">         10 :         REQUIRE(utils::string::is_base64(enc));</span>
 <span class="lineNum">     750 </span><span class="lineCov">         10 :         REQUIRE(dec == str);</span>
 <span class="lineNum">     751 </span>            :     }
 <a name="752"><span class="lineNum">     752 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     753 </span>            : 
-<span class="lineNum">     754 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::base64_decode&quot;, &quot;[utils][utils::string]&quot;) {</span>
-<span class="lineNum">     755 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;&quot;        ) == &quot;&quot;      );</span>
-<span class="lineNum">     756 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;Zg==&quot;    ) == &quot;f&quot;     );</span>
-<span class="lineNum">     757 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;Zm8=&quot;    ) == &quot;fo&quot;    );</span>
-<span class="lineNum">     758 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;Zm9v&quot;    ) == &quot;foo&quot;   );</span>
-<span class="lineNum">     759 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;Zm9vYg==&quot;) == &quot;foob&quot;  );</span>
-<span class="lineNum">     760 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;Zm9vYmE=&quot;) == &quot;fooba&quot; );</span>
-<span class="lineNum">     761 </span><span class="lineCov">          2 :     REQUIRE(utils::string::base64_decode(&quot;Zm9vYmFy&quot;) == &quot;foobar&quot;);</span>
+<span class="lineNum">     754 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::string::from_base64&quot;, &quot;[utils][utils::string]&quot;) {</span>
+<span class="lineNum">     755 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;&quot;        ) == &quot;&quot;      );</span>
+<span class="lineNum">     756 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;Zg==&quot;    ) == &quot;f&quot;     );</span>
+<span class="lineNum">     757 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;Zm8=&quot;    ) == &quot;fo&quot;    );</span>
+<span class="lineNum">     758 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;Zm9v&quot;    ) == &quot;foo&quot;   );</span>
+<span class="lineNum">     759 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;Zm9vYg==&quot;) == &quot;foob&quot;  );</span>
+<span class="lineNum">     760 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;Zm9vYmE=&quot;) == &quot;fooba&quot; );</span>
+<span class="lineNum">     761 </span><span class="lineCov">          2 :     REQUIRE(utils::string::from_base64(&quot;Zm9vYmFy&quot;) == &quot;foobar&quot;);</span>
 <span class="lineNum">     762 </span>            : 
-<span class="lineNum">     763 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;AA==&quot;).c_str(), &quot;\0&quot;          ) == 0);</span>
-<span class="lineNum">     764 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;AAA=&quot;).c_str(), &quot;\0\0&quot;        ) == 0);</span>
-<span class="lineNum">     765 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;AAAA&quot;).c_str(), &quot;\0\0\0&quot;      ) == 0);</span>
-<span class="lineNum">     766 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;/w==&quot;).c_str(), &quot;\377&quot;        ) == 0);</span>
-<span class="lineNum">     767 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;//8=&quot;).c_str(), &quot;\377\377&quot;    ) == 0);</span>
-<span class="lineNum">     768 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;////&quot;).c_str(), &quot;\377\377\377&quot;) == 0);</span>
-<span class="lineNum">     769 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::base64_decode(&quot;/+8=&quot;).c_str(), &quot;\xff\xef&quot;    ) == 0);</span>
+<span class="lineNum">     763 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;AA==&quot;).c_str(), &quot;\0&quot;          ) == 0);</span>
+<span class="lineNum">     764 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;AAA=&quot;).c_str(), &quot;\0\0&quot;        ) == 0);</span>
+<span class="lineNum">     765 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;AAAA&quot;).c_str(), &quot;\0\0\0&quot;      ) == 0);</span>
+<span class="lineNum">     766 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;/w==&quot;).c_str(), &quot;\377&quot;        ) == 0);</span>
+<span class="lineNum">     767 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;//8=&quot;).c_str(), &quot;\377\377&quot;    ) == 0);</span>
+<span class="lineNum">     768 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;////&quot;).c_str(), &quot;\377\377\377&quot;) == 0);</span>
+<span class="lineNum">     769 </span><span class="lineCov">          2 :     REQUIRE(std::strcmp(utils::string::from_base64(&quot;/+8=&quot;).c_str(), &quot;\xff\xef&quot;    ) == 0);</span>
 <span class="lineNum">     770 </span>            : 
-<span class="lineNum">     771 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;^&quot;    ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     772 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;A&quot;    ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     773 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;A^&quot;   ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     774 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;AA&quot;   ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     775 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;AA=&quot;  ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     776 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;AA===&quot;) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     777 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;AAA&quot;  ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     778 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;AAA^&quot; ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
-<span class="lineNum">     779 </span><span class="lineCov">          5 :     CHECK_THROWS_AS(utils::string::base64_decode(&quot;AA======&quot;) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     771 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;^&quot;    ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     772 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;A&quot;    ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     773 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;A^&quot;   ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     774 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;AA&quot;   ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     775 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;AA=&quot;  ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     776 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;AA===&quot;) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     777 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;AAA&quot;  ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     778 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;AAA^&quot; ) == &quot;&quot;, utils::exceptions::ConversionException);</span>
+<span class="lineNum">     779 </span><span class="lineCov">          3 :     CHECK_THROWS_AS(utils::string::from_base64(&quot;AA======&quot;) == &quot;&quot;, utils::exceptions::ConversionException);</span>
 <span class="lineNum">     780 </span><span class="lineCov">          1 : }</span>
 <span class="lineNum">     781 </span>            : 
 <span class="lineNum">     782 </span>            : #endif

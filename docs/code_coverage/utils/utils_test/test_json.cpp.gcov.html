@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-08</td>
+            <td class="headerValue">2019-06-10</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -102,19 +102,19 @@
 <span class="lineNum">      40 </span>            :     #endif
 <span class="lineNum">      41 </span>            : 
 <span class="lineNum">      42 </span><span class="lineCov">          2 :     std::vector&lt;std::uint8_t&gt; bson = utils::json::to_ubjson(start);</span>
-<span class="lineNum">      43 </span><span class="lineCov">          2 :     std::string bson_str = utils::string::strJoin(bson);</span>
+<span class="lineNum">      43 </span><span class="lineCov">          2 :     std::string bson_str = utils::string::join(bson);</span>
 <span class="lineNum">      44 </span><span class="lineCov">          2 :     REQUIRE(bson.size() &gt; 0);</span>
 <span class="lineNum">      45 </span>            :     #ifdef TEST_JSON_LOG_STEPS
 <span class="lineNum">      46 </span>            :         utils::Logger::Stream(bson_str, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
 <span class="lineNum">      47 </span>            :     #endif
 <span class="lineNum">      48 </span>            : 
-<span class="lineNum">      49 </span><span class="lineCov">          2 :     std::string encoded = utils::string::base64_encode(bson.data(), bson.size());</span>
+<span class="lineNum">      49 </span><span class="lineCov">          2 :     std::string encoded = utils::string::to_base64(bson.data(), bson.size());</span>
 <span class="lineNum">      50 </span><span class="lineCov">          2 :     CHECK(utils::string::is_base64(encoded));</span>
 <span class="lineNum">      51 </span>            :     #ifdef TEST_JSON_LOG_STEPS
 <span class="lineNum">      52 </span>            :         utils::Logger::Stream(encoded, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
 <span class="lineNum">      53 </span>            :     #endif
 <span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span><span class="lineCov">          2 :     std::string decoded = utils::string::base64_decode(encoded);</span>
+<span class="lineNum">      55 </span><span class="lineCov">          2 :     std::string decoded = utils::string::from_base64(encoded);</span>
 <span class="lineNum">      56 </span><span class="lineCov">          2 :     CHECK(decoded == bson_str);</span>
 <span class="lineNum">      57 </span>            :     #ifdef TEST_JSON_LOG_STEPS
 <span class="lineNum">      58 </span>            :         utils::Logger::Stream(decoded, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);

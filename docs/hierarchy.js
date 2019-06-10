@@ -28,6 +28,8 @@ var hierarchy =
     [ "utils::print::delimiters< std::tuple< Args... >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1tuple_3_01_args_8_8_8_01_4_00_01wchar__t_01_4.html", null ],
     [ "utils::print::delimiters< std::vector< std::string >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01char_01_4.html", null ],
     [ "utils::print::delimiters< std::vector< std::string >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01wchar__t_01_4.html", null ],
+    [ "utils::print::delimiters< std::vector< std::string_view >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string__view_01_4_00_01char_01_4.html", null ],
+    [ "utils::print::delimiters< std::vector< std::string_view >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string__view_01_4_00_01wchar__t_01_4.html", null ],
     [ "utils::print::delimiters< T, char >", "structutils_1_1print_1_1delimiters_3_01_t_00_01char_01_4.html", null ],
     [ "utils::print::delimiters< T, wchar_t >", "structutils_1_1print_1_1delimiters_3_01_t_00_01wchar__t_01_4.html", null ],
     [ "utils::print::delimiters_values< TChar >", "structutils_1_1print_1_1delimiters__values.html", null ],

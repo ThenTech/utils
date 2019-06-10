@@ -3,11 +3,11 @@ var classutils_1_1ini_1_1_config_reader =
     [ "Contents", "classutils_1_1ini_1_1_config_reader.html#a64955d7f9272dfe97beba506342ec021", null ],
     [ "Value", "classutils_1_1ini_1_1_config_reader.html#ac7dfaca56f518c739dfdae513a598770", null ],
     [ "ConfigReader", "classutils_1_1ini_1_1_config_reader.html#aae19cb9c38f9189501afa6d9a400bd3f", null ],
-    [ "ConfigReader", "classutils_1_1ini_1_1_config_reader.html#a8f003de78bda65edd5928eb83dde133c", null ],
+    [ "ConfigReader", "classutils_1_1ini_1_1_config_reader.html#aa4e96f8a677d150d4af9f39811b7d4e0", null ],
     [ "ConfigReader", "classutils_1_1ini_1_1_config_reader.html#a2c41890b6d66bc5f5a79d641811c047c", null ],
     [ "ConfigReader", "classutils_1_1ini_1_1_config_reader.html#a5c661116e42ffc5620049183f6570653", null ],
-    [ "CreateSection", "classutils_1_1ini_1_1_config_reader.html#a908be64e3601951537713ea027d09012", null ],
-    [ "CreateSectionKey", "classutils_1_1ini_1_1_config_reader.html#a38863e6fe5d32a328885ce15a25b1466", null ],
+    [ "CreateSection", "classutils_1_1ini_1_1_config_reader.html#a8212b29b7d9538d7d453eaae2c1feb2a", null ],
+    [ "CreateSectionKey", "classutils_1_1ini_1_1_config_reader.html#a31443bbaef502ab3737f6994ab558e9d", null ],
     [ "ForEachSection", "classutils_1_1ini_1_1_config_reader.html#accb7673cae41c417ac4f5849a7ed2ab9", null ],
     [ "ForEachSectionKey", "classutils_1_1ini_1_1_config_reader.html#a1e0ad7f290dc823d7dad7bb9ee0dcbc9", null ],
     [ "GetValue", "classutils_1_1ini_1_1_config_reader.html#a240b076ad91e3e9f542cb7a2288d709a", null ],
@@ -20,6 +20,6 @@ var classutils_1_1ini_1_1_config_reader =
     [ "save", "classutils_1_1ini_1_1_config_reader.html#a40faee71a0cc90c72a76eb2d94abcfd0", null ],
     [ "SectionKeySize", "classutils_1_1ini_1_1_config_reader.html#ac1a6a391c8fa4e0501c05ced12c7ffd1", null ],
     [ "SectionSize", "classutils_1_1ini_1_1_config_reader.html#a16de2c4818dd6559741a5465ec4bb654", null ],
-    [ "SetValue", "classutils_1_1ini_1_1_config_reader.html#aa3a8c220e317e981c7d4a0c097c866be", null ],
+    [ "SetValue", "classutils_1_1ini_1_1_config_reader.html#aba901d0ccb67a801f2052df750750727", null ],
     [ "operator<<", "classutils_1_1ini_1_1_config_reader.html#a3217caf63360f8f7f8a51ffb7ef12986", null ]
 ];

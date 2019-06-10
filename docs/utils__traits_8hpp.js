@@ -28,6 +28,7 @@ var utils__traits_8hpp =
     [ "VALUE_TO_STRING", "utils__traits_8hpp.html#ad15c9a08925b1c0365fb1bd9ac826670", null ],
     [ "VAR_NAME_VALUE", "utils__traits_8hpp.html#a9a89328d94ddd2cdd4b39db22da01f79", null ],
     [ "can_apply", "utils__traits_8hpp.html#aa5a0769941595d486ba32ba360d8b021", null ],
+    [ "found_t", "utils__traits_8hpp.html#a29a39f74ad82b02bae0e83cb10eadeca", null ],
     [ "to_underlying", "utils__traits_8hpp.html#aa27f6e525357734ce54e31ece4783710", null ],
     [ "unused_variable", "utils__traits_8hpp.html#a00aecbcda4d5219f8ef5b4d773cd9649", null ],
     [ "is_byte_v", "utils__traits_8hpp.html#a52459dbab5fd6fb844f72926d5495f85", null ],

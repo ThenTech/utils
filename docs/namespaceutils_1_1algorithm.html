@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.38.0-beta</span>
+   &#160;<span id="projectnumber">0.39.0-beta</span>
    </div>
   </td>
  </tr>
@@ -65,24 +65,18 @@ $(document).ready(function(){initNavTree('namespaceutils_1_1algorithm.html','');
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">utils::algorithm Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespaceutils_1_1algorithm_1_1iter"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1algorithm_1_1iter.html">iter</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2226fa30d282a47b39ecab3e9214d07c"><td class="memTemplParams" colspan="2">template&lt;typename C , typename T , typename  = typename std::enable_if_t&lt;utils::traits::is_container&lt;C&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:a2226fa30d282a47b39ecab3e9214d07c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr std::optional&lt; size_t &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1algorithm.html#a2226fa30d282a47b39ecab3e9214d07c">contains</a> (const C &amp;container, const T &amp;item)</td></tr>
-<tr class="memdesc:a2226fa30d282a47b39ecab3e9214d07c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given container contains the given item. The type of item must be something that the container holds. e.g. vector&lt;int&gt; &lt;- int string &lt;- char and not: vector&lt;Node&gt; /- int.  <a href="#a2226fa30d282a47b39ecab3e9214d07c">More...</a><br /></td></tr>
-<tr class="separator:a2226fa30d282a47b39ecab3e9214d07c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ef543955ec3ce4237aa6727c0be1718"><td class="memTemplParams" colspan="2">template&lt;typename C , typename T , typename  = typename std::enable_if_t&lt;utils::traits::is_container&lt;C&gt;::value&gt;&gt; </td></tr>
+<tr class="memitem:a6ef543955ec3ce4237aa6727c0be1718"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1algorithm.html#a6ef543955ec3ce4237aa6727c0be1718">contains</a> (const C &amp;container, const T &amp;item)</td></tr>
+<tr class="memdesc:a6ef543955ec3ce4237aa6727c0be1718"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given container contains the given item. The type of item must be something that the container holds. e.g. vector&lt;int&gt; &lt;- int string &lt;- char and not: vector&lt;Node&gt; /- int.  <a href="#a6ef543955ec3ce4237aa6727c0be1718">More...</a><br /></td></tr>
+<tr class="separator:a6ef543955ec3ce4237aa6727c0be1718"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5bebe3b3677ff81f7d3968de8e42da4"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
 <tr class="memitem:af5bebe3b3677ff81f7d3968de8e42da4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1algorithm.html#af5bebe3b3677ff81f7d3968de8e42da4">all</a> (T const &amp;... args)</td></tr>
 <tr class="memdesc:af5bebe3b3677ff81f7d3968de8e42da4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic AND all args.  <a href="#af5bebe3b3677ff81f7d3968de8e42da4">More...</a><br /></td></tr>
@@ -281,8 +275,8 @@ template&lt;typename... T&gt; </div>
 
 </div>
 </div>
-<a id="a2226fa30d282a47b39ecab3e9214d07c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2226fa30d282a47b39ecab3e9214d07c">&#9670;&nbsp;</a></span>contains()</h2>
+<a id="a6ef543955ec3ce4237aa6727c0be1718"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ef543955ec3ce4237aa6727c0be1718">&#9670;&nbsp;</a></span>contains()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -293,7 +287,7 @@ template&lt;typename C , typename T , typename  = typename std::enable_if_t&lt;u
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr std::optional&lt;size_t&gt; utils::algorithm::contains </td>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a> utils::algorithm::contains </td>
           <td>(</td>
           <td class="paramtype">const C &amp;&#160;</td>
           <td class="paramname"><em>container</em>, </td>
@@ -318,7 +312,7 @@ template&lt;typename C , typename T , typename  = typename std::enable_if_t&lt;u
 </div><div class="memdoc">
 
 <p>Check if the given container contains the given item. The type of item must be something that the container holds. e.g. vector&lt;int&gt; &lt;- int string &lt;- char and not: vector&lt;Node&gt; /- int. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Wrap CPPItertools as ::iter Reference: <a href="https://github.com/ryanhaining/cppitertools">https://github.com/ryanhaining/cppitertools</a> (08/06/2019)</p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">container</td><td>The container to look in. </td></tr>
     <tr><td class="paramname">item</td><td>The item to look for. </td></tr>
@@ -378,7 +372,7 @@ template&lt;typename T , typename TIter  = decltype(std::begin(std::declval&lt;T
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a wrapper to enumarete over <code>iterable</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__algorithm_8hpp_source.html#l00234">234</a> of file <a class="el" href="utils__algorithm_8hpp_source.html">utils_algorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__algorithm_8hpp_source.html#l00235">235</a> of file <a class="el" href="utils__algorithm_8hpp_source.html">utils_algorithm.hpp</a>.</p>
 
 </div>
 </div>

@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.38.0-beta</span>
+   &#160;<span id="projectnumber">0.39.0-beta</span>
    </div>
   </td>
  </tr>
@@ -75,7 +75,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 </a> <a href="https://github.com/Wosser1sProductions/utils/commits/master"><object type="image/svg+xml" data="https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg" alt="GitHub last commit"></object>
 />
 </a> <img src="https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue" alt="License" class="inline"/>
-<p><a href="http://semver.org/"><object type="image/svg+xml" data="https://img.shields.io/badge/version-0.38.0--beta-brightgreen.svg" alt="version"></object>
+<p><a href="http://semver.org/"><object type="image/svg+xml" data="https://img.shields.io/badge/version-0.39.0--beta-brightgreen.svg" alt="version"></object>
 />
 </a> <object type="image/svg+xml" data="https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg" alt="c++-version"></object>
 />
@@ -84,6 +84,8 @@ $(document).ready(function(){initNavTree('index.html','');});
 </a> <object type="image/svg+xml" data="https://img.shields.io/badge/tested%20with-MinGW--7.3-orange.svg" alt="tested-win"></object>
 />
 <p>Compile with: <code>-std=c++17</code> And link with <code>-lstdc++fs</code> to enable <code>std::experimental::filesystem</code></p>
+<p><a href="https://wosser1sproductions.github.io/utils/docs/">Doxygen documentation can be found here.</a></p>
+<p><a href="https://wosser1sproductions.github.io/utils/docs/code_coverage">Code coverage (lcov) report can be found here.</a></p>
 <h2>Contents</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -101,7 +103,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_ini.hpp">utils_ini.hpp</a>  </td><td class="markdownTableBodyNone">ConfigReader class commonly for <code>.ini</code> files   </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/utils_io.hpp">utils_io.hpp</a>  </td><td class="markdownTableBodyNone">File/Stream IO (BitStream...)   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_io.hpp">utils_io.hpp</a>  </td><td class="markdownTableBodyNone">File/Stream IO (BitStream...) and <code>::mio</code> with <a href="https://github.com/mandreyel/mio">memory mapped file io</a>   </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_json.hpp">utils_json.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for <a href="https://github.com/nlohmann/json">nlohmann JSON</a>   </td></tr>
 <tr class="markdownTableRowOdd">
@@ -143,10 +145,12 @@ $(document).ready(function(){initNavTree('index.html','');});
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/external/json.hpp">external/json.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/nlohmann/json">JSON</a> library by Niels Lohmann   </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="utils_lib/external/random.hpp">external/random.hpp</a>  </td><td class="markdownTableBodyNone">Modern random utilities from <a href="https://github.com/effolkronium/random">effolkronium/random</a>   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/external/mio.hpp">external/mio.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/mandreyel/mio">mio</a> by Mabdreyel   </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/external/semver.hpp">external/semver.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://semver.org/">Semantic versioning</a> library by <a href="https://github.com/Neargye/semver">Neargye</a>   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/external/random.hpp">external/random.hpp</a>  </td><td class="markdownTableBodyNone">Modern random utilities from <a href="https://github.com/effolkronium/random">effolkronium/random</a>   </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/external/semver.hpp">external/semver.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://semver.org/">Semantic versioning</a> library by <a href="https://github.com/Neargye/semver">Neargye</a>   </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_test/">/utils_test/</a>  </td><td class="markdownTableBodyNone">Unit tests for most functions with <a href="https://github.com/catchorg/Catch2">Catch2</a>   </td></tr>
 </table>
 </div></div><!-- PageDoc -->

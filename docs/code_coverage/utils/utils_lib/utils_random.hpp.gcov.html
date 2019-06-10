@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-08</td>
+            <td class="headerValue">2019-06-10</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -127,8 +127,8 @@
 <span class="lineNum">      65 </span>            : 
 <span class="lineNum">      66 </span>            :         using diff_t = typename std::iterator_traits&lt;decltype(std::begin(container))&gt;::difference_type;
 <span class="lineNum">      67 </span>            : 
-<span class="lineNum">      68 </span><span class="lineCov">         17 :         for (size_t i = 0; i &lt; amount; ++i) {</span>
-<span class="lineNum">      69 </span><span class="lineCov">         13 :             picked.push_back(*std::next(std::begin(container), Random::get&lt;diff_t&gt;( 0, size - 1)));</span>
+<span class="lineNum">      68 </span><span class="lineCov">         23 :         for (size_t i = 0; i &lt; amount; ++i) {</span>
+<span class="lineNum">      69 </span><span class="lineCov">         19 :             picked.push_back(*std::next(std::begin(container), Random::get&lt;diff_t&gt;( 0, size - 1)));</span>
 <span class="lineNum">      70 </span>            :         }
 <span class="lineNum">      71 </span>            : 
 <span class="lineNum">      72 </span><span class="lineCov">          4 :         return picked;</span>
@@ -198,8 +198,8 @@
 <span class="lineNum">     136 </span>            :                 static_cast&lt;T&gt;(to)
 <span class="lineNum">     137 </span>            :             };
 <span class="lineNum">     138 </span>            : 
-<span class="lineNum">     139 </span><span class="lineCov">       5233 :             for (size_t i = 0; i &lt; amount; ++i) {</span>
-<span class="lineNum">     140 </span><span class="lineCov">       5213 :                 picked.push_back(static_cast&lt;T&gt;(dist(Random::engine())));</span>
+<span class="lineNum">     139 </span><span class="lineCov">       5227 :             for (size_t i = 0; i &lt; amount; ++i) {</span>
+<span class="lineNum">     140 </span><span class="lineCov">       5207 :                 picked.push_back(static_cast&lt;T&gt;(dist(Random::engine())));</span>
 <span class="lineNum">     141 </span>            :             }
 <span class="lineNum">     142 </span>            :         }
 <span class="lineNum">     143 </span>            : 
@@ -225,7 +225,7 @@
 <span class="lineNum">     163 </span>            :      */
 <span class="lineNum">     164 </span>            :     template&lt;
 <span class="lineNum">     165 </span>            :         typename T = char,
-<a name="166"><span class="lineNum">     166 </span>            :         typename Container = typename std::enable_if&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;::type</a>
+<a name="166"><span class="lineNum">     166 </span>            :         typename Container = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;</a>
 <span class="lineNum">     167 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
 <span class="lineNum">     168 </span><span class="lineCov">         15 :     static inline Container generate_string(</span>
 <span class="lineNum">     169 </span>            :             const size_t amount,

@@ -37,11 +37,11 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-08</td>
+            <td class="headerValue">2019-06-10</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">78</td>
-            <td class="headerCovTableEntry">78</td>
+            <td class="headerCovTableEntry">74</td>
+            <td class="headerCovTableEntry">74</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -76,7 +76,7 @@
 <span class="lineNum">      14 </span>            :      *  Wrap CPPItertools as ::iter
 <span class="lineNum">      15 </span>            :      *  Reference: https://github.com/ryanhaining/cppitertools (08/06/2019)
 <span class="lineNum">      16 </span>            :      */
-<span class="lineNum">      17 </span>            :     namespace iter { using namespace ::iter; }
+<span class="lineNum">      17 </span>            :     namespace iter = ::iter;
 <span class="lineNum">      18 </span>            : 
 <span class="lineNum">      19 </span>            :     /**
 <span class="lineNum">      20 </span>            :      *  \brief  Check if the given container contains the given item.
@@ -98,7 +98,7 @@
 <span class="lineNum">      36 </span>            :         typename C, typename T,
 <a name="37"><span class="lineNum">      37 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_container&lt;C&gt;::value&gt;</a>
 <span class="lineNum">      38 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      39 </span><span class="lineCov">         14 :     static inline constexpr std::optional&lt;size_t&gt; contains(const C&amp; container, const T&amp; item) {</span>
+<span class="lineNum">      39 </span><span class="lineCov">         14 :     static inline constexpr utils::traits::found_t contains(const C&amp; container, const T&amp; item) {</span>
 <span class="lineNum">      40 </span>            :         if constexpr (utils::traits::has_find_v&lt;C, T&gt;) {
 <span class="lineNum">      41 </span><span class="lineCov">          1 :             if (const auto idx = container.find(item); std::end(container) != idx) {</span>
 <span class="lineNum">      42 </span><span class="lineCov">          1 :                 return { std::distance(std::begin(container), idx) };</span>
@@ -111,7 +111,7 @@
 <span class="lineNum">      49 </span>            :             }
 <span class="lineNum">      50 </span>            :         }
 <span class="lineNum">      51 </span>            : 
-<span class="lineNum">      52 </span><span class="lineCov">          2 :         return {};</span>
+<span class="lineNum">      52 </span><span class="lineCov">          2 :         return std::nullopt;</span>
 <span class="lineNum">      53 </span>            :     }
 <span class="lineNum">      54 </span>            : 
 <span class="lineNum">      55 </span>            :     /**
@@ -155,12 +155,12 @@
 <a name="93"><span class="lineNum">      93 </span>            :      */</a>
 <span class="lineNum">      94 </span>            :     template &lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
 <span class="lineNum">      95 </span><span class="lineCov">         21 :     static inline constexpr bool all_equal(T const&amp;... args) {</span>
-<span class="lineNum">      96 </span>            :         if constexpr (sizeof...(T) == 0) {
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">          1 :             return true;</span></a>
+<span class="lineNum">      96 </span>            :         if constexpr (sizeof...(T) &lt; 2) {
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">          8 :             return true;</span></a>
 <span class="lineNum">      98 </span>            :         } else {
-<span class="lineNum">      99 </span><span class="lineCov">         20 :             return [](auto const&amp; a0, auto const&amp;... rest){</span>
-<span class="lineNum">     100 </span><span class="lineCov">         20 :                 return ((a0 == rest) &amp;&amp; ...);</span>
-<span class="lineNum">     101 </span><span class="lineCov">         20 :             }(args...);</span>
+<span class="lineNum">      99 </span><span class="lineCov">         13 :             return [](auto const&amp; a0, auto const&amp;... rest){</span>
+<span class="lineNum">     100 </span><span class="lineCov">         13 :                 return ((a0 == rest) &amp;&amp; ...);</span>
+<span class="lineNum">     101 </span><span class="lineCov">         13 :             }(args...);</span>
 <span class="lineNum">     102 </span>            :         }
 <span class="lineNum">     103 </span>            :     }
 <span class="lineNum">     104 </span>            : 
@@ -269,60 +269,61 @@
 <a name="207"><span class="lineNum">     207 </span>            :      */</a>
 <span class="lineNum">     208 </span>            :     template&lt;size_t times = 1, typename F, typename... Args&gt;
 <span class="lineNum">     209 </span><span class="lineCov">          5 :     void repeat(F&amp;&amp; fn, Args&amp;&amp;... args) {</span>
-<span class="lineNum">     210 </span>            :         static_assert(std::is_invocable_v&lt;F, Args...&gt;, &quot;utils::algorithm::repeat: Callable function required.&quot;);
-<span class="lineNum">     211 </span><span class="lineCov">         14 :         for (size_t i = 0; i &lt; times; i++) {</span>
-<span class="lineNum">     212 </span><span class="lineCov">          9 :             std::invoke(std::forward&lt;F&gt;(fn), std::forward&lt;Args&gt;(args)...);</span>
-<span class="lineNum">     213 </span>            :         }
-<span class="lineNum">     214 </span><span class="lineCov">          5 :     }</span>
-<span class="lineNum">     215 </span>            : 
-<span class="lineNum">     216 </span>            :     /**
-<span class="lineNum">     217 </span>            :      *  \brief  Enumerate wrapper for containers.
-<span class="lineNum">     218 </span>            :      *          Return an iterator that also holds an index, starting at \p start_t.
-<span class="lineNum">     219 </span>            :      *
-<span class="lineNum">     220 </span>            :      *          Does the same as the one from ::iter::enumerate, but includes
-<span class="lineNum">     221 </span>            :      *          an offsetable start index.
-<span class="lineNum">     222 </span>            :      *
-<span class="lineNum">     223 </span>            :      *  \param  iterable
-<span class="lineNum">     224 </span>            :      *      The container to wrap.
-<span class="lineNum">     225 </span>            :      *  \param  start_i
-<span class="lineNum">     226 </span>            :      *      The starting index when looping over the container.
-<span class="lineNum">     227 </span>            :      *  \return Returns a wrapper to enumarete over \p iterable.
-<span class="lineNum">     228 </span>            :      */
-<span class="lineNum">     229 </span>            :     template &lt;
-<span class="lineNum">     230 </span>            :         typename T,
-<span class="lineNum">     231 </span>            :         typename TIter = decltype(std::begin(std::declval&lt;T&gt;())),
-<a name="232"><span class="lineNum">     232 </span>            :         typename       = decltype(std::end  (std::declval&lt;T&gt;()))</a>
-<span class="lineNum">     233 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     234 </span><span class="lineCov">          2 :     static inline constexpr auto enumerate(T&amp;&amp; iterable, size_t start_i = 0) {</span>
-<span class="lineNum">     235 </span>            :         struct iterator {
-<span class="lineNum">     236 </span>            :             size_t i;
-<a name="237"><span class="lineNum">     237 </span>            :             TIter iter;</a>
-<span class="lineNum">     238 </span>            : 
-<span class="lineNum">     239 </span><span class="lineCov">         22 :             bool operator!=(const iterator&amp; other) const {</span>
-<span class="lineNum">     240 </span><span class="lineCov">         22 :                 return iter != other.iter;</span>
-<a name="241"><span class="lineNum">     241 </span>            :             }</a>
-<span class="lineNum">     242 </span>            : 
-<span class="lineNum">     243 </span><span class="lineCov">         20 :             void operator++() {</span>
-<span class="lineNum">     244 </span><span class="lineCov">         20 :                 ++i; ++iter;</span>
-<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         20 :             }</span></a>
-<span class="lineNum">     246 </span>            : 
-<span class="lineNum">     247 </span><span class="lineCov">         20 :             auto operator*() const {</span>
-<span class="lineNum">     248 </span><span class="lineCov">         20 :                 return std::tie(i, *iter);</span>
-<span class="lineNum">     249 </span>            :             }
-<span class="lineNum">     250 </span>            :         };
-<span class="lineNum">     251 </span>            : 
-<span class="lineNum">     252 </span>            :         struct iterable_wrapper {
-<a name="253"><span class="lineNum">     253 </span>            :             T iterable;</a>
-<a name="254"><span class="lineNum">     254 </span>            :             size_t start;</a>
-<span class="lineNum">     255 </span><span class="lineCov">          2 :             auto begin() { return iterator{ start, std::begin(iterable) }; }</span>
-<span class="lineNum">     256 </span><span class="lineCov">          2 :             auto end()   { return iterator{ start, std::end  (iterable) }; }</span>
-<span class="lineNum">     257 </span>            :         };
-<span class="lineNum">     258 </span>            : 
-<span class="lineNum">     259 </span><span class="lineCov">          2 :         return iterable_wrapper{ std::forward&lt;T&gt;(iterable), start_i };</span>
-<span class="lineNum">     260 </span>            :     }
-<span class="lineNum">     261 </span>            : }
-<span class="lineNum">     262 </span>            : 
-<span class="lineNum">     263 </span>            : #endif // UTILS_ALGORITHM_HPP
+<span class="lineNum">     210 </span>            :         static_assert(std::is_invocable_v&lt;F, Args...&gt;,
+<span class="lineNum">     211 </span>            :                       &quot;utils::algorithm::repeat: Callable function required.&quot;);
+<span class="lineNum">     212 </span><span class="lineCov">         14 :         for (size_t i = 0; i &lt; times; i++) {</span>
+<span class="lineNum">     213 </span><span class="lineCov">          9 :             std::invoke(std::forward&lt;F&gt;(fn), std::forward&lt;Args&gt;(args)...);</span>
+<span class="lineNum">     214 </span>            :         }
+<span class="lineNum">     215 </span><span class="lineCov">          5 :     }</span>
+<span class="lineNum">     216 </span>            : 
+<span class="lineNum">     217 </span>            :     /**
+<span class="lineNum">     218 </span>            :      *  \brief  Enumerate wrapper for containers.
+<span class="lineNum">     219 </span>            :      *          Return an iterator that also holds an index, starting at \p start_t.
+<span class="lineNum">     220 </span>            :      *
+<span class="lineNum">     221 </span>            :      *          Does the same as the one from ::iter::enumerate, but includes
+<span class="lineNum">     222 </span>            :      *          an offsetable start index.
+<span class="lineNum">     223 </span>            :      *
+<span class="lineNum">     224 </span>            :      *  \param  iterable
+<span class="lineNum">     225 </span>            :      *      The container to wrap.
+<span class="lineNum">     226 </span>            :      *  \param  start_i
+<span class="lineNum">     227 </span>            :      *      The starting index when looping over the container.
+<span class="lineNum">     228 </span>            :      *  \return Returns a wrapper to enumarete over \p iterable.
+<span class="lineNum">     229 </span>            :      */
+<span class="lineNum">     230 </span>            :     template &lt;
+<span class="lineNum">     231 </span>            :         typename T,
+<span class="lineNum">     232 </span>            :         typename TIter = decltype(std::begin(std::declval&lt;T&gt;())),
+<a name="233"><span class="lineNum">     233 </span>            :         typename       = decltype(std::end  (std::declval&lt;T&gt;()))</a>
+<span class="lineNum">     234 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     235 </span><span class="lineCov">          2 :     static inline constexpr auto enumerate(T&amp;&amp; iterable, size_t start_i = 0) {</span>
+<span class="lineNum">     236 </span>            :         struct iterator {
+<span class="lineNum">     237 </span>            :             size_t i;
+<a name="238"><span class="lineNum">     238 </span>            :             TIter iter;</a>
+<span class="lineNum">     239 </span>            : 
+<span class="lineNum">     240 </span><span class="lineCov">         22 :             bool operator!=(const iterator&amp; other) const {</span>
+<span class="lineNum">     241 </span><span class="lineCov">         22 :                 return iter != other.iter;</span>
+<a name="242"><span class="lineNum">     242 </span>            :             }</a>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span><span class="lineCov">         20 :             void operator++() {</span>
+<span class="lineNum">     245 </span><span class="lineCov">         20 :                 ++i; ++iter;</span>
+<a name="246"><span class="lineNum">     246 </span><span class="lineCov">         20 :             }</span></a>
+<span class="lineNum">     247 </span>            : 
+<span class="lineNum">     248 </span><span class="lineCov">         20 :             auto operator*() const {</span>
+<span class="lineNum">     249 </span><span class="lineCov">         20 :                 return std::tie(i, *iter);</span>
+<span class="lineNum">     250 </span>            :             }
+<span class="lineNum">     251 </span>            :         };
+<span class="lineNum">     252 </span>            : 
+<span class="lineNum">     253 </span>            :         struct iterable_wrapper {
+<a name="254"><span class="lineNum">     254 </span>            :             T iterable;</a>
+<a name="255"><span class="lineNum">     255 </span>            :             size_t start;</a>
+<span class="lineNum">     256 </span><span class="lineCov">          2 :             auto begin() { return iterator{ start, std::begin(iterable) }; }</span>
+<span class="lineNum">     257 </span><span class="lineCov">          2 :             auto end()   { return iterator{ start, std::end  (iterable) }; }</span>
+<span class="lineNum">     258 </span>            :         };
+<span class="lineNum">     259 </span>            : 
+<span class="lineNum">     260 </span><span class="lineCov">          2 :         return iterable_wrapper{ std::forward&lt;T&gt;(iterable), start_i };</span>
+<span class="lineNum">     261 </span>            :     }
+<span class="lineNum">     262 </span>            : }
+<span class="lineNum">     263 </span>            : 
+<span class="lineNum">     264 </span>            : #endif // UTILS_ALGORITHM_HPP
 </pre>
       </td>
     </tr>

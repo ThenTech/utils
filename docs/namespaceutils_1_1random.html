@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.38.0-beta</span>
+   &#160;<span id="projectnumber">0.39.0-beta</span>
    </div>
   </td>
  </tr>
@@ -94,7 +94,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a396a5e89556efe0c01bc0f95b5c8031d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::enable_if&lt;(effolkronium::details::is_supported_number&lt; T &gt;::value||effolkronium::details::is_supported_character&lt; T &gt;::value||std::is_same&lt; T, bool &gt;::value), Container &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a396a5e89556efe0c01bc0f95b5c8031d">generate_x</a> (const size_t amount, T from=std::numeric_limits&lt; T &gt;::min(), T to=std::numeric_limits&lt; T &gt;::max())</td></tr>
 <tr class="memdesc:a396a5e89556efe0c01bc0f95b5c8031d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a container (default: vector&lt;T&gt;) with <code>amount</code> items, randomly distributed between <code>from</code> and <code>to</code>.  <a href="#a396a5e89556efe0c01bc0f95b5c8031d">More...</a><br /></td></tr>
 <tr class="separator:a396a5e89556efe0c01bc0f95b5c8031d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a47eb65189df657e8e4345c8ae1c858"><td class="memTemplParams" colspan="2">template&lt;typename T  = char, typename Container  = typename std::enable_if&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;::type&gt; </td></tr>
+<tr class="memitem:a9a47eb65189df657e8e4345c8ae1c858"><td class="memTemplParams" colspan="2">template&lt;typename T  = char, typename Container  = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a9a47eb65189df657e8e4345c8ae1c858"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> Container&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a9a47eb65189df657e8e4345c8ae1c858">generate_string</a> (const size_t amount, const T from=std::numeric_limits&lt; T &gt;::min(), const T to=std::numeric_limits&lt; T &gt;::max())</td></tr>
 <tr class="memdesc:a9a47eb65189df657e8e4345c8ae1c858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random string with length <code>amount</code> and chars chosen between <code>from</code> and <code>to</code>. Every char-type is supported and will create a <code>std::basic_string&lt;T&gt;</code> containter.  <a href="#a9a47eb65189df657e8e4345c8ae1c858">More...</a><br /></td></tr>
 <tr class="separator:a9a47eb65189df657e8e4345c8ae1c858"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,7 +219,7 @@ template&lt;typename T  = bool, typename Container  = typename std::enable_if&lt
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T  = char, typename Container  = typename std::enable_if&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;::type&gt; </div>
+template&lt;typename T  = char, typename Container  = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
