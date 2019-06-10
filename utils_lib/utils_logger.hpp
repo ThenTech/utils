@@ -78,7 +78,7 @@ namespace utils {
                 return this->canLogScreen(level) || this->canLogFile(level);
             }
 
-            inline void write_to_screen(const std::string& text) {
+            inline void write_to_screen(const std::string_view& text) {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                 if (this->canLogScreen()) {
@@ -86,7 +86,7 @@ namespace utils {
                 }
             }
 
-            inline void write_to_file(const std::string& text) {
+            inline void write_to_file(const std::string_view& text) {
                 LOCK_BLOCK(utils::Logger::get().file_mutex);
 
                 if (this->canLogFile()) {
@@ -106,8 +106,8 @@ namespace utils {
             template<typename ...Type>
             void hdr_colour_format(const Logger::Level level,
                                    const utils::os::command_t hdr_colour,
-                                   const std::string& hdr_str,
-                                   const std::string& format,
+                                   const std::string_view& hdr_str,
+                                   const std::string_view& format,
                                    const Type& ...args)
             {
                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
@@ -116,13 +116,13 @@ namespace utils {
                     this->Command(  utils::os::Console::FG
                                   | utils::os::Console::BOLD
                                   | hdr_colour);
-                    this->Write("[" + hdr_str + "]", true);
+                    this->Write("[" + std::string(hdr_str) + "]", true);
 
                     this->Command(utils::os::Console::RESET
                                 | utils::os::Console::WHITE);
                     const bool stamp = this->GetFileTimestamp();
                     this->SetFileTimestamp(false);
-                    this->Writef(" " + format + utils::Logger::CRLF, args...);
+                    this->Writef(" " + std::string(format) + utils::Logger::CRLF, args...);
                     this->SetFileTimestamp(stamp);
                     this->Command(utils::os::Console::RESET);
                 }
@@ -172,7 +172,7 @@ namespace utils {
             }
 
             static void InitFile(const std::string& fileName = "",
-                                   const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
+                                 const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
             {
                 utils::Logger::DestroyFile();
                 utils::Logger::SetFileLogLevel(level);
@@ -193,7 +193,7 @@ namespace utils {
             }
 
             static void InitScreen(std::ostream& console_stream = std::cout,
-                                     const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
+                                   const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
             {
                 utils::Logger::DestroyScreen();
                 utils::Logger::SetScreenLogLevel(level);
@@ -290,7 +290,7 @@ namespace utils {
              *  @param  text
              *      The text to write.
              */
-            static void Write(const std::string &text, const bool timestamp = false) {
+            static void Write(const std::string_view& text, const bool timestamp = false) {
                 if (utils::Logger::get().canLog()) {
                     const bool stamp = utils::Logger::GetFileTimestamp();
                     utils::Logger::SetFileTimestamp(timestamp);
@@ -302,12 +302,12 @@ namespace utils {
                 }
             }
 
-            static inline void WriteLn(const std::string &text, const bool timestamp = false) {
+            static inline void WriteLn(const std::string& text, const bool timestamp = false) {
                 utils::Logger::Write(text + utils::Logger::CRLF, timestamp);
             }
 
             template<typename ...Type>
-            static void Debug(const std::string& format, const Type& ...args) {
+            static void Debug(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_DEBUG,
                     utils::os::Console::BG | utils::os::Console::BLUE, "DEBUG",
@@ -316,7 +316,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Success(const std::string& format, const Type& ...args) {
+            static void Success(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_INFO,
                     utils::os::Console::GREEN, "Success",
@@ -325,7 +325,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Info(const std::string& format, const Type& ...args) {
+            static void Info(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_INFO,
                     utils::os::Console::CYAN, "Info",
@@ -334,7 +334,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Notice(const std::string& format, const Type& ...args) {
+            static void Notice(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_NOTICE,
                     utils::os::Console::BG |
@@ -346,7 +346,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Warn(const std::string& format, const Type& ...args) {
+            static void Warn(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_WARNING,
                     utils::os::Console::YELLOW, "Warning",
@@ -355,7 +355,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Error(const std::string& format, const Type& ...args) {
+            static void Error(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_ERROR,
                     utils::os::Console::RED, "Error",
@@ -364,7 +364,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Critical(const std::string& format, const Type& ...args) {
+            static void Critical(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_CRITICAL,
                     utils::os::Console::BG | utils::os::Console::RED, "Critical",
@@ -373,7 +373,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Alert(const std::string& format, const Type& ...args) {
+            static void Alert(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_ALERT,
                     utils::os::Console::MAGENTA, "Alert",
@@ -382,7 +382,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Emergency(const std::string& format, const Type& ...args) {
+            static void Emergency(const std::string_view& format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_EMERGENCY,
                     utils::os::Console::BG |
@@ -445,7 +445,7 @@ namespace utils {
                 }
             }
 
-            static void WriteProgress(const size_t& iteration, const size_t& total, const char* prefix = "Progress ") {
+            static void WriteProgress(const size_t& iteration, const size_t& total, const std::string_view& prefix = "Progress ") {
                 static constexpr size_t LEN = 55u;
                 static size_t stepu = 0u;
 
@@ -516,7 +516,7 @@ namespace utils {
                 }
             }
 
-            static inline void SetScreenTitle(const std::string& title) {
+            static inline void SetScreenTitle(const std::string_view& title) {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::os::SetScreenTitle(title, utils::Logger::GetConsoleStream());
             }

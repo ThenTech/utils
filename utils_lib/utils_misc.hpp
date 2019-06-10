@@ -24,7 +24,7 @@ namespace utils::misc {
      *      Returns a variable of type T with the value as given in buffer.
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static T lexical_cast(const char *buffer) {
+    static T lexical_cast(const std::string_view& buffer) {
         T out;
         std::stringstream cast;
 
@@ -35,9 +35,9 @@ namespace utils::misc {
             } else if (buffer[1] == 'b' || buffer[1] == 'B') {
                 // Binary literal
                 try {
-                    cast << std::stoll(buffer + 2, nullptr, 2);
+                    cast << std::stoll(std::string(buffer.substr(2)), nullptr, 2);
                 } catch (std::invalid_argument const&) {
-                    throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));
+                    throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));
                 }
             } else {
                 // Octal literal
@@ -45,14 +45,14 @@ namespace utils::misc {
             }
         } else if (buffer[0] == '#') {
             // Hex colour string
-            cast << std::hex << ++buffer;
+            cast << std::hex << buffer.substr(1);
         } else {
             // Decimal/float/...
             cast << buffer;
         }
 
         if (!(cast >> out))
-            throw utils::exceptions::CastingException(buffer, utils::print::type2name(out));
+            throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));
 
         return out;
     }

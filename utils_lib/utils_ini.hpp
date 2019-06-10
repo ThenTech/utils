@@ -41,26 +41,26 @@ namespace utils::ini {
                     // Continue if too small or comment
                     if (line.size() < 2 || line[0] == '#' || line[0] == ';') continue;
 
-                    if (const size_t left_delim = line.find(TDelimiters::values.prefix);
-                        left_delim == 0)
+                    if (const auto left_delim = utils::string::contains(line, TDelimiters::values.prefix);
+                        left_delim && *left_delim == 0)
                     {
-                        if (const size_t right_delim = line.find(TDelimiters::values.postfix, left_delim + 1);
-                            right_delim != std::string::npos)
+                        if (const auto right_delim = utils::string::contains(line, TDelimiters::values.postfix, *left_delim + 1);
+                            right_delim)
                         {
                             // Found both delimiters, add section
-                            current_section = line.substr(left_delim + 1, right_delim - 1);
+                            current_section = line.substr(*left_delim + 1, *right_delim - 1);
                             utils::string::trim(current_section);
                             this->settings_map.emplace(current_section, Contents());
                         }
                     } else if (current_section.size() > 0) {
                         // Entered mapped settings
-                        if (const size_t val_delim = line.find(TDelimiters::values.delimiter);
-                            val_delim != std::string::npos)
+                        if (const auto val_delim = utils::string::contains(line, TDelimiters::values.delimiter);
+                            val_delim)
                         {
-                            std::string val = line.substr(val_delim + val_delim_size);
+                            std::string val = line.substr(*val_delim + val_delim_size);
                             utils::string::rtrim(val);
                             this->settings_map[current_section]
-                                    .emplace(line.substr(0, val_delim), val);
+                                    .emplace(line.substr(0, *val_delim), val);
                         }
                     }
                 }
@@ -74,7 +74,7 @@ namespace utils::ini {
                 // Empty
             }
 
-            ConfigReader(const std::string& filename)
+            ConfigReader(const std::string_view& filename)
                 : read_from_file(true)
                 , filename(filename)
             {
@@ -163,14 +163,14 @@ namespace utils::ini {
                 return this->hasSectionKey(section, key);
             }
 
-            void CreateSection(const std::string& section) {
-                const std::string strim = utils::string::trimmed(section);
+            void CreateSection(std::string section) {
+                utils::string::trim(section);
 
-                if (const auto it = this->settings_map.find(strim);
+                if (const auto it = this->settings_map.find(section);
                     it == this->settings_map.end())
                 {
                     // Does not exist yet
-                    this->settings_map.emplace(strim, Contents());
+                    this->settings_map.emplace(section, Contents());
                 }
             }
 
@@ -183,18 +183,18 @@ namespace utils::ini {
                 }
             }
 
-            void CreateSectionKey(const std::string& section, const std::string& key) {
-                const std::string strim = utils::string::trimmed(section);
-                const std::string ktrim = utils::string::trimmed(key);
+            void CreateSectionKey(std::string section, std::string key) {
+                utils::string::trim(section);
+                utils::string::trim(key);
 
-                if (const auto it = this->settings_map.find(strim);
+                if (const auto it = this->settings_map.find(section);
                     it == this->settings_map.end())
                 {
                     // Does not exist yet
-                    this->settings_map.emplace(strim, Contents());
+                    this->settings_map.emplace(section, Contents());
                 }
 
-                this->settings_map.at(strim).emplace(ktrim, Value());
+                this->settings_map.at(section).emplace(key, Value());
             }
 
             void RemoveSectionKey(const std::string& section, const std::string& key, bool delete_section_if_empty = false) {
@@ -214,24 +214,24 @@ namespace utils::ini {
                 typename T,
                 typename std::enable_if<utils::traits::is_variant_member_v<T, Value>, int>::type = 0
             >
-            void SetValue(const std::string& section, const std::string& key, T&& val) {
-                const std::string strim = utils::string::trimmed(section);
-                const std::string ktrim = utils::string::trimmed(key);
+            void SetValue(std::string section, std::string key, T&& val) {
+                utils::string::trim(section);
+                utils::string::trim(key);
 
-                if (const auto it = this->settings_map.find(strim);
+                if (const auto it = this->settings_map.find(section);
                     it == this->settings_map.end())
                 {
                     // Does not exist yet
-                    this->settings_map.emplace(strim, Contents());
+                    this->settings_map.emplace(section, Contents());
                 }
 
-                if (const auto it = this->settings_map.at(strim).find(ktrim);
-                    it == this->settings_map.at(strim).end())
+                if (const auto it = this->settings_map.at(section).find(key);
+                    it == this->settings_map.at(section).end())
                 {
                     // Does not exist yet
-                    this->settings_map.at(strim).emplace(ktrim, Value(val));
+                    this->settings_map.at(section).emplace(key, Value(val));
                 } else {
-                    this->settings_map.at(strim).at(ktrim) = Value(val);
+                    this->settings_map.at(section).at(key) = Value(val);
                 }
             }
 
@@ -260,8 +260,7 @@ namespace utils::ini {
                             if constexpr(std::is_same_v<T, std::string>) {
                                 return ss.str();
                             } else if constexpr(std::is_same_v<T, bool>) {
-                                std::string str = ss.str();
-                                utils::string::strToLower(str);
+                                std::string_view str = utils::string::to_lowercase(ss.str());
 
                                 if (str == "true" || str == "yes"
                                  || str == "on"   || str == "1")

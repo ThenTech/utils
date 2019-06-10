@@ -163,7 +163,7 @@ namespace utils::random {
      */
     template<
         typename T = char,
-        typename Container = typename std::enable_if<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>::type
+        typename Container = typename std::enable_if_t<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline Container generate_string(
             const size_t amount,

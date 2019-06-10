@@ -140,6 +140,28 @@ namespace utils::print {
                 #endif
             };
         };
+
+        template<>
+        struct delimiters<std::vector<std::string_view>, char> {
+            static inline constexpr delimiters_values<char> values = {
+                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+                    "[\n    \"", "\",\n    \"", "\"\n]"
+                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
+                    "[\"", "\", \"", "\"]"
+                #endif
+            };
+        };
+
+        template<>
+        struct delimiters<std::vector<std::string_view>, wchar_t> {
+            static inline constexpr delimiters_values<wchar_t> values = {
+                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+                    L"[\n    \"", L"\",\n    \"", L"\"\n]"
+                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
+                    L"[\"", L"\", \"", L"\"]"
+                #endif
+            };
+        };
     #endif
 
     ////////////////////////////////////////////////////////////////////////////
@@ -182,12 +204,12 @@ namespace utils::print {
     // Delimiters for optional
     template<typename T>
     struct delimiters<std::optional<T>, char> {
-            static inline constexpr delimiters_values<char> values = { "", "(?)", "" };
+            static inline constexpr delimiters_values<char> values = { "", "nullopt", "" };
     };
 
     template<typename T>
     struct delimiters<std::optional<T>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = { L"", L"(?)", L"" };
+            static inline constexpr delimiters_values<wchar_t> values = { L"", L"nullopt", L"" };
     };
 
     ////////////////////////////////////////////////////////////////////////////
@@ -331,7 +353,7 @@ namespace utils::print {
 
         // Remove every occurence in filter... list from output (e.g. std::)
         if constexpr (sizeof...(filter) > 0) {
-            (utils::string::strEraseAll(s, filter), ...);
+            (utils::string::erase_all(s, filter), ...);
         }
 
         return s;

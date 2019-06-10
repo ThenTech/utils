@@ -14,7 +14,7 @@ namespace utils::algorithm {
      *  Wrap CPPItertools as ::iter
      *  Reference: https://github.com/ryanhaining/cppitertools (08/06/2019)
      */
-    namespace iter { using namespace ::iter; }
+    namespace iter = ::iter;
 
     /**
      *  \brief  Check if the given container contains the given item.
@@ -36,7 +36,7 @@ namespace utils::algorithm {
         typename C, typename T,
         typename = typename std::enable_if_t<utils::traits::is_container<C>::value>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr std::optional<size_t> contains(const C& container, const T& item) {
+    static inline constexpr utils::traits::found_t contains(const C& container, const T& item) {
         if constexpr (utils::traits::has_find_v<C, T>) {
             if (const auto idx = container.find(item); std::end(container) != idx) {
                 return { std::distance(std::begin(container), idx) };
@@ -49,7 +49,7 @@ namespace utils::algorithm {
             }
         }
 
-        return {};
+        return std::nullopt;
     }
 
     /**
@@ -93,7 +93,7 @@ namespace utils::algorithm {
      */
     template <typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool all_equal(T const&... args) {
-        if constexpr (sizeof...(T) == 0) {
+        if constexpr (sizeof...(T) < 2) {
             return true;
         } else {
             return [](auto const& a0, auto const&... rest){
@@ -207,7 +207,8 @@ namespace utils::algorithm {
      */
     template<size_t times = 1, typename F, typename... Args>
     void repeat(F&& fn, Args&&... args) {
-        static_assert(std::is_invocable_v<F, Args...>, "utils::algorithm::repeat: Callable function required.");
+        static_assert(std::is_invocable_v<F, Args...>,
+                      "utils::algorithm::repeat: Callable function required.");
         for (size_t i = 0; i < times; i++) {
             std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
         }

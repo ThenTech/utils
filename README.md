@@ -5,7 +5,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)](https://github.com/Wosser1sProductions/utils/commits/master)
 ![License](https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue)
 
-[![version](https://img.shields.io/badge/version-0.38.0--beta-brightgreen.svg)](http://semver.org/)
+[![version](https://img.shields.io/badge/version-0.39.0--beta-brightgreen.svg)](http://semver.org/)
 ![c++-version](https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg)
 [![tested-unix](https://img.shields.io/badge/tested%20with-g%2B%2B--9.1-orange.svg)](https://gcc.gnu.org/gcc-9/)
 ![tested-win](https://img.shields.io/badge/tested%20with-MinGW--7.3-orange.svg)
@@ -27,7 +27,7 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [utils_colour.hpp](utils_lib/utils_colour.hpp)            | Colour class and LUTs for colour mappings from [tinycolormap](https://github.com/yuki-koyama/tinycolormap) |
 | [utils_exceptions.hpp](utils_lib/utils_exceptions.hpp)    | Extra Exceptions                                             |
 | [utils_ini.hpp](utils_lib/utils_ini.hpp)                  | ConfigReader class commonly for `.ini` files                 |
-| [utils_io.hpp](utils_lib/utils_io.hpp)                    | File/Stream IO (BitStream...)                                |
+| [utils_io.hpp](utils_lib/utils_io.hpp)                    | File/Stream IO (BitStream...) and `::mio` with [memory mapped file io](https://github.com/mandreyel/mio) |
 | [utils_json.hpp](utils_lib/utils_json.hpp)                | Namespace wrapper for [nlohmann JSON](https://github.com/nlohmann/json) |
 | [utils_logger.hpp](utils_lib/utils_logger.hpp)            | Static Logger singleton                                      |
 | [utils_math.hpp](utils_lib/utils_math.hpp)                | Math extensions                                              |
@@ -48,6 +48,8 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [external/cppitertools](utils_lib/external/cppitertools/) | [CPPItertools](https://github.com/ryanhaining/cppitertools) by Ryan Haining |
 | [external/catch.hpp](utils_lib/external/catch.hpp)        | [Catch2](https://github.com/catchorg/Catch2) C++ test framework |
 | [external/json.hpp](utils_lib/external/json.hpp)          | [JSON](https://github.com/nlohmann/json) library by Niels Lohmann |
+| [external/mio.hpp](utils_lib/external/mio.hpp)            | [mio](https://github.com/mandreyel/mio) by Mabdreyel         |
 | [external/random.hpp](utils_lib/external/random.hpp)      | Modern random utilities from [effolkronium/random](https://github.com/effolkronium/random) |
 | [external/semver.hpp](utils_lib/external/semver.hpp)      | [Semantic versioning](https://semver.org/) library by [Neargye](https://github.com/Neargye/semver) |
 | [/utils_test/](utils_test/)                               | Unit tests for most functions with [Catch2](https://github.com/catchorg/Catch2) |
+

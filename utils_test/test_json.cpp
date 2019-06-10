@@ -40,19 +40,19 @@ TEST_CASE("Test utils::json::to_ubjson", "[utils][utils::json]" ) {
     #endif
 
     std::vector<std::uint8_t> bson = utils::json::to_ubjson(start);
-    std::string bson_str = utils::string::strJoin(bson);
+    std::string bson_str = utils::string::join(bson);
     REQUIRE(bson.size() > 0);
     #ifdef TEST_JSON_LOG_STEPS
         utils::Logger::Stream(bson_str, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
     #endif
 
-    std::string encoded = utils::string::base64_encode(bson.data(), bson.size());
+    std::string encoded = utils::string::to_base64(bson.data(), bson.size());
     CHECK(utils::string::is_base64(encoded));
     #ifdef TEST_JSON_LOG_STEPS
         utils::Logger::Stream(encoded, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
     #endif
 
-    std::string decoded = utils::string::base64_decode(encoded);
+    std::string decoded = utils::string::from_base64(encoded);
     CHECK(decoded == bson_str);
     #ifdef TEST_JSON_LOG_STEPS
         utils::Logger::Stream(decoded, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);

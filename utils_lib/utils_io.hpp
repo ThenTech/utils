@@ -1,6 +1,7 @@
 #ifndef UTILS_IO_HPP
 #define UTILS_IO_HPP
 
+#include "external/mio.hpp"
 #include "utils_exceptions.hpp"
 #include "utils_bits.hpp"
 #include "utils_string.hpp"
@@ -25,6 +26,12 @@
 #endif
 
 namespace utils::io {
+    /**
+     *  Wrap mio as ::mio (memory mapping file io)
+     *  Reference: https://github.com/mandreyel/mio (10/06/2019)
+     */
+    namespace mio = ::mio;
+
     #ifdef UTILS_IO_FS_SUPPORTED
         #ifdef __cpp_lib_experimental_filesystem
             namespace fs = std::experimental::filesystem;
@@ -55,7 +62,7 @@ namespace utils::io {
         template <
             typename TFilter = decltype(utils::io::filter::all())
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents(const std::string& folder, TFilter predicate = utils::io::filter::all())
+        static auto list_contents(const std::string_view& folder, TFilter predicate = utils::io::filter::all())
         {
             static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>, "utils::io::list_contents: Callable function required.");
 
@@ -72,7 +79,7 @@ namespace utils::io {
         template <
             typename TFilter = decltype(utils::io::filter::all())
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents_recur(const std::string& folder, TFilter predicate = utils::io::filter::all()) {
+        static auto list_contents_recur(const std::string_view& folder, TFilter predicate = utils::io::filter::all()) {
             auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
 
             for (const auto& entry : fs::recursive_directory_iterator(folder)) {
@@ -84,17 +91,17 @@ namespace utils::io {
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static inline auto list_files(const std::string& folder) {
+        static inline auto list_files(const std::string_view& folder) {
             return list_contents(folder, utils::io::filter::file());
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static inline auto list_folders(const std::string& folder) {
+        static inline auto list_folders(const std::string_view& folder) {
             return list_contents(folder, utils::io::filter::directory());
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static size_t file_size(const std::string& filename) {
+        static size_t file_size(const std::string_view& filename) {
             if (fs::exists(filename) && fs::is_regular_file(filename)) {
                 return fs::file_size(filename);
             }
@@ -102,7 +109,7 @@ namespace utils::io {
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static std::time_t file_last_modified(const std::string& filename) {
+        static std::time_t file_last_modified(const std::string_view& filename) {
             if (fs::exists(filename)) {
                 const auto modified = fs::last_write_time(filename);
 
@@ -138,19 +145,19 @@ namespace utils::io {
 
             return most_recent;
         }
-    #endif
+    #endif  // UTILS_IO_FS_SUPPORTED
 
     ATTR_MAYBE_UNUSED
     static void safe_filename(std::string& filename) {
         static constexpr std::string_view invalid_chars = "\"<>?*|/:\\\n";
 
         for (const char& c : invalid_chars) {
-            utils::string::strEraseAll(filename, c);
+            utils::string::erase_all(filename, c);
         }
     }
 
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string safe_filename(const std::string& filename) {
+    static std::string safe_filename(const std::string_view& filename) {
         std::string str(filename);
         utils::io::safe_filename(str);
         return str;
@@ -194,7 +201,7 @@ namespace utils::io {
      *	\param str
      */
     ATTR_MAYBE_UNUSED
-    static void writeStringToFile(const std::string& filename, const std::string& str) {
+    static void writeStringToFile(const std::string& filename, const std::string_view& str) {
         std::ofstream file;
 
         try {

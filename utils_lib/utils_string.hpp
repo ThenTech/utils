@@ -6,13 +6,13 @@
 #include "utils_traits.hpp"
 
 #include <string>
+#include <string_view>
 #include <locale>
 #include <codecvt>
 #include <cstring>
 #include <algorithm>
 #include <sstream>
 #include <vector>
-#include <optional>
 
 
 namespace utils::string {
@@ -29,14 +29,13 @@ namespace utils::string {
      *          `str.begin()` if the char was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::optional<size_t> contains(const std::string &str, const char ch, const size_t start = 0) {
-        // string.h : strchr(str.c_str(), ch)
+    static inline constexpr utils::traits::found_t contains(const std::string_view& str, const char ch, const size_t start = 0) {
         if (const size_t pos = str.find(ch, start);
             pos != std::string::npos)
         {
             return { pos };
         }
-        return {};
+        return std::nullopt;
     }
 
     /**
@@ -52,13 +51,13 @@ namespace utils::string {
      *          `str.begin()` if the part was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::optional<size_t> contains(const std::string& str, const std::string& part, const size_t start = 0) {
+    static inline constexpr utils::traits::found_t contains(const std::string_view& str, const std::string_view& part, const size_t start = 0) {
         if (const size_t pos = str.find(part, start);
             pos != std::string::npos)
         {
             return { pos };
         }
-        return {};
+        return std::nullopt;
     }
 
     /**
@@ -71,26 +70,8 @@ namespace utils::string {
      *  \return Returns true if str[0] == ch.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool starts_with(const std::string &str, const char ch) {
-        return ch && str.front() == ch;
-    }
-
-    /**
-     *  \brief  Check if \p str starts with the given char string.
-     *
-     *  \param  str
-     *      The std::string to check.
-     *  \param  start
-     *      The char* to look for.
-     *  \return Returns true if str[0:start.size()] == start.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool starts_with(const std::string &str, const char* start) {
-        const size_t length = std::strlen(start);
-        return !length || str.size() < length
-             ? false
-             : std::equal(start, start + length,
-                          str.begin());
+    static inline constexpr bool starts_with(const std::string_view& str, const char ch) {
+        return ch && str.size() && str.front() == ch;
     }
 
     /**
@@ -103,7 +84,7 @@ namespace utils::string {
      *  \return Returns true if str[0:start.size()] == start.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool starts_with(const std::string &str, const std::string& start) {
+    static inline constexpr bool starts_with(const std::string_view& str, const std::string_view& start) {
         return !start.size() || str.size() < start.size()
              ? false
              : std::equal(start.begin(), start.end(),
@@ -120,26 +101,8 @@ namespace utils::string {
      *  \return Returns true if str[-1] == ch.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool ends_with(const std::string &str, const char ch) {
-        return ch && str.back() == ch;
-    }
-
-    /**
-     *  \brief  Check if \p str ends with the given char string.
-     *
-     *  \param  str
-     *      The std::string to check.
-     *  \param  end
-     *      The char* to look for.
-     *  \return Returns true if str[-end.size():] == end.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool ends_with(const std::string &str, const char* end) {
-        const size_t length = std::strlen(end);
-        return !length || str.size() < length
-             ? false
-             : std::equal(end, end + length,
-                          str.end() - static_cast<std::string::difference_type>(length));
+    static inline constexpr bool ends_with(const std::string_view& str, const char ch) {
+        return ch && str.size() && str.back() == ch;
     }
 
     /**
@@ -152,7 +115,7 @@ namespace utils::string {
      *  \return Returns true if str[-end.size():] == end.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool ends_with(const std::string &str, const std::string& end) {
+    static inline constexpr bool ends_with(const std::string_view& str, const std::string_view& end) {
         return !end.size() || str.size() < end.size()
              ? false
              : std::equal(end.begin(), end.end(),
@@ -165,7 +128,7 @@ namespace utils::string {
      *		A reference to the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED
-    static inline void ltrim(std::string &s) {
+    static inline void ltrim(std::string& s) {
         s.erase(s.begin(), std::find_if(s.begin(), s.end(),
                 [](int c) {return !std::isspace(c);}));
     }
@@ -176,7 +139,7 @@ namespace utils::string {
      *		A reference to the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED
-    static inline void rtrim(std::string &s) {
+    static inline void rtrim(std::string& s) {
         s.erase(std::find_if(s.rbegin(), s.rend(),
                 [](int c) {return !std::isspace(c);}).base(), s.end());
     }
@@ -187,7 +150,7 @@ namespace utils::string {
      *		A reference to the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED
-    static inline void trim(std::string &s) {
+    static inline void trim(std::string& s) {
         ltrim(s);
         rtrim(s);
     }
@@ -204,63 +167,63 @@ namespace utils::string {
     }
 
     /**
-     *  \brief  Erase everything starting from erase_from (inclusive; in place).
+     *  \brief  Erase everything starting from \p erasefrom (inclusive; in place).
      *
      *  \param  str
      *      The string to erase characters from.
-     *  \param  erase_from
+     *  \param  erasefrom
      *      The substring to look for and start erasing from.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strEraseFrom(std::string &str, const std::string& erase_from) {
-        if (const auto found = utils::string::contains(str, erase_from)) {
+    static inline void erase_from(std::string& str, const std::string_view& erasefrom) {
+        if (const auto found = utils::string::contains(str, erasefrom)) {
             str = str.substr(0, found.value());
         }
     }
 
     /**
      *  \brief  Erase everything starting from the beginning of the string
-     *          to erase_to (exclusive; in place).
+     *          to \p eraseto (exclusive; in place).
      *
      *  \param  str
      *      The string to erase characters from.
-     *  \param  erase_to
+     *  \param  eraseto
      *      The substring to look for and erase to.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strEraseTo(std::string &str, const std::string& erase_to) {
-        if (const auto found = utils::string::contains(str, erase_to)) {
+    static inline void erase_to(std::string& str, const std::string_view& eraseto) {
+        if (const auto found = utils::string::contains(str, eraseto)) {
             str = str.substr(found.value());
         }
     }
 
     /**
-     *  \brief  Erase everything starting from erase_from (inclusive; copy).
+     *  \brief  Erase everything starting from \p erasefrom (inclusive; copy).
      *
      *  \param  str
      *      The string to erase characters from.
-     *  \param  erase_from
+     *  \param  erasefrom
      *      The substring to look for and start erasing from.
      *  \return Returns a copy where the appropriate parts were erased.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string strErasedFrom(std::string str, const std::string& erase_from) {
-        strEraseFrom(str, erase_from);
+    static inline std::string erased_from(std::string str, const std::string_view& erasefrom) {
+        erase_from(str, erasefrom);
         return str;
     }
 
     /**
      *  \brief  Erase everything starting from the beginning of the string
-     *          to erase_to (exclusive; copy).
+     *          to \p eraseto (exclusive; copy).
      *
      *  \param  str
      *      The string to erase characters from.
-     *  \param  erase_to
+     *  \param  eraseto
      *      The substring to look for and erase to.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string strErasedTo(std::string str, const std::string& erase_to) {
-        strEraseTo(str, erase_to);
+    static inline std::string erased_to(std::string str, const std::string_view& eraseto) {
+        erase_to(str, eraseto);
         return str;
     }
 
@@ -272,7 +235,7 @@ namespace utils::string {
      *		A reference to the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strToUpper(std::string &str) {
+    static inline void to_upper(std::string& str) {
         std::transform(str.begin(), str.end(), str.begin(),
             [](std::string::value_type ch) {
                 return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).toupper(ch);
@@ -288,8 +251,8 @@ namespace utils::string {
      *		A copy of the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string strToUppercase(std::string str) {
-        strToUpper(str);
+    static inline std::string to_uppercase(std::string str) {
+        to_upper(str);
         return str;
     }
 
@@ -301,7 +264,7 @@ namespace utils::string {
      *		A reference to the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strToLower(std::string &str) {
+    static inline void to_lower(std::string& str) {
         std::transform(str.begin(), str.end(), str.begin(),
             [](std::string::value_type ch) {
                 return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).tolower(ch);
@@ -317,8 +280,8 @@ namespace utils::string {
      *		A copy of the string to perform the operation.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string strToLowercase(std::string str) {
-        strToLower(str);
+    static inline std::string to_lowercase(std::string str) {
+        to_lower(str);
         return str;
     }
 
@@ -332,7 +295,7 @@ namespace utils::string {
      *		The characters to replace.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strEraseConsecutive(std::string &str, const char ch) {
+    static inline void erase_consecutive(std::string& str, const char ch) {
         str.erase(std::unique(str.begin(), str.end(),
                                 [&](const char lhs, const char rhs) {
                                     return (lhs == ch) && (lhs == rhs);
@@ -351,13 +314,13 @@ namespace utils::string {
      *		A reference to a string to replace with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strReplaceAll(std::string &str, const std::string& from, const std::string& to) {
+    static inline void replace_all(std::string& str, const std::string_view& from, const std::string_view& to) {
         if (from.size() == 0) return;
 
-        size_t start_pos = 0;
-        while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-            str.replace(start_pos, from.length(), to);
-            start_pos += to.length();
+        utils::traits::found_t found = 0ull;
+        while ((found = utils::string::contains(str, from, *found))) {
+            str.replace(*found, from.length(), to);
+            *found += to.length();
         }
     }
 
@@ -372,8 +335,8 @@ namespace utils::string {
      *		A reference to a string to replace with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strReplaceAll(std::string &str, const char from, const std::string& to = "") {
-        utils::string::strReplaceAll(str, std::string(1, from), to);
+    static inline void replace_all(std::string& str, const char from, const std::string_view& to = "") {
+        utils::string::replace_all(str, std::string_view{&from, 1}, to);
     }
 
     /**	\brief	Replace all occurrences of from with to in the given
@@ -387,11 +350,11 @@ namespace utils::string {
      *		A char to replace with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strReplaceAll(std::string &str, const char from, const char to) {
-        size_t start_pos = 0;
-        while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-            str.replace(start_pos, 1, 1, to);
-            start_pos++;
+    static inline void replace_all(std::string& str, const char from, const char to) {
+        utils::traits::found_t found = 0ull;
+        while ((found = utils::string::contains(str, from, *found))) {
+            str.replace(*found, 1, 1, to);
+            (*found)++;
         }
     }
 
@@ -403,7 +366,7 @@ namespace utils::string {
      *		A char to erase.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strEraseAll(std::string &str, const char erase) {
+    static inline void erase_all(std::string& str, const char erase) {
         str.erase(std::remove(str.begin(), str.end(), erase), str.end());
     }
 
@@ -415,65 +378,39 @@ namespace utils::string {
      *		A string to erase.
      */
     ATTR_MAYBE_UNUSED
-    static inline void strEraseAll(std::string &str, const std::string& erase) {
+    static inline void erase_all(std::string& str, const std::string_view& erase) {
         if (erase.size() == 0) return;
 
-        size_t start_pos = 0;
-        while((start_pos = str.find(erase, start_pos)) != std::string::npos) {
-            str.erase(start_pos, erase.length());
+        utils::traits::found_t found = 0ull;
+        while ((found = utils::string::contains(str, erase, *found))) {
+            str.erase(*found, erase.length());
         }
     }
 
     /**
-     *  \brief  Convert the given char* to an std::wstring.
+     *  \brief  Convert the given string to an std::wstring.
      *
-     *	\param	buffer
-     *		The character buffer to convert.
+     *	\param	str
+     *		The string to convert.
      *  \return
      *      Returns the converted data as an std::wstring.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::wstring str2wstr(const char* buffer) {
-        return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().from_bytes(buffer);
+    static inline std::wstring to_wstring(const std::string_view& str) {
+        return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().from_bytes(str.data());
     }
 
     /**
-     *  \brief  Convert the given std:string to an std::wstring.
+     *  \brief  Convert the given wide string to an std::string.
      *
-     *	\param	s
-     *		The std:string to convert.
-     *  \return
-     *      Returns the converted data as an std::wstring.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::wstring str2wstr(const std::string& s) {
-        return utils::string::str2wstr(s.data());
-    }
-
-    /**
-     *  \brief  Convert the given wchar_t* to an std::string.
-     *
-     *	\param	buffer
+     *	\param	str
      *		The character buffer to convert.
      *  \return
      *      Returns the converted data as an std::string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string wstr2str(const wchar_t* buffer) {
-        return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().to_bytes(buffer);
-    }
-
-    /**
-     *  \brief  Convert the given std::wstring to an std::string.
-     *
-     *	\param	s
-     *		The std::wstring to convert.
-     *  \return
-     *      Returns the converted data as an std::string.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string wstr2str(const std::wstring& s) {
-        return utils::string::wstr2str(s.data());
+    static inline std::string to_string(const std::wstring_view& str) {
+        return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().to_bytes(str.data());
     }
 
     /**
@@ -492,18 +429,18 @@ namespace utils::string {
      *  \return Returns the list of quoted strings, without quotes.
      */
     ATTR_MAYBE_UNUSED
-    static void strExtractQuotedStrings(std::vector<std::string> &v, const std::string& s, const char str_char='\'') {
+    static void extract_quoted(std::vector<std::string_view>& v, const std::string_view& s, const char str_char='\'') {
         const size_t len = s.length() - 1u;
         v.clear();
 
         if (len < 2) return;
 
-        std::optional<size_t> found_start = 0, found_end = 0;
+        utils::traits::found_t found_start = 0, found_end = 0;
 
         do {
             if ((found_start = utils::string::contains(s, str_char, *found_start))) {
                 if ((found_end = utils::string::contains(s, str_char, ++(*found_start)))) {
-                    v.emplace_back(s.substr(*found_start, *found_end - *found_start));
+                    v.emplace_back(std::string_view{s.data() + *found_start, *found_end - *found_start});
                     found_start = *found_end + 1u;
                 }
             }
@@ -521,15 +458,26 @@ namespace utils::string {
      *          to eachother, joined by \p join_with.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string strJoin(const std::vector<std::string> &v, const std::string& join_with=",") {
+    static std::string join(const std::vector<std::string>& v, const std::string_view& join_with = ",") {
         std::string joined;
         const auto end = v.end();
 
         if (auto start = v.begin(); start != end) {
-            joined += *start;
+            // Calculate final size beforehand
+            size_t size = (*start).size() + v.size() - 1;
 
             while (++start != end) {
-                joined += join_with + *start;
+                size += (*start).size();
+            }
+
+            joined.reserve(size);
+
+            // Append strings and dilimiter
+            start = v.begin();
+            joined += *start;
+            while (++start != end) {
+                joined += join_with;
+                joined += *start;
             }
         }
 
@@ -547,8 +495,8 @@ namespace utils::string {
      *          to eachother, joined by \p join_with.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string strJoin(const std::vector<std::string> &v, const char join_with) {
-        return utils::string::strJoin(v, std::string(1, join_with));
+    static inline std::string join(const std::vector<std::string>& v, const char join_with) {
+        return utils::string::join(v, std::string_view{&join_with, 1});
     }
 
     /**
@@ -571,7 +519,7 @@ namespace utils::string {
                                   || std::is_same<CharT, char32_t>::value,
                                      int> = 0
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string strJoin(const std::vector<CharT> &v, const char join_with='\0') {
+    static std::string join(const std::vector<CharT>& v, const char join_with = '\0') {
         std::string joined;
         const auto end = v.end();
 
@@ -611,20 +559,20 @@ namespace utils::string {
      *  \return Returns a list of seperate strings that were delimited by \p delim.
      */
     ATTR_MAYBE_UNUSED
-    static void strSplit(std::vector<std::string> &v, const std::string &s, const char delim = ',', int max_splits = -1) {
-        std::stringstream ss(s);
-        std::string item;
-        size_t tail = 0;
+    static void split(std::vector<std::string_view> &v, const std::string_view& s, const char delim = ',', int max_splits = -1) {
+        utils::traits::found_t found = 0ull;
+        size_t prev_end = 0ull;
         v.clear();
 
-        while (max_splits != 0 && std::getline(ss, item, delim)) {
-            v.emplace_back(item);
+        while (max_splits != 0 && (found = utils::string::contains(s, delim, prev_end))) {
+            const size_t size = *found - prev_end;
+            v.emplace_back(std::string_view{s.data() + prev_end, size});
             max_splits--;
-            tail += item.size() + 1;
+            prev_end += size + 1;
         }
 
-        if (tail < s.size()) {
-            v.emplace_back(s.substr(tail));
+        if (prev_end < s.size()) {
+            v.emplace_back(std::string_view{s.data() + prev_end});
         }
     }
 
@@ -643,19 +591,18 @@ namespace utils::string {
      *      Returns the format expanded with the args.
      */
     template<typename ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string format(const std::string& format, Type&& ...args) {
+    static std::string format(const std::string_view& format, Type&& ...args) {
         if constexpr(sizeof...(Type) != 0) {
-            const size_t size = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
+            const size_t size = std::snprintf(nullptr, 0, format.data(), args...) + 1; // Extra space for '\0'
             auto buf = utils::memory::new_unique_array<char>(size);
 
-            std::snprintf(buf.get(), size, format.c_str(), args...);
+            std::snprintf(buf.get(), size, format.data(), args...);
 
             return std::string(buf.get(), buf.get() + size - 1 ); // Strip '\0'
         } else {
-            return format;
+            return std::string(format);
         }
     }
-
 
     /**
      *  \brief  Static buffer with all valid base64 chars.
@@ -723,7 +670,7 @@ namespace utils::string {
      *      Returns true if string contains a valid base64 encoded string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool is_base64(const std::string& str) {
+    static inline bool is_base64(const std::string_view& str) {
         return utils::string::is_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 
@@ -737,7 +684,7 @@ namespace utils::string {
      *  \return Return an std::string containing the encoded buffer.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string base64_encode(const uint8_t *buffer, size_t length) {
+    static std::string to_base64(const uint8_t *buffer, size_t length) {
         std::string encoded;
         const uint8_t mod = length % 3;
         encoded.reserve(((length / 3) + (mod > 0)) * 4);
@@ -783,8 +730,8 @@ namespace utils::string {
      *  \return Return an std::string containing the encoded string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string base64_encode(const std::string& str) {
-        return utils::string::base64_encode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
+    static inline std::string to_base64(const std::string_view& str) {
+        return utils::string::to_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 
     /**
@@ -797,7 +744,7 @@ namespace utils::string {
      *  \return Return an std::string containing the decoded buffer.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string base64_decode(const uint8_t *buffer, size_t length) {
+    static std::string from_base64(const uint8_t *buffer, size_t length) {
         if (length % 4) {
             throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid size)");
         }
@@ -861,8 +808,8 @@ namespace utils::string {
      *  \return Return an std::string containing the decoded string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string base64_decode(const std::string& str) {
-        return utils::string::base64_decode(reinterpret_cast<const uint8_t*>(str.data()), str.length());
+    static inline std::string from_base64(const std::string_view& str) {
+        return utils::string::from_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 }
 

@@ -177,7 +177,7 @@ namespace utils::os {
      *      The stream to write the virtual codes to. (default: std::cout)
      */
     ATTR_MAYBE_UNUSED
-    static void SetScreenTitle(const std::string& title, std::ostream& out = std::cout) {
+    static void SetScreenTitle(const std::string_view& title, std::ostream& out = std::cout) {
         out << "\033]2;" << title << "\007";
     }
 
