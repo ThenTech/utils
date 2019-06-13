@@ -361,69 +361,115 @@ TEST_CASE("Test utils::string::erased_to", "[utils][utils::string]") {
 }
 
 TEST_CASE("Test utils::string::to_upper", "[utils][utils::string]") {
-    std::string empty("");
-    utils::string::to_upper(empty);
-    REQUIRE(empty.size() == 0);
-
-    std::string test_1(" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~");
-    utils::string::to_upper(test_1);
-    REQUIRE(test_1 == " \t\n\rABCD\t-=_+[]'#;/,.<>?:@~");
-
+    std::string empty ("");
+    std::string test_1(" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
     std::string test_2(alphabet_lower);
-    utils::string::to_upper(test_2);
-    REQUIRE(test_2.size() == alphabet_lower.size());
-    REQUIRE(test_2 == alphabet_upper);
-
     std::string test_3("üêéè");
+
+    std::wstring wempty (L"");
+    std::wstring wtest_1(L" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
+    std::wstring wtest_2(utils::string::to_wstring(test_2));
+    std::wstring wtest_3(L"üêéè");
+
+    utils::string::to_upper(empty);
+    utils::string::to_upper(wempty);
+    REQUIRE(empty.size()  == 0);
+    REQUIRE(wempty.size() == 0);
+
+    utils::string::to_upper(test_1);
+    utils::string::to_upper(wtest_1);
+    REQUIRE(test_1  == " \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
+    REQUIRE(wtest_1 == L" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
+
+    utils::string::to_upper(test_2);
+    utils::string::to_upper(wtest_2);
+    REQUIRE(test_2.size()  == alphabet_lower.size());
+    REQUIRE(test_2  == alphabet_upper);
+    REQUIRE(wtest_2.size() == alphabet_lower.size());
+    REQUIRE(wtest_2 == utils::string::to_wstring(alphabet_upper));
+
     utils::string::to_upper(test_3);
-    CHECK_FALSE(test_3 == "ÜÊÉÈ");
+    utils::string::to_upper(wtest_3);
+    CHECK_FALSE(test_3  == "ÜÊÉÈ");
+    CHECK_FALSE(wtest_3 == L"ÜÊÉÈ");
 }
 
 TEST_CASE("Test utils::string::to_uppercase", "[utils][utils::string]") {
-    std::string empty("");
+    const std::string empty ("");
+    const std::string test_1(" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
+    const std::string test_2(alphabet_lower);
+    const std::string test_3("üêéè");
+
+    const std::wstring wempty (L"");
+    const std::wstring wtest_1(L" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
+    const std::wstring wtest_2(utils::string::to_wstring(test_2));
+    const std::wstring wtest_3(L"üêéè");
+
     REQUIRE(utils::string::to_uppercase(empty).size() == 0);
-
-    std::string test_1(" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~");
-    REQUIRE(utils::string::to_uppercase(test_1) == " \t\n\rABCD\t-=_+[]'#;/,.<>?:@~");
-
-    std::string test_2(alphabet_lower);
+    REQUIRE(utils::string::to_uppercase(test_1) == " \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
     REQUIRE(utils::string::to_uppercase(test_2) == alphabet_upper);
-
-    std::string test_3("üêéè");
     CHECK_FALSE(utils::string::to_uppercase(test_3) == "ÜÊÉÈ");
+
+    REQUIRE(utils::string::to_uppercase(wempty).size() == 0);
+    REQUIRE(utils::string::to_uppercase(wtest_1) == L" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
+    REQUIRE(utils::string::to_uppercase(wtest_2) == utils::string::to_wstring(alphabet_upper));
+    CHECK_FALSE(utils::string::to_uppercase(wtest_3) == L"ÜÊÉÈ");
 }
 
 TEST_CASE("Test utils::string::to_lower", "[utils][utils::string]") {
-    std::string empty("");
-    utils::string::to_lower(empty);
-    REQUIRE(empty.size() == 0);
-
-    std::string test_1(" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~");
-    utils::string::to_lower(test_1);
-    REQUIRE(test_1 == " \t\n\rabcd\t-=_+[]'#;/,.<>?:@~");
-
+    std::string empty ("");
+    std::string test_1(" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
     std::string test_2(alphabet_upper);
-    utils::string::to_lower(test_2);
-    REQUIRE(test_2.size() == alphabet_upper.size());
-    REQUIRE(test_2 == alphabet_lower);
-
     std::string test_3("ÜÊÉÈ");
+
+    std::wstring wempty (L"");
+    std::wstring wtest_1(L" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
+    std::wstring wtest_2(utils::string::to_wstring(test_2));
+    std::wstring wtest_3(L"ÜÊÉÈ");
+
+    utils::string::to_lower(empty);
+    utils::string::to_lower(wempty);
+    REQUIRE(empty.size()  == 0);
+    REQUIRE(wempty.size() == 0);
+
+    utils::string::to_lower(test_1);
+    utils::string::to_lower(wtest_1);
+    REQUIRE(test_1  == " \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
+    REQUIRE(wtest_1 == L" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
+
+    utils::string::to_lower(test_2);
+    utils::string::to_lower(wtest_2);
+    REQUIRE(test_2.size()  == alphabet_upper.size());
+    REQUIRE(test_2  == alphabet_lower);
+    REQUIRE(wtest_2.size() == alphabet_upper.size());
+    REQUIRE(wtest_2 == utils::string::to_wstring(alphabet_lower));
+
     utils::string::to_lower(test_3);
-    CHECK_FALSE(test_3 == "üêéè");
+    utils::string::to_lower(wtest_3);
+    CHECK_FALSE(test_3  == "üêéè");
+    CHECK_FALSE(wtest_3 == L"üêéè");
 }
 
 TEST_CASE("Test utils::string::to_lowercase", "[utils][utils::string]") {
-    std::string empty("");
+    const std::string empty ("");
+    const std::string test_1(" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
+    const std::string test_2(alphabet_upper);
+    const std::string test_3("ÜÊÉÈ");
+
+    const std::wstring wempty (L"");
+    const std::wstring wtest_1(L" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
+    const std::wstring wtest_2(utils::string::to_wstring(test_2));
+    const std::wstring wtest_3(L"ÜÊÉÈ");
+
     REQUIRE(utils::string::to_lowercase(empty).size() == 0);
-
-    std::string test_1(" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~");
-    REQUIRE(utils::string::to_lowercase(test_1) == " \t\n\rabcd\t-=_+[]'#;/,.<>?:@~");
-
-    std::string test_2(alphabet_upper);
+    REQUIRE(utils::string::to_lowercase(test_1) == " \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
     REQUIRE(utils::string::to_lowercase(test_2) == alphabet_lower);
-
-    std::string test_3("ÜÊÉÈ");
     CHECK_FALSE(utils::string::to_lowercase(test_3) == "üêéè");
+
+    REQUIRE(utils::string::to_lowercase(wempty).size() == 0);
+    REQUIRE(utils::string::to_lowercase(wtest_1) == L" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
+    REQUIRE(utils::string::to_lowercase(wtest_2) == utils::string::to_wstring(alphabet_lower));
+    CHECK_FALSE(utils::string::to_lowercase(wtest_3) == L"üêéè");
 }
 
 TEST_CASE("Test utils::string::erase_consecutive", "[utils][utils::string]") {

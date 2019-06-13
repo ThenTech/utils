@@ -1,20 +1,15 @@
 #ifndef UTILS_MEMORY_HPP
 #define UTILS_MEMORY_HPP
 
-//#define ALLOC_LOG
-
-#if __cplusplus < 201703L
-#error A C++17 compiler is required!
-#endif
+#define UTILS_MEMORY_ALLOC_LOG 0
 
 #include "utils_traits.hpp"
 
 #include <algorithm>
 #include <vector>
-#include <unordered_map>
 #include <memory>
 
-#ifdef ALLOC_LOG
+#if UTILS_MEMORY_ALLOC_LOG
     #include <cstdio>
 #endif
 
@@ -36,7 +31,7 @@ namespace utils::memory {
      *		A pointer to the newly allocated object.
      */
     template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline T* allocVar(Type &&... args) {
+    static inline T* new_var(Type &&... args) {
         return new T(std::forward<Type>(args)...);
     }
 
@@ -48,9 +43,9 @@ namespace utils::memory {
      *		A pointer to the object to deallocate.
      */
     template <class T> ATTR_MAYBE_UNUSED
-    static inline void deallocVar(T* v) {
-        #ifdef ALLOC_LOG
-            std::fprintf(stderr, "[deallocVar] at 0x%p\n", v);
+    static inline void delete_var(T* v) {
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[delete_var] at 0x%p\n", v);
         #endif
         delete v;
     }
@@ -60,7 +55,7 @@ namespace utils::memory {
      *  std::unique_ptr that contains a pointer to T.
      */
     template <class T, typename _Dp = std::default_delete<T>>
-//    template <class T, typename _Dp = decltype(&deallocVar<T>)>
+//    template <class T, typename _Dp = decltype(&delete_var<T>)>
     using unique_t = std::unique_ptr<T, _Dp>;
 
     /**
@@ -71,9 +66,9 @@ namespace utils::memory {
      */
     template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline auto new_unique_var(Type &&... args) {
-        return unique_t<T, decltype(&deallocVar<T>)>(
-            allocVar<T>(std::forward<Type>(args)...),
-            &deallocVar<T>
+        return unique_t<T, decltype(&delete_var<T>)>(
+            new_var<T>(std::forward<Type>(args)...),
+            &delete_var<T>
         );
     }
 
@@ -90,7 +85,7 @@ namespace utils::memory {
      *		A pointer to the newly allocated object.
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline T* allocArray(size_t x) {
+    static inline T* new_array(size_t x) {
         return new T[x]();
     }
 
@@ -105,8 +100,8 @@ namespace utils::memory {
      *      A pointer to the newly allocated object.
      */
     template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline T* allocFlatArray(size_t ... dims) {
-        return allocArray<T>((dims * ... * 1));
+    static inline T* new_flat_array(size_t... dims) {
+        return new_array<T>((dims * ... * 1));
     }
 
     /**	\brief	Deallocate an array of type T that was allocated using SysUtils::allocArray<T>(size_t).
@@ -117,9 +112,9 @@ namespace utils::memory {
      *		A pointer to the object to deallocate.
      */
     template <class T> ATTR_MAYBE_UNUSED
-    static inline void deallocArray(T* a) {
-        #ifdef ALLOC_LOG
-            std::fprintf(stderr, "[deallocArray] at 0x%p\n", a);
+    static inline void delete_array(T* a) {
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[delete_array] at 0x%p\n", a);
         #endif
         delete[] a;
     }
@@ -138,16 +133,17 @@ namespace utils::memory {
      *		The new length of the array in the first dimension.
      */
     template <class T> ATTR_MAYBE_UNUSED
-    static void reallocArray(T*& a, size_t& old_size, size_t new_size) {
-        #ifdef ALLOC_LOG
-            std::fprintf(stderr, "[reallocArray] at 0x%p from %lld to %lld\n", a, old_size, new_size);
+    static void realloc_array(T*& a, size_t& old_size, size_t new_size) {
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[reallocArray] at 0x%p from %u to %u\n",
+                         a, uint32_t(old_size), uint32_t(new_size));
         #endif
 
-        T* new_array = utils::memory::allocArray<T>(new_size);
+        T* new_array = utils::memory::new_array<T>(new_size);
 
         if (a != nullptr) {
             std::copy_n(a, std::min(old_size, new_size), new_array);
-            utils::memory::deallocArray(a);
+            utils::memory::delete_array(a);
         }
 
         a = new_array;
@@ -157,7 +153,7 @@ namespace utils::memory {
     /**
      *  Self destructing array type.
      */
-    template <class T, typename _Dp = decltype(&deallocArray<T>)>
+    template <class T, typename _Dp = decltype(&delete_array<T>)>
     using unique_arr_t = unique_t<T[], _Dp>;
 
     /**
@@ -170,7 +166,7 @@ namespace utils::memory {
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline unique_arr_t<T> new_unique_array(size_t x) {
-        return unique_arr_t<T>(allocArray<T>(x), &deallocArray<T>);
+        return unique_arr_t<T>(new_array<T>(x), &delete_array<T>);
     }
 
     /**
@@ -183,7 +179,7 @@ namespace utils::memory {
      */
     template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline unique_arr_t<T> new_unique_flat_array(size_t ... dims) {
-        return unique_arr_t<T>(allocFlatArray<T>(dims...), &deallocArray<T>);
+        return unique_arr_t<T>(new_flat_array<T>(dims...), &delete_array<T>);
     }
 
     /**	\brief	Allocate y arrays of objects of type T and length x on the heap.
@@ -198,9 +194,9 @@ namespace utils::memory {
      *		A pointer to the newly allocated object.
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static T** allocArray(size_t x, size_t y) {
+    static T** new_array(size_t x, size_t y) {
         T **arr = new T*[x];
-        for(size_t i = 0; i < x; i++) arr[i] = utils::memory::allocArray<T>(y);
+        for(size_t i = 0; i < x; i++) arr[i] = utils::memory::new_array<T>(y);
         return arr;
     }
 
@@ -214,12 +210,12 @@ namespace utils::memory {
      *		The length of the array in the second dimension.
      */
     template <class T> ATTR_MAYBE_UNUSED
-    static void deallocArray(T** a, size_t y) {
-        #ifdef ALLOC_LOG
+    static void delete_array(T** a, size_t y) {
+        #if UTILS_MEMORY_ALLOC_LOG
             std::fprintf(stderr, "[deallocArrayXY] at 0x%p\n", a);
         #endif
-        for(size_t i = 0; i < y; i++) utils::memory::deallocArray(a[i]);
-        utils::memory::deallocArray(a);
+        for(size_t i = 0; i < y; i++) utils::memory::delete_array(a[i]);
+        utils::memory::delete_array(a);
     }
 
     /**	\brief	Allocate z arrays of y arrays of objects of type T and length x on the heap.
@@ -236,9 +232,9 @@ namespace utils::memory {
      *		A pointer to the newly allocated object.
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static T*** allocArray(size_t x, size_t y, size_t z) {
+    static T*** new_array(size_t x, size_t y, size_t z) {
         T ***arr = new T**[x];
-        for(size_t i = 0; i < x; i++) arr[i] = utils::memory::allocArray<T>(y, z);
+        for(size_t i = 0; i < x; i++) arr[i] = utils::memory::new_array<T>(y, z);
         return arr;
     }
 
@@ -254,33 +250,62 @@ namespace utils::memory {
      *		The length of the array in the third dimension.
      */
     template <class T> ATTR_MAYBE_UNUSED
-    static void deallocArray(T*** a, size_t y, size_t z) {
-        #ifdef ALLOC_LOG
+    static void delete_array(T*** a, size_t y, size_t z) {
+        #if UTILS_MEMORY_ALLOC_LOG
             std::fprintf(stderr, "[deallocArrayXYZ] at 0x%p\n", a);
         #endif
-        for(size_t i = 0; i < z; i++) utils::memory::deallocArray(a[i], y);
-        utils::memory::deallocArray(a);
+        for(size_t i = 0; i < z; i++) utils::memory::delete_array(a[i], y);
+        utils::memory::delete_array(a);
     }
 
     ////////////////////////////////////////////////////////////////////////////
     ///  Containers
     ////////////////////////////////////////////////////////////////////////////
-    /**	\brief	Deallocate a vector containing pointers to type T,
-     *			that was allocated using SysUtils::allocVar<T>() and then filled by emplace_back(SysUtils::allocVar<T>()).
+    /**	\brief	Deallocate a Container with pointers.
+     *          This can be any type where utils::traits::is_container is true.
      *
-     *	\tparam	T
-     *		The type of pointer to an object inside the std::vector to deallocate.
-     *	\param	*v
-     *		A pointer to the object to deallocate.
+     *          For map-like structures, if the ::mapped_type is a pointer, it will be freed,
+     *          for others if ::value_type is a pointer it will be freed.
+     *
+     *  \tparam Container
+     *      A container type that passes utils::traits::is_container<Container>::value.
+     *	\param	container
+     *		The container element that holds allocated pointers.
      */
-    template <class T> ATTR_MAYBE_UNUSED
-    static void deallocVector(std::vector<T*> *v) {
-        #ifdef ALLOC_LOG
-            std::fprintf(stderr, "[deallocVector] at 0x%p\n", v);
-        #endif
-        for (T *i : *v) utils::memory::deallocVar(i);
-        utils::memory::deallocVar(v);
+    template <
+        class Container,
+        typename = typename std::enable_if_t<utils::traits::is_container<Container>::value>
+    > ATTR_MAYBE_UNUSED
+    static void delete_container(Container *container) {
+        if constexpr (utils::traits::is_maplike_v<Container>) {
+            if constexpr (std::is_pointer_v<typename Container::mapped_type>)
+            {
+                #if UTILS_MEMORY_ALLOC_LOG
+                    std::fprintf(stderr, "[delete_map] at 0x%p\n", container);
+                #endif
+                for (auto& [key, value] : *container) {
+                    UNUSED(key);
+                    utils::memory::delete_var(value);
+                }
+            }
+        } else if constexpr (std::is_pointer_v<typename Container::value_type>) {
+            #if UTILS_MEMORY_ALLOC_LOG
+                std::fprintf(stderr, "[delete_container] at 0x%p\n", container);
+            #endif
+            for (auto *value : *container) {
+                utils::memory::delete_var(value);
+            }
+        }
+
+        utils::memory::delete_var(container);
     }
+
+    /**
+     *  Self destructing container type.
+     *  Unique_ptr container that will auto dealloc all elements and itself.
+     */
+    template <class T>
+    using unique_container_t = unique_t<T, decltype(&delete_container<T>)>;
 
     /**
      *  Self destructing vector type.
@@ -288,7 +313,15 @@ namespace utils::memory {
      *  Will auto dealloc all elements and itself.
      */
     template <class T>
-    using unique_vect_t = unique_t<std::vector<T*>, decltype(&deallocVector<T>)>;
+    using unique_vect_t = unique_container_t<std::vector<T*>>;
+
+    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline auto new_unique_container(Type &&... args) {
+        return unique_container_t<T>(
+            new_var<T>(std::forward<Type>(args)...),
+            &delete_container<T>
+        );
+    }
 
     /**
      *  \brief  Create a unique_vect_t<T> variable that deletes
@@ -300,33 +333,13 @@ namespace utils::memory {
     template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline auto new_unique_vector(Type &&... args) {
         return unique_vect_t<T>(
-            allocVar<std::vector<T*>>(std::forward<Type>(args)...),
-            &deallocVector
+            new_var<std::vector<T*>>(std::forward<Type>(args)...),
+            &delete_container<std::vector<T*>>
         );
-    }
-
-    /**	\brief	Deallocate an unordered_map containing pointers to type SECOND as mapped element,
-     *			that was allocated using SysUtils::allocVar<T>() and then filled by insert( { const FIRST, SysUtils::allocVar<T>() }).
-     *
-     *	\tparam	FIRST
-     *		The type of the key element.
-     *	\tparam	SECOND
-     *		The type of the mapped element.
-     *	\param	*m
-     *		A pointer to the object to deallocate.
-     */
-    template <class FIRST, class SECOND> ATTR_MAYBE_UNUSED
-    static void deallocMap(std::unordered_map<FIRST, SECOND> *m) {
-        #ifdef ALLOC_LOG
-            std::fprintf(stderr, "[deallocMap] at 0x%p\n", m);
-        #endif
-        for (std::pair<FIRST, SECOND>& i : *m) utils::memory::deallocVar(i.second);
-        utils::memory::deallocVar(m);
     }
 }
 
-#ifdef ALLOC_LOG
-    #undef ALLOC_LOG
+#if UTILS_MEMORY_ALLOC_LOG
+    #undef UTILS_MEMORY_ALLOC_LOG
 #endif
-
 #endif // UTILS_MEMORY_HPP

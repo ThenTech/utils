@@ -2,24 +2,13 @@
 #define UTILS_RANDOM_HPP
 
 #include "external/random.hpp"
+#include "utils_traits.hpp"
 #include "utils_catch.hpp"
 #include "utils_string.hpp"
-#include "utils_traits.hpp"
 
 #include <sstream>
 #include <iomanip>
 
-/*
- *  NOTE: Does adding inline to static methods increase performance?
- *
-
-#ifdef _MSC_VER
-    #define RND_INLINE __forceinline
-#else
-    #define RND_INLINE inline
-#endif
-
- */
 
 namespace utils::random {
     /**
@@ -53,10 +42,11 @@ namespace utils::random {
      *      the reserve and push_back methods implemented.
      *  \return Returns a Container instance with the picked items.
      */
-    template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static auto pick_x_from(size_t amount, const Container& container) ->
-        typename std::enable_if<is_iterable_v(container), Container>::type
-    {
+    template<
+        typename Container,
+        typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static auto pick_x_from(size_t amount, const Container& container) {
         Container picked;
         picked.reserve(amount);
 
@@ -97,17 +87,16 @@ namespace utils::random {
      */
     template<
         typename T,
-        typename Container = std::vector<T>
+        typename Container = std::vector<T>,
+        typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>
+                                         && (   effolkronium::details::is_supported_number<T>::value
+                                             || effolkronium::details::is_supported_character<T>::value
+                                             || std::is_same<T, bool>::value
+                                            )>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static typename std::enable_if<
-        (   effolkronium::details::is_supported_number<T>::value
-         || effolkronium::details::is_supported_character<T>::value
-         || std::is_same<T, bool>::value
-        ), Container>::type
-    generate_x(
-        const size_t amount,
-        T from = std::numeric_limits<T>::min(),
-        T to   = std::numeric_limits<T>::max())
+    static auto generate_x(const size_t amount,
+                           T from = std::numeric_limits<T>::min(),
+                           T to   = std::numeric_limits<T>::max())
     {
         Container picked;
         picked.reserve(amount);
@@ -163,12 +152,12 @@ namespace utils::random {
      */
     template<
         typename T = char,
-        typename Container = typename std::enable_if_t<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>
+        typename Container = typename std::enable_if_t<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>,
+        typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline Container generate_string(
-            const size_t amount,
-            const T from = std::numeric_limits<T>::min(),
-            const T to   = std::numeric_limits<T>::max())
+    static inline Container generate_string(const size_t amount,
+                                            const T from = std::numeric_limits<T>::min(),
+                                            const T to   = std::numeric_limits<T>::max())
     {
         return utils::random::generate_x<T, Container>(amount, from, to);
     };
@@ -191,11 +180,11 @@ namespace utils::random {
      */
     template<
         typename T = bool,
-        typename Container = typename std::enable_if<std::is_same<T, bool>::value, std::vector<T>>::type
+        typename Container = typename std::enable_if<std::is_same<T, bool>::value, std::vector<T>>::type,
+        typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
     > ATTR_MAYBE_UNUSED
-    static inline Container generate_bool(
-            const size_t amount,
-            const double probability = 0.5)
+    static inline Container generate_bool(const size_t amount,
+                                          const double probability = 0.5)
     {
         ASSERT(0 <= probability && 1 >= probability);
 

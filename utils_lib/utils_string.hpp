@@ -229,58 +229,50 @@ namespace utils::string {
 
     /**	\brief	Transform the string contents to uppercase (within the current locale) (in-place).
      *
-     *          WARNING: ASCII only
-     *
      *	\param	str
      *		A reference to the string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED
-    static inline void to_upper(std::string& str) {
+    template<typename CharT> ATTR_MAYBE_UNUSED
+    static inline void to_upper(std::basic_string<CharT>& str) {
         std::transform(str.begin(), str.end(), str.begin(),
-            [](std::string::value_type ch) {
-                return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).toupper(ch);
+            [](CharT ch) {
+                return std::use_facet<std::ctype<CharT>>(std::locale()).toupper(ch);
             }
         );
     }
 
     /**	\brief	Transform the string contents to uppercase (within the current locale) (copying).
      *
-     *          WARNING: ASCII only
-     *
      *	\param	str
      *		A copy of the string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string to_uppercase(std::string str) {
+    template<typename CharT> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::basic_string<CharT> to_uppercase(std::basic_string<CharT> str) {
         to_upper(str);
         return str;
     }
 
     /**	\brief	Transform the string contents to lowercase (within the current locale) (in-place).
      *
-     *          WARNING: ASCII only
-     *
      *	\param	str
      *		A reference to the string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED
-    static inline void to_lower(std::string& str) {
+    template<typename CharT> ATTR_MAYBE_UNUSED
+    static inline void to_lower(std::basic_string<CharT>& str) {
         std::transform(str.begin(), str.end(), str.begin(),
-            [](std::string::value_type ch) {
-                return std::use_facet<std::ctype<std::string::value_type>>(std::locale()).tolower(ch);
+            [](CharT ch) {
+                return std::use_facet<std::ctype<CharT>>(std::locale()).tolower(ch);
             }
         );
     }
 
     /**	\brief	Transform the string contents to lowercase (within the current locale) (copying).
      *
-     *          WARNING: ASCII only
-     *
      *	\param	str
      *		A copy of the string to perform the operation.
      */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string to_lowercase(std::string str) {
+    template<typename CharT> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::basic_string<CharT> to_lowercase(std::basic_string<CharT> str) {
         to_lower(str);
         return str;
     }
@@ -472,7 +464,7 @@ namespace utils::string {
 
             joined.reserve(size);
 
-            // Append strings and dilimiter
+            // Append strings and delimiter
             start = v.begin();
             joined += *start;
             while (++start != end) {
@@ -592,7 +584,7 @@ namespace utils::string {
      */
     template<typename ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string format(const std::string_view& format, Type&& ...args) {
-        if constexpr(sizeof...(Type) != 0) {
+        if constexpr (sizeof...(Type) != 0) {
             const size_t size = std::snprintf(nullptr, 0, format.data(), args...) + 1; // Extra space for '\0'
             auto buf = utils::memory::new_unique_array<char>(size);
 

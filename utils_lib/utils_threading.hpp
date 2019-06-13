@@ -12,7 +12,6 @@
 #include <queue>
 
 #include <functional>
-#include <memory>
 
 
 #define LOCK_BLOCK(MTX)         std::lock_guard<std::mutex> __lock(MTX)

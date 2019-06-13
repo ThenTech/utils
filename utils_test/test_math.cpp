@@ -22,6 +22,73 @@ TEST_CASE("Test utils::math::sign", "[utils][utils::math]" ) {
     REQUIRE(utils::math::sign(val_one) ==  1);
 }
 
+
+TEST_CASE("Test utils::math::sum", "[utils][utils::math]") {
+    REQUIRE(utils::math::sum( ) == 0);
+    REQUIRE(utils::math::sum(0) == 0);
+    REQUIRE(utils::math::sum(1) == 1);
+    REQUIRE(utils::math::sum(0.0) == 0.0);
+
+    const double rnd = utils::random::Random::get<double>();
+    REQUIRE(utils::math::sum(rnd)      == Approx(rnd));
+    REQUIRE(utils::math::sum(rnd, rnd) == Approx(rnd + rnd));
+
+    const double div = rnd / 5.0;
+    REQUIRE(utils::math::sum(div, div, div, div, div) == Approx(rnd));
+
+    REQUIRE(utils::math::sum(10, 20, 30, 40, 50) == 150);
+}
+
+TEST_CASE("Test utils::math::product", "[utils][utils::math]") {
+    REQUIRE(utils::math::product( ) == 1);
+    REQUIRE(utils::math::product(0) == 0);
+    REQUIRE(utils::math::product(1) == 1);
+    REQUIRE(utils::math::product(0.0) == 0.0);
+
+    const double rnd = utils::random::Random::get<double>();
+    REQUIRE(utils::math::product(rnd)      == Approx(rnd));
+    REQUIRE(utils::math::product(rnd, rnd) == Approx(rnd * rnd));
+
+    const double div = rnd / utils::random::Random::get<double>();
+    REQUIRE(utils::math::product(div, div, div, div, div) == Approx(std::pow(div, 5.0)));
+
+    REQUIRE(utils::math::product(10, 20, 30, 40, 50) == 12000000);
+}
+
+TEST_CASE("Test utils::math::min", "[utils][utils::math]") {
+    REQUIRE(utils::math::min( 0,  0) ==  0);
+    REQUIRE(utils::math::min( 1,  0) ==  0);
+    REQUIRE(utils::math::min( 0,  1) ==  0);
+    REQUIRE(utils::math::min(-1,  0) == -1);
+    REQUIRE(utils::math::min( 0, -1) == -1);
+
+    const double smaller = utils::random::Random::get<double>(0.0, 100.0);
+    const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
+    REQUIRE(utils::math::min(smaller, bigger ) == Approx(smaller));
+    REQUIRE(utils::math::min(bigger , smaller) == Approx(smaller));
+
+    REQUIRE(utils::math::min(bigger,  bigger, bigger,  bigger, smaller) == Approx(smaller));
+    REQUIRE(utils::math::min(bigger,  bigger, bigger, smaller) == Approx(smaller));
+    REQUIRE(utils::math::min(bigger, smaller, bigger,  bigger) == Approx(smaller));
+}
+
+TEST_CASE("Test utils::math::max", "[utils][utils::math]") {
+    REQUIRE(utils::math::max( 0,  0) ==  0);
+    REQUIRE(utils::math::max( 1,  0) ==  1);
+    REQUIRE(utils::math::max( 0,  1) ==  1);
+    REQUIRE(utils::math::max(-1,  0) ==  0);
+    REQUIRE(utils::math::max( 0, -1) ==  0);
+
+    const double smaller = utils::random::Random::get<double>(0.0, 100.0);
+    const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
+    REQUIRE(utils::math::max(smaller, bigger ) == Approx(bigger));
+    REQUIRE(utils::math::max(bigger , smaller) == Approx(bigger));
+
+    REQUIRE(utils::math::max(smaller, smaller, smaller, smaller, bigger) == Approx(bigger));
+    REQUIRE(utils::math::max(smaller, smaller, smaller,  bigger) == Approx(bigger));
+    REQUIRE(utils::math::max(smaller,  bigger, smaller, smaller) == Approx(bigger));
+}
+
 TEST_CASE("Test utils::math::pow", "[utils][utils::math]" ) {
     REQUIRE(utils::math::pow( 0) ==  0);
     REQUIRE(utils::math::pow( 1) ==  1);

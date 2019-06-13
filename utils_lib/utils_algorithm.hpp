@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <numeric>
 #include <optional>
 
 
@@ -109,15 +110,38 @@ namespace utils::algorithm {
      *      True if (min <= arg1 && arg1 <= max) && ...
      */
     template <typename T, typename... Ts> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool all_within(T min, T max, const Ts&... ts) {
+    static inline constexpr bool all_within(ATTR_MAYBE_UNUSED T min,
+                                            ATTR_MAYBE_UNUSED T max,
+                                            const Ts&... ts)
+    {
         if constexpr (sizeof...(Ts) == 0) {
-            UNUSED(min, max);
             return true;
         } else {
             if (max < min) // Allow range from higher to lower
                 std::swap(min, max);
             return ((min <= ts && ts <= max) && ...);
         }
+    }
+
+    /**
+     *  \brief  Generic test if all elements in the range
+     *          are within [min, max] (inclusive).
+     *
+     *  \return
+     *      True if (min <= start[0] && start[0] <= max) && ...
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool within(T min, T max, Iterator start, Iterator end) {
+        if (max < min) // Allow range from higher to lower
+            std::swap(min, max);
+
+        return std::all_of(start, end, [min, max](const T& x){
+            return min <= x && x <= max;
+        });
     }
 
     /**
@@ -129,68 +153,75 @@ namespace utils::algorithm {
      */
     template <typename T, typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool within(T min, T max, const Container& cont) {
-        static_assert (is_iterable_v(cont),
-                       "utils::algorithm::all_within: Container must have iterator support.");
-        if (max < min) // Allow range from higher to lower
-            std::swap(min, max);
-
-        return std::all_of(std::begin(cont), std::end(cont), [min, max](const T& x){
-            return min <= x && x <= max;
-        });
+        static_assert (utils::traits::is_iterable_v<Container>,
+                       "utils::algorithm::within: Container must have iterator support.");
+        return utils::algorithm::within(min, max, std::begin(cont), std::end(cont));
     }
 
     /**
-     *  \brief  Generic sum all args.
+     *  \brief  Calculate the sum of all elements between \p start and \p end.
      *
-     *  \return
-     *      Returns arg1 + ... + argn
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \return Returns the sum of the elements with type `Iterator::value_type`.
      */
-    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto sum(T const&... args) {
-        return (args + ... + 0);
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T sum(Iterator start, Iterator end) {
+        return std::accumulate(start, end, T{0});
     }
 
     /**
-     *  \brief  Generic multiply all args.
+     *  \brief  Calculate the sum of all elements inside the container \p cont.
      *
-     *  \return
-     *      Returns arg1 * ... * argn
+     *  \param cont
+     *      The container to calculate the sum for.
+     *  \return Returns the sum of the elements with type `Container::value_type`.
      */
-    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto multiply(T const&... args) {
-        return (args * ... * 1);
+    template <typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto sum(const Container& cont) {
+        static_assert (utils::traits::is_iterable_v<Container>,
+                       "utils::algorithm::sum: Container must have iterator support.");
+        return utils::algorithm::sum(std::begin(cont), std::end(cont));
     }
 
     /**
-     *  \brief  Generic determine minimum of all args.
+     *  \brief  Calculate the product of all elements between \p start and \p end.
      *
-     *  \return
-     *      Returns std::min(arg1, std::min(..., argn))
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \return Returns the product of the elements with type `Iterator::value_type`.
      */
-    template<typename T, typename... Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto min(T const& first, T const& second, Args const&... args) {
-        if constexpr (sizeof...(Args) == 0) {
-            return std::min(first, second);
-        } else {
-            return first < second ? utils::algorithm::min(first , args...)
-                                  : utils::algorithm::min(second, args...);
-        }
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T product(Iterator start, Iterator end) {
+        return start != end
+             ? std::accumulate(start, end, T{1}, [](const T& x, const T& y){ return x * y; })
+             : T{0};
     }
 
     /**
-     *  \brief  Generic determine maximum of all args.
+     *  \brief  Calculate the product of all elements inside the container \p cont.
      *
-     *  \return
-     *      Returns std::max(arg1, std::max(..., argn))
+     *  \param cont
+     *      The container to calculate the sum for.
+     *  \return Returns the product of the elements with type `Container::value_type`.
      */
-    template<typename T, typename... Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto max(T const& first, T const& second, Args const&... args) {
-        if constexpr (sizeof...(Args) == 0) {
-            return std::max(first, second);
-        } else {
-            return first > second ? utils::algorithm::max(first , args...)
-                                  : utils::algorithm::max(second, args...);
-        }
+    template <typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto product(const Container& cont) {
+        static_assert (utils::traits::is_iterable_v<Container>,
+                       "utils::algorithm::product: Container must have iterator support.");
+        return utils::algorithm::product(std::begin(cont), std::end(cont));
     }
 
     /**

@@ -277,7 +277,7 @@ namespace utils {
              */
             template<typename ...Type>
             static void Writef(const std::string& format, const Type& ...args) {
-                if constexpr(sizeof...(args) > 0) {
+                if constexpr (sizeof...(args) > 0) {
                     utils::Logger::Write(utils::string::format(format, args...), utils::Logger::GetFileTimestamp());
                 } else {
                     utils::Logger::Write(format, utils::Logger::GetFileTimestamp());

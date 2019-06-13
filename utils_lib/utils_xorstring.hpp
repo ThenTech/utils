@@ -141,9 +141,9 @@
 
                 template<std::size_t N>
                 XORSTR_FORCEINLINE void _crypt(XORSTR_VOLATILE std::uint64_t *keys) noexcept {
-                    if constexpr(T::buffer_size > N) {
+                    if constexpr (T::buffer_size > N) {
                         #ifndef JM_XORSTR_DISABLE_AVX_INTRINSICS
-                            if constexpr((T::buffer_size - N) >= 4) {
+                            if constexpr ((T::buffer_size - N) >= 4) {
                                 _mm256_store_si256(
                                     (__m256i *)(_storage + N),
                                     _mm256_xor_si256(

@@ -79,7 +79,7 @@ namespace utils::ini {
                 , filename(filename)
             {
                 try {
-                    auto contents = utils::io::readStringFromFile(this->filename);
+                    auto contents = utils::io::file_to_string(this->filename);
                     this->inifile << *contents;
                     this->parse();
                 } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false;);
@@ -109,7 +109,7 @@ namespace utils::ini {
                 this->inifile << *this;
 
                 try {
-                    utils::io::writeStringToFile(name, this->inifile.str());
+                    utils::io::string_to_file(name, this->inifile.str());
                 } CATCH_AND_LOG_ERROR_TRACE();
             }
 
@@ -257,9 +257,9 @@ namespace utils::ini {
                             std::visit([&](auto&& arg){ ss << arg; }, val);
 
                             // Print to string or cast to value
-                            if constexpr(std::is_same_v<T, std::string>) {
+                            if constexpr (std::is_same_v<T, std::string>) {
                                 return ss.str();
-                            } else if constexpr(std::is_same_v<T, bool>) {
+                            } else if constexpr (std::is_same_v<T, bool>) {
                                 std::string_view str = utils::string::to_lowercase(ss.str());
 
                                 if (str == "true" || str == "yes"

@@ -6,8 +6,8 @@
 #include "../utils_lib/utils_memory.hpp"
 
 TEST_CASE("Test utils::memory::allocVar", "[utils][utils::memory]") {
-    int *test     = utils::memory::allocVar<int>();
-    int *test_val = utils::memory::allocVar<int>(0xDEADBEEF);
+    int *test     = utils::memory::new_var<int>();
+    int *test_val = utils::memory::new_var<int>(0xDEADBEEF);
 
     REQUIRE(test != nullptr);
     *test = 42;
@@ -16,8 +16,8 @@ TEST_CASE("Test utils::memory::allocVar", "[utils][utils::memory]") {
     REQUIRE(test_val != nullptr);
     CHECK(*test_val == 0xDEADBEEF);
 
-    utils::memory::deallocVar(test);
-    utils::memory::deallocVar(test_val);
+    utils::memory::delete_var(test);
+    utils::memory::delete_var(test_val);
 }
 
 TEST_CASE("Test utils::memory::new_unique_var", "[utils][utils::memory]") {
@@ -33,8 +33,8 @@ TEST_CASE("Test utils::memory::new_unique_var", "[utils][utils::memory]") {
 }
 
 TEST_CASE("Test utils::memory::allocArray", "[utils][utils::memory]") {
-    auto test_0  = utils::memory::allocArray<int>(0);
-    auto test_10 = utils::memory::allocArray<int>(10);
+    auto test_0  = utils::memory::new_array<int>(0);
+    auto test_10 = utils::memory::new_array<int>(10);
 
     REQUIRE(test_0  != nullptr);
     REQUIRE(test_10 != nullptr);
@@ -48,14 +48,14 @@ TEST_CASE("Test utils::memory::allocArray", "[utils][utils::memory]") {
         CHECK(test_10[i] == i);
     }
 
-    utils::memory::deallocArray(test_0 );
-    utils::memory::deallocArray(test_10);
+    utils::memory::delete_array(test_0 );
+    utils::memory::delete_array(test_10);
 }
 
 TEST_CASE("Test utils::memory::allocFlatArray", "[utils][utils::memory]") {
-    auto test_0   = utils::memory::allocFlatArray<int>(0);
-    auto test_10  = utils::memory::allocFlatArray<int>(10);
-    auto test_2_2 = utils::memory::allocFlatArray<int>(2, 2);
+    auto test_0   = utils::memory::new_flat_array<int>(0);
+    auto test_10  = utils::memory::new_flat_array<int>(10);
+    auto test_2_2 = utils::memory::new_flat_array<int>(2, 2);
 
     REQUIRE(test_0   != nullptr);
     REQUIRE(test_10  != nullptr);
@@ -73,18 +73,18 @@ TEST_CASE("Test utils::memory::allocFlatArray", "[utils][utils::memory]") {
         }
     }
 
-    utils::memory::deallocArray(test_0 );
-    utils::memory::deallocArray(test_10);
-    utils::memory::deallocArray(test_2_2);
+    utils::memory::delete_array(test_0 );
+    utils::memory::delete_array(test_10);
+    utils::memory::delete_array(test_2_2);
 }
 
 TEST_CASE("Test utils::memory::reallocArray", "[utils][utils::memory]") {
     size_t length = 0;
-    auto test = utils::memory::allocArray<int>(length);
+    auto test = utils::memory::new_array<int>(length);
     REQUIRE(test != nullptr);
 
     auto old = test;
-    utils::memory::reallocArray(test, length, 10ull);
+    utils::memory::realloc_array(test, length, 10ull);
     REQUIRE(test != nullptr);
     REQUIRE(test != old);
     REQUIRE(length == 10);
@@ -95,7 +95,7 @@ TEST_CASE("Test utils::memory::reallocArray", "[utils][utils::memory]") {
     }
 
     old = test;
-    utils::memory::reallocArray(test, length, 5ull);
+    utils::memory::realloc_array(test, length, 5ull);
     REQUIRE(test != nullptr);
     REQUIRE(test != old);
     REQUIRE(length == 5);
@@ -104,7 +104,7 @@ TEST_CASE("Test utils::memory::reallocArray", "[utils][utils::memory]") {
     }
 
     old = test;
-    utils::memory::reallocArray(test, length, 10ull);
+    utils::memory::realloc_array(test, length, 10ull);
     REQUIRE(test != nullptr);
     REQUIRE(test != old);
     REQUIRE(length == 10);
@@ -117,15 +117,15 @@ TEST_CASE("Test utils::memory::reallocArray", "[utils][utils::memory]") {
 
     int *empty = nullptr;
     length = 0;
-    utils::memory::reallocArray(empty, length, 10ull);
+    utils::memory::realloc_array(empty, length, 10ull);
     REQUIRE(empty != nullptr);
     REQUIRE(length == 10);
     for (int i = 0; i < 10; i++) {
         CHECK(empty[i] == 0);
     }
 
-    utils::memory::deallocArray(test);
-    utils::memory::deallocArray(empty);
+    utils::memory::delete_array(test);
+    utils::memory::delete_array(empty);
 }
 
 TEST_CASE("Test utils::memory::new_unique_array", "[utils][utils::memory]") {
@@ -167,14 +167,70 @@ TEST_CASE("Test utils::memory::new_unique_flat_array", "[utils][utils::memory]")
     }
 }
 
+TEST_CASE("Test utils::memory::deallocContainer", "[utils][utils::memory]") {
+    auto uv_p = utils::memory::new_var<std::vector<int*>>();
+    REQUIRE(uv_p != nullptr);
+    for (int i = 0; i < 10; i++) {
+        uv_p->push_back(new int(i));
+    }
+    REQUIRE(uv_p->size() == 10);
+    utils::memory::delete_container(uv_p);
+
+    auto um_p = utils::memory::new_var<std::map<std::string, int*>>();
+    REQUIRE(um_p != nullptr);
+    for (int i = 0; i < 10; i++) {
+        (*um_p)[std::to_string(i)] = new int(i);
+    }
+    REQUIRE(um_p->size() == 10);
+    for (int i = 0; i < 10; i++) {
+        CHECK(i == *(*um_p)[std::to_string(i)]);
+    }
+    utils::memory::delete_container(um_p);
+}
+
+TEST_CASE("Test utils::memory::new_unique_container", "[utils][utils::memory]") {
+    auto uv_p = utils::memory::new_unique_vector<int>();
+    REQUIRE(uv_p.get() != nullptr);
+
+    for (int i = 0; i < 10; i++) {
+        uv_p->push_back(new int(i));
+    }
+    for (int i = 0; i < 10; i++) {
+        CHECK(i == *uv_p->at(size_t(i)));
+    }
+
+    auto um_p = utils::memory::new_unique_container<std::map<std::string, int*>>();
+    REQUIRE(um_p.get() != nullptr);
+    for (int i = 0; i < 10; i++) {
+        (*um_p)[std::to_string(i)] = new int(i);
+    }
+    for (int i = 0; i < 10; i++) {
+        CHECK(i == *(*um_p)[std::to_string(i)]);
+    }
+
+    auto uv = utils::memory::new_unique_container<std::vector<int>>();
+    REQUIRE(uv.get() != nullptr);
+    for (int i = 0; i < 10; i++) {
+        uv->push_back(i);
+    }
+    for (int i = 0; i < 10; i++) {
+        CHECK(i == uv->at(size_t(i)));
+    }
+
+    auto um = utils::memory::new_unique_container<std::map<std::string, int>>();
+    REQUIRE(um.get() != nullptr);
+    for (int i = 0; i < 10; i++) {
+        (*um)[std::to_string(i)] = i;
+    }
+    for (int i = 0; i < 10; i++) {
+        CHECK(i == (*um)[std::to_string(i)]);
+    }
+}
+
 // TODO Other allocator tests
 // T** allocArray(size_t x, size_t y)
 // deallocArray(T** a, size_t y)
 // T*** allocArray(size_t x, size_t y, size_t z)
 // deallocArray(T*** a, size_t y, size_t z)
-
-// deallocVector
-// new_unique_vector
-// deallocMap
 
 #endif

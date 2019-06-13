@@ -2,9 +2,7 @@
 #define UTILS_MISC_HPP
 
 #include "utils_exceptions.hpp"
-#include "utils_memory.hpp"
 #include "utils_print.hpp"
-#include "utils_traits.hpp"
 
 #include <iomanip>
 
@@ -25,8 +23,8 @@ namespace utils::misc {
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static T lexical_cast(const std::string_view& buffer) {
-        T out;
         std::stringstream cast;
+        T out;
 
         if (buffer[0] == '0' && buffer[1] != '.') {
             if (buffer[1] == 'x' || buffer[1] == 'X') {

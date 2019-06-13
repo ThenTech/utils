@@ -6,6 +6,7 @@
 
 #include <cstdint>
 #include <limits>
+#include <numeric>
 
 
 /*
@@ -343,6 +344,32 @@ namespace utils::bits {
         while (utils::bits::shift_signed<T>(value, ++bits) != value);
 
         return bits;
+    }
+
+    /**
+     *  \brief  Accumulate the boolean vector to the target type \p T.
+     *          The MSB will be the first value in the vector.
+     *
+     *          Optional ASSERT to limit size of vector to size of target type.
+     *          If `bool_vec.size()` is bigger, the MSBs will be shifted out.
+     *
+     *  \tparam T
+     *      The target type.
+     *  \param  bool_vec
+     *      The vector to put its contents into a \p T.
+     *  \return Returns a `T` where the MSB is the first item in \p bool_vec,
+     *          and the LSB is the last one.
+     */
+    template<
+        typename T, typename U = bool,
+        typename = typename std::enable_if_t<std::is_integral_v<T>>,
+        typename = typename std::enable_if_t<std::is_same_v<bool, U>
+                                          || std::is_integral_v<U>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline T to_binary(const std::vector<U>& bool_vec) {
+        ASSERT(bool_vec.size() <= utils::bits::size_of<T>());
+        return std::accumulate(bool_vec.begin(), bool_vec.end(), T(0),
+                               [](T x, T y) { return (x << 1) | (y & 1); });
     }
 }
 

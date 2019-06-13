@@ -27,6 +27,60 @@ namespace utils::math {
     }
 
     /**
+     *  \brief  Generic sum all args.
+     *
+     *  \return
+     *      Returns arg1 + ... + argn
+     */
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto sum(T const&... args) {
+        return (args + ... + 0);
+    }
+
+    /**
+     *  \brief  Generic multiply all args.
+     *
+     *  \return
+     *      Returns arg1 * ... * argn
+     */
+    template<typename... T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto product(T const&... args) {
+        return (args * ... * 1);
+    }
+
+    /**
+     *  \brief  Generic determine minimum of all args.
+     *
+     *  \return
+     *      Returns std::min(arg1, std::min(..., argn))
+     */
+    template<typename T, typename... Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto min(T const& first, T const& second, Args const&... args) {
+        if constexpr (sizeof...(Args) == 0) {
+            return std::min(first, second);
+        } else {
+            return first < second ? utils::math::min(first , args...)
+                                  : utils::math::min(second, args...);
+        }
+    }
+
+    /**
+     *  \brief  Generic determine maximum of all args.
+     *
+     *  \return
+     *      Returns std::max(arg1, std::max(..., argn))
+     */
+    template<typename T, typename... Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto max(T const& first, T const& second, Args const&... args) {
+        if constexpr (sizeof...(Args) == 0) {
+            return std::max(first, second);
+        } else {
+            return first > second ? utils::math::max(first , args...)
+                                  : utils::math::max(second, args...);
+        }
+    }
+
+    /**
      *  \brief  Calculate \p value raised to the power \p Exp,
      *          where \p Exp must be an unsigned int.
      *
@@ -39,11 +93,10 @@ namespace utils::math {
      *  \return Returns the result of \p Exp times multiplying \value with itself.
      */
     template <size_t Exp = 2ull, typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr T pow(const T value) {
-        if constexpr(Exp == 0ull) {
-            UNUSED(value);
+    static inline constexpr T pow(ATTR_MAYBE_UNUSED const T value) {
+        if constexpr (Exp == 0ull) {
             return T(1);
-        } else if constexpr(Exp == 1ull) {
+        } else if constexpr (Exp == 1ull) {
             return value;
         } else {
             return value * utils::math::pow<Exp - 1>(value);
@@ -68,7 +121,7 @@ namespace utils::math {
         typename C = typename std::common_type<A, B>::type
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr C gcd(const A x, const B y) noexcept {
-        if constexpr(std::is_integral_v<C>) {
+        if constexpr (std::is_integral_v<C>) {
             return std::gcd(static_cast<C>(x), static_cast<C>(y));
         } else {
             return std::gcd(static_cast<int64_t>(x), static_cast<int64_t>(y));
@@ -93,7 +146,7 @@ namespace utils::math {
         typename C = typename std::common_type<A, B>::type
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr C lcm(const A x, const B y) {
-        if constexpr(std::is_integral_v<C>) {
+        if constexpr (std::is_integral_v<C>) {
             return std::lcm(static_cast<C>(x), static_cast<C>(y));
         } else {
             return std::lcm(static_cast<int64_t>(x), static_cast<int64_t>(y));
@@ -143,9 +196,8 @@ namespace utils::math {
      *		Returns whether x equals y within the given epsilon precision.
      */
     template<typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool epsilon_equals(const T x, const T y, const double epsilon = 1e-4) {
+    static inline constexpr bool epsilon_equals(const T x, const T y, ATTR_MAYBE_UNUSED const double epsilon = 1e-4) {
         if constexpr (std::is_integral_v<T>) {
-            UNUSED(epsilon);
             return x == y;
         } else {
             // TODO Use std::numeric_limits<T>::epsilon() ?
@@ -166,13 +218,14 @@ namespace utils::math {
          */
         template<
             typename Iterator,
-            typename DiffType = typename std::iterator_traits<Iterator>::difference_type
+            typename DiffType = typename std::iterator_traits<Iterator>::difference_type,
+            typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double mean(Iterator first, Iterator last) {
             const DiffType size = std::distance(first, last);
             ASSERT(size > 0);
 
-            return std::accumulate(first, last, 0.0) / size;
+            return double(utils::algorithm::sum(first, last)) / size;
         }
 
         /**
@@ -184,7 +237,7 @@ namespace utils::math {
          */
         template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double mean(const Container& cont) {
-            static_assert(is_iterable_v(cont),
+            static_assert(utils::traits::is_iterable_v<Container>,
                           "utils::algorithm::mean: Container must have iterator support.");
             return utils::math::stats::mean(std::begin(cont), std::end(cont));
         }
@@ -201,7 +254,8 @@ namespace utils::math {
          */
         template<
             typename Iterator,
-            typename DiffType = typename std::iterator_traits<Iterator>::difference_type
+            typename DiffType = typename std::iterator_traits<Iterator>::difference_type,
+            typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static double variance(Iterator first, Iterator last) {
             const DiffType size = std::distance(first, last);
@@ -224,7 +278,7 @@ namespace utils::math {
          */
         template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double variance(const Container& cont) {
-            static_assert(is_iterable_v(cont),
+            static_assert(utils::traits::is_iterable_v<Container>,
                           "utils::algorithm::variance: Container must have iterator support.");
             return utils::math::stats::variance(std::begin(cont), std::end(cont));
         }
@@ -241,7 +295,7 @@ namespace utils::math {
          */
         template<
             typename Iterator,
-            typename DiffType = typename std::iterator_traits<Iterator>::difference_type
+            typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static double stddev(Iterator first, Iterator last) {
             return std::sqrt(utils::math::stats::variance(first, last));
@@ -256,7 +310,7 @@ namespace utils::math {
          */
         template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double stddev(const Container& cont) {
-            static_assert(is_iterable_v(cont),
+            static_assert(utils::traits::is_iterable_v<Container>,
                           "utils::algorithm::stddev: Container must have iterator support.");
             return utils::math::stats::stddev(std::begin(cont), std::end(cont));
         }

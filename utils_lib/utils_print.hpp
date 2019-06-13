@@ -7,8 +7,9 @@
  *  TODO Also look at https://github.com/p-ranav/pprint
  */
 
-#include "utils_string.hpp"
 #include "utils_traits.hpp"
+#include "utils_catch.hpp"
+#include "utils_string.hpp"
 
 #include <iostream>
 #include <iterator>
@@ -270,7 +271,7 @@ namespace utils::print {
             }
 
             void operator()(ostream_type& stream) const {
-                if constexpr(N == 1) {
+                if constexpr (N == 1) {
                     stream << std::get<0>(_tuple);
                 } else {
                     (print_tuple_helper<Tuple, N - 1, TChar, TCharTraits>(_tuple))(stream);
@@ -421,21 +422,17 @@ namespace std {
         return stream;
     }
 
-    // Prints a container to the stream using default delimiters
-    template<
-        typename T, typename TChar, typename TCharTraits,
-        typename = typename std::enable_if_t<utils::traits::is_container<T>::value>
-    >
+    template<typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters>
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
-            const T& container)
+            const utils::print::array_wrapper<T, N>& helper)
     {
-        stream << utils::print::print_container_helper<T, TChar, TCharTraits>(container);
+        stream << utils::print::print_container_helper<utils::print::array_wrapper<T, N>, TChar, TCharTraits>(helper);
         return stream;
     }
 
-    // Prints a pair to the stream using delimiters from delimiters<std::pair<T1, T2>>.
+    /// Prints a pair to the stream using delimiters from delimiters<std::pair<T1, T2>>.
     template<typename T1, typename T2, typename TChar, typename TCharTraits>
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
@@ -468,7 +465,7 @@ namespace std {
         return stream;
     }
 
-    // Prints a tuple to the stream using delimiters from delimiters<std::pair<T1, T2>>.
+    /// Prints a tuple to the stream using delimiters from delimiters<std::tuple<Args...>>.
     template<typename ...Args, typename TChar, typename TCharTraits>
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
@@ -486,17 +483,7 @@ namespace std {
         return stream;
     }
 
-    template<typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::print::array_wrapper<T, N>& helper)
-    {
-        stream << utils::print::print_container_helper<utils::print::array_wrapper<T, N>, TChar, TCharTraits>(helper);
-        return stream;
-    }
-
-
+    /// Prints an optional to the stream using delimiters from delimiters<std::optional<T>>.
     template<typename T, typename TChar, typename TCharTraits>
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
@@ -511,23 +498,44 @@ namespace std {
     }
 
     /**
-     *  \brief  operator <<
-     *          Triggered if T == __gnu_cxx::__normal_iterator<T, Container>
-     *          or another iterator type.
+     *  \brief  Generic operator <<
+     *
+     *          if T == is_pointer<T>
+     *              => prints %p format
+     *          if T == __gnu_cxx::__normal_iterator<T, Container>
+     *                  or another iterator type
+     *              => prints dereference
+     *          if T == is_container<T>
+     *              => prints print_container_helpter<T> using default delimiters
+     *          else prints value itself.
+     *
      *  \param  stream
+     *      The stream to write to.
      *  \param  it_value
-     *  \return
+     *      The possible iterator value.
+     *  \return Returns the stream reference.
      */
-    template<
-        typename T, typename TChar, typename TCharTraits,
-        std::enable_if_t<utils::traits::is_iterator_v<T>, int> = 0
-    >
+    template<typename T, typename TChar, typename TCharTraits>
     std::basic_ostream<TChar, TCharTraits>&
     operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const T& it_value)
     {
-        stream << *it_value;
+        if constexpr (std::is_pointer<T>::value) {
+            if constexpr (std::is_void<T>::value) {
+                stream << (it_value == nullptr ? "nullptr" : utils::string::format("%p", it_value));
+            } else {
+                stream << *it_value;
+            }
+        } else if constexpr (utils::traits::is_iterator_v<T>) {
+            stream << *it_value;
+        } else if constexpr (utils::traits::is_container<T>::value) {
+            stream << utils::print::print_container_helper<T, TChar, TCharTraits>(it_value);
+        } else {
+            stream << it_value; // Warning: Should be unreachable
+            ASSERT(false);
+        }
+
         return stream;
     }
 }

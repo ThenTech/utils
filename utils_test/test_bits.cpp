@@ -261,4 +261,21 @@ TEST_CASE("Test utils::bits::bits_needed", "[utils][utils::bits]" ) {
     }
 }
 
+TEST_CASE("Test utils::bits::to_binary", "[utils][utils::bits]" ) {
+    const std::vector<bool> empty  {};
+    const std::vector<bool> test_f { false };
+    const std::vector<bool> test_t { true  };
+    const std::vector<bool> test_8 { true, false, true, false, true, false, true, false };
+    const std::vector<bool> test_9 { true, false, true, false, true, false, true, false, true };
+    const std::vector<int>  test_i8{ 1, 0, 255, 0, 3, 0, 5, 0};
+
+    CHECK(utils::bits::to_binary<uint8_t> (empty ) == 0x00);
+    CHECK(utils::bits::to_binary<uint8_t> (test_f) == 0x00);
+    CHECK(utils::bits::to_binary<uint8_t> (test_t) == 0x01);
+    CHECK(utils::bits::to_binary<uint8_t> (test_8) == 0xAA);
+    CHECK_FUNCTION_ABORTS(utils::bits::to_binary<uint8_t>, test_9);
+    CHECK(utils::bits::to_binary<uint16_t>(test_9) == 0x155);
+    CHECK(utils::bits::to_binary<int>(test_i8) == 0xAA);
+}
+
 #endif

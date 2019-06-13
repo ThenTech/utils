@@ -1,6 +1,10 @@
 #ifndef UTILS_TRAITS_HPP
 #define UTILS_TRAITS_HPP
 
+#if __cplusplus < 201703L
+#error A C++17 compiler is required!
+#endif
+
 #include <type_traits>
 #include <iterator>
 
@@ -25,6 +29,15 @@
 //#pragma message(VAR_NAME_VALUE(__GNUC__))
 //#pragma message(VAR_NAME_VALUE(__cplusplus))
 //#pragma message(VAR_NAME_VALUE(__TIME__))
+
+/**
+ *  Add padding to class or struct members.
+ *  TYPE should be the type of the last member variable, while
+ *  SIZE should be its size.
+ *
+ *  This will add a char[] with a size to pad the struct/class to the next byte boundary.
+ */
+#define UTILS_TRAITS_ADD_PADDING(TYPE, SIZE) char __utils_padding[alignof(TYPE) * SIZE - 1];
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -69,6 +82,7 @@ namespace utils::traits {
 
     ////////////////////////////////////////////////////////////////////////////
     /// Function with varying number of arguments to avoid "unused variable" warnings.
+    /// Use as UNUSED(var list) or add ATTR_MAYBE_UNUSED to args
     ////////////////////////////////////////////////////////////////////////////
     template <typename... A>
     #if defined(__cpp_constexpr) && __cpp_constexpr >= 201304L
@@ -101,7 +115,7 @@ namespace utils::traits {
 
     ////////////////////////////////////////////////////////////////////////////
     /// True if type T is iterator
-    ////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////   
     template<typename T>
     struct is_iterator {
         private:
@@ -122,9 +136,18 @@ namespace utils::traits {
     template<typename T>
     inline constexpr bool is_iterator_v = is_iterator<T>::value;
 
-    // True if variable CONTAINER is a container with iterator support.
-    #define is_iterable(CONTAINER)   utils::traits::is_iterator<decltype(std::begin(CONTAINER))>
-    #define is_iterable_v(CONTAINER) utils::traits::is_iterator_v<decltype(std::begin(CONTAINER))>
+    /// True if variable T is a container with iterator support.
+    /// i.e. has std::begin and std::end
+    template<typename T, typename U = void>
+    struct is_iterable : public std::false_type { };
+
+    template<typename T>
+    struct is_iterable<T, std::void_t<utils::traits::is_iterator<decltype(std::begin(std::declval<T&>()))>,
+                                      utils::traits::is_iterator<decltype(std::end(std::declval<T&>()))>
+    >> : public std::true_type { };
+
+    template<typename T>
+    inline constexpr bool is_iterable_v = is_iterable<T>::value;
 
     ////////////////////////////////////////////////////////////////////////////
     /// True if type T is a member of the variant VARIANT_T
@@ -173,6 +196,18 @@ namespace utils::traits {
     // Mark T[N] as a container
     template<typename T, size_t N>
     struct is_container<T[N]> : public std::true_type { };
+
+    template<typename T, typename U = void>
+    struct is_maplike : public std::false_type { };
+
+    template<typename T>
+    struct is_maplike<T, std::void_t<typename T::key_type,
+                                     typename T::mapped_type,
+                                     decltype(std::declval<T&>()[std::declval<const typename T::key_type&>()])>>
+      : public std::true_type { };
+
+    template<typename T>
+    inline constexpr bool is_maplike_v = is_maplike<T>::value;
 
     ////////////////////////////////////////////////////////////////////////////
     /// Check if function can be called on Type

@@ -41,30 +41,34 @@ namespace utils::io {
 
         namespace filter {
             struct all {
-                bool operator()(const fs::directory_entry&) {
+                inline bool operator()(const fs::directory_entry&) const {
                     return true;
                 }
             };
 
             struct file {
-                bool operator()(const fs::directory_entry& entry) {
+                inline bool operator()(const fs::directory_entry& entry) const {
                     return entry.status().type() == fs::file_type::regular;
                 }
             };
 
             struct directory {
-                bool operator()(const fs::directory_entry& entry) {
+                inline bool operator()(const fs::directory_entry& entry) const {
                     return entry.status().type() == fs::file_type::directory;
                 }
             };
+
+            using filter_t = decltype(utils::io::filter::all());
         }
 
         template <
-            typename TFilter = decltype(utils::io::filter::all())
+            typename TFilter = filter::filter_t
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents(const std::string_view& folder, TFilter predicate = utils::io::filter::all())
+        static auto list_contents(const std::string_view& folder,
+                                  TFilter predicate = utils::io::filter::all())
         {
-            static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>, "utils::io::list_contents: Callable function required.");
+            static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>,
+                          "utils::io::list_contents: Callable function required.");
 
             auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
 
@@ -77,9 +81,14 @@ namespace utils::io {
         }
 
         template <
-            typename TFilter = decltype(utils::io::filter::all())
+            typename TFilter = filter::filter_t
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents_recur(const std::string_view& folder, TFilter predicate = utils::io::filter::all()) {
+        static auto list_contents_recur(const std::string_view& folder,
+                                        TFilter predicate = utils::io::filter::all())
+        {
+            static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>,
+                          "utils::io::list_contents_recur: Callable function required.");
+
             auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
 
             for (const auto& entry : fs::recursive_directory_iterator(folder)) {
@@ -174,7 +183,7 @@ namespace utils::io {
      *		Throws FileReadException if the file could not be read properly.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static auto readStringFromFile(const std::string& filename) {
+    static auto file_to_string(const std::string& filename) {
         auto str = utils::memory::new_unique_var<std::string>();
         std::ifstream file;
 
@@ -196,12 +205,12 @@ namespace utils::io {
     }
 
     /**
-     *	\brief TO-DO
+     *	\brief TODO comment and test
      *	\param filename
      *	\param str
      */
     ATTR_MAYBE_UNUSED
-    static void writeStringToFile(const std::string& filename, const std::string_view& str) {
+    static void string_to_file(const std::string& filename, const std::string_view& str) {
         std::ofstream file;
 
         try {
@@ -228,7 +237,7 @@ namespace utils::io {
      *		Throws FileReadException if the file could not be read properly.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static auto readBinaryFile(const std::string& filename) {
+    static auto file_to_bytes(const std::string& filename) {
         std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);
 
         if (!file.good()) {
@@ -267,7 +276,7 @@ namespace utils::io {
      *		Throws FileWriteException if the file could not be written properly.
      */
     ATTR_MAYBE_UNUSED
-    static void writeBinaryFile(const std::string& filename, const uint8_t* buffer, size_t length) {
+    static void bytes_to_file(const std::string& filename, const uint8_t* buffer, size_t length) {
         std::ofstream file(filename, std::ofstream::binary);
 
         try {
@@ -289,7 +298,9 @@ namespace utils::io {
             size_t  position;    ///< Position in bits
             bool    managed;
 
-            static constexpr uint8_t bitmasks[] = { 255, 128, 192, 224, 240, 248, 252, 254 };
+            static constexpr inline uint8_t bitmasks[] = { 255, 128, 192, 224, 240, 248, 252, 254 };
+
+            UTILS_TRAITS_ADD_PADDING(uint8_t, 8)
 
         public:
             BitStream(uint8_t *b = nullptr, size_t s = 0, size_t p = 0, bool m = false)
@@ -297,7 +308,7 @@ namespace utils::io {
 
             virtual ~BitStream(void) {
                 if (this->managed) {
-                    utils::memory::deallocArray(this->buffer);
+                    utils::memory::delete_array(this->buffer);
                 }
             }
 
@@ -307,6 +318,10 @@ namespace utils::io {
 
             inline const uint8_t* get_buffer() const {
                 return this->buffer;
+            }
+
+            inline uint8_t operator[](size_t idx) const {
+                return this->buffer[idx];
             }
 
             inline size_t get_size(void) const {
@@ -360,7 +375,7 @@ namespace utils::io {
                         return this->get_size();
                     }
 
-                    utils::memory::reallocArray(this->buffer, this->size, new_size);
+                    utils::memory::realloc_array(this->buffer, this->size, new_size);
                 }
 
                 return this->get_size();
@@ -384,10 +399,27 @@ namespace utils::io {
                 // Empty
             }
 
-            BitStreamReader(std::vector<uint8_t> const& src)
-                : BitStream(utils::memory::allocArray<uint8_t>(src.size()), src.size(), 0, true)
+            template <
+                typename Iterator,
+                typename = typename std::enable_if_t<
+                        utils::traits::is_iterator_v<Iterator>
+                     && std::is_same_v<uint8_t, typename std::iterator_traits<Iterator>::value_type>>
+            >
+            BitStreamReader(Iterator start, Iterator end)
+                : BitStream(nullptr, 0, 0, true)
             {
-                std::copy(src.begin(), src.end(), this->get_buffer());
+                this->resize(size_t(std::distance(start, end)));
+                std::copy(start, end, this->get_buffer());
+            }
+
+            template<
+                typename Container,
+                typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
+            >
+            BitStreamReader(const Container& cont)
+                : BitStreamReader(std::begin(cont), std::end(cont))
+            {
+                // Empty
             }
 
             ~BitStreamReader() {}
@@ -442,8 +474,8 @@ namespace utils::io {
                 utils::memory::unique_t<BitStreamReader> reader;
 
                 try {
-                    auto invec = utils::io::readBinaryFile(filename);
-                    reader.reset(utils::memory::allocVar<BitStreamReader>(*invec));
+                    auto invec = utils::io::file_to_bytes(filename);
+                    reader.reset(utils::memory::new_var<BitStreamReader>(*invec));
                 } catch (utils::exceptions::FileReadException const& e) {
                     reader.reset(nullptr);
                     throw e;
@@ -476,7 +508,7 @@ namespace utils::io {
              * @param [in] size The size (expressed in bytes) of the buffer into which bits will be written.
              */
             BitStreamWriter(size_t s)
-                : BitStream(utils::memory::allocArray<uint8_t>(s), s, 0, true)
+                : BitStream(utils::memory::new_array<uint8_t>(s), s, 0, true)
             {
                 // Empty
             }
@@ -488,12 +520,13 @@ namespace utils::io {
              * @param [in] value The value to put into the bitstream.
              */
             void put_bit(int8_t value) {
+                const size_t current_start_byte = this->position / 8u;
                 const size_t bits_taken = this->position % 8;
 
                 if (value) {
-                    this->buffer[this->position / 8] |= 1 << (7 - bits_taken);
+                    this->buffer[current_start_byte] |= 1 << (7 - bits_taken);
                 } else {
-                    this->buffer[this->position / 8] &= ~(1 << (7 - bits_taken));
+                    this->buffer[current_start_byte] &= ~(1 << (7 - bits_taken));
                 }
 
                 this->position++;
@@ -526,9 +559,9 @@ namespace utils::io {
             }
 
             void write_to_file(const std::string &filename) {
-                utils::io::writeBinaryFile(filename,
-                                           this->get_buffer(),
-                                           this->get_last_byte_position());
+                utils::io::bytes_to_file(filename,
+                                         this->get_buffer(),
+                                         this->get_last_byte_position());
             }
     };
 }

@@ -2,7 +2,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 39, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 40, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
     #warning "TESTS ENABLED"
@@ -46,7 +46,7 @@ static constexpr utils::Version VERSION(0, 39, 0, utils::Version::PreReleaseType
  *      - csv lib
  *      - Floating/Signed-Bitset
  *      - Other threading/future features
- *
+ *      - utils::os other commands (cursor movement etc)
  *      - Rename functions
  *
  *      - Catch 2 with BENCHMARK or Hayai
@@ -58,8 +58,10 @@ static constexpr utils::Version VERSION(0, 39, 0, utils::Version::PreReleaseType
  *  https://github.com/fgoujeon/signal
  *  https://github.com/hosseinmoein/Matrix
  *
- * TODO Doxygen
- * TODO ErrorTrace + Stacktrace?
+ *  Args:
+ *      https://github.com/p-ranav/argparse
+ *      https://github.com/muellan/clipp
+ *      https://github.com/Taywee/args
  *
  *  Extra:
  *      https://github.com/jan-moeller/perlin

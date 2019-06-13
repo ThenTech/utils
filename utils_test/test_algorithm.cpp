@@ -147,78 +147,44 @@ TEST_CASE("Test utils::algorithm::all_within", "[utils][utils::algorithm]") {
 
     auto c = utils::random::generate_x<int>(10, 0, 10);
     REQUIRE(utils::algorithm::within(0, 10, c));
+    REQUIRE(utils::algorithm::within(0, 10, c.begin(), c.end()));
     c.push_back(12);
     CHECK_FALSE(utils::algorithm::within(0, 10, c));
+    CHECK_FALSE(utils::algorithm::within(0, 10, c.begin(), c.end()));
 
     c = utils::random::generate_x<int>(10, 15, 0);
     CHECK(utils::algorithm::within(0, 15, c));
+    CHECK(utils::algorithm::within(0, 15, c.begin(), c.end()));
     CHECK(utils::algorithm::within(15, 0, c));
+    CHECK(utils::algorithm::within(15, 0, c.begin(), c.end()));
 }
 
-TEST_CASE("Test utils::algorithm::sum", "[utils][utils::algorithm]") {
-    REQUIRE(utils::algorithm::sum( ) == 0);
-    REQUIRE(utils::algorithm::sum(0) == 0);
-    REQUIRE(utils::algorithm::sum(1) == 1);
-    REQUIRE(utils::algorithm::sum(0.0) == 0.0);
+TEST_CASE("Test utils::algorithm::sum", "[utils][utils::math]") {
+    constexpr int sum = 55;
+    const std::vector<int>    e{};
+    const std::vector<int>    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const std::vector<double> y{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    const double rnd = utils::random::Random::get<double>();
-    REQUIRE(utils::algorithm::sum(rnd)      == Approx(rnd));
-    REQUIRE(utils::algorithm::sum(rnd, rnd) == Approx(rnd + rnd));
-
-    const double div = rnd / 5.0;
-    REQUIRE(utils::algorithm::sum(div, div, div, div, div) == Approx(rnd));
-
-    REQUIRE(utils::algorithm::sum(10, 20, 30, 40, 50) == 150);
+    REQUIRE(utils::algorithm::sum(e) == 0);
+    REQUIRE(utils::algorithm::sum(e.begin(), e.end()) == 0);
+    REQUIRE(utils::algorithm::sum(x) == sum);
+    REQUIRE(utils::algorithm::sum(x.begin(), x.end()) == sum);
+    REQUIRE(utils::algorithm::sum(y) == Approx(sum));
+    REQUIRE(utils::algorithm::sum(y.begin(), y.end()) == Approx(sum));
 }
 
-TEST_CASE("Test utils::algorithm::multiply", "[utils][utils::algorithm]") {
-    REQUIRE(utils::algorithm::multiply( ) == 1);
-    REQUIRE(utils::algorithm::multiply(0) == 0);
-    REQUIRE(utils::algorithm::multiply(1) == 1);
-    REQUIRE(utils::algorithm::multiply(0.0) == 0.0);
+TEST_CASE("Test utils::algorithm::product", "[utils][utils::math]") {
+    constexpr int prod = 3628800;
+    const std::vector<int>    e{};
+    const std::vector<int>    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const std::vector<double> y{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-    const double rnd = utils::random::Random::get<double>();
-    REQUIRE(utils::algorithm::multiply(rnd)      == Approx(rnd));
-    REQUIRE(utils::algorithm::multiply(rnd, rnd) == Approx(rnd * rnd));
-
-    const double div = rnd / utils::random::Random::get<double>();
-    REQUIRE(utils::algorithm::multiply(div, div, div, div, div) == Approx(std::pow(div, 5.0)));
-
-    REQUIRE(utils::algorithm::multiply(10, 20, 30, 40, 50) == 12000000);
-}
-
-TEST_CASE("Test utils::algorithm::min", "[utils][utils::algorithm]") {
-    REQUIRE(utils::algorithm::min( 0,  0) ==  0);
-    REQUIRE(utils::algorithm::min( 1,  0) ==  0);
-    REQUIRE(utils::algorithm::min( 0,  1) ==  0);
-    REQUIRE(utils::algorithm::min(-1,  0) == -1);
-    REQUIRE(utils::algorithm::min( 0, -1) == -1);
-
-    const double smaller = utils::random::Random::get<double>(0.0, 100.0);
-    const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
-    REQUIRE(utils::algorithm::min(smaller, bigger ) == Approx(smaller));
-    REQUIRE(utils::algorithm::min(bigger , smaller) == Approx(smaller));
-
-    REQUIRE(utils::algorithm::min(bigger,  bigger, bigger,  bigger, smaller) == Approx(smaller));
-    REQUIRE(utils::algorithm::min(bigger,  bigger, bigger, smaller) == Approx(smaller));
-    REQUIRE(utils::algorithm::min(bigger, smaller, bigger,  bigger) == Approx(smaller));
-}
-
-TEST_CASE("Test utils::algorithm::max", "[utils][utils::algorithm]") {
-    REQUIRE(utils::algorithm::max( 0,  0) ==  0);
-    REQUIRE(utils::algorithm::max( 1,  0) ==  1);
-    REQUIRE(utils::algorithm::max( 0,  1) ==  1);
-    REQUIRE(utils::algorithm::max(-1,  0) ==  0);
-    REQUIRE(utils::algorithm::max( 0, -1) ==  0);
-
-    const double smaller = utils::random::Random::get<double>(0.0, 100.0);
-    const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
-    REQUIRE(utils::algorithm::max(smaller, bigger ) == Approx(bigger));
-    REQUIRE(utils::algorithm::max(bigger , smaller) == Approx(bigger));
-
-    REQUIRE(utils::algorithm::max(smaller, smaller, smaller, smaller, bigger) == Approx(bigger));
-    REQUIRE(utils::algorithm::max(smaller, smaller, smaller,  bigger) == Approx(bigger));
-    REQUIRE(utils::algorithm::max(smaller,  bigger, smaller, smaller) == Approx(bigger));
+    REQUIRE(utils::algorithm::product(e) == 0);
+    REQUIRE(utils::algorithm::product(e.begin(), e.end()) == 0);
+    REQUIRE(utils::algorithm::product(x) == prod);
+    REQUIRE(utils::algorithm::product(x.begin(), x.end()) == prod);
+    REQUIRE(utils::algorithm::product(y) == Approx(prod));
+    REQUIRE(utils::algorithm::product(y.begin(), y.end()) == Approx(prod));
 }
 
 static void __test_func(int& x) { x /= 5; }

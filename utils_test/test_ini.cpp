@@ -79,7 +79,7 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
 
         reader3.save();
         std::stringstream().swap(streamed3);
-        auto fc = utils::io::readStringFromFile("./tmp");
+        auto fc = utils::io::file_to_string("./tmp");
         streamed3 << *fc;
         CHECK(streamed.str() == streamed3.str());
         utils::io::fs::remove("./tmp");
