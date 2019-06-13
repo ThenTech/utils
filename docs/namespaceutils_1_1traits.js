@@ -10,7 +10,11 @@ var namespaceutils_1_1traits =
     [ "is_container< std::unordered_map< TKey, TValue, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__map_3_01_t_key_00_01_t_value_00_01_36216da77d37e11cb184e4ea3bbd5fe2.html", null ],
     [ "is_container< std::vector< T, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html", null ],
     [ "is_container< T[N]>", "structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html", null ],
+    [ "is_iterable", "structutils_1_1traits_1_1is__iterable.html", null ],
+    [ "is_iterable< T, std::void_t< utils::traits::is_iterator< decltype(std::begin(std::declval< T & >()))>, utils::traits::is_iterator< decltype(std::end(std::declval< T & >()))> > >", "structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html", null ],
     [ "is_iterator", "structutils_1_1traits_1_1is__iterator.html", "structutils_1_1traits_1_1is__iterator" ],
+    [ "is_maplike", "structutils_1_1traits_1_1is__maplike.html", null ],
+    [ "is_maplike< T, std::void_t< typename T::key_type, typename T::mapped_type, decltype(std::declval< T & >()[std::declval< const typename T::key_type & >()])> >", "structutils_1_1traits_1_1is__maplike_3_01_t_00_01std_1_1void__t_3_01typename_01_t_1_1key__type_08cf2935ef276afed4a89e0bc9ef4f8b6.html", null ],
     [ "is_variant_member", "structutils_1_1traits_1_1is__variant__member.html", null ],
     [ "is_variant_member< T, std::variant< ALL_T... > >", "structutils_1_1traits_1_1is__variant__member_3_01_t_00_01std_1_1variant_3_01_a_l_l___t_8_8_8_01_4_01_4.html", null ]
 ];

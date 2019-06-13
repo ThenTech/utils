@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">15</td>
@@ -339,7 +339,7 @@
 <a name="277"><span class="lineNum">     277 </span>            :              */</a>
 <span class="lineNum">     278 </span>            :             template&lt;typename ...Type&gt;
 <span class="lineNum">     279 </span><span class="lineCov">          1 :             static void Writef(const std::string&amp; format, const Type&amp; ...args) {</span>
-<span class="lineNum">     280 </span>            :                 if constexpr(sizeof...(args) &gt; 0) {
+<span class="lineNum">     280 </span>            :                 if constexpr (sizeof...(args) &gt; 0) {
 <span class="lineNum">     281 </span><span class="lineCov">          1 :                     utils::Logger::Write(utils::string::format(format, args...), utils::Logger::GetFileTimestamp());</span>
 <span class="lineNum">     282 </span>            :                 } else {
 <span class="lineNum">     283 </span>            :                     utils::Logger::Write(format, utils::Logger::GetFileTimestamp());

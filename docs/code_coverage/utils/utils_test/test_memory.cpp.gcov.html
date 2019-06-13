@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">115</td>
-            <td class="headerCovTableEntry">115</td>
+            <td class="headerCovTableEntry">157</td>
+            <td class="headerCovTableEntry">157</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">7</td>
-            <td class="headerCovTableEntry">7</td>
+            <td class="headerCovTableEntry">9</td>
+            <td class="headerCovTableEntry">9</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -68,8 +68,8 @@
 <a name="6"><span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_memory.hpp&quot;</a>
 <span class="lineNum">       7 </span>            : 
 <span class="lineNum">       8 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::allocVar&quot;, &quot;[utils][utils::memory]&quot;) {</span>
-<span class="lineNum">       9 </span><span class="lineCov">          1 :     int *test     = utils::memory::allocVar&lt;int&gt;();</span>
-<span class="lineNum">      10 </span><span class="lineCov">          1 :     int *test_val = utils::memory::allocVar&lt;int&gt;(0xDEADBEEF);</span>
+<span class="lineNum">       9 </span><span class="lineCov">          1 :     int *test     = utils::memory::new_var&lt;int&gt;();</span>
+<span class="lineNum">      10 </span><span class="lineCov">          1 :     int *test_val = utils::memory::new_var&lt;int&gt;(0xDEADBEEF);</span>
 <span class="lineNum">      11 </span>            : 
 <span class="lineNum">      12 </span><span class="lineCov">          2 :     REQUIRE(test != nullptr);</span>
 <span class="lineNum">      13 </span><span class="lineCov">          1 :     *test = 42;</span>
@@ -78,8 +78,8 @@
 <span class="lineNum">      16 </span><span class="lineCov">          2 :     REQUIRE(test_val != nullptr);</span>
 <span class="lineNum">      17 </span><span class="lineCov">          2 :     CHECK(*test_val == 0xDEADBEEF);</span>
 <span class="lineNum">      18 </span>            : 
-<span class="lineNum">      19 </span><span class="lineCov">          1 :     utils::memory::deallocVar(test);</span>
-<span class="lineNum">      20 </span><span class="lineCov">          1 :     utils::memory::deallocVar(test_val);</span>
+<span class="lineNum">      19 </span><span class="lineCov">          1 :     utils::memory::delete_var(test);</span>
+<span class="lineNum">      20 </span><span class="lineCov">          1 :     utils::memory::delete_var(test_val);</span>
 <a name="21"><span class="lineNum">      21 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      22 </span>            : 
 <span class="lineNum">      23 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::new_unique_var&quot;, &quot;[utils][utils::memory]&quot;) {</span>
@@ -95,8 +95,8 @@
 <a name="33"><span class="lineNum">      33 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      34 </span>            : 
 <span class="lineNum">      35 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::allocArray&quot;, &quot;[utils][utils::memory]&quot;) {</span>
-<span class="lineNum">      36 </span><span class="lineCov">          1 :     auto test_0  = utils::memory::allocArray&lt;int&gt;(0);</span>
-<span class="lineNum">      37 </span><span class="lineCov">          1 :     auto test_10 = utils::memory::allocArray&lt;int&gt;(10);</span>
+<span class="lineNum">      36 </span><span class="lineCov">          1 :     auto test_0  = utils::memory::new_array&lt;int&gt;(0);</span>
+<span class="lineNum">      37 </span><span class="lineCov">          1 :     auto test_10 = utils::memory::new_array&lt;int&gt;(10);</span>
 <span class="lineNum">      38 </span>            : 
 <span class="lineNum">      39 </span><span class="lineCov">          2 :     REQUIRE(test_0  != nullptr);</span>
 <span class="lineNum">      40 </span><span class="lineCov">          2 :     REQUIRE(test_10 != nullptr);</span>
@@ -110,14 +110,14 @@
 <span class="lineNum">      48 </span><span class="lineCov">         20 :         CHECK(test_10[i] == i);</span>
 <span class="lineNum">      49 </span>            :     }
 <span class="lineNum">      50 </span>            : 
-<span class="lineNum">      51 </span><span class="lineCov">          1 :     utils::memory::deallocArray(test_0 );</span>
-<span class="lineNum">      52 </span><span class="lineCov">          1 :     utils::memory::deallocArray(test_10);</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 :     utils::memory::delete_array(test_0 );</span>
+<span class="lineNum">      52 </span><span class="lineCov">          1 :     utils::memory::delete_array(test_10);</span>
 <a name="53"><span class="lineNum">      53 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      54 </span>            : 
 <span class="lineNum">      55 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::allocFlatArray&quot;, &quot;[utils][utils::memory]&quot;) {</span>
-<span class="lineNum">      56 </span><span class="lineCov">          1 :     auto test_0   = utils::memory::allocFlatArray&lt;int&gt;(0);</span>
-<span class="lineNum">      57 </span><span class="lineCov">          1 :     auto test_10  = utils::memory::allocFlatArray&lt;int&gt;(10);</span>
-<span class="lineNum">      58 </span><span class="lineCov">          1 :     auto test_2_2 = utils::memory::allocFlatArray&lt;int&gt;(2, 2);</span>
+<span class="lineNum">      56 </span><span class="lineCov">          1 :     auto test_0   = utils::memory::new_flat_array&lt;int&gt;(0);</span>
+<span class="lineNum">      57 </span><span class="lineCov">          1 :     auto test_10  = utils::memory::new_flat_array&lt;int&gt;(10);</span>
+<span class="lineNum">      58 </span><span class="lineCov">          1 :     auto test_2_2 = utils::memory::new_flat_array&lt;int&gt;(2, 2);</span>
 <span class="lineNum">      59 </span>            : 
 <span class="lineNum">      60 </span><span class="lineCov">          2 :     REQUIRE(test_0   != nullptr);</span>
 <span class="lineNum">      61 </span><span class="lineCov">          2 :     REQUIRE(test_10  != nullptr);</span>
@@ -135,18 +135,18 @@
 <span class="lineNum">      73 </span>            :         }
 <span class="lineNum">      74 </span>            :     }
 <span class="lineNum">      75 </span>            : 
-<span class="lineNum">      76 </span><span class="lineCov">          1 :     utils::memory::deallocArray(test_0 );</span>
-<span class="lineNum">      77 </span><span class="lineCov">          1 :     utils::memory::deallocArray(test_10);</span>
-<span class="lineNum">      78 </span><span class="lineCov">          1 :     utils::memory::deallocArray(test_2_2);</span>
+<span class="lineNum">      76 </span><span class="lineCov">          1 :     utils::memory::delete_array(test_0 );</span>
+<span class="lineNum">      77 </span><span class="lineCov">          1 :     utils::memory::delete_array(test_10);</span>
+<span class="lineNum">      78 </span><span class="lineCov">          1 :     utils::memory::delete_array(test_2_2);</span>
 <a name="79"><span class="lineNum">      79 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      80 </span>            : 
 <span class="lineNum">      81 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::reallocArray&quot;, &quot;[utils][utils::memory]&quot;) {</span>
 <span class="lineNum">      82 </span><span class="lineCov">          1 :     size_t length = 0;</span>
-<span class="lineNum">      83 </span><span class="lineCov">          1 :     auto test = utils::memory::allocArray&lt;int&gt;(length);</span>
+<span class="lineNum">      83 </span><span class="lineCov">          1 :     auto test = utils::memory::new_array&lt;int&gt;(length);</span>
 <span class="lineNum">      84 </span><span class="lineCov">          2 :     REQUIRE(test != nullptr);</span>
 <span class="lineNum">      85 </span>            : 
 <span class="lineNum">      86 </span><span class="lineCov">          1 :     auto old = test;</span>
-<span class="lineNum">      87 </span><span class="lineCov">          1 :     utils::memory::reallocArray(test, length, 10ull);</span>
+<span class="lineNum">      87 </span><span class="lineCov">          1 :     utils::memory::realloc_array(test, length, 10ull);</span>
 <span class="lineNum">      88 </span><span class="lineCov">          2 :     REQUIRE(test != nullptr);</span>
 <span class="lineNum">      89 </span><span class="lineCov">          2 :     REQUIRE(test != old);</span>
 <span class="lineNum">      90 </span><span class="lineCov">          2 :     REQUIRE(length == 10);</span>
@@ -157,7 +157,7 @@
 <span class="lineNum">      95 </span>            :     }
 <span class="lineNum">      96 </span>            : 
 <span class="lineNum">      97 </span><span class="lineCov">          1 :     old = test;</span>
-<span class="lineNum">      98 </span><span class="lineCov">          1 :     utils::memory::reallocArray(test, length, 5ull);</span>
+<span class="lineNum">      98 </span><span class="lineCov">          1 :     utils::memory::realloc_array(test, length, 5ull);</span>
 <span class="lineNum">      99 </span><span class="lineCov">          2 :     REQUIRE(test != nullptr);</span>
 <span class="lineNum">     100 </span><span class="lineCov">          2 :     REQUIRE(test != old);</span>
 <span class="lineNum">     101 </span><span class="lineCov">          2 :     REQUIRE(length == 5);</span>
@@ -166,7 +166,7 @@
 <span class="lineNum">     104 </span>            :     }
 <span class="lineNum">     105 </span>            : 
 <span class="lineNum">     106 </span><span class="lineCov">          1 :     old = test;</span>
-<span class="lineNum">     107 </span><span class="lineCov">          1 :     utils::memory::reallocArray(test, length, 10ull);</span>
+<span class="lineNum">     107 </span><span class="lineCov">          1 :     utils::memory::realloc_array(test, length, 10ull);</span>
 <span class="lineNum">     108 </span><span class="lineCov">          2 :     REQUIRE(test != nullptr);</span>
 <span class="lineNum">     109 </span><span class="lineCov">          2 :     REQUIRE(test != old);</span>
 <span class="lineNum">     110 </span><span class="lineCov">          2 :     REQUIRE(length == 10);</span>
@@ -179,15 +179,15 @@
 <span class="lineNum">     117 </span>            : 
 <span class="lineNum">     118 </span><span class="lineCov">          1 :     int *empty = nullptr;</span>
 <span class="lineNum">     119 </span><span class="lineCov">          1 :     length = 0;</span>
-<span class="lineNum">     120 </span><span class="lineCov">          1 :     utils::memory::reallocArray(empty, length, 10ull);</span>
+<span class="lineNum">     120 </span><span class="lineCov">          1 :     utils::memory::realloc_array(empty, length, 10ull);</span>
 <span class="lineNum">     121 </span><span class="lineCov">          2 :     REQUIRE(empty != nullptr);</span>
 <span class="lineNum">     122 </span><span class="lineCov">          2 :     REQUIRE(length == 10);</span>
 <span class="lineNum">     123 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
 <span class="lineNum">     124 </span><span class="lineCov">         20 :         CHECK(empty[i] == 0);</span>
 <span class="lineNum">     125 </span>            :     }
 <span class="lineNum">     126 </span>            : 
-<span class="lineNum">     127 </span><span class="lineCov">          1 :     utils::memory::deallocArray(test);</span>
-<span class="lineNum">     128 </span><span class="lineCov">          1 :     utils::memory::deallocArray(empty);</span>
+<span class="lineNum">     127 </span><span class="lineCov">          1 :     utils::memory::delete_array(test);</span>
+<span class="lineNum">     128 </span><span class="lineCov">          1 :     utils::memory::delete_array(empty);</span>
 <a name="129"><span class="lineNum">     129 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     130 </span>            : 
 <span class="lineNum">     131 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::new_unique_array&quot;, &quot;[utils][utils::memory]&quot;) {</span>
@@ -227,19 +227,75 @@
 <span class="lineNum">     165 </span><span class="lineCov">          8 :             CHECK(test_2_2[j * 2 + i] == j * 2 + i);</span>
 <span class="lineNum">     166 </span>            :         }
 <span class="lineNum">     167 </span>            :     }
-<span class="lineNum">     168 </span><span class="lineCov">          1 : }</span>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     169 </span>            : 
-<span class="lineNum">     170 </span>            : // TODO Other allocator tests
-<span class="lineNum">     171 </span>            : // T** allocArray(size_t x, size_t y)
-<span class="lineNum">     172 </span>            : // deallocArray(T** a, size_t y)
-<span class="lineNum">     173 </span>            : // T*** allocArray(size_t x, size_t y, size_t z)
-<span class="lineNum">     174 </span>            : // deallocArray(T*** a, size_t y, size_t z)
-<span class="lineNum">     175 </span>            : 
-<span class="lineNum">     176 </span>            : // deallocVector
-<span class="lineNum">     177 </span>            : // new_unique_vector
-<span class="lineNum">     178 </span>            : // deallocMap
-<span class="lineNum">     179 </span>            : 
-<span class="lineNum">     180 </span>            : #endif
+<span class="lineNum">     170 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::deallocContainer&quot;, &quot;[utils][utils::memory]&quot;) {</span>
+<span class="lineNum">     171 </span><span class="lineCov">          1 :     auto uv_p = utils::memory::new_var&lt;std::vector&lt;int*&gt;&gt;();</span>
+<span class="lineNum">     172 </span><span class="lineCov">          2 :     REQUIRE(uv_p != nullptr);</span>
+<span class="lineNum">     173 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     174 </span><span class="lineCov">         10 :         uv_p-&gt;push_back(new int(i));</span>
+<span class="lineNum">     175 </span>            :     }
+<span class="lineNum">     176 </span><span class="lineCov">          2 :     REQUIRE(uv_p-&gt;size() == 10);</span>
+<span class="lineNum">     177 </span><span class="lineCov">          1 :     utils::memory::delete_container(uv_p);</span>
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span><span class="lineCov">          1 :     auto um_p = utils::memory::new_var&lt;std::map&lt;std::string, int*&gt;&gt;();</span>
+<span class="lineNum">     180 </span><span class="lineCov">          2 :     REQUIRE(um_p != nullptr);</span>
+<span class="lineNum">     181 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     182 </span><span class="lineCov">         10 :         (*um_p)[std::to_string(i)] = new int(i);</span>
+<span class="lineNum">     183 </span>            :     }
+<span class="lineNum">     184 </span><span class="lineCov">          2 :     REQUIRE(um_p-&gt;size() == 10);</span>
+<span class="lineNum">     185 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     186 </span><span class="lineCov">         20 :         CHECK(i == *(*um_p)[std::to_string(i)]);</span>
+<span class="lineNum">     187 </span>            :     }
+<span class="lineNum">     188 </span><span class="lineCov">          1 :     utils::memory::delete_container(um_p);</span>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::memory::new_unique_container&quot;, &quot;[utils][utils::memory]&quot;) {</span>
+<span class="lineNum">     192 </span><span class="lineCov">          2 :     auto uv_p = utils::memory::new_unique_vector&lt;int&gt;();</span>
+<span class="lineNum">     193 </span><span class="lineCov">          2 :     REQUIRE(uv_p.get() != nullptr);</span>
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     196 </span><span class="lineCov">         10 :         uv_p-&gt;push_back(new int(i));</span>
+<span class="lineNum">     197 </span>            :     }
+<span class="lineNum">     198 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     199 </span><span class="lineCov">         20 :         CHECK(i == *uv_p-&gt;at(size_t(i)));</span>
+<span class="lineNum">     200 </span>            :     }
+<span class="lineNum">     201 </span>            : 
+<span class="lineNum">     202 </span><span class="lineCov">          2 :     auto um_p = utils::memory::new_unique_container&lt;std::map&lt;std::string, int*&gt;&gt;();</span>
+<span class="lineNum">     203 </span><span class="lineCov">          2 :     REQUIRE(um_p.get() != nullptr);</span>
+<span class="lineNum">     204 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     205 </span><span class="lineCov">         10 :         (*um_p)[std::to_string(i)] = new int(i);</span>
+<span class="lineNum">     206 </span>            :     }
+<span class="lineNum">     207 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     208 </span><span class="lineCov">         20 :         CHECK(i == *(*um_p)[std::to_string(i)]);</span>
+<span class="lineNum">     209 </span>            :     }
+<span class="lineNum">     210 </span>            : 
+<span class="lineNum">     211 </span><span class="lineCov">          2 :     auto uv = utils::memory::new_unique_container&lt;std::vector&lt;int&gt;&gt;();</span>
+<span class="lineNum">     212 </span><span class="lineCov">          2 :     REQUIRE(uv.get() != nullptr);</span>
+<span class="lineNum">     213 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     214 </span><span class="lineCov">         10 :         uv-&gt;push_back(i);</span>
+<span class="lineNum">     215 </span>            :     }
+<span class="lineNum">     216 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     217 </span><span class="lineCov">         20 :         CHECK(i == uv-&gt;at(size_t(i)));</span>
+<span class="lineNum">     218 </span>            :     }
+<span class="lineNum">     219 </span>            : 
+<span class="lineNum">     220 </span><span class="lineCov">          2 :     auto um = utils::memory::new_unique_container&lt;std::map&lt;std::string, int&gt;&gt;();</span>
+<span class="lineNum">     221 </span><span class="lineCov">          2 :     REQUIRE(um.get() != nullptr);</span>
+<span class="lineNum">     222 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     223 </span><span class="lineCov">         10 :         (*um)[std::to_string(i)] = i;</span>
+<span class="lineNum">     224 </span>            :     }
+<span class="lineNum">     225 </span><span class="lineCov">         11 :     for (int i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     226 </span><span class="lineCov">         20 :         CHECK(i == (*um)[std::to_string(i)]);</span>
+<span class="lineNum">     227 </span>            :     }
+<span class="lineNum">     228 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">     229 </span>            : 
+<span class="lineNum">     230 </span>            : // TODO Other allocator tests
+<span class="lineNum">     231 </span>            : // T** allocArray(size_t x, size_t y)
+<span class="lineNum">     232 </span>            : // deallocArray(T** a, size_t y)
+<span class="lineNum">     233 </span>            : // T*** allocArray(size_t x, size_t y, size_t z)
+<span class="lineNum">     234 </span>            : // deallocArray(T*** a, size_t y, size_t z)
+<span class="lineNum">     235 </span>            : 
+<span class="lineNum">     236 </span>            : #endif
 </pre>
       </td>
     </tr>

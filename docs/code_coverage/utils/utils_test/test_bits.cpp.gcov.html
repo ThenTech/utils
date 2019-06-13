@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">192</td>
-            <td class="headerCovTableEntry">192</td>
+            <td class="headerCovTableEntry">207</td>
+            <td class="headerCovTableEntry">207</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">16</td>
-            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntry">17</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -321,9 +321,26 @@
 <span class="lineNum">     259 </span><span class="lineCov">        128 :         CHECK(utils::bits::bits_needed&lt;uint64_t&gt;(mask) == i);</span>
 <span class="lineNum">     260 </span><span class="lineCov">        128 :         CHECK(utils::bits::bits_needed&lt;int64_t&gt;(int64_t(mask)) == (i &lt; 63 ? i + 1 : 64));</span>
 <span class="lineNum">     261 </span>            :     }
-<span class="lineNum">     262 </span><span class="lineCov">          1 : }</span>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     263 </span>            : 
-<span class="lineNum">     264 </span>            : #endif
+<span class="lineNum">     264 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::bits::to_binary&quot;, &quot;[utils][utils::bits]&quot; ) {</span>
+<span class="lineNum">     265 </span><span class="lineCov">          2 :     const std::vector&lt;bool&gt; empty  {};</span>
+<span class="lineNum">     266 </span><span class="lineCov">          2 :     const std::vector&lt;bool&gt; test_f { false };</span>
+<span class="lineNum">     267 </span><span class="lineCov">          2 :     const std::vector&lt;bool&gt; test_t { true  };</span>
+<span class="lineNum">     268 </span><span class="lineCov">          2 :     const std::vector&lt;bool&gt; test_8 { true, false, true, false, true, false, true, false };</span>
+<span class="lineNum">     269 </span><span class="lineCov">          2 :     const std::vector&lt;bool&gt; test_9 { true, false, true, false, true, false, true, false, true };</span>
+<span class="lineNum">     270 </span><span class="lineCov">          2 :     const std::vector&lt;int&gt;  test_i8{ 1, 0, 255, 0, 3, 0, 5, 0};</span>
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span><span class="lineCov">          2 :     CHECK(utils::bits::to_binary&lt;uint8_t&gt; (empty ) == 0x00);</span>
+<span class="lineNum">     273 </span><span class="lineCov">          2 :     CHECK(utils::bits::to_binary&lt;uint8_t&gt; (test_f) == 0x00);</span>
+<span class="lineNum">     274 </span><span class="lineCov">          2 :     CHECK(utils::bits::to_binary&lt;uint8_t&gt; (test_t) == 0x01);</span>
+<span class="lineNum">     275 </span><span class="lineCov">          2 :     CHECK(utils::bits::to_binary&lt;uint8_t&gt; (test_8) == 0xAA);</span>
+<span class="lineNum">     276 </span><span class="lineCov">          2 :     CHECK_FUNCTION_ABORTS(utils::bits::to_binary&lt;uint8_t&gt;, test_9);</span>
+<span class="lineNum">     277 </span><span class="lineCov">          2 :     CHECK(utils::bits::to_binary&lt;uint16_t&gt;(test_9) == 0x155);</span>
+<span class="lineNum">     278 </span><span class="lineCov">          2 :     CHECK(utils::bits::to_binary&lt;int&gt;(test_i8) == 0xAA);</span>
+<span class="lineNum">     279 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span>            : #endif
 </pre>
       </td>
     </tr>

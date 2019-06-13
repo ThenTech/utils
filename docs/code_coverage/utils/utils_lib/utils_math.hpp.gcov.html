@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">38</td>
-            <td class="headerCovTableEntry">38</td>
+            <td class="headerCovTableEntry">50</td>
+            <td class="headerCovTableEntry">50</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">53</td>
-            <td class="headerCovTableEntry">53</td>
+            <td class="headerCovTableEntry">75</td>
+            <td class="headerCovTableEntry">75</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -89,243 +89,297 @@
 <span class="lineNum">      27 </span>            :     }
 <span class="lineNum">      28 </span>            : 
 <span class="lineNum">      29 </span>            :     /**
-<span class="lineNum">      30 </span>            :      *  \brief  Calculate \p value raised to the power \p Exp,
-<span class="lineNum">      31 </span>            :      *          where \p Exp must be an unsigned int.
-<span class="lineNum">      32 </span>            :      *
-<span class="lineNum">      33 </span>            :      *          The result is calulated by unpacking \p value times itself \p Exp times.
-<span class="lineNum">      34 </span>            :      *
-<span class="lineNum">      35 </span>            :      *  \tparam Exp
-<span class="lineNum">      36 </span>            :      *      The power to raise to as template parameter. Default is squared.
-<span class="lineNum">      37 </span>            :      *  \param  value
-<span class="lineNum">      38 </span>            :      *      The value to raise.
-<span class="lineNum">      39 </span>            :      *  \return Returns the result of \p Exp times multiplying \value with itself.
-<a name="40"><span class="lineNum">      40 </span>            :      */</a>
-<span class="lineNum">      41 </span>            :     template &lt;size_t Exp = 2ull, typename T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      42 </span><span class="lineCov">         39 :     static inline constexpr T pow(const T value) {</span>
-<span class="lineNum">      43 </span>            :         if constexpr(Exp == 0ull) {
-<span class="lineNum">      44 </span>            :             UNUSED(value);
-<span class="lineNum">      45 </span><span class="lineCov">          1 :             return T(1);</span>
-<span class="lineNum">      46 </span>            :         } else if constexpr(Exp == 1ull) {
-<span class="lineNum">      47 </span><span class="lineCov">          9 :             return value;</span>
-<span class="lineNum">      48 </span>            :         } else {
-<span class="lineNum">      49 </span><span class="lineCov">         29 :             return value * utils::math::pow&lt;Exp - 1&gt;(value);</span>
-<span class="lineNum">      50 </span>            :         }
-<span class="lineNum">      51 </span>            :     }
-<span class="lineNum">      52 </span>            : 
-<span class="lineNum">      53 </span>            :     /**
-<span class="lineNum">      54 </span>            :      *  brief   Greatest Common Divisor (Euclid)
-<span class="lineNum">      55 </span>            :      *          Find the GCD of \p x and \p y:
-<span class="lineNum">      56 </span>            :      *              - will cast to size_t if their common type is not integral;
-<span class="lineNum">      57 </span>            :      *              - will take absolute value.
-<span class="lineNum">      58 </span>            :      *
-<span class="lineNum">      59 </span>            :      *  param   x
-<span class="lineNum">      60 </span>            :      *      The first number to check.
-<span class="lineNum">      61 </span>            :      *  param   y
-<span class="lineNum">      62 </span>            :      *      The second number to check.
-<span class="lineNum">      63 </span>            :      *  return  Returns the GCD between \p x and \p y.
-<span class="lineNum">      64 </span>            :      */
-<span class="lineNum">      65 </span>            :     template&lt;
-<span class="lineNum">      66 </span>            :         typename A,
-<span class="lineNum">      67 </span>            :         typename B,
-<a name="68"><span class="lineNum">      68 </span>            :         typename C = typename std::common_type&lt;A, B&gt;::type</a>
-<span class="lineNum">      69 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      70 </span><span class="lineCov">         22 :     static inline constexpr C gcd(const A x, const B y) noexcept {</span>
-<span class="lineNum">      71 </span>            :         if constexpr(std::is_integral_v&lt;C&gt;) {
-<span class="lineNum">      72 </span><span class="lineCov">         20 :             return std::gcd(static_cast&lt;C&gt;(x), static_cast&lt;C&gt;(y));</span>
-<span class="lineNum">      73 </span>            :         } else {
-<span class="lineNum">      74 </span><span class="lineCov">          2 :             return std::gcd(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y));</span>
-<span class="lineNum">      75 </span>            :         }
-<span class="lineNum">      76 </span>            :     }
-<span class="lineNum">      77 </span>            : 
-<span class="lineNum">      78 </span>            :     /**
-<span class="lineNum">      79 </span>            :      *  brief   Least Common Multiple
-<span class="lineNum">      80 </span>            :      *          Find the LCM of \p x and \p y:
-<span class="lineNum">      81 </span>            :      *              - will cast to size_t if their common type is not integral;
-<span class="lineNum">      82 </span>            :      *              - will take absolute value.
-<span class="lineNum">      83 </span>            :      *
-<span class="lineNum">      84 </span>            :      *  param   x
-<span class="lineNum">      85 </span>            :      *      The first number to check.
-<span class="lineNum">      86 </span>            :      *  param   y
-<span class="lineNum">      87 </span>            :      *      The second number to check.
-<span class="lineNum">      88 </span>            :      *  return  Returns the LCM of \p x and \p y.
-<span class="lineNum">      89 </span>            :      */
-<span class="lineNum">      90 </span>            :     template&lt;
-<span class="lineNum">      91 </span>            :         typename A,
-<span class="lineNum">      92 </span>            :         typename B,
-<a name="93"><span class="lineNum">      93 </span>            :         typename C = typename std::common_type&lt;A, B&gt;::type</a>
-<span class="lineNum">      94 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      95 </span><span class="lineCov">         32 :     static inline constexpr C lcm(const A x, const B y) {</span>
-<span class="lineNum">      96 </span>            :         if constexpr(std::is_integral_v&lt;C&gt;) {
-<span class="lineNum">      97 </span><span class="lineCov">         30 :             return std::lcm(static_cast&lt;C&gt;(x), static_cast&lt;C&gt;(y));</span>
-<span class="lineNum">      98 </span>            :         } else {
-<span class="lineNum">      99 </span><span class="lineCov">          2 :             return std::lcm(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y));</span>
-<span class="lineNum">     100 </span>            :         }
-<span class="lineNum">     101 </span>            :     }
-<span class="lineNum">     102 </span>            : 
-<span class="lineNum">     103 </span>            :     /**
-<span class="lineNum">     104 </span>            :      *  brief   Least Common Multiple
-<span class="lineNum">     105 </span>            :      *          Find the LCM of \p x, \p y and every other argument
-<span class="lineNum">     106 </span>            :      *          by calling `utils::math::lcm` on the first two and
-<span class="lineNum">     107 </span>            :      *          chining that result with the other arguments.
-<span class="lineNum">     108 </span>            :      *
-<span class="lineNum">     109 </span>            :      *  param   x
-<span class="lineNum">     110 </span>            :      *      The first number to check.
-<span class="lineNum">     111 </span>            :      *  param   y
-<span class="lineNum">     112 </span>            :      *      The second number to check.
-<span class="lineNum">     113 </span>            :      *  param   ...args
-<span class="lineNum">     114 </span>            :      *      The other numbers to check.
-<span class="lineNum">     115 </span>            :      *  return  Returns the LCM of \p x, \p y and every other argument.
-<span class="lineNum">     116 </span>            :      */
-<span class="lineNum">     117 </span>            :     template&lt;
-<span class="lineNum">     118 </span>            :         typename A,
-<span class="lineNum">     119 </span>            :         typename B,
-<span class="lineNum">     120 </span>            :         typename ...Args,
-<a name="121"><span class="lineNum">     121 </span>            :         typename C = typename std::common_type&lt;A, B, Args...&gt;::type</a>
+<span class="lineNum">      30 </span>            :      *  \brief  Generic sum all args.
+<span class="lineNum">      31 </span>            :      *
+<span class="lineNum">      32 </span>            :      *  \return
+<span class="lineNum">      33 </span>            :      *      Returns arg1 + ... + argn
+<a name="34"><span class="lineNum">      34 </span>            :      */</a>
+<span class="lineNum">      35 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      36 </span><span class="lineCov">          8 :     static inline constexpr auto sum(T const&amp;... args) {</span>
+<span class="lineNum">      37 </span><span class="lineCov">          8 :         return (args + ... + 0);</span>
+<span class="lineNum">      38 </span>            :     }
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            :     /**
+<span class="lineNum">      41 </span>            :      *  \brief  Generic multiply all args.
+<span class="lineNum">      42 </span>            :      *
+<span class="lineNum">      43 </span>            :      *  \return
+<span class="lineNum">      44 </span>            :      *      Returns arg1 * ... * argn
+<a name="45"><span class="lineNum">      45 </span>            :      */</a>
+<span class="lineNum">      46 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      47 </span><span class="lineCov">          8 :     static inline constexpr auto product(T const&amp;... args) {</span>
+<span class="lineNum">      48 </span><span class="lineCov">          8 :         return (args * ... * 1);</span>
+<span class="lineNum">      49 </span>            :     }
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            :     /**
+<span class="lineNum">      52 </span>            :      *  \brief  Generic determine minimum of all args.
+<span class="lineNum">      53 </span>            :      *
+<span class="lineNum">      54 </span>            :      *  \return
+<span class="lineNum">      55 </span>            :      *      Returns std::min(arg1, std::min(..., argn))
+<a name="56"><span class="lineNum">      56 </span>            :      */</a>
+<span class="lineNum">      57 </span>            :     template&lt;typename T, typename... Args&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      58 </span><span class="lineCov">         17 :     static inline constexpr auto min(T const&amp; first, T const&amp; second, Args const&amp;... args) {</span>
+<span class="lineNum">      59 </span>            :         if constexpr (sizeof...(Args) == 0) {
+<span class="lineNum">      60 </span><span class="lineCov">         10 :             return std::min(first, second);</span>
+<span class="lineNum">      61 </span>            :         } else {
+<span class="lineNum">      62 </span><span class="lineCov">          7 :             return first &lt; second ? utils::math::min(first , args...)</span>
+<span class="lineNum">      63 </span><span class="lineCov">          7 :                                   : utils::math::min(second, args...);</span>
+<span class="lineNum">      64 </span>            :         }
+<span class="lineNum">      65 </span>            :     }
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            :     /**
+<span class="lineNum">      68 </span>            :      *  \brief  Generic determine maximum of all args.
+<span class="lineNum">      69 </span>            :      *
+<span class="lineNum">      70 </span>            :      *  \return
+<span class="lineNum">      71 </span>            :      *      Returns std::max(arg1, std::max(..., argn))
+<a name="72"><span class="lineNum">      72 </span>            :      */</a>
+<span class="lineNum">      73 </span>            :     template&lt;typename T, typename... Args&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      74 </span><span class="lineCov">         17 :     static inline constexpr auto max(T const&amp; first, T const&amp; second, Args const&amp;... args) {</span>
+<span class="lineNum">      75 </span>            :         if constexpr (sizeof...(Args) == 0) {
+<span class="lineNum">      76 </span><span class="lineCov">         10 :             return std::max(first, second);</span>
+<span class="lineNum">      77 </span>            :         } else {
+<span class="lineNum">      78 </span><span class="lineCov">          7 :             return first &gt; second ? utils::math::max(first , args...)</span>
+<span class="lineNum">      79 </span><span class="lineCov">          7 :                                   : utils::math::max(second, args...);</span>
+<span class="lineNum">      80 </span>            :         }
+<span class="lineNum">      81 </span>            :     }
+<span class="lineNum">      82 </span>            : 
+<span class="lineNum">      83 </span>            :     /**
+<span class="lineNum">      84 </span>            :      *  \brief  Calculate \p value raised to the power \p Exp,
+<span class="lineNum">      85 </span>            :      *          where \p Exp must be an unsigned int.
+<span class="lineNum">      86 </span>            :      *
+<span class="lineNum">      87 </span>            :      *          The result is calulated by unpacking \p value times itself \p Exp times.
+<span class="lineNum">      88 </span>            :      *
+<span class="lineNum">      89 </span>            :      *  \tparam Exp
+<span class="lineNum">      90 </span>            :      *      The power to raise to as template parameter. Default is squared.
+<span class="lineNum">      91 </span>            :      *  \param  value
+<span class="lineNum">      92 </span>            :      *      The value to raise.
+<span class="lineNum">      93 </span>            :      *  \return Returns the result of \p Exp times multiplying \value with itself.
+<a name="94"><span class="lineNum">      94 </span>            :      */</a>
+<span class="lineNum">      95 </span>            :     template &lt;size_t Exp = 2ull, typename T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      96 </span><span class="lineCov">         39 :     static inline constexpr T pow(ATTR_MAYBE_UNUSED const T value) {</span>
+<span class="lineNum">      97 </span>            :         if constexpr (Exp == 0ull) {
+<span class="lineNum">      98 </span><span class="lineCov">          1 :             return T(1);</span>
+<span class="lineNum">      99 </span>            :         } else if constexpr (Exp == 1ull) {
+<span class="lineNum">     100 </span><span class="lineCov">          9 :             return value;</span>
+<span class="lineNum">     101 </span>            :         } else {
+<span class="lineNum">     102 </span><span class="lineCov">         29 :             return value * utils::math::pow&lt;Exp - 1&gt;(value);</span>
+<span class="lineNum">     103 </span>            :         }
+<span class="lineNum">     104 </span>            :     }
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span>            :     /**
+<span class="lineNum">     107 </span>            :      *  brief   Greatest Common Divisor (Euclid)
+<span class="lineNum">     108 </span>            :      *          Find the GCD of \p x and \p y:
+<span class="lineNum">     109 </span>            :      *              - will cast to size_t if their common type is not integral;
+<span class="lineNum">     110 </span>            :      *              - will take absolute value.
+<span class="lineNum">     111 </span>            :      *
+<span class="lineNum">     112 </span>            :      *  param   x
+<span class="lineNum">     113 </span>            :      *      The first number to check.
+<span class="lineNum">     114 </span>            :      *  param   y
+<span class="lineNum">     115 </span>            :      *      The second number to check.
+<span class="lineNum">     116 </span>            :      *  return  Returns the GCD between \p x and \p y.
+<span class="lineNum">     117 </span>            :      */
+<span class="lineNum">     118 </span>            :     template&lt;
+<span class="lineNum">     119 </span>            :         typename A,
+<span class="lineNum">     120 </span>            :         typename B,
+<a name="121"><span class="lineNum">     121 </span>            :         typename C = typename std::common_type&lt;A, B&gt;::type</a>
 <span class="lineNum">     122 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     123 </span><span class="lineCov">         12 :     static inline constexpr C lcm_chain(const A x, const B y, const Args... args) {</span>
-<span class="lineNum">     124 </span>            :         if constexpr (sizeof...(Args) == 0) {
-<span class="lineNum">     125 </span><span class="lineCov">          4 :             return utils::math::lcm(x, y);</span>
+<span class="lineNum">     123 </span><span class="lineCov">         22 :     static inline constexpr C gcd(const A x, const B y) noexcept {</span>
+<span class="lineNum">     124 </span>            :         if constexpr (std::is_integral_v&lt;C&gt;) {
+<span class="lineNum">     125 </span><span class="lineCov">         20 :             return std::gcd(static_cast&lt;C&gt;(x), static_cast&lt;C&gt;(y));</span>
 <span class="lineNum">     126 </span>            :         } else {
-<span class="lineNum">     127 </span><span class="lineCov">          8 :             return utils::math::lcm_chain(utils::math::lcm(x, y), args...);</span>
+<span class="lineNum">     127 </span><span class="lineCov">          2 :             return std::gcd(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y));</span>
 <span class="lineNum">     128 </span>            :         }
 <span class="lineNum">     129 </span>            :     }
 <span class="lineNum">     130 </span>            : 
-<span class="lineNum">     131 </span>            :     /** \brief  Check if the given values are equal.
-<span class="lineNum">     132 </span>            :      *          For integral types, `==` is used, while floating point types
-<span class="lineNum">     133 </span>            :      *          use a comparison with diff(x, y) and epsilon.
-<span class="lineNum">     134 </span>            :      *
-<span class="lineNum">     135 </span>            :      *  \param  x
-<span class="lineNum">     136 </span>            :      *          The first value to compare.
-<span class="lineNum">     137 </span>            :      *  \param  y
-<span class="lineNum">     138 </span>            :      *          The second value to compare.
-<span class="lineNum">     139 </span>            :      *  \param  epsilon
-<span class="lineNum">     140 </span>            :      *          The precision to compare with (standard deviation of 1e-4 or 0.0001).
-<span class="lineNum">     141 </span>            :      *
-<span class="lineNum">     142 </span>            :      *  \return bool
-<span class="lineNum">     143 </span>            :      *          Returns whether x equals y within the given epsilon precision.
-<a name="144"><span class="lineNum">     144 </span>            :      */</a>
-<span class="lineNum">     145 </span>            :     template&lt;typename T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     146 </span><span class="lineCov">          9 :     static inline constexpr bool epsilon_equals(const T x, const T y, const double epsilon = 1e-4) {</span>
-<span class="lineNum">     147 </span>            :         if constexpr (std::is_integral_v&lt;T&gt;) {
-<span class="lineNum">     148 </span>            :             UNUSED(epsilon);
-<span class="lineNum">     149 </span><span class="lineCov">          2 :             return x == y;</span>
-<span class="lineNum">     150 </span>            :         } else {
-<span class="lineNum">     151 </span>            :             // TODO Use std::numeric_limits&lt;T&gt;::epsilon() ?
-<span class="lineNum">     152 </span><span class="lineCov">          7 :             return std::abs(x - y) &lt; epsilon;</span>
+<span class="lineNum">     131 </span>            :     /**
+<span class="lineNum">     132 </span>            :      *  brief   Least Common Multiple
+<span class="lineNum">     133 </span>            :      *          Find the LCM of \p x and \p y:
+<span class="lineNum">     134 </span>            :      *              - will cast to size_t if their common type is not integral;
+<span class="lineNum">     135 </span>            :      *              - will take absolute value.
+<span class="lineNum">     136 </span>            :      *
+<span class="lineNum">     137 </span>            :      *  param   x
+<span class="lineNum">     138 </span>            :      *      The first number to check.
+<span class="lineNum">     139 </span>            :      *  param   y
+<span class="lineNum">     140 </span>            :      *      The second number to check.
+<span class="lineNum">     141 </span>            :      *  return  Returns the LCM of \p x and \p y.
+<span class="lineNum">     142 </span>            :      */
+<span class="lineNum">     143 </span>            :     template&lt;
+<span class="lineNum">     144 </span>            :         typename A,
+<span class="lineNum">     145 </span>            :         typename B,
+<a name="146"><span class="lineNum">     146 </span>            :         typename C = typename std::common_type&lt;A, B&gt;::type</a>
+<span class="lineNum">     147 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     148 </span><span class="lineCov">         32 :     static inline constexpr C lcm(const A x, const B y) {</span>
+<span class="lineNum">     149 </span>            :         if constexpr (std::is_integral_v&lt;C&gt;) {
+<span class="lineNum">     150 </span><span class="lineCov">         30 :             return std::lcm(static_cast&lt;C&gt;(x), static_cast&lt;C&gt;(y));</span>
+<span class="lineNum">     151 </span>            :         } else {
+<span class="lineNum">     152 </span><span class="lineCov">          2 :             return std::lcm(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y));</span>
 <span class="lineNum">     153 </span>            :         }
 <span class="lineNum">     154 </span>            :     }
 <span class="lineNum">     155 </span>            : 
-<span class="lineNum">     156 </span>            :     namespace stats {
-<span class="lineNum">     157 </span>            :         /**
-<span class="lineNum">     158 </span>            :          *  \brief  Calculate sample mean between \p first and \p last.
-<span class="lineNum">     159 </span>            :          *          (`std::distance(first, last)` elements)
-<span class="lineNum">     160 </span>            :          *
-<span class="lineNum">     161 </span>            :          *  \param  first
-<span class="lineNum">     162 </span>            :          *      The iterator to start from.
-<span class="lineNum">     163 </span>            :          *  \param  last
-<span class="lineNum">     164 </span>            :          *      The end iterator.
-<span class="lineNum">     165 </span>            :          *  \return Returns the mean of the items [first, ..., last].
-<span class="lineNum">     166 </span>            :          */
-<span class="lineNum">     167 </span>            :         template&lt;
-<span class="lineNum">     168 </span>            :             typename Iterator,
-<a name="169"><span class="lineNum">     169 </span>            :             typename DiffType = typename std::iterator_traits&lt;Iterator&gt;::difference_type</a>
-<span class="lineNum">     170 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     171 </span><span class="lineCov">         15 :         static inline double mean(Iterator first, Iterator last) {</span>
-<span class="lineNum">     172 </span><span class="lineCov">         15 :             const DiffType size = std::distance(first, last);</span>
-<span class="lineNum">     173 </span><span class="lineCov">         15 :             ASSERT(size &gt; 0);</span>
-<span class="lineNum">     174 </span>            : 
-<span class="lineNum">     175 </span><span class="lineCov">         14 :             return std::accumulate(first, last, 0.0) / size;</span>
-<span class="lineNum">     176 </span>            :         }
-<span class="lineNum">     177 </span>            : 
-<span class="lineNum">     178 </span>            :         /**
-<span class="lineNum">     179 </span>            :          *  \brief  Calculate sample mean of \p cont.
-<span class="lineNum">     180 </span>            :          *
-<span class="lineNum">     181 </span>            :          *  \param  cont
-<span class="lineNum">     182 </span>            :          *      The container to calculate from.
-<span class="lineNum">     183 </span>            :          *  \return Return the sample mean of \p cont.
-<a name="184"><span class="lineNum">     184 </span>            :          */</a>
-<span class="lineNum">     185 </span>            :         template&lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     186 </span><span class="lineCov">          6 :         static inline double mean(const Container&amp; cont) {</span>
-<span class="lineNum">     187 </span>            :             static_assert(is_iterable_v(cont),
-<span class="lineNum">     188 </span>            :                           &quot;utils::algorithm::mean: Container must have iterator support.&quot;);
-<span class="lineNum">     189 </span><span class="lineCov">          6 :             return utils::math::stats::mean(std::begin(cont), std::end(cont));</span>
-<span class="lineNum">     190 </span>            :         }
-<span class="lineNum">     191 </span>            : 
-<span class="lineNum">     192 </span>            :         /**
-<span class="lineNum">     193 </span>            :          *  \brief  Calculate sample variance between \p first and \p last.
-<span class="lineNum">     194 </span>            :          *          (`std::distance(first, last)` elements)
-<span class="lineNum">     195 </span>            :          *
-<span class="lineNum">     196 </span>            :          *  \param  first
-<span class="lineNum">     197 </span>            :          *      The iterator to start from.
-<span class="lineNum">     198 </span>            :          *  \param  last
-<span class="lineNum">     199 </span>            :          *      The end iterator.
-<span class="lineNum">     200 </span>            :          *  \return Returns the variance of the items [first, ..., last].
-<span class="lineNum">     201 </span>            :          */
-<span class="lineNum">     202 </span>            :         template&lt;
-<span class="lineNum">     203 </span>            :             typename Iterator,
-<a name="204"><span class="lineNum">     204 </span>            :             typename DiffType = typename std::iterator_traits&lt;Iterator&gt;::difference_type</a>
-<span class="lineNum">     205 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     206 </span><span class="lineCov">         12 :         static double variance(Iterator first, Iterator last) {</span>
-<span class="lineNum">     207 </span><span class="lineCov">         12 :             const DiffType size = std::distance(first, last);</span>
-<span class="lineNum">     208 </span><span class="lineCov">         12 :             ASSERT(size &gt; 1);</span>
-<span class="lineNum">     209 </span>            : 
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          8 :             const double mean   = utils::math::stats::mean(first, last);</span></a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          8 :             const double sq_sum = std::inner_product(first, last, first, 0.0,</span></a>
-<span class="lineNum">     212 </span><span class="lineCov">         46 :                 [    ](const double&amp; x, const double&amp; y) { return x + y; },</span>
-<span class="lineNum">     213 </span><span class="lineCov">         46 :                 [mean](const double&amp; x, const double&amp; y) { return (x - mean) * (y - mean); });</span>
-<span class="lineNum">     214 </span>            : 
-<span class="lineNum">     215 </span><span class="lineCov">          8 :             return sq_sum / (size - 1);</span>
-<span class="lineNum">     216 </span>            :         }
-<span class="lineNum">     217 </span>            : 
-<span class="lineNum">     218 </span>            :         /**
-<span class="lineNum">     219 </span>            :          *  \brief  Calculate sample variance of \p cont.
-<span class="lineNum">     220 </span>            :          *
-<span class="lineNum">     221 </span>            :          *  \param  cont
-<span class="lineNum">     222 </span>            :          *      The container to calculate from.
-<span class="lineNum">     223 </span>            :          *  \return Return the sample variance of \p cont.
-<a name="224"><span class="lineNum">     224 </span>            :          */</a>
-<span class="lineNum">     225 </span>            :         template&lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     226 </span><span class="lineCov">          5 :         static inline double variance(const Container&amp; cont) {</span>
-<span class="lineNum">     227 </span>            :             static_assert(is_iterable_v(cont),
-<span class="lineNum">     228 </span>            :                           &quot;utils::algorithm::variance: Container must have iterator support.&quot;);
-<span class="lineNum">     229 </span><span class="lineCov">          5 :             return utils::math::stats::variance(std::begin(cont), std::end(cont));</span>
-<span class="lineNum">     230 </span>            :         }
-<span class="lineNum">     231 </span>            : 
-<span class="lineNum">     232 </span>            :         /**
-<span class="lineNum">     233 </span>            :          *  \brief  Calculate sample stddev between \p first and \p last.
-<span class="lineNum">     234 </span>            :          *          (`std::distance(first, last)` elements)
-<span class="lineNum">     235 </span>            :          *
-<span class="lineNum">     236 </span>            :          *  \param  first
-<span class="lineNum">     237 </span>            :          *      The iterator to start from.
-<span class="lineNum">     238 </span>            :          *  \param  last
-<span class="lineNum">     239 </span>            :          *      The end iterator.
-<span class="lineNum">     240 </span>            :          *  \return Returns the stddev of the items [first, ..., last].
-<span class="lineNum">     241 </span>            :          */
-<span class="lineNum">     242 </span>            :         template&lt;
-<span class="lineNum">     243 </span>            :             typename Iterator,
-<a name="244"><span class="lineNum">     244 </span>            :             typename DiffType = typename std::iterator_traits&lt;Iterator&gt;::difference_type</a>
-<span class="lineNum">     245 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     246 </span><span class="lineCov">          6 :         static double stddev(Iterator first, Iterator last) {</span>
-<span class="lineNum">     247 </span><span class="lineCov">          6 :             return std::sqrt(utils::math::stats::variance(first, last));</span>
-<span class="lineNum">     248 </span>            :         }
-<span class="lineNum">     249 </span>            : 
-<span class="lineNum">     250 </span>            :         /**
-<span class="lineNum">     251 </span>            :          *  \brief  Calculate sample stddev of \p cont.
-<span class="lineNum">     252 </span>            :          *
-<span class="lineNum">     253 </span>            :          *  \param  cont
-<span class="lineNum">     254 </span>            :          *      The container to calculate from.
-<span class="lineNum">     255 </span>            :          *  \return Return the sample stddev of \p cont.
-<a name="256"><span class="lineNum">     256 </span>            :          */</a>
-<span class="lineNum">     257 </span>            :         template&lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     258 </span><span class="lineCov">          5 :         static inline double stddev(const Container&amp; cont) {</span>
-<span class="lineNum">     259 </span>            :             static_assert(is_iterable_v(cont),
-<span class="lineNum">     260 </span>            :                           &quot;utils::algorithm::stddev: Container must have iterator support.&quot;);
-<span class="lineNum">     261 </span><span class="lineCov">          5 :             return utils::math::stats::stddev(std::begin(cont), std::end(cont));</span>
-<span class="lineNum">     262 </span>            :         }
-<span class="lineNum">     263 </span>            :     }
-<span class="lineNum">     264 </span>            : }
-<span class="lineNum">     265 </span>            : 
-<span class="lineNum">     266 </span>            : #endif // UTILS_MATH_HPP
+<span class="lineNum">     156 </span>            :     /**
+<span class="lineNum">     157 </span>            :      *  brief   Least Common Multiple
+<span class="lineNum">     158 </span>            :      *          Find the LCM of \p x, \p y and every other argument
+<span class="lineNum">     159 </span>            :      *          by calling `utils::math::lcm` on the first two and
+<span class="lineNum">     160 </span>            :      *          chining that result with the other arguments.
+<span class="lineNum">     161 </span>            :      *
+<span class="lineNum">     162 </span>            :      *  param   x
+<span class="lineNum">     163 </span>            :      *      The first number to check.
+<span class="lineNum">     164 </span>            :      *  param   y
+<span class="lineNum">     165 </span>            :      *      The second number to check.
+<span class="lineNum">     166 </span>            :      *  param   ...args
+<span class="lineNum">     167 </span>            :      *      The other numbers to check.
+<span class="lineNum">     168 </span>            :      *  return  Returns the LCM of \p x, \p y and every other argument.
+<span class="lineNum">     169 </span>            :      */
+<span class="lineNum">     170 </span>            :     template&lt;
+<span class="lineNum">     171 </span>            :         typename A,
+<span class="lineNum">     172 </span>            :         typename B,
+<span class="lineNum">     173 </span>            :         typename ...Args,
+<a name="174"><span class="lineNum">     174 </span>            :         typename C = typename std::common_type&lt;A, B, Args...&gt;::type</a>
+<span class="lineNum">     175 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     176 </span><span class="lineCov">         12 :     static inline constexpr C lcm_chain(const A x, const B y, const Args... args) {</span>
+<span class="lineNum">     177 </span>            :         if constexpr (sizeof...(Args) == 0) {
+<span class="lineNum">     178 </span><span class="lineCov">          4 :             return utils::math::lcm(x, y);</span>
+<span class="lineNum">     179 </span>            :         } else {
+<span class="lineNum">     180 </span><span class="lineCov">          8 :             return utils::math::lcm_chain(utils::math::lcm(x, y), args...);</span>
+<span class="lineNum">     181 </span>            :         }
+<span class="lineNum">     182 </span>            :     }
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span>            :     /** \brief  Check if the given values are equal.
+<span class="lineNum">     185 </span>            :      *          For integral types, `==` is used, while floating point types
+<span class="lineNum">     186 </span>            :      *          use a comparison with diff(x, y) and epsilon.
+<span class="lineNum">     187 </span>            :      *
+<span class="lineNum">     188 </span>            :      *  \param  x
+<span class="lineNum">     189 </span>            :      *          The first value to compare.
+<span class="lineNum">     190 </span>            :      *  \param  y
+<span class="lineNum">     191 </span>            :      *          The second value to compare.
+<span class="lineNum">     192 </span>            :      *  \param  epsilon
+<span class="lineNum">     193 </span>            :      *          The precision to compare with (standard deviation of 1e-4 or 0.0001).
+<span class="lineNum">     194 </span>            :      *
+<span class="lineNum">     195 </span>            :      *  \return bool
+<span class="lineNum">     196 </span>            :      *          Returns whether x equals y within the given epsilon precision.
+<a name="197"><span class="lineNum">     197 </span>            :      */</a>
+<span class="lineNum">     198 </span>            :     template&lt;typename T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     199 </span><span class="lineCov">          9 :     static inline constexpr bool epsilon_equals(const T x, const T y, ATTR_MAYBE_UNUSED const double epsilon = 1e-4) {</span>
+<span class="lineNum">     200 </span>            :         if constexpr (std::is_integral_v&lt;T&gt;) {
+<span class="lineNum">     201 </span><span class="lineCov">          2 :             return x == y;</span>
+<span class="lineNum">     202 </span>            :         } else {
+<span class="lineNum">     203 </span>            :             // TODO Use std::numeric_limits&lt;T&gt;::epsilon() ?
+<span class="lineNum">     204 </span><span class="lineCov">          7 :             return std::abs(x - y) &lt; epsilon;</span>
+<span class="lineNum">     205 </span>            :         }
+<span class="lineNum">     206 </span>            :     }
+<span class="lineNum">     207 </span>            : 
+<span class="lineNum">     208 </span>            :     namespace stats {
+<span class="lineNum">     209 </span>            :         /**
+<span class="lineNum">     210 </span>            :          *  \brief  Calculate sample mean between \p first and \p last.
+<span class="lineNum">     211 </span>            :          *          (`std::distance(first, last)` elements)
+<span class="lineNum">     212 </span>            :          *
+<span class="lineNum">     213 </span>            :          *  \param  first
+<span class="lineNum">     214 </span>            :          *      The iterator to start from.
+<span class="lineNum">     215 </span>            :          *  \param  last
+<span class="lineNum">     216 </span>            :          *      The end iterator.
+<span class="lineNum">     217 </span>            :          *  \return Returns the mean of the items [first, ..., last].
+<span class="lineNum">     218 </span>            :          */
+<span class="lineNum">     219 </span>            :         template&lt;
+<span class="lineNum">     220 </span>            :             typename Iterator,
+<span class="lineNum">     221 </span>            :             typename DiffType = typename std::iterator_traits&lt;Iterator&gt;::difference_type,
+<a name="222"><span class="lineNum">     222 </span>            :             typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     223 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     224 </span><span class="lineCov">         15 :         static inline double mean(Iterator first, Iterator last) {</span>
+<span class="lineNum">     225 </span><span class="lineCov">         15 :             const DiffType size = std::distance(first, last);</span>
+<span class="lineNum">     226 </span><span class="lineCov">         15 :             ASSERT(size &gt; 0);</span>
+<span class="lineNum">     227 </span>            : 
+<span class="lineNum">     228 </span><span class="lineCov">         14 :             return double(utils::algorithm::sum(first, last)) / size;</span>
+<span class="lineNum">     229 </span>            :         }
+<span class="lineNum">     230 </span>            : 
+<span class="lineNum">     231 </span>            :         /**
+<span class="lineNum">     232 </span>            :          *  \brief  Calculate sample mean of \p cont.
+<span class="lineNum">     233 </span>            :          *
+<span class="lineNum">     234 </span>            :          *  \param  cont
+<span class="lineNum">     235 </span>            :          *      The container to calculate from.
+<span class="lineNum">     236 </span>            :          *  \return Return the sample mean of \p cont.
+<a name="237"><span class="lineNum">     237 </span>            :          */</a>
+<span class="lineNum">     238 </span>            :         template&lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     239 </span><span class="lineCov">          6 :         static inline double mean(const Container&amp; cont) {</span>
+<span class="lineNum">     240 </span>            :             static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     241 </span>            :                           &quot;utils::algorithm::mean: Container must have iterator support.&quot;);
+<span class="lineNum">     242 </span><span class="lineCov">          6 :             return utils::math::stats::mean(std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     243 </span>            :         }
+<span class="lineNum">     244 </span>            : 
+<span class="lineNum">     245 </span>            :         /**
+<span class="lineNum">     246 </span>            :          *  \brief  Calculate sample variance between \p first and \p last.
+<span class="lineNum">     247 </span>            :          *          (`std::distance(first, last)` elements)
+<span class="lineNum">     248 </span>            :          *
+<span class="lineNum">     249 </span>            :          *  \param  first
+<span class="lineNum">     250 </span>            :          *      The iterator to start from.
+<span class="lineNum">     251 </span>            :          *  \param  last
+<span class="lineNum">     252 </span>            :          *      The end iterator.
+<span class="lineNum">     253 </span>            :          *  \return Returns the variance of the items [first, ..., last].
+<span class="lineNum">     254 </span>            :          */
+<span class="lineNum">     255 </span>            :         template&lt;
+<span class="lineNum">     256 </span>            :             typename Iterator,
+<span class="lineNum">     257 </span>            :             typename DiffType = typename std::iterator_traits&lt;Iterator&gt;::difference_type,
+<a name="258"><span class="lineNum">     258 </span>            :             typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     259 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     260 </span><span class="lineCov">         12 :         static double variance(Iterator first, Iterator last) {</span>
+<span class="lineNum">     261 </span><span class="lineCov">         12 :             const DiffType size = std::distance(first, last);</span>
+<span class="lineNum">     262 </span><span class="lineCov">         12 :             ASSERT(size &gt; 1);</span>
+<span class="lineNum">     263 </span>            : 
+<a name="264"><span class="lineNum">     264 </span><span class="lineCov">          8 :             const double mean   = utils::math::stats::mean(first, last);</span></a>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          8 :             const double sq_sum = std::inner_product(first, last, first, 0.0,</span></a>
+<span class="lineNum">     266 </span><span class="lineCov">         46 :                 [    ](const double&amp; x, const double&amp; y) { return x + y; },</span>
+<span class="lineNum">     267 </span><span class="lineCov">         46 :                 [mean](const double&amp; x, const double&amp; y) { return (x - mean) * (y - mean); });</span>
+<span class="lineNum">     268 </span>            : 
+<span class="lineNum">     269 </span><span class="lineCov">          8 :             return sq_sum / (size - 1);</span>
+<span class="lineNum">     270 </span>            :         }
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :         /**
+<span class="lineNum">     273 </span>            :          *  \brief  Calculate sample variance of \p cont.
+<span class="lineNum">     274 </span>            :          *
+<span class="lineNum">     275 </span>            :          *  \param  cont
+<span class="lineNum">     276 </span>            :          *      The container to calculate from.
+<span class="lineNum">     277 </span>            :          *  \return Return the sample variance of \p cont.
+<a name="278"><span class="lineNum">     278 </span>            :          */</a>
+<span class="lineNum">     279 </span>            :         template&lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     280 </span><span class="lineCov">          5 :         static inline double variance(const Container&amp; cont) {</span>
+<span class="lineNum">     281 </span>            :             static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     282 </span>            :                           &quot;utils::algorithm::variance: Container must have iterator support.&quot;);
+<span class="lineNum">     283 </span><span class="lineCov">          5 :             return utils::math::stats::variance(std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     284 </span>            :         }
+<span class="lineNum">     285 </span>            : 
+<span class="lineNum">     286 </span>            :         /**
+<span class="lineNum">     287 </span>            :          *  \brief  Calculate sample stddev between \p first and \p last.
+<span class="lineNum">     288 </span>            :          *          (`std::distance(first, last)` elements)
+<span class="lineNum">     289 </span>            :          *
+<span class="lineNum">     290 </span>            :          *  \param  first
+<span class="lineNum">     291 </span>            :          *      The iterator to start from.
+<span class="lineNum">     292 </span>            :          *  \param  last
+<span class="lineNum">     293 </span>            :          *      The end iterator.
+<span class="lineNum">     294 </span>            :          *  \return Returns the stddev of the items [first, ..., last].
+<span class="lineNum">     295 </span>            :          */
+<span class="lineNum">     296 </span>            :         template&lt;
+<span class="lineNum">     297 </span>            :             typename Iterator,
+<a name="298"><span class="lineNum">     298 </span>            :             typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     299 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     300 </span><span class="lineCov">          6 :         static double stddev(Iterator first, Iterator last) {</span>
+<span class="lineNum">     301 </span><span class="lineCov">          6 :             return std::sqrt(utils::math::stats::variance(first, last));</span>
+<span class="lineNum">     302 </span>            :         }
+<span class="lineNum">     303 </span>            : 
+<span class="lineNum">     304 </span>            :         /**
+<span class="lineNum">     305 </span>            :          *  \brief  Calculate sample stddev of \p cont.
+<span class="lineNum">     306 </span>            :          *
+<span class="lineNum">     307 </span>            :          *  \param  cont
+<span class="lineNum">     308 </span>            :          *      The container to calculate from.
+<span class="lineNum">     309 </span>            :          *  \return Return the sample stddev of \p cont.
+<a name="310"><span class="lineNum">     310 </span>            :          */</a>
+<span class="lineNum">     311 </span>            :         template&lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     312 </span><span class="lineCov">          5 :         static inline double stddev(const Container&amp; cont) {</span>
+<span class="lineNum">     313 </span>            :             static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     314 </span>            :                           &quot;utils::algorithm::stddev: Container must have iterator support.&quot;);
+<span class="lineNum">     315 </span><span class="lineCov">          5 :             return utils::math::stats::stddev(std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     316 </span>            :         }
+<span class="lineNum">     317 </span>            :     }
+<span class="lineNum">     318 </span>            : }
+<span class="lineNum">     319 </span>            : 
+<span class="lineNum">     320 </span>            : #endif // UTILS_MATH_HPP
 </pre>
       </td>
     </tr>

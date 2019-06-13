@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"classutils_1_1print_1_1pretty__ostream__iterator.html#ae30ab6e0473b166ebceb263d6ca90b99":[1,0,0,9,17,4],
+"classutils_1_1threading_1_1_thread_pool.html":[1,0,0,10,0],
 "classutils_1_1threading_1_1_thread_pool.html#a0ba3128ab672ddd41da6767273159b7c":[1,0,0,10,0,4],
 "classutils_1_1threading_1_1_thread_pool.html#a20e7ad31752e02ebba85f3d2514b1517":[1,0,0,10,0,2],
 "classutils_1_1threading_1_1_thread_pool.html#a24d71f19ba2dc330834652a2f160b3c0":[1,0,0,10,0,3],
@@ -149,7 +151,7 @@ var NAVTREEINDEX1 =
 "structutils_1_1algo_1_1_codeword.html#a2dd822437eccf1dbaabb3b5753605ae4":[1,0,0,0,5,0],
 "structutils_1_1algo_1_1_codeword.html#a9f39b4a7640d9bec0e853acabe528ae3":[1,0,0,0,5,1],
 "structutils_1_1algo_1_1_node_1_1comparator.html":[1,0,0,0,7,0],
-"structutils_1_1algo_1_1_node_1_1comparator.html#a4201680561d0852b2b1e0752a5dc895c":[1,0,0,0,7,0,0],
+"structutils_1_1algo_1_1_node_1_1comparator.html#a22acfcb5032f38f2d1c0dfad3c979507":[1,0,0,0,7,0,0],
 "structutils_1_1colour_1_1_colour.html":[1,0,0,3,0],
 "structutils_1_1colour_1_1_colour.html#a05a062614268aebd8845f170aaa224b2":[1,0,0,3,0,11],
 "structutils_1_1colour_1_1_colour.html#a1c21d9759dca7d2ab317b078859617af":[1,0,0,3,0,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "structutils_1_1traits_1_1is__container_3_01std_1_1map_3_01_t_key_00_01_t_value_00_01_t_traits_00_01_t_allocator_01_4_01_4.html":[1,0,0,12,5],
 "structutils_1_1traits_1_1is__container_3_01std_1_1set_3_01_t_00_01_t_traits_00_01_t_allocator_01_4_01_4.html":[1,0,0,12,6],
 "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__map_3_01_t_key_00_01_t_value_00_01_36216da77d37e11cb184e4ea3bbd5fe2.html":[1,0,0,12,7],
-"structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html":[1,0,0,12,8],
-"structutils_1_1traits_1_1is__iterator.html":[1,0,0,12,10],
-"structutils_1_1traits_1_1is__iterator.html#ad5eb631ccd58d2c93772dcae22eae931":[1,0,0,12,10,0]
+"structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html":[1,0,0,12,8]
 };

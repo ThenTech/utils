@@ -31,18 +31,18 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">18</td>
+            <td class="headerCovTableEntry">23</td>
             <td class="headerCovTableEntry">27</td>
-            <td class="headerCovTableEntryLo">66.7 %</td>
+            <td class="headerCovTableEntryMed">85.2 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">7</td>
             <td class="headerCovTableEntry">10</td>
-            <td class="headerCovTableEntryLo">60.0 %</td>
+            <td class="headerCovTableEntryLo">70.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -82,13 +82,13 @@
 <span class="lineNum">      20 </span>            :         private:
 <a name="21"><span class="lineNum">      21 </span>            :             std::string _msg;</a>
 <span class="lineNum">      22 </span>            :         public:
-<span class="lineNum">      23 </span><span class="lineCov">         13 :             explicit Exception(const std::string&amp; name, const std::string&amp; msg)</span>
-<span class="lineNum">      24 </span><span class="lineCov">         13 :                 : _msg(name + &quot;: &quot; + msg) {}</span>
+<span class="lineNum">      23 </span><span class="lineCov">         16 :             explicit Exception(const std::string&amp; name, const std::string&amp; msg)</span>
+<span class="lineNum">      24 </span><span class="lineCov">         16 :                 : _msg(name + &quot;: &quot; + msg) {}</span>
 <span class="lineNum">      25 </span>            : 
 <span class="lineNum">      26 </span>            :             explicit Exception(const std::string&amp; msg)
 <a name="27"><span class="lineNum">      27 </span>            :                 : Exception(&quot;Exception&quot;, msg) {}</a>
 <span class="lineNum">      28 </span>            : 
-<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         13 :             virtual ~Exception() {}</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         16 :             virtual ~Exception() {}</span></a>
 <span class="lineNum">      30 </span>            : 
 <span class="lineNum">      31 </span><span class="lineNoCov">          0 :             virtual const char *what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_USE_NOEXCEPT {</span>
 <span class="lineNum">      32 </span><span class="lineNoCov">          0 :                 return this-&gt;getMessage().c_str();</span>
@@ -151,11 +151,11 @@
 <span class="lineNum">      89 </span>            :      */
 <a name="90"><span class="lineNum">      90 </span>            :     class CastingException : public Exception  {</a>
 <span class="lineNum">      91 </span>            :         public:
-<span class="lineNum">      92 </span><span class="lineNoCov">          0 :             CastingException(const std::string&amp; src, const std::string&amp; dest)</span>
-<span class="lineNum">      93 </span><span class="lineNoCov">          0 :                 : Exception(&quot;CastingException&quot;,</span>
-<span class="lineNum">      94 </span><span class="lineNoCov">          0 :                             &quot;Cannot cast \&quot;&quot; + src + &quot;\&quot; to object of type \&quot;&quot;</span>
-<span class="lineNum">      95 </span><span class="lineNoCov">          0 :                             + dest + &quot;\&quot;!&quot;)</span>
-<span class="lineNum">      96 </span><span class="lineNoCov">          0 :             {}</span>
+<span class="lineNum">      92 </span><span class="lineCov">          3 :             CastingException(const std::string&amp; src, const std::string&amp; dest)</span>
+<span class="lineNum">      93 </span><span class="lineCov">          3 :                 : Exception(&quot;CastingException&quot;,</span>
+<span class="lineNum">      94 </span><span class="lineCov">          6 :                             &quot;Cannot cast \&quot;&quot; + src + &quot;\&quot; to object of type \&quot;&quot;</span>
+<span class="lineNum">      95 </span><span class="lineCov">          6 :                             + dest + &quot;\&quot;!&quot;)</span>
+<span class="lineNum">      96 </span><span class="lineCov">          3 :             {}</span>
 <span class="lineNum">      97 </span>            :     };
 <span class="lineNum">      98 </span>            : 
 <span class="lineNum">      99 </span>            :     /**

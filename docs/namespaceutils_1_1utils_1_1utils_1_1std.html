@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.39.0-beta</span>
+   &#160;<span id="projectnumber">0.40.0-beta</span>
    </div>
   </td>
  </tr>
@@ -77,25 +77,28 @@ Functions</h2></td></tr>
 <tr class="memitem:ab942361235f2bd4947e37d389068abf7"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab942361235f2bd4947e37d389068abf7">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1print__container__helper.html">utils::print::print_container_helper</a>&lt; T, TChar, TCharTraits, TDelimiters &gt; &amp;helper)</td></tr>
 <tr class="memdesc:ab942361235f2bd4947e37d389068abf7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab942361235f2bd4947e37d389068abf7" title="operator&lt;&lt;() overloads">operator&lt;&lt;()</a> overloads  <a href="#ab942361235f2bd4947e37d389068abf7">More...</a><br /></td></tr>
 <tr class="separator:ab942361235f2bd4947e37d389068abf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e72334c3df47bbad80b190910089cac"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits , typename  = typename std::enable_if_t&lt;utils::traits::is_container&lt;T&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:a6e72334c3df47bbad80b190910089cac"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a6e72334c3df47bbad80b190910089cac">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const T &amp;it_value)</td></tr>
-<tr class="memdesc:a6e72334c3df47bbad80b190910089cac"><td class="mdescLeft">&#160;</td><td class="mdescRight">operator &lt;&lt; Triggered if T == __gnu_cxx::__normal_iterator&lt;T, Container&gt; or another iterator type.  <a href="#a6e72334c3df47bbad80b190910089cac">More...</a><br /></td></tr>
-<tr class="separator:a6e72334c3df47bbad80b190910089cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
+<tr class="memitem:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ae5e1bac5b049baf0dbcf0d93405e2562">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt; &amp;helper)</td></tr>
+<tr class="separator:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , typename TChar , typename TCharTraits &gt; </td></tr>
 <tr class="memitem:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a9d78f72cc82efa26f9a40b0dcf9eef3c">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::pair&lt; T1, T2 &gt; &amp;value)</td></tr>
+<tr class="memdesc:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.  <a href="#a9d78f72cc82efa26f9a40b0dcf9eef3c">More...</a><br /></td></tr>
 <tr class="separator:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66af45ee3d5a5cad7385940ef47bf91d"><td class="memTemplParams" colspan="2">template&lt;typename ... Args, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
 <tr class="memitem:a66af45ee3d5a5cad7385940ef47bf91d"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a66af45ee3d5a5cad7385940ef47bf91d">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1print__tuple__helper.html">utils::print::print_tuple_helper</a>&lt; std::tuple&lt; Args... &gt;, sizeof...(Args), TChar, TDelimiters &gt; &amp;helper)</td></tr>
 <tr class="separator:a66af45ee3d5a5cad7385940ef47bf91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0721bcbaf77efafc2c6b166627e17a62"><td class="memTemplParams" colspan="2">template&lt;typename ... Args, typename TChar , typename TCharTraits &gt; </td></tr>
 <tr class="memitem:a0721bcbaf77efafc2c6b166627e17a62"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a0721bcbaf77efafc2c6b166627e17a62">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::tuple&lt; Args... &gt; &amp;value)</td></tr>
+<tr class="memdesc:a0721bcbaf77efafc2c6b166627e17a62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a tuple to the stream using delimiters from delimiters&lt;std::tuple&lt;Args...&gt;&gt;.  <a href="#a0721bcbaf77efafc2c6b166627e17a62">More...</a><br /></td></tr>
 <tr class="separator:a0721bcbaf77efafc2c6b166627e17a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
-<tr class="memitem:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ae5e1bac5b049baf0dbcf0d93405e2562">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt; &amp;helper)</td></tr>
-<tr class="separator:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
 <tr class="memitem:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a6946f64c85de9ba8b8cbb027a6b383a2">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::optional&lt; T &gt; &amp;optional)</td></tr>
+<tr class="memdesc:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an optional to the stream using delimiters from delimiters&lt;std::optional&lt;T&gt;&gt;.  <a href="#a6946f64c85de9ba8b8cbb027a6b383a2">More...</a><br /></td></tr>
 <tr class="separator:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78fa1981c01c6c87377564b4b5082f71"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:a78fa1981c01c6c87377564b4b5082f71"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a78fa1981c01c6c87377564b4b5082f71">operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const T &amp;it_value)</td></tr>
+<tr class="memdesc:a78fa1981c01c6c87377564b4b5082f71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic operator &lt;&lt;.  <a href="#a78fa1981c01c6c87377564b4b5082f71">More...</a><br /></td></tr>
+<tr class="separator:a78fa1981c01c6c87377564b4b5082f71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ab942361235f2bd4947e37d389068abf7"></a>
@@ -128,12 +131,62 @@ template&lt;typename T , typename TChar , typename TCharTraits , typename TDelim
 
 <p><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab942361235f2bd4947e37d389068abf7" title="operator&lt;&lt;() overloads">operator&lt;&lt;()</a> overloads </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00416">416</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00417">417</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a78fa1981c01c6c87377564b4b5082f71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78fa1981c01c6c87377564b4b5082f71">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/7]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename TChar , typename TCharTraits &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; utils::utils::utils::std::operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>it_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generic operator &lt;&lt;. </p>
+<pre class="fragment">    if T == is_pointer&lt;T&gt;
+        =&gt; prints %p format
+    if T == __gnu_cxx::__normal_iterator&lt;T, Container&gt;
+            or another iterator type
+        =&gt; prints dereference
+    if T == is_container&lt;T&gt;
+        =&gt; prints print_container_helpter&lt;T&gt; using default delimiters
+    else prints value itself.
+</pre><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The stream to write to. </td></tr>
+    <tr><td class="paramname">it_value</td><td>The possible iterator value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the stream reference. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00520">520</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a6946f64c85de9ba8b8cbb027a6b383a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6946f64c85de9ba8b8cbb027a6b383a2">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6946f64c85de9ba8b8cbb027a6b383a2">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,39 +213,9 @@ template&lt;typename T , typename TChar , typename TCharTraits &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00502">502</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p>Prints an optional to the stream using delimiters from delimiters&lt;std::optional&lt;T&gt;&gt;. </p>
 
-</div>
-</div>
-<a id="ae5e1bac5b049baf0dbcf0d93405e2562"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5e1bac5b049baf0dbcf0d93405e2562">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/7]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t N, typename TChar , typename TCharTraits , typename TDelimiters &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; utils::utils::utils::std::operator&lt;&lt; </td>
-          <td>(</td>
-          <td class="paramtype">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td>
-          <td class="paramname"><em>stream</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt; &amp;&#160;</td>
-          <td class="paramname"><em>helper</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00491">491</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00489">489</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
@@ -224,7 +247,9 @@ template&lt;typename ... Args, typename TChar , typename TCharTraits &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00474">474</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p>Prints a tuple to the stream using delimiters from delimiters&lt;std::tuple&lt;Args...&gt;&gt;. </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00471">471</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
@@ -256,7 +281,7 @@ template&lt;typename ... Args, typename TChar , typename TCharTraits , typename 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00463">463</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00460">460</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
@@ -288,20 +313,22 @@ template&lt;typename T1 , typename T2 , typename TChar , typename TCharTraits &g
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00441">441</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p>Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;. </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00438">438</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a6e72334c3df47bbad80b190910089cac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e72334c3df47bbad80b190910089cac">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/7]</span></h2>
+<a id="ae5e1bac5b049baf0dbcf0d93405e2562"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5e1bac5b049baf0dbcf0d93405e2562">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename TChar , typename TCharTraits , typename  = typename std::enable_if_t&lt;utils::traits::is_container&lt;T&gt;::value&gt;&gt; </div>
+template&lt;typename T , size_t N, typename TChar , typename TCharTraits , typename TDelimiters &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp; utils::utils::utils::std::operator&lt;&lt; </td>
+          <td class="memname">std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; utils::utils::utils::std::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td>
           <td class="paramname"><em>stream</em>, </td>
@@ -309,8 +336,8 @@ template&lt;typename T , typename TChar , typename TCharTraits , typename  = typ
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>it_value</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt; &amp;&#160;</td>
+          <td class="paramname"><em>helper</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -320,17 +347,7 @@ template&lt;typename T , typename TChar , typename TCharTraits , typename  = typ
       </table>
 </div><div class="memdoc">
 
-<p>operator &lt;&lt; Triggered if T == __gnu_cxx::__normal_iterator&lt;T, Container&gt; or another iterator type. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">stream</td><td></td></tr>
-    <tr><td class="paramname">it_value</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00430">430</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00427">427</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>

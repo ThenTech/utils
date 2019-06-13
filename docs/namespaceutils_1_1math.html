@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.39.0-beta</span>
+   &#160;<span id="projectnumber">0.40.0-beta</span>
    </div>
   </td>
  </tr>
@@ -83,10 +83,26 @@ Functions</h2></td></tr>
 <tr class="memitem:a0c738738287d1584b3efe8136d9c4da0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a0c738738287d1584b3efe8136d9c4da0">sign</a> (const T &amp;value)</td></tr>
 <tr class="memdesc:a0c738738287d1584b3efe8136d9c4da0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the sign of the given value.  <a href="#a0c738738287d1584b3efe8136d9c4da0">More...</a><br /></td></tr>
 <tr class="separator:a0c738738287d1584b3efe8136d9c4da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2891906d96e1a808820a2c478ab15c4"><td class="memTemplParams" colspan="2">template&lt;size_t Exp = 2ull, typename T &gt; </td></tr>
-<tr class="memitem:aa2891906d96e1a808820a2c478ab15c4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#aa2891906d96e1a808820a2c478ab15c4">pow</a> (const T value)</td></tr>
-<tr class="memdesc:aa2891906d96e1a808820a2c478ab15c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate <code>value</code> raised to the power <code>Exp</code>, where <code>Exp</code> must be an unsigned int.  <a href="#aa2891906d96e1a808820a2c478ab15c4">More...</a><br /></td></tr>
-<tr class="separator:aa2891906d96e1a808820a2c478ab15c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0aaf87bc074d111cbece06adbb19b201"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
+<tr class="memitem:a0aaf87bc074d111cbece06adbb19b201"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a0aaf87bc074d111cbece06adbb19b201">sum</a> (T const &amp;... args)</td></tr>
+<tr class="memdesc:a0aaf87bc074d111cbece06adbb19b201"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic sum all args.  <a href="#a0aaf87bc074d111cbece06adbb19b201">More...</a><br /></td></tr>
+<tr class="separator:a0aaf87bc074d111cbece06adbb19b201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00c1f96b12cd0251e011f3d95850c1ea"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
+<tr class="memitem:a00c1f96b12cd0251e011f3d95850c1ea"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a00c1f96b12cd0251e011f3d95850c1ea">product</a> (T const &amp;... args)</td></tr>
+<tr class="memdesc:a00c1f96b12cd0251e011f3d95850c1ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic multiply all args.  <a href="#a00c1f96b12cd0251e011f3d95850c1ea">More...</a><br /></td></tr>
+<tr class="separator:a00c1f96b12cd0251e011f3d95850c1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b9601e3c3e45a3aef025b81dbdb402c"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:a0b9601e3c3e45a3aef025b81dbdb402c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a0b9601e3c3e45a3aef025b81dbdb402c">min</a> (T const &amp;first, T const &amp;second, Args const &amp;... args)</td></tr>
+<tr class="memdesc:a0b9601e3c3e45a3aef025b81dbdb402c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic determine minimum of all args.  <a href="#a0b9601e3c3e45a3aef025b81dbdb402c">More...</a><br /></td></tr>
+<tr class="separator:a0b9601e3c3e45a3aef025b81dbdb402c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb510b17104c1284914d97d02a16be30"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:acb510b17104c1284914d97d02a16be30"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#acb510b17104c1284914d97d02a16be30">max</a> (T const &amp;first, T const &amp;second, Args const &amp;... args)</td></tr>
+<tr class="memdesc:acb510b17104c1284914d97d02a16be30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic determine maximum of all args.  <a href="#acb510b17104c1284914d97d02a16be30">More...</a><br /></td></tr>
+<tr class="separator:acb510b17104c1284914d97d02a16be30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a984c616e67c54da7bc8d817285b7e3ee"><td class="memTemplParams" colspan="2">template&lt;size_t Exp = 2ull, typename T &gt; </td></tr>
+<tr class="memitem:a984c616e67c54da7bc8d817285b7e3ee"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a984c616e67c54da7bc8d817285b7e3ee">pow</a> (<a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const T value)</td></tr>
+<tr class="memdesc:a984c616e67c54da7bc8d817285b7e3ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate <code>value</code> raised to the power <code>Exp</code>, where <code>Exp</code> must be an unsigned int.  <a href="#a984c616e67c54da7bc8d817285b7e3ee">More...</a><br /></td></tr>
+<tr class="separator:a984c616e67c54da7bc8d817285b7e3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a137ef10a2b4a23bdf6246c8db0b59aa9"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B , typename C  = typename std::common_type&lt;A, B&gt;::type&gt; </td></tr>
 <tr class="memitem:a137ef10a2b4a23bdf6246c8db0b59aa9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr C&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a137ef10a2b4a23bdf6246c8db0b59aa9">gcd</a> (const A x, const B y) noexcept</td></tr>
 <tr class="separator:a137ef10a2b4a23bdf6246c8db0b59aa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -96,14 +112,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a3f341d6578135c21c05f595389ba1c3a"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B , typename ... Args, typename C  = typename std::common_type&lt;A, B, Args...&gt;::type&gt; </td></tr>
 <tr class="memitem:a3f341d6578135c21c05f595389ba1c3a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr C&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a3f341d6578135c21c05f595389ba1c3a">lcm_chain</a> (const A x, const B y, const Args... args)</td></tr>
 <tr class="separator:a3f341d6578135c21c05f595389ba1c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac976801448989f3eefb542e32c35b6d0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac976801448989f3eefb542e32c35b6d0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#ac976801448989f3eefb542e32c35b6d0">epsilon_equals</a> (const T x, const T y, const double epsilon=1e-4)</td></tr>
-<tr class="memdesc:ac976801448989f3eefb542e32c35b6d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given values are equal. For integral types, <code>==</code> is used, while floating point types use a comparison with diff(x, y) and epsilon.  <a href="#ac976801448989f3eefb542e32c35b6d0">More...</a><br /></td></tr>
-<tr class="separator:ac976801448989f3eefb542e32c35b6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa1d6166d322ccea07bc50269ef87d96"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:afa1d6166d322ccea07bc50269ef87d96"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#afa1d6166d322ccea07bc50269ef87d96">epsilon_equals</a> (const T x, const T y, <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const double epsilon=1e-4)</td></tr>
+<tr class="memdesc:afa1d6166d322ccea07bc50269ef87d96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given values are equal. For integral types, <code>==</code> is used, while floating point types use a comparison with diff(x, y) and epsilon.  <a href="#afa1d6166d322ccea07bc50269ef87d96">More...</a><br /></td></tr>
+<tr class="separator:afa1d6166d322ccea07bc50269ef87d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ac976801448989f3eefb542e32c35b6d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac976801448989f3eefb542e32c35b6d0">&#9670;&nbsp;</a></span>epsilon_equals()</h2>
+<a id="afa1d6166d322ccea07bc50269ef87d96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa1d6166d322ccea07bc50269ef87d96">&#9670;&nbsp;</a></span>epsilon_equals()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -128,7 +144,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const double&#160;</td>
           <td class="paramname"><em>epsilon</em> = <code>1e-4</code>&#160;</td>
         </tr>
         <tr>
@@ -155,7 +171,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool Returns whether x equals y within the given epsilon precision. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00146">146</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00199">199</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -200,7 +216,7 @@ template&lt;typename A , typename B , typename C  = typename std::common_type&lt
 </ul>
 <p>param x The first number to check. param y The second number to check. return Returns the GCD between <code>x</code> and <code>y</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00070">70</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00123">123</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -245,7 +261,7 @@ template&lt;typename A , typename B , typename C  = typename std::common_type&lt
 </ul>
 <p>param x The first number to check. param y The second number to check. return Returns the LCM of <code>x</code> and <code>y</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00095">95</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00148">148</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -293,12 +309,110 @@ template&lt;typename A , typename B , typename ... Args, typename C  = typename 
 <p>brief Least Common Multiple Find the LCM of <code>x</code>, <code>y</code> and every other argument by calling <code><a class="el" href="namespaceutils_1_1math.html#a7e31bb23b0a0f54d3b870c9858f268a2">utils::math::lcm</a></code> on the first two and chining that result with the other arguments.</p>
 <p>param x The first number to check. param y The second number to check. param ...args The other numbers to check. return Returns the LCM of <code>x</code>, <code>y</code> and every other argument. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00123">123</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00176">176</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aa2891906d96e1a808820a2c478ab15c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2891906d96e1a808820a2c478ab15c4">&#9670;&nbsp;</a></span>pow()</h2>
+<a id="acb510b17104c1284914d97d02a16be30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb510b17104c1284914d97d02a16be30">&#9670;&nbsp;</a></span>max()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto utils::math::max </td>
+          <td>(</td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>second</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args const &amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic determine maximum of all args. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns std::max(arg1, std::max(..., argn)) </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00074">74</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0b9601e3c3e45a3aef025b81dbdb402c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b9601e3c3e45a3aef025b81dbdb402c">&#9670;&nbsp;</a></span>min()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto utils::math::min </td>
+          <td>(</td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>second</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args const &amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic determine minimum of all args. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns std::min(arg1, std::min(..., argn)) </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00058">58</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a984c616e67c54da7bc8d817285b7e3ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a984c616e67c54da7bc8d817285b7e3ee">&#9670;&nbsp;</a></span>pow()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -311,7 +425,7 @@ template&lt;size_t Exp = 2ull, typename T &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr T utils::math::pow </td>
           <td>(</td>
-          <td class="paramtype">const T&#160;</td>
+          <td class="paramtype"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const T&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -339,7 +453,40 @@ template&lt;size_t Exp = 2ull, typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the result of <code>Exp</code> times multiplying \value with itself. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00042">42</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00096">96</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a00c1f96b12cd0251e011f3d95850c1ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00c1f96b12cd0251e011f3d95850c1ea">&#9670;&nbsp;</a></span>product()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto utils::math::product </td>
+          <td>(</td>
+          <td class="paramtype">T const &amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic multiply all args. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns arg1 * ... * argn </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00047">47</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -380,6 +527,39 @@ template&lt;class T &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>Returns -1, 0, or 1 according to the sign of value. </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00024">24</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0aaf87bc074d111cbece06adbb19b201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0aaf87bc074d111cbece06adbb19b201">&#9670;&nbsp;</a></span>sum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto utils::math::sum </td>
+          <td>(</td>
+          <td class="paramtype">T const &amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Generic sum all args. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns arg1 + ... + argn </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00036">36</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>

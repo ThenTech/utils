@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">186</td>
-            <td class="headerCovTableEntry">186</td>
+            <td class="headerCovTableEntry">162</td>
+            <td class="headerCovTableEntry">162</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">16</td>
-            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">14</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -209,119 +209,85 @@
 <span class="lineNum">     147 </span>            : 
 <span class="lineNum">     148 </span><span class="lineCov">          2 :     auto c = utils::random::generate_x&lt;int&gt;(10, 0, 10);</span>
 <span class="lineNum">     149 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::within(0, 10, c));</span>
-<span class="lineNum">     150 </span><span class="lineCov">          1 :     c.push_back(12);</span>
-<span class="lineNum">     151 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::algorithm::within(0, 10, c));</span>
-<span class="lineNum">     152 </span>            : 
-<span class="lineNum">     153 </span><span class="lineCov">          1 :     c = utils::random::generate_x&lt;int&gt;(10, 15, 0);</span>
-<span class="lineNum">     154 </span><span class="lineCov">          2 :     CHECK(utils::algorithm::within(0, 15, c));</span>
-<span class="lineNum">     155 </span><span class="lineCov">          2 :     CHECK(utils::algorithm::within(15, 0, c));</span>
-<a name="156"><span class="lineNum">     156 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     157 </span>            : 
-<span class="lineNum">     158 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::sum&quot;, &quot;[utils][utils::algorithm]&quot;) {</span>
-<span class="lineNum">     159 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum( ) == 0);</span>
-<span class="lineNum">     160 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(0) == 0);</span>
-<span class="lineNum">     161 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(1) == 1);</span>
-<span class="lineNum">     162 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(0.0) == 0.0);</span>
-<span class="lineNum">     163 </span>            : 
-<span class="lineNum">     164 </span><span class="lineCov">          1 :     const double rnd = utils::random::Random::get&lt;double&gt;();</span>
-<span class="lineNum">     165 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(rnd)      == Approx(rnd));</span>
-<span class="lineNum">     166 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(rnd, rnd) == Approx(rnd + rnd));</span>
+<span class="lineNum">     150 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::within(0, 10, c.begin(), c.end()));</span>
+<span class="lineNum">     151 </span><span class="lineCov">          1 :     c.push_back(12);</span>
+<span class="lineNum">     152 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::algorithm::within(0, 10, c));</span>
+<span class="lineNum">     153 </span><span class="lineCov">          2 :     CHECK_FALSE(utils::algorithm::within(0, 10, c.begin(), c.end()));</span>
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span><span class="lineCov">          1 :     c = utils::random::generate_x&lt;int&gt;(10, 15, 0);</span>
+<span class="lineNum">     156 </span><span class="lineCov">          2 :     CHECK(utils::algorithm::within(0, 15, c));</span>
+<span class="lineNum">     157 </span><span class="lineCov">          2 :     CHECK(utils::algorithm::within(0, 15, c.begin(), c.end()));</span>
+<span class="lineNum">     158 </span><span class="lineCov">          2 :     CHECK(utils::algorithm::within(15, 0, c));</span>
+<span class="lineNum">     159 </span><span class="lineCov">          2 :     CHECK(utils::algorithm::within(15, 0, c.begin(), c.end()));</span>
+<a name="160"><span class="lineNum">     160 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::sum&quot;, &quot;[utils][utils::math]&quot;) {</span>
+<span class="lineNum">     163 </span><span class="lineCov">          1 :     constexpr int sum = 55;</span>
+<span class="lineNum">     164 </span><span class="lineCov">          2 :     const std::vector&lt;int&gt;    e{};</span>
+<span class="lineNum">     165 </span><span class="lineCov">          2 :     const std::vector&lt;int&gt;    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};</span>
+<span class="lineNum">     166 </span><span class="lineCov">          2 :     const std::vector&lt;double&gt; y{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};</span>
 <span class="lineNum">     167 </span>            : 
-<span class="lineNum">     168 </span><span class="lineCov">          1 :     const double div = rnd / 5.0;</span>
-<span class="lineNum">     169 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(div, div, div, div, div) == Approx(rnd));</span>
-<span class="lineNum">     170 </span>            : 
-<span class="lineNum">     171 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(10, 20, 30, 40, 50) == 150);</span>
-<a name="172"><span class="lineNum">     172 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     173 </span>            : 
-<span class="lineNum">     174 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::multiply&quot;, &quot;[utils][utils::algorithm]&quot;) {</span>
-<span class="lineNum">     175 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply( ) == 1);</span>
-<span class="lineNum">     176 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(0) == 0);</span>
-<span class="lineNum">     177 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(1) == 1);</span>
-<span class="lineNum">     178 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(0.0) == 0.0);</span>
-<span class="lineNum">     179 </span>            : 
-<span class="lineNum">     180 </span><span class="lineCov">          1 :     const double rnd = utils::random::Random::get&lt;double&gt;();</span>
-<span class="lineNum">     181 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(rnd)      == Approx(rnd));</span>
-<span class="lineNum">     182 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(rnd, rnd) == Approx(rnd * rnd));</span>
-<span class="lineNum">     183 </span>            : 
-<span class="lineNum">     184 </span><span class="lineCov">          1 :     const double div = rnd / utils::random::Random::get&lt;double&gt;();</span>
-<span class="lineNum">     185 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(div, div, div, div, div) == Approx(std::pow(div, 5.0)));</span>
-<span class="lineNum">     186 </span>            : 
-<span class="lineNum">     187 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::multiply(10, 20, 30, 40, 50) == 12000000);</span>
+<span class="lineNum">     168 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(e) == 0);</span>
+<span class="lineNum">     169 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(e.begin(), e.end()) == 0);</span>
+<span class="lineNum">     170 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(x) == sum);</span>
+<span class="lineNum">     171 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(x.begin(), x.end()) == sum);</span>
+<span class="lineNum">     172 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(y) == Approx(sum));</span>
+<span class="lineNum">     173 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::sum(y.begin(), y.end()) == Approx(sum));</span>
+<a name="174"><span class="lineNum">     174 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     175 </span>            : 
+<span class="lineNum">     176 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::product&quot;, &quot;[utils][utils::math]&quot;) {</span>
+<span class="lineNum">     177 </span><span class="lineCov">          1 :     constexpr int prod = 3628800;</span>
+<span class="lineNum">     178 </span><span class="lineCov">          2 :     const std::vector&lt;int&gt;    e{};</span>
+<span class="lineNum">     179 </span><span class="lineCov">          2 :     const std::vector&lt;int&gt;    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};</span>
+<span class="lineNum">     180 </span><span class="lineCov">          2 :     const std::vector&lt;double&gt; y{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};</span>
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::product(e) == 0);</span>
+<span class="lineNum">     183 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::product(e.begin(), e.end()) == 0);</span>
+<span class="lineNum">     184 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::product(x) == prod);</span>
+<span class="lineNum">     185 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::product(x.begin(), x.end()) == prod);</span>
+<span class="lineNum">     186 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::product(y) == Approx(prod));</span>
+<span class="lineNum">     187 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::product(y.begin(), y.end()) == Approx(prod));</span>
 <a name="188"><span class="lineNum">     188 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     189 </span>            : 
-<span class="lineNum">     190 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::min&quot;, &quot;[utils][utils::algorithm]&quot;) {</span>
-<span class="lineNum">     191 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min( 0,  0) ==  0);</span>
-<span class="lineNum">     192 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min( 1,  0) ==  0);</span>
-<span class="lineNum">     193 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min( 0,  1) ==  0);</span>
-<span class="lineNum">     194 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min(-1,  0) == -1);</span>
-<span class="lineNum">     195 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min( 0, -1) == -1);</span>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          2 : static void __test_func(int&amp; x) { x /= 5; }</span></a>
+<span class="lineNum">     191 </span>            : 
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::repeat&quot;, &quot;[utils][utils::algorithm]&quot;) {</span></a>
+<span class="lineNum">     193 </span><span class="lineCov">          1 :     int test = 0;</span>
+<span class="lineNum">     194 </span><span class="lineCov">          1 :     utils::algorithm::repeat&lt;5&gt;([&amp;](){ test++; });</span>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">          2 :     REQUIRE(test == 5);</span></a>
 <span class="lineNum">     196 </span>            : 
-<span class="lineNum">     197 </span><span class="lineCov">          1 :     const double smaller = utils::random::Random::get&lt;double&gt;(0.0, 100.0);</span>
-<span class="lineNum">     198 </span><span class="lineCov">          1 :     const double bigger  = utils::random::Random::get&lt;double&gt;(smaller + 1.0);</span>
-<span class="lineNum">     199 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min(smaller, bigger ) == Approx(smaller));</span>
-<span class="lineNum">     200 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min(bigger , smaller) == Approx(smaller));</span>
-<span class="lineNum">     201 </span>            : 
-<span class="lineNum">     202 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min(bigger,  bigger, bigger,  bigger, smaller) == Approx(smaller));</span>
-<span class="lineNum">     203 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min(bigger,  bigger, bigger, smaller) == Approx(smaller));</span>
-<span class="lineNum">     204 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::min(bigger, smaller, bigger,  bigger) == Approx(smaller));</span>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     206 </span>            : 
-<span class="lineNum">     207 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::max&quot;, &quot;[utils][utils::algorithm]&quot;) {</span>
-<span class="lineNum">     208 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max( 0,  0) ==  0);</span>
-<span class="lineNum">     209 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max( 1,  0) ==  1);</span>
-<span class="lineNum">     210 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max( 0,  1) ==  1);</span>
-<span class="lineNum">     211 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max(-1,  0) ==  0);</span>
-<span class="lineNum">     212 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max( 0, -1) ==  0);</span>
+<span class="lineNum">     197 </span><span class="lineCov">          1 :     utils::algorithm::repeat([&amp;](){ test *= 10; });</span>
+<span class="lineNum">     198 </span><span class="lineCov">          2 :     REQUIRE(test == 50);</span>
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span><span class="lineCov">          1 :     utils::algorithm::repeat&lt;2&gt;(__test_func, test);</span>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">          2 :     REQUIRE(test == 2);</span></a>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span><span class="lineCov">          4 :     utils::algorithm::repeat&lt;1&gt;([](){ CHECK(true); });</span>
+<span class="lineNum">     204 </span>            : 
+<span class="lineNum">     205 </span><span class="lineCov">          1 :     utils::algorithm::repeat&lt;0&gt;([&amp;](){ test--; });</span>
+<span class="lineNum">     206 </span><span class="lineCov">          2 :     REQUIRE(test == 2);</span>
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::enumerate&quot;, &quot;[utils][utils::algorithm]&quot;) {</span>
+<span class="lineNum">     210 </span><span class="lineCov">          2 :     std::vector&lt;int&gt; test(10);</span>
+<span class="lineNum">     211 </span><span class="lineCov">          1 :     std::iota(test.begin(), test.end(), 0);</span>
+<span class="lineNum">     212 </span><span class="lineCov">          1 :     int cnt = 0;</span>
 <span class="lineNum">     213 </span>            : 
-<span class="lineNum">     214 </span><span class="lineCov">          1 :     const double smaller = utils::random::Random::get&lt;double&gt;(0.0, 100.0);</span>
-<span class="lineNum">     215 </span><span class="lineCov">          1 :     const double bigger  = utils::random::Random::get&lt;double&gt;(smaller + 1.0);</span>
-<span class="lineNum">     216 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max(smaller, bigger ) == Approx(bigger));</span>
-<span class="lineNum">     217 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max(bigger , smaller) == Approx(bigger));</span>
+<span class="lineNum">     214 </span><span class="lineCov">         11 :     for (auto [i, val] : utils::algorithm::enumerate(test)) {</span>
+<span class="lineNum">     215 </span><span class="lineCov">         20 :         CHECK(i == cnt++);</span>
+<span class="lineNum">     216 </span><span class="lineCov">         20 :         CHECK(i == val);</span>
+<span class="lineNum">     217 </span>            :     }
 <span class="lineNum">     218 </span>            : 
-<span class="lineNum">     219 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max(smaller, smaller, smaller, smaller, bigger) == Approx(bigger));</span>
-<span class="lineNum">     220 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max(smaller, smaller, smaller,  bigger) == Approx(bigger));</span>
-<span class="lineNum">     221 </span><span class="lineCov">          2 :     REQUIRE(utils::algorithm::max(smaller,  bigger, smaller, smaller) == Approx(bigger));</span>
-<a name="222"><span class="lineNum">     222 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     223 </span>            : 
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          2 : static void __test_func(int&amp; x) { x /= 5; }</span></a>
-<span class="lineNum">     225 </span>            : 
-<a name="226"><span class="lineNum">     226 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::repeat&quot;, &quot;[utils][utils::algorithm]&quot;) {</span></a>
-<span class="lineNum">     227 </span><span class="lineCov">          1 :     int test = 0;</span>
-<span class="lineNum">     228 </span><span class="lineCov">          1 :     utils::algorithm::repeat&lt;5&gt;([&amp;](){ test++; });</span>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          2 :     REQUIRE(test == 5);</span></a>
-<span class="lineNum">     230 </span>            : 
-<span class="lineNum">     231 </span><span class="lineCov">          1 :     utils::algorithm::repeat([&amp;](){ test *= 10; });</span>
-<span class="lineNum">     232 </span><span class="lineCov">          2 :     REQUIRE(test == 50);</span>
-<span class="lineNum">     233 </span>            : 
-<span class="lineNum">     234 </span><span class="lineCov">          1 :     utils::algorithm::repeat&lt;2&gt;(__test_func, test);</span>
-<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          2 :     REQUIRE(test == 2);</span></a>
-<span class="lineNum">     236 </span>            : 
-<span class="lineNum">     237 </span><span class="lineCov">          4 :     utils::algorithm::repeat&lt;1&gt;([](){ CHECK(true); });</span>
-<span class="lineNum">     238 </span>            : 
-<span class="lineNum">     239 </span><span class="lineCov">          1 :     utils::algorithm::repeat&lt;0&gt;([&amp;](){ test--; });</span>
-<span class="lineNum">     240 </span><span class="lineCov">          2 :     REQUIRE(test == 2);</span>
-<a name="241"><span class="lineNum">     241 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     242 </span>            : 
-<span class="lineNum">     243 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::algorithm::enumerate&quot;, &quot;[utils][utils::algorithm]&quot;) {</span>
-<span class="lineNum">     244 </span><span class="lineCov">          2 :     std::vector&lt;int&gt; test(10);</span>
-<span class="lineNum">     245 </span><span class="lineCov">          1 :     std::iota(test.begin(), test.end(), 0);</span>
-<span class="lineNum">     246 </span><span class="lineCov">          1 :     int cnt = 0;</span>
-<span class="lineNum">     247 </span>            : 
-<span class="lineNum">     248 </span><span class="lineCov">         11 :     for (auto [i, val] : utils::algorithm::enumerate(test)) {</span>
-<span class="lineNum">     249 </span><span class="lineCov">         20 :         CHECK(i == cnt++);</span>
-<span class="lineNum">     250 </span><span class="lineCov">         20 :         CHECK(i == val);</span>
-<span class="lineNum">     251 </span>            :     }
-<span class="lineNum">     252 </span>            : 
-<span class="lineNum">     253 </span><span class="lineCov">          1 :     const auto randoffset = utils::random::Random::get&lt;size_t&gt;(1, 100);</span>
-<span class="lineNum">     254 </span>            : 
-<span class="lineNum">     255 </span><span class="lineCov">         11 :     for (auto [i, val] : utils::algorithm::enumerate(test, randoffset)) {</span>
-<span class="lineNum">     256 </span><span class="lineCov">         20 :         CHECK(i == size_t(val) + randoffset);</span>
-<span class="lineNum">     257 </span>            :     }
-<span class="lineNum">     258 </span>            : 
-<span class="lineNum">     259 </span><span class="lineCov">          2 :     REQUIRE(cnt == 10);</span>
-<span class="lineNum">     260 </span><span class="lineCov">          1 : }</span>
-<span class="lineNum">     261 </span>            : 
-<span class="lineNum">     262 </span>            : #endif
+<span class="lineNum">     219 </span><span class="lineCov">          1 :     const auto randoffset = utils::random::Random::get&lt;size_t&gt;(1, 100);</span>
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span><span class="lineCov">         11 :     for (auto [i, val] : utils::algorithm::enumerate(test, randoffset)) {</span>
+<span class="lineNum">     222 </span><span class="lineCov">         20 :         CHECK(i == size_t(val) + randoffset);</span>
+<span class="lineNum">     223 </span>            :     }
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span><span class="lineCov">          2 :     REQUIRE(cnt == 10);</span>
+<span class="lineNum">     226 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">     227 </span>            : 
+<span class="lineNum">     228 </span>            : #endif
 </pre>
       </td>
     </tr>

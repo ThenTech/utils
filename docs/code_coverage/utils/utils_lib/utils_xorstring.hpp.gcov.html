@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">4</td>
@@ -203,9 +203,9 @@
 <span class="lineNum">     141 </span>            : 
 <span class="lineNum">     142 </span>            :                 template&lt;std::size_t N&gt;
 <span class="lineNum">     143 </span>            :                 XORSTR_FORCEINLINE void _crypt(XORSTR_VOLATILE std::uint64_t *keys) noexcept {
-<span class="lineNum">     144 </span>            :                     if constexpr(T::buffer_size &gt; N) {
+<span class="lineNum">     144 </span>            :                     if constexpr (T::buffer_size &gt; N) {
 <span class="lineNum">     145 </span>            :                         #ifndef JM_XORSTR_DISABLE_AVX_INTRINSICS
-<span class="lineNum">     146 </span>            :                             if constexpr((T::buffer_size - N) &gt;= 4) {
+<span class="lineNum">     146 </span>            :                             if constexpr ((T::buffer_size - N) &gt;= 4) {
 <span class="lineNum">     147 </span>            :                                 _mm256_store_si256(
 <span class="lineNum">     148 </span>            :                                     (__m256i *)(_storage + N),
 <span class="lineNum">     149 </span>            :                                     _mm256_xor_si256(

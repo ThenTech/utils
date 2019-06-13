@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-10</td>
+            <td class="headerValue">2019-06-13</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">36</td>
@@ -141,7 +141,7 @@
 <span class="lineNum">      79 </span><span class="lineCov">          5 :                 , filename(filename)</span>
 <span class="lineNum">      80 </span>            :             {
 <span class="lineNum">      81 </span>            :                 try {
-<span class="lineNum">      82 </span><span class="lineCov">          3 :                     auto contents = utils::io::readStringFromFile(this-&gt;filename);</span>
+<span class="lineNum">      82 </span><span class="lineCov">          3 :                     auto contents = utils::io::file_to_string(this-&gt;filename);</span>
 <span class="lineNum">      83 </span><span class="lineCov">          1 :                     this-&gt;inifile &lt;&lt; *contents;</span>
 <span class="lineNum">      84 </span><span class="lineCov">          1 :                     this-&gt;parse();</span>
 <span class="lineNum">      85 </span><span class="lineCov">          1 :                 } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false;);</span>
@@ -171,7 +171,7 @@
 <span class="lineNum">     109 </span><span class="lineCov">          3 :                 this-&gt;inifile &lt;&lt; *this;</span>
 <span class="lineNum">     110 </span>            : 
 <span class="lineNum">     111 </span>            :                 try {
-<span class="lineNum">     112 </span><span class="lineCov">          3 :                     utils::io::writeStringToFile(name, this-&gt;inifile.str());</span>
+<span class="lineNum">     112 </span><span class="lineCov">          3 :                     utils::io::string_to_file(name, this-&gt;inifile.str());</span>
 <span class="lineNum">     113 </span><span class="lineNoCov">          0 :                 } CATCH_AND_LOG_ERROR_TRACE();</span>
 <span class="lineNum">     114 </span><span class="lineCov">          3 :             }</span>
 <a name="115"><span class="lineNum">     115 </span>            : </a>
@@ -319,9 +319,9 @@
 <span class="lineNum">     257 </span><span class="lineCov">         32 :                             std::visit([&amp;](auto&amp;&amp; arg){ ss &lt;&lt; arg; }, val);</span>
 <span class="lineNum">     258 </span>            : 
 <span class="lineNum">     259 </span>            :                             // Print to string or cast to value
-<span class="lineNum">     260 </span>            :                             if constexpr(std::is_same_v&lt;T, std::string&gt;) {
+<span class="lineNum">     260 </span>            :                             if constexpr (std::is_same_v&lt;T, std::string&gt;) {
 <span class="lineNum">     261 </span><span class="lineCov">          1 :                                 return ss.str();</span>
-<span class="lineNum">     262 </span>            :                             } else if constexpr(std::is_same_v&lt;T, bool&gt;) {
+<span class="lineNum">     262 </span>            :                             } else if constexpr (std::is_same_v&lt;T, bool&gt;) {
 <span class="lineNum">     263 </span><span class="lineCov">         13 :                                 std::string_view str = utils::string::to_lowercase(ss.str());</span>
 <span class="lineNum">     264 </span>            : 
 <span class="lineNum">     265 </span><span class="lineCov">         24 :                                 if (str == &quot;true&quot; || str == &quot;yes&quot;</span>

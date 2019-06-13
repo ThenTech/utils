@@ -9,6 +9,7 @@ var classutils_1_1io_1_1_bit_stream =
     [ "get_position", "classutils_1_1io_1_1_bit_stream.html#ad3613f4bb3b7e42bb78f80504b68ca75", null ],
     [ "get_size", "classutils_1_1io_1_1_bit_stream.html#ad1a4fa1bef53f59e6d821148ccab1982", null ],
     [ "get_size_bits", "classutils_1_1io_1_1_bit_stream.html#adc8d8638cfa2a914b01db03155919342", null ],
+    [ "operator[]", "classutils_1_1io_1_1_bit_stream.html#a68985ca9915505568a7345f4689e771c", null ],
     [ "reset", "classutils_1_1io_1_1_bit_stream.html#a8c05f2f7d4dd03c9b11583762169ea12", null ],
     [ "resize", "classutils_1_1io_1_1_bit_stream.html#aa535f3c2e9a44154dd40f1c0f3c6ea0a", null ],
     [ "set_managed", "classutils_1_1io_1_1_bit_stream.html#a5dc9a38963b2e25be2126d714b876fcb", null ],

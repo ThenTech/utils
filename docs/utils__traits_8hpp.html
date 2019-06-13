@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.39.0-beta</span>
+   &#160;<span id="projectnumber">0.40.0-beta</span>
    </div>
   </td>
  </tr>
@@ -110,23 +110,23 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__traits_8hpp__dep__incl.png" border="0" usemap="#utils__lib_2utils__traits_8hppdep" alt=""/></div>
 <map name="utils__lib_2utils__traits_8hppdep" id="utils__lib_2utils__traits_8hppdep">
-<area shape="rect"  title=" " alt="" coords="732,5,887,32"/>
-<area shape="rect"  href="utils__memory_8hpp.html" title=" " alt="" coords="440,80,613,107"/>
-<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="537,155,695,181"/>
-<area shape="rect"  href="utils__print_8hpp.html" title=" " alt="" coords="259,229,410,256"/>
-<area shape="rect"  href="utils__misc_8hpp.html" title=" " alt="" coords="93,304,248,331"/>
-<area shape="rect"  href="utils__colour_8hpp.html" title=" " alt="" coords="90,386,251,413"/>
-<area shape="rect"  href="utils__ini_8hpp.html" title=" " alt="" coords="340,386,479,413"/>
-<area shape="rect"  href="utils__os_8hpp.html" title=" " alt="" coords="849,229,989,256"/>
-<area shape="rect"  href="utils__io_8hpp.html" title=" " alt="" coords="688,229,824,256"/>
-<area shape="rect"  href="utils__random_8hpp.html" title=" " alt="" coords="1013,229,1182,256"/>
-<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="1034,80,1193,107"/>
-<area shape="rect"  href="utils__bits_8hpp.html" title=" " alt="" coords="872,155,1019,181"/>
-<area shape="rect"  href="utils__math_8hpp.html" title=" " alt="" coords="1255,155,1409,181"/>
-<area shape="rect"  href="utils__time_8hpp.html" title=" " alt="" coords="1434,155,1585,181"/>
-<area shape="rect"  href="utils__algorithm_8hpp.html" title=" " alt="" coords="1268,80,1447,107"/>
-<area shape="rect"  href="algo__huffman_8hpp.html" title=" " alt="" coords="609,379,732,420"/>
-<area shape="rect"  href="utils__logger_8hpp.html" title=" " alt="" coords="809,304,970,331"/>
+<area shape="rect"  title=" " alt="" coords="805,5,959,32"/>
+<area shape="rect"  href="utils__memory_8hpp.html" title=" " alt="" coords="215,80,389,107"/>
+<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="685,155,844,181"/>
+<area shape="rect"  href="utils__print_8hpp.html" title=" " alt="" coords="760,229,911,256"/>
+<area shape="rect"  href="utils__colour_8hpp.html" title=" " alt="" coords="972,386,1133,413"/>
+<area shape="rect"  href="utils__ini_8hpp.html" title=" " alt="" coords="678,386,817,413"/>
+<area shape="rect"  href="utils__os_8hpp.html" title=" " alt="" coords="493,229,633,256"/>
+<area shape="rect"  href="utils__io_8hpp.html" title=" " alt="" coords="333,229,469,256"/>
+<area shape="rect"  href="utils__random_8hpp.html" title=" " alt="" coords="1037,229,1207,256"/>
+<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="920,80,1079,107"/>
+<area shape="rect"  href="utils__bits_8hpp.html" title=" " alt="" coords="514,155,661,181"/>
+<area shape="rect"  href="utils__math_8hpp.html" title=" " alt="" coords="1333,155,1487,181"/>
+<area shape="rect"  href="utils__time_8hpp.html" title=" " alt="" coords="5,155,156,181"/>
+<area shape="rect"  href="utils__algorithm_8hpp.html" title=" " alt="" coords="1383,80,1562,107"/>
+<area shape="rect"  href="algo__huffman_8hpp.html" title=" " alt="" coords="339,379,462,420"/>
+<area shape="rect"  href="utils__logger_8hpp.html" title=" " alt="" coords="515,304,676,331"/>
+<area shape="rect"  href="utils__misc_8hpp.html" title=" " alt="" coords="810,304,965,331"/>
 </map>
 </div>
 </div>
@@ -139,6 +139,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__iterator.html">utils::traits::is_iterator&lt; T &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if type T is iterator.  <a href="structutils_1_1traits_1_1is__iterator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__iterable.html">utils::traits::is_iterable&lt; T, U &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html">utils::traits::is_iterable&lt; T, std::void_t&lt; utils::traits::is_iterator&lt; decltype(std::begin(std::declval&lt; T &amp; &gt;()))&gt;, utils::traits::is_iterator&lt; decltype(std::end(std::declval&lt; T &amp; &gt;()))&gt; &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__variant__member.html">utils::traits::is_variant_member&lt; T, VARIANT_T &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if type T is a member of the variant VARIANT_T.  <a href="structutils_1_1traits_1_1is__variant__member.html#details">More...</a><br /></td></tr>
@@ -161,6 +165,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__container_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4.html">utils::traits::is_container&lt; std::array&lt; T, N &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html">utils::traits::is_container&lt; T[N]&gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__maplike.html">utils::traits::is_maplike&lt; T, U &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1is__maplike_3_01_t_00_01std_1_1void__t_3_01typename_01_t_1_1key__type_08cf2935ef276afed4a89e0bc9ef4f8b6.html">utils::traits::is_maplike&lt; T, std::void_t&lt; typename T::key_type, typename T::mapped_type, decltype(std::declval&lt; T &amp; &gt;()[std::declval&lt; const typename T::key_type &amp; &gt;()])&gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1traits_1_1internal_1_1can__apply.html">utils::traits::internal::can_apply&lt; class, class,... &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,6 +194,8 @@ Macros</h2></td></tr>
 <tr class="separator:ad705dc78222473228fa826e42eca95f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a89328d94ddd2cdd4b39db22da01f79"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#a9a89328d94ddd2cdd4b39db22da01f79">VAR_NAME_VALUE</a>(var)&#160;&#160;&#160;#var &quot; = &quot;  <a class="el" href="utils__traits_8hpp.html#ad705dc78222473228fa826e42eca95f1">VALUE</a>(var)</td></tr>
 <tr class="separator:a9a89328d94ddd2cdd4b39db22da01f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b54f43a92a64bb75600bbac55d20f49"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#a3b54f43a92a64bb75600bbac55d20f49">UTILS_TRAITS_ADD_PADDING</a>(TYPE,  SIZE)&#160;&#160;&#160;char __utils_padding[alignof(TYPE) * SIZE - 1];</td></tr>
+<tr class="separator:a3b54f43a92a64bb75600bbac55d20f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9593e6e545b76d1a9b62da2a3b81ec17"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#a9593e6e545b76d1a9b62da2a3b81ec17">ATTR_NORETURN</a>&#160;&#160;&#160;[[noreturn]]</td></tr>
 <tr class="memdesc:a9593e6e545b76d1a9b62da2a3b81ec17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attributes.  <a href="#a9593e6e545b76d1a9b62da2a3b81ec17">More...</a><br /></td></tr>
 <tr class="separator:a9593e6e545b76d1a9b62da2a3b81ec17"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,10 +211,6 @@ Macros</h2></td></tr>
 <tr class="separator:a2b2aadd2802a322676b7f31018f2814c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b58a1294d89c976dfbe4dc480e9dfb8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#a9b58a1294d89c976dfbe4dc480e9dfb8">UNUSED</a>(...)&#160;&#160;&#160;(decltype(<a class="el" href="namespaceutils_1_1traits.html#a00aecbcda4d5219f8ef5b4d773cd9649">utils::traits::unused_variable</a>(__VA_ARGS__))());</td></tr>
 <tr class="separator:a9b58a1294d89c976dfbe4dc480e9dfb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba115bd33b6284e3f1ca0e7b6fca69fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#aba115bd33b6284e3f1ca0e7b6fca69fe">is_iterable</a>(CONTAINER)&#160;&#160;&#160;<a class="el" href="structutils_1_1traits_1_1is__iterator.html">utils::traits::is_iterator</a>&lt;decltype(std::begin(CONTAINER))&gt;</td></tr>
-<tr class="separator:aba115bd33b6284e3f1ca0e7b6fca69fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3aa27eff2755d88f8f30531495980e0c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#a3aa27eff2755d88f8f30531495980e0c">is_iterable_v</a>(CONTAINER)&#160;&#160;&#160;<a class="el" href="namespaceutils_1_1traits.html#ae7dc09b5d534ab5195c8557407776a2b">utils::traits::is_iterator_v</a>&lt;decltype(std::begin(CONTAINER))&gt;</td></tr>
-<tr class="separator:a3aa27eff2755d88f8f30531495980e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad17f244fa09ecaa96d07aeba607301a0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__traits_8hpp.html#ad17f244fa09ecaa96d07aeba607301a0">CREATE_HAS_FUNCTION</a>(F)</td></tr>
 <tr class="separator:ad17f244fa09ecaa96d07aeba607301a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -220,7 +226,6 @@ Typedefs</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a00aecbcda4d5219f8ef5b4d773cd9649"><td class="memTemplParams" colspan="2">template&lt;typename... A&gt; </td></tr>
 <tr class="memitem:a00aecbcda4d5219f8ef5b4d773cd9649"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1traits.html#a00aecbcda4d5219f8ef5b4d773cd9649">utils::traits::unused_variable</a> (const A &amp;...) noexcept</td></tr>
-<tr class="memdesc:a00aecbcda4d5219f8ef5b4d773cd9649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function with varying number of arguments to avoid "unused variable" warnings.  <a href="namespaceutils_1_1traits.html#a00aecbcda4d5219f8ef5b4d773cd9649">More...</a><br /></td></tr>
 <tr class="separator:a00aecbcda4d5219f8ef5b4d773cd9649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa27f6e525357734ce54e31ece4783710"><td class="memTemplParams" colspan="2">template&lt;typename E &gt; </td></tr>
 <tr class="memitem:aa27f6e525357734ce54e31ece4783710"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1traits.html#aa27f6e525357734ce54e31ece4783710">utils::traits::to_underlying</a> (const E e) noexcept</td></tr>
@@ -235,9 +240,15 @@ Variables</h2></td></tr>
 <tr class="memitem:ae7dc09b5d534ab5195c8557407776a2b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ae7dc09b5d534ab5195c8557407776a2b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1traits.html#ae7dc09b5d534ab5195c8557407776a2b">utils::traits::is_iterator_v</a> = is_iterator&lt;T&gt;::value</td></tr>
 <tr class="separator:ae7dc09b5d534ab5195c8557407776a2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3098b4d1d61e60e7c4a198587a35aaf1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a3098b4d1d61e60e7c4a198587a35aaf1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1traits.html#a3098b4d1d61e60e7c4a198587a35aaf1">utils::traits::is_iterable_v</a> = is_iterable&lt;T&gt;::value</td></tr>
+<tr class="separator:a3098b4d1d61e60e7c4a198587a35aaf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad99e4d2b5d9a8a823d8dffaa479b569f"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... ALL_T&gt; </td></tr>
 <tr class="memitem:ad99e4d2b5d9a8a823d8dffaa479b569f"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1traits.html#ad99e4d2b5d9a8a823d8dffaa479b569f">utils::traits::is_variant_member_v</a> = is_variant_member&lt;T, ALL_T...&gt;::value</td></tr>
 <tr class="separator:ad99e4d2b5d9a8a823d8dffaa479b569f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57eafb22ce9f0ea401d0d12c5530852e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a57eafb22ce9f0ea401d0d12c5530852e"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1traits.html#a57eafb22ce9f0ea401d0d12c5530852e">utils::traits::is_maplike_v</a> = is_maplike&lt;T&gt;::value</td></tr>
+<tr class="separator:a57eafb22ce9f0ea401d0d12c5530852e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="aa120f4d35b3409a3c78353e7a10d671c"></a>
@@ -253,7 +264,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>ATTR_DEPRECATED indicates that the use of the name or entity declared with this attribute is allowed, but discouraged for some reason. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00042">42</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00055">55</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,7 +284,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00043">43</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00056">56</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -290,7 +301,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>ATTR_FALLTHROUGH indicates that the fall through from the previous case label is intentional and should not be diagnosed by a compiler that warns on fall-through. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00050">50</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00063">63</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -307,7 +318,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>ATTR_MAYBE_UNUSED suppresses compiler warnings on unused entities, if any. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00061">61</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00074">74</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -324,7 +335,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>ATTR_NODISCARD encourages the compiler to issue a warning if the return value is discarded. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00056">56</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00069">69</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -343,7 +354,7 @@ Variables</h2></td></tr>
 <p>Attributes. </p>
 <p>Indicates that the function does not return. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00036">36</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00049">49</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -363,47 +374,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> U&gt; \</div><div class="line">        using dot_ ## F ## _r = decltype(std::declval&lt;T&gt;().F(U())); \</div><div class="line">        template&lt;class T, class U&gt; \</div><div class="line">        using has_ ## F = can_apply&lt;dot_ ## F ## _r, T, U&gt;; \</div><div class="line">        template&lt;typename T, class U&gt; \</div><div class="line">        inline constexpr <span class="keywordtype">bool</span> has_ ## F ## _v = has_ ## F&lt;T, U&gt;::value;</div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00191">191</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
-
-</div>
-</div>
-<a id="aba115bd33b6284e3f1ca0e7b6fca69fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba115bd33b6284e3f1ca0e7b6fca69fe">&#9670;&nbsp;</a></span>is_iterable</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define is_iterable</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">CONTAINER</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="structutils_1_1traits_1_1is__iterator.html">utils::traits::is_iterator</a>&lt;decltype(std::begin(CONTAINER))&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00126">126</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a3aa27eff2755d88f8f30531495980e0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3aa27eff2755d88f8f30531495980e0c">&#9670;&nbsp;</a></span>is_iterable_v</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define is_iterable_v</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">CONTAINER</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="namespaceutils_1_1traits.html#ae7dc09b5d534ab5195c8557407776a2b">utils::traits::is_iterator_v</a>&lt;decltype(std::begin(CONTAINER))&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00127">127</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00226">226</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +394,39 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00086">86</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00100">100</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3b54f43a92a64bb75600bbac55d20f49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b54f43a92a64bb75600bbac55d20f49">&#9670;&nbsp;</a></span>UTILS_TRAITS_ADD_PADDING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define UTILS_TRAITS_ADD_PADDING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPE, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">SIZE&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;char __utils_padding[alignof(TYPE) * SIZE - 1];</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add padding to class or struct members. TYPE should be the type of the last member variable, while SIZE should be its size.</p>
+<p>This will add a char[] with a size to pad the struct/class to the next byte boundary. </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00040">40</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -443,7 +446,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00022">22</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00026">26</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -465,7 +468,7 @@ Variables</h2></td></tr>
 
 <p>Macro helpers. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00021">21</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00025">25</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>
@@ -485,7 +488,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00023">23</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__traits_8hpp_source.html#l00027">27</a> of file <a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>.</p>
 
 </div>
 </div>

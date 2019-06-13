@@ -20,5 +20,6 @@ var utils__bits_8hpp =
     [ "round_to_multiple", "utils__bits_8hpp.html#a5ded9cbe3cc8af61c7729874943d58f5", null ],
     [ "shift_signed", "utils__bits_8hpp.html#ae89323e6dbdecaab3c2a135d2f121213", null ],
     [ "size_of", "utils__bits_8hpp.html#ae13cebecb70ce1106e368f1da6907c18", null ],
+    [ "to_binary", "utils__bits_8hpp.html#a6b14ee4b07752a1465e5bb49ddbfb6e2", null ],
     [ "xor_all", "utils__bits_8hpp.html#a1fde0ee9d5a491297a28896d47519595", null ]
 ];

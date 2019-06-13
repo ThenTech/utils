@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.39.0-beta</span>
+   &#160;<span id="projectnumber">0.40.0-beta</span>
    </div>
   </td>
  </tr>
@@ -76,16 +76,18 @@ $(document).ready(function(){initNavTree('utils__bits_8hpp.html','');});
 <code>#include &quot;<a class="el" href="utils__traits_8hpp_source.html">utils_traits.hpp</a>&quot;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;numeric&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for utils_bits.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__bits_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__bits_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__bits_8hpp" id="utils__lib_2utils__bits_8hpp">
-<area shape="rect"  title=" " alt="" coords="665,5,812,32"/>
+<area shape="rect"  title=" " alt="" coords="721,5,868,32"/>
 <area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="629,80,739,107"/>
 <area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="379,162,485,189"/>
 <area shape="rect"  title=" " alt="" coords="764,80,825,107"/>
 <area shape="rect"  title=" " alt="" coords="849,80,903,107"/>
+<area shape="rect"  title=" " alt="" coords="927,80,995,107"/>
 <area shape="rect"  title=" " alt="" coords="510,155,623,196"/>
 <area shape="rect"  title=" " alt="" coords="648,162,720,189"/>
 <area shape="rect"  title=" " alt="" coords="744,162,821,189"/>
@@ -208,6 +210,10 @@ Functions</h2></td></tr>
 <tr class="memitem:af17a75a6ca6b8a2b0d968995080fe01f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> uint_fast32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#af17a75a6ca6b8a2b0d968995080fe01f">utils::bits::bits_needed</a> (T value)</td></tr>
 <tr class="memdesc:af17a75a6ca6b8a2b0d968995080fe01f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the amount of bits needed to represent the given T.  <a href="namespaceutils_1_1bits.html#af17a75a6ca6b8a2b0d968995080fe01f">More...</a><br /></td></tr>
 <tr class="separator:af17a75a6ca6b8a2b0d968995080fe01f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b14ee4b07752a1465e5bb49ddbfb6e2"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U  = bool, typename  = typename std::enable_if_t&lt;std::is_integral_v&lt;T&gt;&gt;, typename  = typename std::enable_if_t&lt;std::is_same_v&lt;bool, U&gt;                                          || std::is_integral_v&lt;U&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a6b14ee4b07752a1465e5bb49ddbfb6e2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#a6b14ee4b07752a1465e5bb49ddbfb6e2">utils::bits::to_binary</a> (const std::vector&lt; U &gt; &amp;bool_vec)</td></tr>
+<tr class="memdesc:a6b14ee4b07752a1465e5bb49ddbfb6e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accumulate the boolean vector to the target type <code>T</code>. The MSB will be the first value in the vector.  <a href="namespaceutils_1_1bits.html#a6b14ee4b07752a1465e5bb49ddbfb6e2">More...</a><br /></td></tr>
+<tr class="separator:a6b14ee4b07752a1465e5bb49ddbfb6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a9c131cb9db733a253f214e3d40abbc27"></a>
@@ -222,7 +228,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00024">24</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00025">25</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -238,7 +244,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00019">19</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00020">20</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -254,7 +260,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00021">21</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00022">22</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -270,7 +276,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00020">20</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00021">21</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>

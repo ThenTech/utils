@@ -53,7 +53,9 @@ var hierarchy =
     ] ],
     [ "false_type", null, [
       [ "utils::traits::internal::can_apply< class, class,... >", "structutils_1_1traits_1_1internal_1_1can__apply.html", null ],
-      [ "utils::traits::is_container< T >", "structutils_1_1traits_1_1is__container.html", null ]
+      [ "utils::traits::is_container< T >", "structutils_1_1traits_1_1is__container.html", null ],
+      [ "utils::traits::is_iterable< T, U >", "structutils_1_1traits_1_1is__iterable.html", null ],
+      [ "utils::traits::is_maplike< T, U >", "structutils_1_1traits_1_1is__maplike.html", null ]
     ] ],
     [ "utils::algo::Huffman< T >", "classutils_1_1algo_1_1_huffman.html", null ],
     [ "utils::traits::is_byte< T >", "structutils_1_1traits_1_1is__byte.html", null ],
@@ -84,6 +86,8 @@ var hierarchy =
       [ "utils::traits::is_container< std::unordered_map< TKey, TValue, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__map_3_01_t_key_00_01_t_value_00_01_36216da77d37e11cb184e4ea3bbd5fe2.html", null ],
       [ "utils::traits::is_container< std::vector< T, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html", null ],
       [ "utils::traits::is_container< T[N]>", "structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html", null ],
+      [ "utils::traits::is_iterable< T, std::void_t< utils::traits::is_iterator< decltype(std::begin(std::declval< T & >()))>, utils::traits::is_iterator< decltype(std::end(std::declval< T & >()))> > >", "structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html", null ],
+      [ "utils::traits::is_maplike< T, std::void_t< typename T::key_type, typename T::mapped_type, decltype(std::declval< T & >()[std::declval< const typename T::key_type & >()])> >", "structutils_1_1traits_1_1is__maplike_3_01_t_00_01std_1_1void__t_3_01typename_01_t_1_1key__type_08cf2935ef276afed4a89e0bc9ef4f8b6.html", null ],
       [ "utils::utils::traits::is_container< utils::print::array_wrapper< T, N > >", "structutils_1_1utils_1_1traits_1_1is__container_3_01utils_1_1print_1_1array__wrapper_3_01_t_00_01_n_01_4_01_4.html", null ]
     ] ]
 ];

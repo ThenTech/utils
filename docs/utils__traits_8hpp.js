@@ -2,6 +2,8 @@ var utils__traits_8hpp =
 [
     [ "is_byte", "structutils_1_1traits_1_1is__byte.html", "structutils_1_1traits_1_1is__byte" ],
     [ "is_iterator", "structutils_1_1traits_1_1is__iterator.html", "structutils_1_1traits_1_1is__iterator" ],
+    [ "is_iterable", "structutils_1_1traits_1_1is__iterable.html", null ],
+    [ "is_iterable< T, std::void_t< utils::traits::is_iterator< decltype(std::begin(std::declval< T & >()))>, utils::traits::is_iterator< decltype(std::end(std::declval< T & >()))> > >", "structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html", null ],
     [ "is_variant_member", "structutils_1_1traits_1_1is__variant__member.html", null ],
     [ "is_variant_member< T, std::variant< ALL_T... > >", "structutils_1_1traits_1_1is__variant__member_3_01_t_00_01std_1_1variant_3_01_a_l_l___t_8_8_8_01_4_01_4.html", null ],
     [ "is_container", "structutils_1_1traits_1_1is__container.html", null ],
@@ -12,6 +14,8 @@ var utils__traits_8hpp =
     [ "is_container< std::unordered_map< TKey, TValue, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__map_3_01_t_key_00_01_t_value_00_01_36216da77d37e11cb184e4ea3bbd5fe2.html", null ],
     [ "is_container< std::array< T, N > >", "structutils_1_1traits_1_1is__container_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4.html", null ],
     [ "is_container< T[N]>", "structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html", null ],
+    [ "is_maplike", "structutils_1_1traits_1_1is__maplike.html", null ],
+    [ "is_maplike< T, std::void_t< typename T::key_type, typename T::mapped_type, decltype(std::declval< T & >()[std::declval< const typename T::key_type & >()])> >", "structutils_1_1traits_1_1is__maplike_3_01_t_00_01std_1_1void__t_3_01typename_01_t_1_1key__type_08cf2935ef276afed4a89e0bc9ef4f8b6.html", null ],
     [ "can_apply", "structutils_1_1traits_1_1internal_1_1can__apply.html", null ],
     [ "can_apply< Z, std::void_t< Z< Ts... > >, Ts... >", "structutils_1_1traits_1_1internal_1_1can__apply_3_01_z_00_01std_1_1void__t_3_01_z_3_01_ts_8_8_8_01_4_01_4_00_01_ts_8_8_8_01_4.html", null ],
     [ "ATTR_DEPRECATED", "utils__traits_8hpp.html#aa120f4d35b3409a3c78353e7a10d671c", null ],
@@ -21,9 +25,8 @@ var utils__traits_8hpp =
     [ "ATTR_NODISCARD", "utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c", null ],
     [ "ATTR_NORETURN", "utils__traits_8hpp.html#a9593e6e545b76d1a9b62da2a3b81ec17", null ],
     [ "CREATE_HAS_FUNCTION", "utils__traits_8hpp.html#ad17f244fa09ecaa96d07aeba607301a0", null ],
-    [ "is_iterable", "utils__traits_8hpp.html#aba115bd33b6284e3f1ca0e7b6fca69fe", null ],
-    [ "is_iterable_v", "utils__traits_8hpp.html#a3aa27eff2755d88f8f30531495980e0c", null ],
     [ "UNUSED", "utils__traits_8hpp.html#a9b58a1294d89c976dfbe4dc480e9dfb8", null ],
+    [ "UTILS_TRAITS_ADD_PADDING", "utils__traits_8hpp.html#a3b54f43a92a64bb75600bbac55d20f49", null ],
     [ "VALUE", "utils__traits_8hpp.html#ad705dc78222473228fa826e42eca95f1", null ],
     [ "VALUE_TO_STRING", "utils__traits_8hpp.html#ad15c9a08925b1c0365fb1bd9ac826670", null ],
     [ "VAR_NAME_VALUE", "utils__traits_8hpp.html#a9a89328d94ddd2cdd4b39db22da01f79", null ],
@@ -32,6 +35,8 @@ var utils__traits_8hpp =
     [ "to_underlying", "utils__traits_8hpp.html#aa27f6e525357734ce54e31ece4783710", null ],
     [ "unused_variable", "utils__traits_8hpp.html#a00aecbcda4d5219f8ef5b4d773cd9649", null ],
     [ "is_byte_v", "utils__traits_8hpp.html#a52459dbab5fd6fb844f72926d5495f85", null ],
+    [ "is_iterable_v", "utils__traits_8hpp.html#a3098b4d1d61e60e7c4a198587a35aaf1", null ],
     [ "is_iterator_v", "utils__traits_8hpp.html#ae7dc09b5d534ab5195c8557407776a2b", null ],
+    [ "is_maplike_v", "utils__traits_8hpp.html#a57eafb22ce9f0ea401d0d12c5530852e", null ],
     [ "is_variant_member_v", "utils__traits_8hpp.html#ad99e4d2b5d9a8a823d8dffaa479b569f", null ]
 ];
