@@ -5,7 +5,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)](https://github.com/Wosser1sProductions/utils/commits/master)
 ![License](https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue)
 
-[![version](https://img.shields.io/badge/version-0.40.0--beta-brightgreen.svg)](http://semver.org/)
+[![version](https://img.shields.io/badge/version-0.41.0--beta-brightgreen.svg)](http://semver.org/)
 ![c++-version](https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg)
 [![tested-unix](https://img.shields.io/badge/tested%20with-g%2B%2B--9.1-orange.svg)](https://gcc.gnu.org/gcc-9/)
 ![tested-win](https://img.shields.io/badge/tested%20with-MinGW--7.3-orange.svg)

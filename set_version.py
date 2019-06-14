@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import subprocess
 import fileinput
 import re
@@ -5,7 +6,7 @@ import os
 
 LF = "\n" if os.name == "nt" else "\r\n"
     
-OFFSET = 31
+OFFSET = 35
 
 MAIN         = "./main.cpp"
 MAIN_MATCH   = "VERSION("

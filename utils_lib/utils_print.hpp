@@ -3,8 +3,11 @@
 /**
  *  Generic printing to an outputstream.
  *  Reference: https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers
+ *  Also similar to: https://github.com/louisdx/cxx-prettyprint
  *
- *  TODO Also look at https://github.com/p-ranav/pprint
+ *  Also look at https://github.com/p-ranav/pprint
+ *
+ *  TODO Add queue, prio_queue and stack
  */
 
 #include "utils_traits.hpp"
@@ -15,6 +18,7 @@
 #include <iterator>
 #include <type_traits>
 #include <vector>
+#include <variant>
 #include <algorithm>
 
 #ifdef _MSC_VER
@@ -24,12 +28,22 @@
     #include <cxxabi.h>
 #endif
 
-
-#define UTILS_PRINT_VECTOR_STRINGS_QUOTED              1
-#define UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES 1
+#define UTILS_PRINT_QUOTE_STRINGS                  1
+#define UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES 1
 
 
 namespace utils::print {
+    template <typename T, typename TChar, typename TCharTraits> ATTR_MAYBE_UNUSED
+    static inline auto& print_quoted_helper(std::basic_ostream<TChar, TCharTraits>& stream, const T& value) {
+        #if UTILS_PRINT_QUOTE_STRINGS
+            if constexpr (std::is_convertible_v<T, std::string_view>) {
+                stream << utils::string::quoted(value);
+            } else
+        #endif
+        stream << value;
+        return stream;
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     /// pretty_ostream_iterator
     ////////////////////////////////////////////////////////////////////////////
@@ -60,7 +74,7 @@ namespace utils::print {
                         _insertDelim = true;
                 }
 
-                (*_stream) << value;
+                utils::print::print_quoted_helper(*_stream, value);
                 return *this;
             }
 
@@ -106,112 +120,115 @@ namespace utils::print {
     };
 
     // Default delimiters
-    template<typename T>
-    struct delimiters<T, char> {
-        static inline constexpr delimiters_values<char> values = { "[ ", ", ", " ]" };
-    };
+    #define COMMA ,
+    #define DELIM_CHAR_CONT         "[ ", ", ", " ]"
+    #define DELIM_WCHAR_CONT        L"[ ", L", ", L" ]"
+    #define DELIM_CHAR_CONT_NL      "[\n    ", ",\n    ", "\n]"
+    #define DELIM_WCHAR_CONT_NL     L"[\n    ", L",\n    ", L"\n]"
 
-    template<typename T>
-    struct delimiters<T, wchar_t> {
-        static inline constexpr delimiters_values<wchar_t> values = { L"[ ", L", ", L" ]" };
-    };
+    #define DELIM_CHAR_SET          "{ ", ", ", " }"
+    #define DELIM_WCHAR_SET         L"{ ", L", ", L" }"
+    #define DELIM_CHAR_SET_NL       "{\n    ", ",\n    ", "\n}"
+    #define DELIM_WCHAR_SET_NL      L"{\n    ", L",\n    ", L"\n}"
+
+    #define DELIM_CHAR_PAIR         "<", ", ", ">"
+    #define DELIM_WCHAR_PAIR        L"<", L", ", L">"
+
+    #define DELIM_CHAR_TUPLE        "(", ", ", ")"
+    #define DELIM_WCHAR_TUPLE       L"(", L", ", L")"
+
+    #define DELIM_CHAR_OPTIONAL     NULL, "nullopt", NULL
+    #define DELIM_WCHAR_OPTIONAL    NULL, L"nullopt", NULL
+
+    #define DELIM_CHAR_VARIANT      NULL, NULL, NULL
+    #define DELIM_WCHAR_VARIANT     NULL, NULL, NULL
+
+    #define MAKE_CONTAINER(DELIM, TEMPL, TYPE) \
+        template<TEMPL> \
+        struct delimiters<TYPE, char> { \
+            static inline constexpr delimiters_values<char> values = { DELIM_CHAR_ ## DELIM }; \
+        }; \
+        template<TEMPL> \
+        struct delimiters<TYPE, wchar_t> { \
+            static inline constexpr delimiters_values<wchar_t> values = { DELIM_WCHAR_ ## DELIM }; \
+        };
+
+    MAKE_CONTAINER(CONT, typename T, T)
 
     ////////////////////////////////////////////////////////////////////////////
-    /// vector<string> newline
-    ////////////////////////////////////////////////////////////////////////////
-    #if (UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES || UTILS_PRINT_VECTOR_STRINGS_QUOTED)
-        template<>
-        struct delimiters<std::vector<std::string>, char> {
-            static inline constexpr delimiters_values<char> values = {
-                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
-                    "[\n    \"", "\",\n    \"", "\"\n]"
-                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
-                    "[\"", "\", \"", "\"]"
-                #endif
-            };
+
+    // container<string> newline
+    #define MAKE_CONTAINER_NL(DELIM, TEMPL, CONT, ...) \
+        template<TEMPL> \
+        struct delimiters<std::CONT<std::string __VA_ARGS__>, char> { \
+            static inline constexpr delimiters_values<char> values = { DELIM_CHAR_ ## DELIM ## _NL }; \
+        }; \
+        template<TEMPL> \
+        struct delimiters<std::CONT<std::wstring __VA_ARGS__>, wchar_t> { \
+            static inline constexpr delimiters_values<wchar_t> values = { DELIM_WCHAR_ ## DELIM ## _NL }; \
+        }; \
+        template<TEMPL> \
+        struct delimiters<std::CONT<std::string_view __VA_ARGS__>, char> { \
+            static inline constexpr delimiters_values<char> values = { DELIM_CHAR_ ## DELIM ## _NL }; \
+        }; \
+        template<TEMPL> \
+        struct delimiters<std::CONT<std::wstring_view __VA_ARGS__>, wchar_t> { \
+            static inline constexpr delimiters_values<wchar_t> values = { DELIM_WCHAR_ ## DELIM ## _NL }; \
         };
 
-        template<>
-        struct delimiters<std::vector<std::string>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = {
-                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
-                    L"[\n    \"", L"\",\n    \"", L"\"\n]"
-                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
-                    L"[\"", L"\", \"", L"\"]"
-                #endif
-            };
-        };
-
-        template<>
-        struct delimiters<std::vector<std::string_view>, char> {
-            static inline constexpr delimiters_values<char> values = {
-                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
-                    "[\n    \"", "\",\n    \"", "\"\n]"
-                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
-                    "[\"", "\", \"", "\"]"
-                #endif
-            };
-        };
-
-        template<>
-        struct delimiters<std::vector<std::string_view>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = {
-                #if UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
-                    L"[\n    \"", L"\",\n    \"", L"\"\n]"
-                #elif PRETTY_PRINT_VECTOR_STRINGS_QUOTED
-                    L"[\"", L"\", \"", L"\"]"
-                #endif
-            };
-        };
-    #endif
+#if UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES
+    MAKE_CONTAINER_NL(CONT, typename TAllocator, vector,, TAllocator)
+    MAKE_CONTAINER_NL(CONT, typename TAllocator, list,, TAllocator)
+    MAKE_CONTAINER_NL(CONT, size_t N, array,, N)
+    MAKE_CONTAINER_NL(CONT,, initializer_list)
+#endif
 
     ////////////////////////////////////////////////////////////////////////////
+
     // Delimiters for set
-    template<typename T, typename TTraits, typename TAllocator>
-    struct delimiters<std::set<T, TTraits, TAllocator>, char> {
-            static inline constexpr delimiters_values<char> values = { "{ ", ", ", " }" };
-    };
+    MAKE_CONTAINER(SET, typename T COMMA typename TCompare COMMA typename TAllocator,
+                   std::set<T COMMA TCompare COMMA TAllocator>)
+    MAKE_CONTAINER(SET, typename T COMMA typename TCompare COMMA typename TAllocator,
+                   std::multiset<T COMMA TCompare COMMA TAllocator>)
 
-    template<typename T, typename TTraits, typename TAllocator>
-    struct delimiters<std::set<T, TTraits, TAllocator>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = { L"{ ", L", ", L" }" };
-    };
+    MAKE_CONTAINER(SET, typename T COMMA typename THash COMMA typename TPred COMMA typename TAllocator,
+                   std::unordered_set<T COMMA THash COMMA TPred COMMA TAllocator>)
+    MAKE_CONTAINER(SET, typename T COMMA typename THash COMMA typename TPred COMMA typename TAllocator,
+                   std::unordered_multiset<T COMMA THash COMMA TPred COMMA TAllocator>)
 
-    ////////////////////////////////////////////////////////////////////////////
+#if UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES
+    MAKE_CONTAINER_NL(SET, typename TCompare COMMA typename TAllocator,
+                      set,, TCompare COMMA TAllocator)
+    MAKE_CONTAINER_NL(SET, typename TCompare COMMA typename TAllocator,
+                      multiset,, TCompare COMMA TAllocator)
+
+    MAKE_CONTAINER_NL(SET, typename THash COMMA typename TPred COMMA typename TAllocator,
+                      unordered_set,, THash COMMA TPred COMMA TAllocator)
+    MAKE_CONTAINER_NL(SET, typename THash COMMA typename TPred COMMA typename TAllocator,
+                      unordered_multiset,, THash COMMA TPred COMMA TAllocator)
+#endif
+
+    // Delimiters for map
+    MAKE_CONTAINER(SET_NL, typename TKey COMMA typename TVal COMMA typename TCompare COMMA typename TAllocator,
+                   std::map<TKey COMMA TVal COMMA TCompare COMMA TAllocator>)
+    MAKE_CONTAINER(SET_NL, typename TKey COMMA typename TVal COMMA typename TCompare COMMA typename TAllocator,
+                   std::unordered_map<TKey COMMA TVal COMMA TCompare COMMA TAllocator>)
+
     // Delimiters for pair
-    template<typename T1, typename T2>
-    struct delimiters<std::pair<T1, T2>, char> {
-            static inline constexpr delimiters_values<char> values = { "(", ", ", ")" };
-    };
+    MAKE_CONTAINER(PAIR, typename T1 COMMA typename T2,
+                   std::pair<T1 COMMA T2>)
 
-    template<typename T1, typename T2>
-    struct delimiters<std::pair<T1, T2>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = { L"(", L", ", L")" };
-    };
-
-    ////////////////////////////////////////////////////////////////////////////
     // Delimiters for tuple
-    template<typename ...Args>
-    struct delimiters<std::tuple<Args...>, char> {
-            static inline constexpr delimiters_values<char> values = { "(", ", ", ")" };
-    };
+    MAKE_CONTAINER(TUPLE, typename ...Args,
+                   std::tuple<Args...>)
 
-    template<typename ...Args>
-    struct delimiters<std::tuple<Args...>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = { L"(", L", ", L")" };
-    };
-
-    ////////////////////////////////////////////////////////////////////////////
     // Delimiters for optional
-    template<typename T>
-    struct delimiters<std::optional<T>, char> {
-            static inline constexpr delimiters_values<char> values = { "", "nullopt", "" };
-    };
+    MAKE_CONTAINER(OPTIONAL, typename T,
+                   std::optional<T>)
 
-    template<typename T>
-    struct delimiters<std::optional<T>, wchar_t> {
-            static inline constexpr delimiters_values<wchar_t> values = { L"", L"nullopt", L"" };
-    };
+    // Delimiters for variant
+    MAKE_CONTAINER(VARIANT, typename ...T,
+                   std::variant<T...>)
 
     ////////////////////////////////////////////////////////////////////////////
     /// Functor to print containers. You can use this directly if you
@@ -271,15 +288,17 @@ namespace utils::print {
             }
 
             void operator()(ostream_type& stream) const {
-                if constexpr (N == 1) {
-                    stream << std::get<0>(_tuple);
+                if constexpr (N == 0) {
+                    return;
+                } else if constexpr (N == 1) {
+                    utils::print::print_quoted_helper(stream, std::get<0>(_tuple));
                 } else {
                     (print_tuple_helper<Tuple, N - 1, TChar, TCharTraits>(_tuple))(stream);
 
                     if (delimiters_type::values.delimiter != NULL)
                         stream << delimiters_type::values.delimiter;
 
-                    stream << std::get<N - 1>(_tuple);
+                    utils::print::print_quoted_helper(stream, std::get<N - 1>(_tuple));
                 }
             }
     };
@@ -310,13 +329,13 @@ namespace utils::traits {
 }
 
 namespace utils::print {
-    template <typename T, size_t N>
-    utils::print::array_wrapper<T, N> print_array_helper(const T (&a)[N]) {
+    template <typename T, size_t N> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline utils::print::array_wrapper<T, N> print_array_helper(const T (&a)[N]) {
         return utils::print::array_wrapper<T, N>(a);
     }
 
-    template <typename T, size_t N = 0>
-    utils::print::array_wrapper<T, N> print_array_helper(const T* a) {
+    template <typename T, size_t N = 0> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline utils::print::array_wrapper<T, N> print_array_helper(const T* a) {
         static_assert(N > 0, "print_array_helper requires N!");
         return utils::print::array_wrapper<T, N>(a);
     }
@@ -338,9 +357,8 @@ namespace utils::print {
      */
     template <
         class T, typename ...Strings,
-        std::enable_if_t<(std::is_convertible_v<Strings const&, std::string_view> && ...), int> = 0
-    >
-    ATTR_MAYBE_UNUSED
+        typename = typename std::enable_if_t<(std::is_convertible_v<Strings const&, std::string_view> && ...)>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static const std::string type2name(T const& o, const Strings& ...filter) {
         #ifdef _CXXABI_H
             // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
@@ -413,8 +431,7 @@ namespace std {
 
     // Prints a print_container_helper to the specified stream.
     template<typename T, typename TChar, typename TCharTraits, typename TDelimiters>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    inline auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const utils::print::print_container_helper<T, TChar, TCharTraits, TDelimiters>& helper)
     {
@@ -422,9 +439,9 @@ namespace std {
         return stream;
     }
 
+    // NOTE Redundant?
     template<typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    inline auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const utils::print::array_wrapper<T, N>& helper)
     {
@@ -434,30 +451,25 @@ namespace std {
 
     /// Prints a pair to the stream using delimiters from delimiters<std::pair<T1, T2>>.
     template<typename T1, typename T2, typename TChar, typename TCharTraits>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const std::pair<T1, T2>& value)
     {
-        if (utils::print::delimiters<std::pair<T1, T2>, TChar>::values.prefix != NULL)
-            stream << utils::print::delimiters<std::pair<T1, T2>, TChar>::values.prefix;
+        const auto delims = utils::print::delimiters<std::pair<T1, T2>, TChar>::values;
+        if (delims.prefix != NULL) stream << delims.prefix;
 
-        stream << value.first;
+        utils::print::print_quoted_helper(stream, value.first);
 
-        if (utils::print::delimiters<std::pair<T1, T2>, TChar>::values.delimiter != NULL)
-            stream << utils::print::delimiters<std::pair<T1, T2>, TChar>::values.delimiter;
+        if (delims.delimiter != NULL)  stream << delims.delimiter;
 
-        stream << value.second;
+        utils::print::print_quoted_helper(stream, value.second);
 
-        if (utils::print::delimiters<std::pair<T1, T2>, TChar>::values.postfix != NULL)
-            stream << utils::print::delimiters<std::pair<T1, T2>, TChar>::values.postfix;
-
+        if (delims.postfix != NULL) stream << delims.postfix;
         return stream;
     }
 
     template<typename ...Args, typename TChar, typename TCharTraits, typename TDelimiters>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const utils::print::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TDelimiters>& helper)
     {
@@ -467,33 +479,47 @@ namespace std {
 
     /// Prints a tuple to the stream using delimiters from delimiters<std::tuple<Args...>>.
     template<typename ...Args, typename TChar, typename TCharTraits>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const std::tuple<Args...>& value)
     {
-        if (utils::print::delimiters<std::tuple<Args...>, TChar>::values.prefix != NULL)
-            stream << utils::print::delimiters<std::tuple<Args...>, TChar>::values.prefix;
+        const auto delims = utils::print::delimiters<std::tuple<Args...>, TChar>::values;
+        if (delims.prefix != NULL) stream << delims.prefix;
 
         stream << utils::print::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TCharTraits>(value);
 
-        if (utils::print::delimiters<std::tuple<Args...>, TChar>::values.postfix != NULL)
-            stream << utils::print::delimiters<std::tuple<Args...>, TChar>::values.postfix;
-
+        if (delims.postfix != NULL) stream << delims.postfix;
         return stream;
     }
 
     /// Prints an optional to the stream using delimiters from delimiters<std::optional<T>>.
     template<typename T, typename TChar, typename TCharTraits>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
             const std::optional<T>& optional)
     {
-        if (optional.has_value())
-            stream << optional.value();
-        else
-            stream << utils::print::delimiters<std::optional<T>, TChar>::values.delimiter;
+        const auto delims = utils::print::delimiters<std::optional<T>, TChar>::values;
+        if (delims.prefix != NULL)          stream << delims.prefix;
+
+        if (optional.has_value())           stream << optional.value();
+        else if (delims.delimiter != NULL)  stream << delims.delimiter;
+
+        if (delims.postfix != NULL)         stream << delims.postfix;
+        return stream;
+    }
+
+    /// Prints a variant to the stream.
+    template<typename Arg, typename ...Args, typename TChar, typename TCharTraits>
+    auto& operator<<(
+            std::basic_ostream<TChar, TCharTraits>& stream,
+            const std::variant<Arg, Args...>& var)
+    {
+        const auto delims = utils::print::delimiters<std::variant<Arg, Args...>, TChar>::values;
+        if (delims.prefix != NULL)          stream << delims.prefix;
+
+        std::visit([&](const auto& value) { stream << value; }, var);
+
+        if (delims.postfix != NULL)         stream << delims.postfix;
         return stream;
     }
 
@@ -501,45 +527,70 @@ namespace std {
      *  \brief  Generic operator <<
      *
      *          if T == is_pointer<T>
-     *              => prints %p format
+     *              => prints %p format if void*, "nullptr" if nullptr or else dereference
      *          if T == __gnu_cxx::__normal_iterator<T, Container>
      *                  or another iterator type
      *              => prints dereference
+     *          if T == is_array<T>
+     *              => prints with array_wrapper
      *          if T == is_container<T>
      *              => prints print_container_helpter<T> using default delimiters
      *          else prints value itself.
+     *              => prints <Object type2name(value)>
+     *                 or ASSERT(false)
      *
      *  \param  stream
      *      The stream to write to.
-     *  \param  it_value
-     *      The possible iterator value.
+     *  \param  value
+     *      The possible pointer/iterator/array/container value.
      *  \return Returns the stream reference.
      */
     template<typename T, typename TChar, typename TCharTraits>
-    std::basic_ostream<TChar, TCharTraits>&
-    operator<<(
+    auto& operator<<(
             std::basic_ostream<TChar, TCharTraits>& stream,
-            const T& it_value)
+            const T& value)
     {
-        if constexpr (std::is_pointer<T>::value) {
-            if constexpr (std::is_void<T>::value) {
-                stream << (it_value == nullptr ? "nullptr" : utils::string::format("%p", it_value));
+        if constexpr (std::is_pointer_v<T>) {
+            if constexpr (std::is_void_v<std::remove_pointer_t<T>>) {
+                stream << (value == nullptr ? "nullptr" : utils::string::format("%p", value));
             } else {
-                stream << *it_value;
+                stream << *value;
             }
         } else if constexpr (utils::traits::is_iterator_v<T>) {
-            stream << *it_value;
+            stream << *value;
+        } else if constexpr (std::is_array_v<T>) {
+            using TBase = std::remove_pointer_t<std::decay_t<T>>;
+            stream << utils::print::array_wrapper<TBase, std::size(value)>(value);
         } else if constexpr (utils::traits::is_container<T>::value) {
-            stream << utils::print::print_container_helper<T, TChar, TCharTraits>(it_value);
+            (utils::print::print_container_helper<T, TChar, TCharTraits>(value))(stream);
         } else {
-            stream << it_value; // Warning: Should be unreachable
-            ASSERT(false);
+            if constexpr (std::is_member_function_pointer<T>::value) {
+                stream << "<Object.method " << utils::print::type2name(value) << " at " << &value << ">";
+            } else {
+                stream << "<Object " << utils::print::type2name(value) << ">";
+            }
+            // ASSERT(false && "Warning: Should be unreachable");
         }
 
         return stream;
     }
 }
 
-#undef UTILS_PRINT_VECTOR_STRINGS_QUOTED
-#undef UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES
+#undef COMMA
+#undef MAKE_CONTAINER
+#undef MAKE_CONTAINER_NL
+#undef DELIM_CHAR_CONT
+#undef DELIM_WCHAR_CONT
+#undef DELIM_CHAR_CONT_NL
+#undef DELIM_WCHAR_CONT_NL
+#undef DELIM_CHAR_SET
+#undef DELIM_WCHAR_SET
+#undef DELIM_CHAR_SET_NL
+#undef DELIM_WCHAR_SET_NL
+#undef DELIM_CHAR_PAIR
+#undef DELIM_WCHAR_PAIR
+#undef DELIM_CHAR_TUPLE
+#undef DELIM_WCHAR_TUPLE
+#undef DELIM_CHAR_OPTIONAL
+#undef DELIM_WCHAR_OPTIONAL
 #endif // UTILS_PRINT_HPP

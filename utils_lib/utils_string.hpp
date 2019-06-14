@@ -406,6 +406,40 @@ namespace utils::string {
     }
 
     /**
+     *  \brief  Surround the given string with the \p quote char. (in-place)
+     *          If it is already surrounded, do nothing.
+     *
+     *  \param  str
+     *      The string to surround.
+     *  \param  quote
+     *      The character to surround the string with.
+     */
+    ATTR_MAYBE_UNUSED
+    static inline void quote(std::string& str, const char quote='\"') {
+        if (utils::string::starts_with(str, quote) && utils::string::ends_with(str, quote)) {
+            return;
+        }
+
+        std::string out(str.size() + 2, quote);
+        str = out.replace(1, str.size(), str);
+    }
+
+    /**
+     *  \brief  Surround the given string with the \p quote char. (copy)
+     *          If it is already surrounded, do nothing.
+     *
+     *  \param  str
+     *      The string to surround.
+     *  \param  quote
+     *      The character to surround the string with.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::string quoted(std::string str, const char quote='\"') {
+        utils::string::quote(str, quote);
+        return str;
+    }
+
+    /**
      *  \brief  Extract a vector of strings from the given string \p s that have
      *          been quoted with char \p str_char.
      *

@@ -11,6 +11,7 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <unordered_set>
 #include <map>
 #include <unordered_map>
 #include <array>
@@ -177,13 +178,29 @@ namespace utils::traits {
     template<typename T, typename TAllocator>
     struct is_container<std::list<T, TAllocator>> : public std::true_type { };
 
+    // Mark initializer_list as a container
+    template<typename T>
+    struct is_container<std::initializer_list<T>> : public std::true_type { };
+
     // Mark set as a container
-    template<typename T, typename TTraits, typename TAllocator>
-    struct is_container<std::set<T, TTraits, TAllocator>> : public std::true_type { };
+    template<typename T, typename TCompare, typename TAllocator>
+    struct is_container<std::set<T, TCompare, TAllocator>> : public std::true_type { };
+
+    // Mark unordered_set as a container
+    template<typename T, typename THash, typename TPred, typename TAllocator>
+    struct is_container<std::unordered_set<T, THash, TPred, TAllocator>> : public std::true_type { };
+
+    // Mark multiset as a container
+    template<typename T, typename TCompare, typename TAllocator>
+    struct is_container<std::multiset<T, TCompare, TAllocator>> : public std::true_type { };
+
+    // Mark unordered_multiset as a container
+    template<typename T, typename THash, typename TPred, typename TAllocator>
+    struct is_container<std::unordered_multiset<T, THash, TPred, TAllocator>> : public std::true_type { };
 
     // Mark map as a container
-    template<typename TKey, typename TValue, typename TTraits, typename TAllocator>
-    struct is_container<std::map<TKey, TValue, TTraits, TAllocator>> : public std::true_type { };
+    template<typename TKey, typename TValue, typename TCompare, typename TAllocator>
+    struct is_container<std::map<TKey, TValue, TCompare, TAllocator>> : public std::true_type { };
 
     // Mark unordered_map as a container
     template<typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator>
@@ -197,9 +214,11 @@ namespace utils::traits {
     template<typename T, size_t N>
     struct is_container<T[N]> : public std::true_type { };
 
+    // Basic is maplike template
     template<typename T, typename U = void>
     struct is_maplike : public std::false_type { };
 
+    // Mark type that has key_type, map_type and operator[key_type] as map
     template<typename T>
     struct is_maplike<T, std::void_t<typename T::key_type,
                                      typename T::mapped_type,

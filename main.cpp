@@ -2,7 +2,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 40, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 41, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
     #warning "TESTS ENABLED"

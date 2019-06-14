@@ -90,7 +90,7 @@
     #define ASSERT(condition) \
         do {                                                                     \
             if (!(condition)) {                                                  \
-                std::cerr << "\033[31;1m"                                        \
+                std::cerr << "\n\033[31;1m"                                        \
                           << "Assertion '" #condition "' failed"                 \
                              "\033[0m" " in" "\033[36;1m\n    "                  \
                           << __FILE__                                            \

@@ -591,6 +591,43 @@ TEST_CASE("Test utils::string::to_string", "[utils][utils::string]") {
     REQUIRE(std::strcmp(test.data(), "\xE2\x82\xAC") == 0);
 }
 
+TEST_CASE("Test utils::string::quote", "[utils][utils::string]") {
+    std::string em = "";
+    std::string q1 = ".";
+    std::string q2 = "'Hello'";
+    std::string q3 = "Hello";
+
+    utils::string::quote(em);
+    CHECK(em == "\"\"");
+    utils::string::quote(em);
+    CHECK(em == "\"\"");
+    utils::string::quote(q1);
+    CHECK(q1 == "\".\"");
+    utils::string::quote(q2, '\'');
+    CHECK(q2 == "'Hello'");
+    utils::string::quote(q2);
+    CHECK(q2 == "\"'Hello'\"");
+    utils::string::quote(q3);
+    CHECK(q3 == "\"Hello\"");
+    utils::string::quote(q3, '_');
+    CHECK(q3 == "_\"Hello\"_");
+}
+
+TEST_CASE("Test utils::string::quoted", "[utils][utils::string]") {
+    const std::string em = "";
+    const std::string q1 = ".";
+    const std::string q2 = "'Hello'";
+    const std::string q3 = "Hello";
+
+    CHECK(utils::string::quoted(em)       == "\"\"");
+    CHECK(utils::string::quoted(utils::string::quoted(em)) == "\"\"");
+    CHECK(utils::string::quoted(q1)       == "\".\"");
+    CHECK(utils::string::quoted(q2, '\'') == "'Hello'");
+    CHECK(utils::string::quoted(q2)       == "\"'Hello'\"");
+    CHECK(utils::string::quoted(q3)       == "\"Hello\"");
+    CHECK(utils::string::quoted(q3, '_')  == "_Hello_");
+}
+
 TEST_CASE("Test utils::string::extract_quoted", "[utils][utils::string]") {
     std::vector<std::string_view> list;
     std::string quoted;

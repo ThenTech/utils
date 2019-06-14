@@ -3,14 +3,15 @@
 #ifdef ENABLE_TESTS
 #include "../utils_lib/utils_catch.hpp"
 
+#include "../utils_lib/utils_print.hpp"
+
+#include "../utils_lib/utils_memory.hpp"
+#include "../utils_lib/utils_random.hpp"
+
 #include <numeric>
 #include <map>
 #include <set>
 #include <sstream>
-
-#include "../utils_lib/utils_memory.hpp"
-#include "../utils_lib/utils_print.hpp"
-#include "../utils_lib/utils_random.hpp"
 
 
 #define PUT_SS(V)       std::stringstream().swap(test_op); test_op << (V);
@@ -25,15 +26,21 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
     SECTION("Test std::pair printing") {
         utils::print::delimiters_values dels(
             utils::print::delimiters<std::pair<int, std::string>, char>::values);
-        formatter << dels.prefix    << randomint
-                  << dels.delimiter << randomint
-                  << dels.postfix;
+        formatter << (dels.prefix    ? dels.prefix    : "") << randomint
+                  << (dels.delimiter ? dels.delimiter : "");
+        utils::print::print_quoted_helper(formatter, randomstr)
+                  << (dels.postfix   ? dels.postfix   : "");
 
         const std::pair<int, std::string> var1(randomint, randomstr);
-        const auto var2 = std::make_pair(randomstr, randomint);
-
         PUT_SS(var1);
         CHECK(test_op.str() == formatter.str());
+
+        const auto var2 = std::pair(randomstr, randomint);
+        std::stringstream().swap(formatter);
+        formatter << (dels.prefix    ? dels.prefix    : "");
+        utils::print::print_quoted_helper(formatter, randomstr)
+                  << (dels.delimiter ? dels.delimiter : "") << randomint
+                  << (dels.postfix   ? dels.postfix   : "");
 
         PUT_SS(var2);
         CHECK(test_op.str() == formatter.str());
@@ -42,12 +49,12 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
     SECTION("Test std::array printing") {
         utils::print::delimiters_values dels(
             utils::print::delimiters<std::array<char, 5>, char>::values);
-        formatter << dels.prefix    << 'h'
-                  << dels.delimiter << 'e'
-                  << dels.delimiter << 'l'
-                  << dels.delimiter << 'l'
-                  << dels.delimiter << 'o'
-                  << dels.postfix;
+        formatter << (dels.prefix    ? dels.prefix    : "") << 'h'
+                  << (dels.delimiter ? dels.delimiter : "") << 'e'
+                  << (dels.delimiter ? dels.delimiter : "") << 'l'
+                  << (dels.delimiter ? dels.delimiter : "") << 'l'
+                  << (dels.delimiter ? dels.delimiter : "") << 'o'
+                  << (dels.postfix   ? dels.postfix   : "");
 
         std::array<char, 5> var{{ 'h', 'e', 'l', 'l', 'o' }};
 
@@ -68,11 +75,14 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 
         utils::print::delimiters_values dels(
             utils::print::delimiters<const int(&)[4], char>::values);
-        formatter << dels.prefix    << var[0]
-                  << dels.delimiter << var[1]
-                  << dels.delimiter << var[2]
-                  << dels.delimiter << var[3]
-                  << dels.postfix;
+        formatter << (dels.prefix    ? dels.prefix    : "") << var[0]
+                  << (dels.delimiter ? dels.delimiter : "") << var[1]
+                  << (dels.delimiter ? dels.delimiter : "") << var[2]
+                  << (dels.delimiter ? dels.delimiter : "") << var[3]
+                  << (dels.postfix   ? dels.postfix   : "");
+
+        PUT_SS(var);
+        CHECK(test_op.str() == formatter.str());
 
         PUT_SS(utils::print::print_array_helper(var));
         CHECK(test_op.str() == formatter.str());
@@ -80,6 +90,10 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         const int* var2 = &var[0];
         PUT_SS( (utils::print::array_wrapper<int, 4>(var2)) );
         CHECK(test_op.str() == formatter.str());
+
+        int empty[]{};
+        PUT_SS(empty);
+        CHECK(test_op.str() == "<Object int [0]>");
     }
 
     SECTION("Test flat array printing") {
@@ -88,10 +102,13 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 
         utils::print::delimiters_values dels(
             utils::print::delimiters<const int(&)[100], char>::values);
-        formatter << dels.prefix << var[0];
+        formatter << (dels.prefix ? dels.prefix : "") << var[0];
         for (size_t i = 1; i < 100;)
-            formatter << dels.delimiter << var[i++];
-        formatter << dels.postfix;
+            formatter << (dels.delimiter ? dels.delimiter : "") << var[i++];
+        formatter << (dels.postfix ? dels.postfix : "");
+
+        PUT_SS(var.get());
+        CHECK(test_op.str() == std::to_string(var[0]));
 
         PUT_SS( (utils::print::print_array_helper<int, 100>(var.get())) );
         CHECK(test_op.str() == formatter.str());
@@ -101,8 +118,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         SECTION("Test std::tuple<int> printing") {
             utils::print::delimiters_values dels(
                 utils::print::delimiters<std::tuple<int>, char>::values);
-            formatter << dels.prefix    << randomint
-                      << dels.postfix;
+            formatter << (dels.prefix  ? dels.prefix  : "")    << randomint
+                      << (dels.postfix ? dels.postfix : "");
             const auto var = std::make_tuple(randomint);
 
             PUT_SS(var);
@@ -114,10 +131,12 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 
             utils::print::delimiters_values dels(
                 utils::print::delimiters<std::tuple<std::string, std::pair<int, std::string>, int>, char>::values);
-            formatter << dels.prefix    << randomstr
-                      << dels.delimiter << var1
-                      << dels.delimiter << randomint
-                      << dels.postfix;
+
+            formatter << (dels.prefix    ? dels.prefix    : "");
+            utils::print::print_quoted_helper(formatter, randomstr)
+                      << (dels.delimiter ? dels.delimiter : "") << var1
+                      << (dels.delimiter ? dels.delimiter : "") << randomint
+                      << (dels.postfix   ? dels.postfix   : "");
             const auto var2 = std::make_tuple(randomstr, var1, randomint);
 
             PUT_SS(var2);
@@ -131,10 +150,10 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 
             utils::print::delimiters_values dels(
                 utils::print::delimiters<std::tuple<int, int, std::pair<double, std::string>>, char>::values);
-            formatter << dels.prefix    << randomint
-                      << dels.delimiter << randomint2
-                      << dels.delimiter << var1
-                      << dels.postfix;
+            formatter << (dels.prefix    ? dels.prefix    : "") << randomint
+                      << (dels.delimiter ? dels.delimiter : "") << randomint2
+                      << (dels.delimiter ? dels.delimiter : "") << var1
+                      << (dels.postfix   ? dels.postfix   : "");
             const auto var2 = std::make_tuple(randomint, randomint2, var1);
 
             PUT_SS(var2);
@@ -148,7 +167,9 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 
             utils::print::delimiters_values dels(
                 utils::print::delimiters<std::optional<int>, char>::values);
-            formatter << dels.prefix << dels.delimiter << dels.postfix;
+            formatter << (dels.prefix    ? dels.prefix    : "")
+                      << (dels.delimiter ? dels.delimiter : "")
+                      << (dels.postfix   ? dels.postfix   : "");
 
             PUT_SS(var1);
             CHECK(test_op.str() == formatter.str());
@@ -159,8 +180,40 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 
             utils::print::delimiters_values dels(
                 utils::print::delimiters<std::optional<int>, char>::values);
-            formatter << dels.prefix << randomint << dels.postfix;
+            formatter << (dels.prefix  ? dels.prefix  : "")
+                      << randomint
+                      << (dels.postfix ? dels.postfix : "");
 
+            PUT_SS(var1);
+            CHECK(test_op.str() == formatter.str());
+        }
+    }
+
+    SECTION("Test std::variant printing") {
+        std::variant<int, double> var1;
+
+        SECTION("Test std::variant int printing") {
+            var1 = randomint;
+
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::variant<int, double>, char>::values);
+            formatter << (dels.prefix  ? dels.prefix  : "")
+                      << randomint
+                      << (dels.postfix ? dels.postfix : "");
+
+            PUT_SS(var1);
+            CHECK(test_op.str() == formatter.str());
+        }
+
+        SECTION("Test std::variant double printing") {
+            const double randomdbl (utils::random::Random::get<double>());
+            var1 = randomdbl;
+
+            utils::print::delimiters_values dels(
+                utils::print::delimiters<std::variant<int, double>, char>::values);
+            formatter << (dels.prefix  ? dels.prefix  : "")
+                      << randomdbl
+                      << (dels.postfix ? dels.postfix : "");
             PUT_SS(var1);
             CHECK(test_op.str() == formatter.str());
         }
