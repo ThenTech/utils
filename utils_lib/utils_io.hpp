@@ -16,14 +16,14 @@
  *  Enable FileSystem
  *  Currently only included when linking with -lstdc++fs.
  */
-#if __cplusplus >= 201703L
-    #if defined(__GNUC__) && __GNUC__ < 9
-        #include <experimental/filesystem>
-    #else
-        #include <filesystem>
-    #endif
+#if __has_include(<filesystem>)
+    #include <filesystem>
+    #define UTILS_IO_FS_SUPPORTED
+#elif __has_include(<experimental/filesystem>)
+    #include <experimental/filesystem>
     #define UTILS_IO_FS_SUPPORTED
 #endif
+
 
 namespace utils::io {
     /**
@@ -70,9 +70,10 @@ namespace utils::io {
             static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>,
                           "utils::io::list_contents: Callable function required.");
 
+			const fs::path path{ folder.begin(), folder.end() };
             auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
 
-            for (const auto& entry : fs::directory_iterator(folder)) {
+            for (const auto& entry : fs::directory_iterator(path)) {
                 if (predicate(entry))
                     contents->emplace_back(entry.path().string());
             }
@@ -89,9 +90,10 @@ namespace utils::io {
             static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>,
                           "utils::io::list_contents_recur: Callable function required.");
 
+			const fs::path path{ folder.begin(), folder.end() };
             auto contents = utils::memory::new_unique_var<std::vector<std::string>>();
 
-            for (const auto& entry : fs::recursive_directory_iterator(folder)) {
+            for (const auto& entry : fs::recursive_directory_iterator(path)) {
                 if (predicate(entry))
                     contents->emplace_back(entry.path().string());
             }
@@ -110,17 +112,22 @@ namespace utils::io {
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static size_t file_size(const std::string_view& filename) {
-            if (fs::exists(filename) && fs::is_regular_file(filename)) {
-                return fs::file_size(filename);
+        static uint64_t file_size(const std::string_view& filename) {
+            const fs::path path{ filename.begin(), filename.end() };
+
+            if (fs::exists(path) && fs::is_regular_file(path)) {
+                return fs::file_size(path);
             }
-            return size_t(-1);
+
+            return uint64_t(-1);
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static std::time_t file_last_modified(const std::string_view& filename) {
-            if (fs::exists(filename)) {
-                const auto modified = fs::last_write_time(filename);
+            const fs::path path{ filename.begin(), filename.end() };
+
+            if (fs::exists(path)) {
+                const auto modified = fs::last_write_time(path);
 
                 // FIXME: No clock casting possible
                 // Could use:

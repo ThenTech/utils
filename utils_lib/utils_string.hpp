@@ -17,20 +17,79 @@
 
 namespace utils::string {
     /**
-     *  \brief  Test if the given string \p str contains the given char \p ch.
+     *  Crate a facet for the current locale.
+     */
+    template<class CharT> ATTR_MAYBE_UNUSED
+    static const auto& facet = std::use_facet<std::ctype<CharT>>(std::locale());
+
+    ATTR_MAYBE_UNUSED
+    static const auto& facetch  = facet<char>;
+
+    ATTR_MAYBE_UNUSED
+    static const auto& facetwch = facet<wchar_t>;
+
+    /**
+     *  \brief  Struct to wrap a char in a std::string_view,
+     *          and act as a string_view in all other cases.
+     */
+    template<typename _CharT, typename _Traits = std::char_traits<_CharT>>
+    struct basic_string_view : public std::basic_string_view<_CharT> {
+        public:
+            using traits_type = _Traits;
+            using value_type = _CharT;
+            using pointer = const _CharT*;
+            using const_pointer = const _CharT*;
+            using reference = const _CharT&;
+            using const_reference = const _CharT&;
+            using const_iterator = const _CharT*;
+            using iterator = const_iterator;
+            using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+            using reverse_iterator = const_reverse_iterator;
+            using size_type = size_t;
+            using difference_type = ptrdiff_t;
+            static constexpr size_type npos = size_type(-1);
+
+        constexpr basic_string_view(const _CharT& __ch) noexcept
+            : std::basic_string_view<_CharT>{&__ch, 1} { }
+        constexpr basic_string_view(const basic_string_view<_CharT>& __str) noexcept
+            : std::basic_string_view<_CharT>{__str} { }
+
+        constexpr basic_string_view() noexcept
+            : std::basic_string_view<_CharT>{} { }
+        constexpr basic_string_view(const std::basic_string_view<_CharT>& sv) noexcept
+            : std::basic_string_view<_CharT>{sv} { }
+        constexpr basic_string_view(const _CharT* __str) noexcept
+            : std::basic_string_view<_CharT>{__str} { }
+        constexpr basic_string_view(const _CharT* __str, size_t __len) noexcept
+            : std::basic_string_view<_CharT>{__str, __len} { }
+        constexpr basic_string_view(const std::basic_string<_CharT>& __str) noexcept
+            : std::basic_string_view<_CharT>{__str} { }
+
+        constexpr basic_string_view&
+        operator=(const basic_string_view&) noexcept = default;
+    };
+
+    using string_view = basic_string_view<char>;
+    using wstring_view = basic_string_view<wchar_t>;
+
+    /**
+     *  \brief  Test if the given string \p str contains the other string \p part.
      *
      *  \param  str
      *      The std::string to check.
-     *  \param  ch
-     *      The char to look for.
+     *  \param  part
+     *      The std::string to look for.
      *  \param  start
      *      The starting offset to start looking. (default: 0)
      *  \return Returns an `std:optional<size_t>` holding the offset from
-     *          `str.begin()` if the char was found, or nothing if not.
+     *          `str.begin()` if the part was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr utils::traits::found_t contains(const std::string_view& str, const char ch, const size_t start = 0) {
-        if (const size_t pos = str.find(ch, start);
+    static inline constexpr utils::traits::found_t contains(const std::string_view& str,
+                                                            const utils::string::string_view& part,
+                                                            const size_t start = 0)
+    {
+        if (const size_t pos = str.find(part, start);
             pos != std::string::npos)
         {
             return { pos };
@@ -51,27 +110,16 @@ namespace utils::string {
      *          `str.begin()` if the part was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr utils::traits::found_t contains(const std::string_view& str, const std::string_view& part, const size_t start = 0) {
-        if (const size_t pos = str.find(part, start);
+    static inline constexpr utils::traits::found_t rcontains(const std::string_view& str,
+                                                             const utils::string::string_view& part,
+                                                             const size_t start = std::string_view::npos)
+    {
+        if (const size_t pos = str.rfind(part, start);
             pos != std::string::npos)
         {
             return { pos };
         }
         return std::nullopt;
-    }
-
-    /**
-     *  \brief  Check if \p str starts with the given char.
-     *
-     *  \param  str
-     *      The std::string to check.
-     *  \param  ch
-     *      The char to look for.
-     *  \return Returns true if str[0] == ch.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool starts_with(const std::string_view& str, const char ch) {
-        return ch && str.size() && str.front() == ch;
     }
 
     /**
@@ -84,25 +132,11 @@ namespace utils::string {
      *  \return Returns true if str[0:start.size()] == start.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool starts_with(const std::string_view& str, const std::string_view& start) {
+    static inline constexpr bool starts_with(const utils::string::string_view& str, const utils::string::string_view& start) {
         return !start.size() || str.size() < start.size()
              ? false
              : std::equal(start.begin(), start.end(),
                           str.begin());
-    }
-
-    /**
-     *  \brief  Check if \p str ends with the given char.
-     *
-     *  \param  str
-     *      The std::string to check.
-     *  \param  ch
-     *      The char to look for.
-     *  \return Returns true if str[-1] == ch.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool ends_with(const std::string_view& str, const char ch) {
-        return ch && str.size() && str.back() == ch;
     }
 
     /**
@@ -115,7 +149,7 @@ namespace utils::string {
      *  \return Returns true if str[-end.size():] == end.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool ends_with(const std::string_view& str, const std::string_view& end) {
+    static inline constexpr bool ends_with(const utils::string::string_view& str, const utils::string::string_view& end) {
         return !end.size() || str.size() < end.size()
              ? false
              : std::equal(end.begin(), end.end(),
@@ -130,7 +164,7 @@ namespace utils::string {
     ATTR_MAYBE_UNUSED
     static inline void ltrim(std::string& s) {
         s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-                [](int c) {return !std::isspace(c);}));
+                [](const char& c) { return !facetch.is(facetch.space, c); }));
     }
 
     /**	\brief	Trim whitespace from the end of the given string (in-place).
@@ -141,7 +175,7 @@ namespace utils::string {
     ATTR_MAYBE_UNUSED
     static inline void rtrim(std::string& s) {
         s.erase(std::find_if(s.rbegin(), s.rend(),
-                [](int c) {return !std::isspace(c);}).base(), s.end());
+                [](const char& c) { return !facetch.is(facetch.space, c); }).base(), s.end());
     }
 
     /**	\brief	Trim whitespace from both start and end of the given string (in-place).
@@ -175,7 +209,7 @@ namespace utils::string {
      *      The substring to look for and start erasing from.
      */
     ATTR_MAYBE_UNUSED
-    static inline void erase_from(std::string& str, const std::string_view& erasefrom) {
+    static inline void erase_from(std::string& str, const utils::string::string_view& erasefrom) {
         if (const auto found = utils::string::contains(str, erasefrom)) {
             str = str.substr(0, found.value());
         }
@@ -191,7 +225,7 @@ namespace utils::string {
      *      The substring to look for and erase to.
      */
     ATTR_MAYBE_UNUSED
-    static inline void erase_to(std::string& str, const std::string_view& eraseto) {
+    static inline void erase_to(std::string& str, const utils::string::string_view& eraseto) {
         if (const auto found = utils::string::contains(str, eraseto)) {
             str = str.substr(found.value());
         }
@@ -207,7 +241,7 @@ namespace utils::string {
      *  \return Returns a copy where the appropriate parts were erased.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string erased_from(std::string str, const std::string_view& erasefrom) {
+    static inline std::string erased_from(std::string str, const utils::string::string_view& erasefrom) {
         erase_from(str, erasefrom);
         return str;
     }
@@ -222,7 +256,7 @@ namespace utils::string {
      *      The substring to look for and erase to.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string erased_to(std::string str, const std::string_view& eraseto) {
+    static inline std::string erased_to(std::string str, const utils::string::string_view& eraseto) {
         erase_to(str, eraseto);
         return str;
     }
@@ -235,10 +269,7 @@ namespace utils::string {
     template<typename CharT> ATTR_MAYBE_UNUSED
     static inline void to_upper(std::basic_string<CharT>& str) {
         std::transform(str.begin(), str.end(), str.begin(),
-            [](CharT ch) {
-                return std::use_facet<std::ctype<CharT>>(std::locale()).toupper(ch);
-            }
-        );
+                       [](const CharT& ch) { return facet<CharT>.toupper(ch); });
     }
 
     /**	\brief	Transform the string contents to uppercase (within the current locale) (copying).
@@ -260,10 +291,7 @@ namespace utils::string {
     template<typename CharT> ATTR_MAYBE_UNUSED
     static inline void to_lower(std::basic_string<CharT>& str) {
         std::transform(str.begin(), str.end(), str.begin(),
-            [](CharT ch) {
-                return std::use_facet<std::ctype<CharT>>(std::locale()).tolower(ch);
-            }
-        );
+                       [](const CharT& ch) { return facet<CharT>.tolower(ch); });
     }
 
     /**	\brief	Transform the string contents to lowercase (within the current locale) (copying).
@@ -289,9 +317,9 @@ namespace utils::string {
     ATTR_MAYBE_UNUSED
     static inline void erase_consecutive(std::string& str, const char ch) {
         str.erase(std::unique(str.begin(), str.end(),
-                                [&](const char lhs, const char rhs) {
+                              [&](const char lhs, const char rhs) {
                                     return (lhs == ch) && (lhs == rhs);
-                                }
+                              }
                              ), str.end());
     }
 
@@ -306,60 +334,14 @@ namespace utils::string {
      *		A reference to a string to replace with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void replace_all(std::string& str, const std::string_view& from, const std::string_view& to) {
+    static inline void replace_all(std::string& str, const utils::string::string_view& from, const utils::string::string_view& to = "") {
         if (from.size() == 0) return;
 
         utils::traits::found_t found = 0ull;
         while ((found = utils::string::contains(str, from, *found))) {
-            str.replace(*found, from.length(), to);
-            *found += to.length();
+            str.replace(*found, from.size(), to);
+            *found += to.size();
         }
-    }
-
-    /**	\brief	Replace all occurrences of from with to in the given
-     *          std::string str.
-     *
-     *	\param	str
-     *		A reference to the string to replace a substring.
-     *	\param	from
-     *		A char to replace.
-     *	\param	to
-     *		A reference to a string to replace with.
-     */
-    ATTR_MAYBE_UNUSED
-    static inline void replace_all(std::string& str, const char from, const std::string_view& to = "") {
-        utils::string::replace_all(str, std::string_view{&from, 1}, to);
-    }
-
-    /**	\brief	Replace all occurrences of from with to in the given
-     *          std::string str.
-     *
-     *	\param	str
-     *		A reference to the string to replace a substring.
-     *	\param	from
-     *		A char to replace.
-     *	\param	to
-     *		A char to replace with.
-     */
-    ATTR_MAYBE_UNUSED
-    static inline void replace_all(std::string& str, const char from, const char to) {
-        utils::traits::found_t found = 0ull;
-        while ((found = utils::string::contains(str, from, *found))) {
-            str.replace(*found, 1, 1, to);
-            (*found)++;
-        }
-    }
-
-    /**	\brief	Erase all occurrences of erase in the given std::string str.
-     *
-     *	\param	str
-     *		A reference to the string to erase a char.
-     *	\param	erase
-     *		A char to erase.
-     */
-    ATTR_MAYBE_UNUSED
-    static inline void erase_all(std::string& str, const char erase) {
-        str.erase(std::remove(str.begin(), str.end(), erase), str.end());
     }
 
     /**	\brief	Erase all occurrences of erase in the given std::string str.
@@ -370,7 +352,7 @@ namespace utils::string {
      *		A string to erase.
      */
     ATTR_MAYBE_UNUSED
-    static inline void erase_all(std::string& str, const std::string_view& erase) {
+    static inline void erase_all(std::string& str, const utils::string::string_view& erase) {
         if (erase.size() == 0) return;
 
         utils::traits::found_t found = 0ull;
@@ -415,13 +397,15 @@ namespace utils::string {
      *      The character to surround the string with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void quote(std::string& str, const char quote='\"') {
+    static inline void quote(std::string& str, const utils::string::string_view& quote='\"') {
         if (utils::string::starts_with(str, quote) && utils::string::ends_with(str, quote)) {
             return;
         }
 
-        std::string out(str.size() + 2, quote);
-        str = out.replace(1, str.size(), str);
+        std::string out(str.size() + 2 * quote.size(), '\0');
+        str = out.replace(0, quote.size(), quote)
+                 .replace(quote.size(), str.size(), str)
+                 .replace(out.size() - quote.size(), quote.size(), quote);
     }
 
     /**
@@ -434,7 +418,7 @@ namespace utils::string {
      *      The character to surround the string with.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string quoted(std::string str, const char quote='\"') {
+    static inline std::string quoted(std::string str, const utils::string::string_view& quote='\"') {
         utils::string::quote(str, quote);
         return str;
     }
@@ -450,24 +434,26 @@ namespace utils::string {
      *      The vector to add the strings to. Will be cleared on start.
      *  \param  s
      *      The string to look for quoted strings in.
-     *  \param  str_char
+     *  \param  quote
      *      The char the strings are quoted in.
      *  \return Returns the list of quoted strings, without quotes.
      */
     ATTR_MAYBE_UNUSED
-    static void extract_quoted(std::vector<std::string_view>& v, const std::string_view& s, const char str_char='\'') {
-        const size_t len = s.length() - 1u;
+    static void extract_quoted(std::vector<std::string_view>& v, const std::string_view& s,
+                               const utils::string::string_view& quote='\"')
+    {
+        const size_t len = s.length();
         v.clear();
 
-        if (len < 2) return;
+        if (len < quote.size() * 2) return;
 
         utils::traits::found_t found_start = 0, found_end = 0;
 
         do {
-            if ((found_start = utils::string::contains(s, str_char, *found_start))) {
-                if ((found_end = utils::string::contains(s, str_char, ++(*found_start)))) {
+            if ((found_start = utils::string::contains(s, quote, *found_start))) {
+                if ((found_end = utils::string::contains(s, quote, ++(*found_start)))) {
                     v.emplace_back(std::string_view{s.data() + *found_start, *found_end - *found_start});
-                    found_start = *found_end + 1u;
+                    found_start = *found_end + quote.size();
                 }
             }
         } while (found_start && *found_start < len);
@@ -484,13 +470,13 @@ namespace utils::string {
      *          to eachother, joined by \p join_with.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string join(const std::vector<std::string>& v, const std::string_view& join_with = ",") {
+    static std::string join(const std::vector<std::string>& v, const utils::string::string_view& join_with = ",") {
         std::string joined;
         const auto end = v.end();
 
         if (auto start = v.begin(); start != end) {
             // Calculate final size beforehand
-            size_t size = (*start).size() + v.size() - 1;
+            size_t size = (*start).size() + ((v.size() - 1) * join_with.size());
 
             while (++start != end) {
                 size += (*start).size();
@@ -508,21 +494,6 @@ namespace utils::string {
         }
 
         return joined;
-    }
-
-    /**
-     *  \brief  Join the strings in \p v with the char \p join_with between them.
-     *
-     *  \param  v
-     *      The list of strings to join.
-     *  \param  join_with
-     *      The char to join with.
-     *  \return Returns one string containing all the strings in \p v appended
-     *          to eachother, joined by \p join_with.
-     */
-    ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string join(const std::vector<std::string>& v, const char join_with) {
-        return utils::string::join(v, std::string_view{&join_with, 1});
     }
 
     /**
@@ -575,7 +546,7 @@ namespace utils::string {
      *  \param  s
      *      The string to split.
      *  \param  delim
-     *      The character delimiter.
+     *      The string delimiter.
      *  \param  max_splits
      *      The maximum amount of splits to make.
      *      `-1`    split on all delimiters
@@ -585,21 +556,76 @@ namespace utils::string {
      *  \return Returns a list of seperate strings that were delimited by \p delim.
      */
     ATTR_MAYBE_UNUSED
-    static void split(std::vector<std::string_view> &v, const std::string_view& s, const char delim = ',', int max_splits = -1) {
+    static void split(std::vector<std::string_view> &v, const std::string_view& s,
+                      const utils::string::string_view& delim = ',', int max_splits = -1)
+    {
         utils::traits::found_t found = 0ull;
         size_t prev_end = 0ull;
         v.clear();
 
-        while (max_splits != 0 && (found = utils::string::contains(s, delim, prev_end))) {
-            const size_t size = *found - prev_end;
-            v.emplace_back(std::string_view{s.data() + prev_end, size});
+        if (max_splits != 0 && (found = utils::string::contains(s, delim, 0))) {
+            v.emplace_back(std::string_view{s.data(), *found});
             max_splits--;
-            prev_end += size + 1;
+            prev_end = *found + delim.size();
+
+            while (max_splits != 0 && (found = utils::string::contains(s, delim, prev_end))) {
+                v.emplace_back(std::string_view{s.data() + prev_end, *found - prev_end});
+                max_splits--;
+                prev_end = *found + delim.size();
+            }
         }
 
-        if (prev_end < s.size()) {
-            v.emplace_back(std::string_view{s.data() + prev_end});
+        if (prev_end < s.size() + delim.size() || max_splits == 0) {
+            v.emplace_back(std::string_view{s.data() + prev_end, s.size() - prev_end});
         }
+    }
+
+    /**
+     *  \brief  Split the given string \p s into parts delimited by \p delim,
+     *          but start from the end.
+     *
+     *  \param  v
+     *      The vector to add the splitted strings to.
+     *  \param  s
+     *      The string to split.
+     *  \param  delim
+     *      The string delimiter.
+     *  \param  max_splits
+     *      The maximum amount of splits to make.
+     *      `-1`    split on all delimiters
+     *      `0`     don't split: vector will contain the original string \p s
+     *      `1`     vector has the first splitted element (at its end),
+     *              and the rest of the string as previous elements.
+     *  \return Returns a list of seperate strings that were delimited by \p delim.
+     */
+    ATTR_MAYBE_UNUSED
+    static void rsplit(std::vector<std::string_view> &v, const std::string_view& s,
+                       const utils::string::string_view delim = ",", int max_splits = -1)
+    {
+        utils::traits::found_t found = 0ull;
+        const size_t delim_len = delim.size();
+        size_t prev_start = s.size() - delim_len;
+        v.clear();
+
+        while (max_splits != 0 && (found = utils::string::rcontains(s, delim, prev_start))) {
+            const size_t size = prev_start - *found;
+            v.emplace_back(std::string_view{s.data() + *found + delim_len, size});
+            max_splits--;
+
+            prev_start = *found;
+            if (*found < delim_len) break;
+            prev_start -= delim_len;
+        }
+
+        if ((!found && prev_start+delim_len > 0) || (found && max_splits == 0)) {
+            v.emplace_back(std::string_view{ s.data(), prev_start + delim_len });
+        } else if (found && *found < delim_len) {
+            v.emplace_back(std::string_view{ s.data(), prev_start });
+        } else if (prev_start > delim_len) {
+            v.emplace_back(s);
+        }
+
+        std::reverse(v.begin(), v.end());
     }
 
     /**
@@ -647,7 +673,7 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline bool is_base64(uint8_t c) {
-        return (std::isalnum(c) || (c == '+') || (c == '/'));
+        return (facetch.is(facetch.alnum, char(c)) || (c == '+') || (c == '/'));
     }
 
     /**

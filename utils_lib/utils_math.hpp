@@ -124,7 +124,7 @@ namespace utils::math {
         if constexpr (std::is_integral_v<C>) {
             return std::gcd(static_cast<C>(x), static_cast<C>(y));
         } else {
-            return std::gcd(static_cast<int64_t>(x), static_cast<int64_t>(y));
+            return static_cast<C>(std::gcd(static_cast<int64_t>(x), static_cast<int64_t>(y)));
         }
     }
 
@@ -149,7 +149,7 @@ namespace utils::math {
         if constexpr (std::is_integral_v<C>) {
             return std::lcm(static_cast<C>(x), static_cast<C>(y));
         } else {
-            return std::lcm(static_cast<int64_t>(x), static_cast<int64_t>(y));
+            return static_cast<C>(std::lcm(static_cast<int64_t>(x), static_cast<int64_t>(y)));
         }
     }
 

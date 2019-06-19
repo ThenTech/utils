@@ -71,7 +71,7 @@ namespace utils::algo {
              *  @return Returns true if current Node has higher frequency.
              */
             struct comparator {
-                bool operator()(const Node<T> * const first, const Node<T> * const second) {
+                inline bool operator()(const Node<T> * const first, const Node<T> * const second) {
                     return first->freq > second->freq;
                 }
             };
@@ -111,6 +111,9 @@ namespace utils::algo {
      */
     template<class T=uint8_t>
     class Huffman {
+        public:
+            using KeyPair = std::pair<T, Codeword>;
+
         private:
             algo::Node<T> *tree_root;
 
@@ -219,10 +222,10 @@ namespace utils::algo {
                 while (this->read_huffman_dict_header(reader, dseq_len, dbit_len)) {
                     while (dseq_len--) {
                         // For each element, read {key: val}
-                        const T        key = T(reader.get(algo::Huffman<T>::KEY_BITS));
-                        const Codeword val { reader.get(dbit_len), dbit_len };
-
-                        const std::pair<T, algo::Codeword>& entry = std::make_pair(key, val);
+                        const KeyPair entry {
+                            T(reader.get(algo::Huffman<T>::KEY_BITS)),
+                            Codeword{ reader.get(dbit_len), dbit_len }
+                        };
 
                         #if 0  // Optionally add to dict, but not necessary since decoding only needs tree.
                             dict.insert(entry);
@@ -241,7 +244,7 @@ namespace utils::algo {
              *      Follow Codeword.word from MSB to LSB and create new Nodes on the way,
              *      ending withe a Node that has the data T.
              */
-            void treeAddLeaf(const std::pair<T, Codeword>& pair) {
+            void treeAddLeaf(const KeyPair& pair) {
                 const size_t mask = (1 << (pair.second.len - 1));  // Mask the pair.second.len'th bit
                       size_t dirs = pair.second.word;              // The directions to follow in the tree
 
@@ -296,9 +299,7 @@ namespace utils::algo {
              *  @brief  A comparator to sort Codeword pairs by bit length.
              */
             struct CodewordComparator {
-                bool operator()(const std::pair<uint8_t, algo::Codeword>& first,
-                                const std::pair<uint8_t, algo::Codeword>& second)
-                {
+                inline bool operator()(const KeyPair& first, const KeyPair& second) {
                     return first.second.len > second.second.len;
                 }
             };
@@ -371,7 +372,7 @@ namespace utils::algo {
                 this->buildDict(this->tree_root, {});
 
                 // Create new list with dict elements sorted by bit length for saving to stream
-                std::vector<std::pair<T, algo::Codeword>> sorted_dict(this->dict.begin(), this->dict.end());
+                std::vector<KeyPair> sorted_dict(this->dict.begin(), this->dict.end());
 
                 // Sort the dictionary by value bit length
                 std::sort(sorted_dict.begin(), sorted_dict.end(), algo::Huffman<T>::CodewordComparator());
@@ -431,8 +432,8 @@ namespace utils::algo {
 
                 const size_t total_length = writer->get_last_byte_position();
 
-                utils::Logger::Writef("[Huffman]           Input file size: %8d bytes" + utils::Logger::CRLF, original_length);
-                utils::Logger::Writef("[Huffman]           Compressed size: %8d bytes  => Ratio: %.2f%%" + utils::Logger::CRLF,
+                utils::Logger::Info("[Huffman]           Input file size: %8d bytes", original_length);
+                utils::Logger::Info("[Huffman]           Compressed size: %8d bytes  => Ratio: %.2f%%",
                                       total_length,
                                       float(total_length) / original_length * 100.0f);
 
@@ -517,8 +518,8 @@ namespace utils::algo {
                     writer->set_managed(false);
                     result->set_managed(true);
 
-                    utils::Logger::Writef("[Huffman]           Input file size: %8d bytes" + utils::Logger::CRLF, original_length);
-                    utils::Logger::Writef("[Huffman]         Decompressed size: %8d bytes  => Ratio: %.2f%%" + utils::Logger::CRLF,
+                    utils::Logger::Info("[Huffman]           Input file size: %8d bytes", original_length);
+                    utils::Logger::Info("[Huffman]         Decompressed size: %8d bytes  => Ratio: %.2f%%",
                                           total_length,
                                           float(total_length) / original_length * 100.0f);
                 }
@@ -590,7 +591,7 @@ namespace utils::algo {
                 utils::Logger::Info("[Huffman] Dictionary:");
 
                 for (const auto& pair : this->dict) {
-                    utils::Logger::Writef("%02X: %8X (%d bits)" + utils::Logger::CRLF,
+                    utils::Logger::Writef("%02X: %8X (%d bits)\n",
                                           pair.first, pair.second.word,pair.second.len);
                 }
             }
@@ -607,13 +608,6 @@ namespace utils::algo {
             static constexpr inline size_t DICT_HDR_SEQ_LENGTH_BITS = 7ull;  ///< Amount of bits to represent the length of following items
             static constexpr inline size_t DICT_HDR_ITEM_BITS       = 4ull;  ///< Amount of bits to represent the length of following items
     };
-
-    /**
-     *  Template specification.
-     *  Specify the template class to use uint8_t as default Type.
-     */
-    template class algo::Node<uint8_t>;
-    template class algo::Huffman<uint8_t>;
 }
 
 #endif // HUFFMAN_HPP

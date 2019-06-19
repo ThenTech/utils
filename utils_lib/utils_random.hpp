@@ -120,9 +120,9 @@ namespace utils::random {
                 picked.push_back(static_cast<T>(dist(Random::engine())));
             }
         } else {
-            auto dist = Random::integer_dist_t<T> {
-                static_cast<T>(from),
-                static_cast<T>(to)
+            auto dist = Random::integer_dist_t<int64_t> {
+                static_cast<int64_t>(from),
+                static_cast<int64_t>(to)
             };
 
             for (size_t i = 0; i < amount; ++i) {
@@ -207,9 +207,9 @@ namespace utils::random {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string generate_uuid(void) {
-        auto dist = Random::integer_dist_t<uint8_t> {
-            static_cast<uint8_t>(0x00),
-            static_cast<uint8_t>(0xFF)
+        auto dist = Random::integer_dist_t<uint16_t> {
+            static_cast<uint16_t>(0x00),
+            static_cast<uint16_t>(0xFF)
         };
 
         #define FX      "%02X"

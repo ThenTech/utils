@@ -42,6 +42,15 @@ TEST_CASE("Test utils::misc::lexical_cast", "[utils][utils::misc]") {
         CHECK(utils::misc::lexical_cast<uint32_t>("0100")     == 64);
         CHECK(utils::misc::lexical_cast<int>     ("08")       == 0);
     }
+
+    SECTION("Nothrow") {
+        const uint64_t too_large = std::numeric_limits<int>::max();
+
+        CHECK(utils::misc::try_lexical_cast<int>("2").has_value());
+        CHECK_FALSE(utils::misc::try_lexical_cast<int>("").has_value());
+        CHECK_FALSE(utils::misc::try_lexical_cast<int>(std::to_string(too_large + 1)).has_value());
+        CHECK_FALSE(utils::misc::try_lexical_cast<int>("0b2").has_value());
+    }
 }
 
 #endif

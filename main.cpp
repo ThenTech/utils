@@ -2,18 +2,19 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 41, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 42, 0, utils::Version::PreReleaseType::kBeta);
 
 #ifdef ENABLE_TESTS
-    #warning "TESTS ENABLED"
+    #pragma message("Warning: TESTS ENABLED")
 
     #define CATCH_CONFIG_RUNNER
     #define CATCH_CONFIG_CONSOLE_WIDTH 100
     #define CATCH_CONFIG_FAST_COMPILE
-    #include "utils_lib/utils_logger.hpp"
     #include "utils_lib/external/catch.hpp"
+    #include "utils_lib/utils_logger.hpp"
+    #include "utils_lib/utils_time.hpp"
 #else
-    #warning "TESTS DISABLED"
+    #pragma message("Warning: TESTS DISABLED")
 
     #include "utils_lib/utils_exceptions.hpp"
     #include "utils_lib/utils_algorithm.hpp"
@@ -48,6 +49,8 @@ static constexpr utils::Version VERSION(0, 41, 0, utils::Version::PreReleaseType
  *      - Other threading/future features
  *      - utils::os other commands (cursor movement etc)
  *      - Rename functions
+ *      - utils::bits:  Set/reset/mask
+ *      - utils::os:    Overload operator<< with os::Console type to call os::Command?
  *
  *      - Catch 2 with BENCHMARK or Hayai
  *
@@ -57,6 +60,7 @@ static constexpr utils::Version VERSION(0, 41, 0, utils::Version::PreReleaseType
  *  https://github.com/palacaze/sigslot
  *  https://github.com/fgoujeon/signal
  *  https://github.com/hosseinmoein/Matrix
+ *  Eigen
  *
  *  Args:
  *      https://github.com/p-ranav/argparse
@@ -72,18 +76,23 @@ static constexpr utils::Version VERSION(0, 41, 0, utils::Version::PreReleaseType
  *  Resources:
  *      https://stackoverflow.com/Questions/4158900/embedding-resources-in-executable-using-gcc
  */
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
 
 #ifdef ENABLE_TESTS
+#ifdef UTILS_TRAITS_MSVC
+    // Disable breaking on std::abort(), CATCH must handle this instead.
+    _set_abort_behavior(0, _WRITE_ABORT_MSG);
+#endif
+
     utils::Logger::SetScreenTitle("Testing C++ Utility library " + VERSION.ToString());
     utils::Logger::WriteLn("Running tests...");
 
     int status = 0;
-    const auto test_duration = utils::time::Timer::time<utils::time::Timer::time_ms>([&](){
+    const auto test_duration = utils::time::Timer::time<utils::time::Timer::time_ms>([&]() {
         status = Catch::Session().run(argc, argv);
     });
 
-    utils::Logger::Writef("Tests completed in %.3f ms (%d)" + utils::Logger::CRLF, test_duration, status);
+    utils::Logger::Notice("Tests completed in %.3f ms (%d)", test_duration, status);
 
     return status;
 #else

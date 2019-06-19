@@ -11,6 +11,8 @@
 
 
 #ifdef ENABLE_TESTS
+    #define CATCH_CONFIG_CONSOLE_WIDTH 100
+    #define CATCH_CONFIG_FAST_COMPILE
     #include "../utils_lib/external/catch.hpp"
 
     /**
@@ -36,7 +38,7 @@
 /**
  *  Macro to insert demangled function signature at compile time.
  */
-#ifdef _MSC_VER
+#if defined(UTILS_TRAITS_MSVC)
     #define UTILS_CATCH_FUNCTION_NAME __FUNCDNAME__  // or __FUNCSIG__?
 #else
     #define UTILS_CATCH_FUNCTION_NAME __PRETTY_FUNCTION__
@@ -54,7 +56,7 @@
     do {                                                                     \
         std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  " \
                   << E.what()                                                \
-                  << "\033[0m" "\n    in " "\033[36;1m"                      \
+                  << "\033[0m" "\n    at " "\033[36;1m"                      \
                   << __FILE__                                                \
                   << "\033[0m" ":" "\033[36;1m"                              \
                   << __LINE__                                                \
@@ -90,7 +92,7 @@
     #define ASSERT(condition) \
         do {                                                                     \
             if (!(condition)) {                                                  \
-                std::cerr << "\n\033[31;1m"                                        \
+                std::cerr << "\n\033[31;1m"                                      \
                           << "Assertion '" #condition "' failed"                 \
                              "\033[0m" " in" "\033[36;1m\n    "                  \
                           << __FILE__                                            \

@@ -7,6 +7,7 @@
 
 #include "../utils_lib/utils_memory.hpp"
 #include "../utils_lib/utils_random.hpp"
+#include "../utils_lib/utils_misc.hpp"
 
 #include <numeric>
 #include <map>
@@ -14,7 +15,7 @@
 #include <sstream>
 
 
-#define PUT_SS(V)       std::stringstream().swap(test_op); test_op << (V);
+#define PUT_SS(V)       std::stringstream().swap(test_op); test_op << V;
 
 TEST_CASE("Test utils::print", "[utils][utils::print]") {
     std::stringstream test_op;
@@ -84,21 +85,21 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         PUT_SS(var);
         CHECK(test_op.str() == formatter.str());
 
-        PUT_SS(utils::print::print_array_helper(var));
+        PUT_SS( (utils::print::print_array_helper<int, 4>(&var[0])) );
         CHECK(test_op.str() == formatter.str());
 
         const int* var2 = &var[0];
         PUT_SS( (utils::print::array_wrapper<int, 4>(var2)) );
         CHECK(test_op.str() == formatter.str());
 
-        int empty[]{};
-        PUT_SS(empty);
-        CHECK(test_op.str() == "<Object int [0]>");
+//        int empty[]{};
+//        PUT_SS(empty);
+//        CHECK(test_op.str() == "<Object int [0]>");
     }
 
     SECTION("Test flat array printing") {
         auto var = utils::memory::new_unique_flat_array<int>(10, 10);
-        std::generate_n(var.get(), 100, []{ return utils::random::Random::get<int>(); });
+        std::generate_n(var.get(), 100, [&](){ return utils::random::Random::get<int>(); });
 
         utils::print::delimiters_values dels(
             utils::print::delimiters<const int(&)[100], char>::values);
@@ -217,6 +218,27 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
             PUT_SS(var1);
             CHECK(test_op.str() == formatter.str());
         }
+    }
+
+    SECTION("Test object printing") {
+        PUT_SS(formatter);
+        CHECK(utils::string::starts_with(test_op.str(), "<Object"));
+        CHECK(utils::string::ends_with(test_op.str(), ">"));
+        CHECK(utils::string::contains(test_op.str(), "stringstream"));
+
+        PUT_SS("test");
+        CHECK(test_op.str() == "test");
+
+        PUT_SS(randomstr.begin());
+        CHECK(test_op.str() == randomstr.substr(0, 1));
+
+        PUT_SS(std::hex << static_cast<void*>(&test_op));
+        size_t memaddr;
+        CHECK((test_op >> memaddr));
+        CHECK(memaddr > 0);
+
+        PUT_SS(static_cast<void*>(nullptr));
+        CHECK(test_op.str() == "nullptr");
     }
 
 //    // Init vars

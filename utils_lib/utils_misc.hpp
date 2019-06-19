@@ -23,8 +23,12 @@ namespace utils::misc {
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static T lexical_cast(const std::string_view& buffer) {
-        std::stringstream cast;
         T out;
+
+        if (buffer.size() == 0)
+            throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));
+
+        std::stringstream cast;
 
         if (buffer[0] == '0' && buffer[1] != '.') {
             if (buffer[1] == 'x' || buffer[1] == 'X') {
@@ -53,6 +57,20 @@ namespace utils::misc {
             throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));
 
         return out;
+    }
+
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static std::optional<T> try_lexical_cast(const std::string_view& buffer, utils::exceptions::Exception *error = nullptr) {
+        std::optional<T> value;
+
+        try {
+            value = utils::misc::lexical_cast<T>(buffer);
+        } catch (const utils::exceptions::CastingException& e) {
+            if (error) *error = e;
+            value = std::nullopt;
+        }
+
+        return value;
     }
 }
 

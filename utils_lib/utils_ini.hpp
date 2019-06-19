@@ -14,11 +14,11 @@
 
 
 namespace utils::ini {
-    struct Delimiters {
+    struct delimiters {
         static inline constexpr utils::print::delimiters_values<char> values = { "[", " = ", "]" };
     };
 
-    template<typename TDelimiters = utils::ini::Delimiters>
+    template<typename TDelimiters = utils::ini::delimiters>
     class ConfigReader {
         public:
             using Value    = std::variant<int, size_t, float, double, std::string, bool>;
@@ -254,13 +254,13 @@ namespace utils::ini {
                             return std::get<T>(val);
                         } else {
                             std::stringstream ss;
-                            std::visit([&](auto&& arg){ ss << arg; }, val);
+                            ss << val;
 
                             // Print to string or cast to value
                             if constexpr (std::is_same_v<T, std::string>) {
                                 return ss.str();
                             } else if constexpr (std::is_same_v<T, bool>) {
-                                std::string_view str = utils::string::to_lowercase(ss.str());
+                                std::string str = utils::string::to_lowercase(ss.str());
 
                                 if (str == "true" || str == "yes"
                                  || str == "on"   || str == "1")
@@ -273,7 +273,7 @@ namespace utils::ini {
                                     return false;
                                 }
                             } else {
-                                return utils::misc::lexical_cast<T>(ss.str().c_str());
+                                return utils::misc::try_lexical_cast<T>(ss.str().c_str()).value_or(default_value);
                             }
                         }
                     } else {
@@ -303,9 +303,9 @@ namespace utils::ini {
 
                         for (auto [key, value] : mapped_values) {
                             stream << key
-                                   << TDelimiters_::values.delimiter;
-                            std::visit([&](auto&& arg){ stream << std::boolalpha << arg; }, value);
-                            stream << std::endl;
+                                   << TDelimiters_::values.delimiter
+                                   << std::boolalpha << value
+                                   << std::endl;
                         }
 
                         stream << std::endl;

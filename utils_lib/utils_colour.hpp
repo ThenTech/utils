@@ -97,7 +97,9 @@ namespace utils::colour {
          *  return  Returns a Colour instance containing the colour in \p hexstr.
          */
         static inline Colour from_hex(const char* hexstr) {
-            const uint32_t hexnum = utils::misc::lexical_cast<uint32_t>(hexstr);
+            const auto hexcast = utils::misc::try_lexical_cast<uint32_t>(hexstr);
+            const uint32_t hexnum = hexcast.value_or(0);
+
             return Colour{
                 static_cast<double>((hexnum >> 16) & 0xFF) / 255.0,
                 static_cast<double>((hexnum >>  8) & 0xFF) / 255.0,

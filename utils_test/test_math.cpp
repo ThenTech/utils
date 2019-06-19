@@ -195,7 +195,7 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
 
     const std::vector<int> test2 = utils::random::generate_x<int>(3, -1000, 1000);
 
-    SECTION("utils::math::stats::mean") {
+    SECTION("Test utils::math::stats::mean") {
         const double result = double(0+1+2+3+4+5+6+7+8) / len;
         const double result1 = utils::math::stats::mean(test.begin(), test.end());
         const double result2 = utils::math::stats::mean(test);
@@ -209,7 +209,7 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::mean<std::vector<int>>, one);
     }
 
-    SECTION("utils::math::stats::variance") {
+    SECTION("Test utils::math::stats::variance") {
         const double result = 7.5;
         const double result1 = utils::math::stats::variance(test.begin(), test.end());
         const double result2 = utils::math::stats::variance(test);
@@ -229,7 +229,7 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance<std::vector<int>>, two);
     }
 
-    SECTION("utils::math::stats::stddev") {
+    SECTION("Test utils::math::stats::stddev") {
         const double result = 2.7386127875258;
         const double result1 = utils::math::stats::stddev(test.begin(), test.end());
         const double result2 = utils::math::stats::stddev(test);

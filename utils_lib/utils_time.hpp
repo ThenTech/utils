@@ -155,14 +155,14 @@ namespace utils::time {
      *  \return Returns a string type with the formatted time.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline auto Timestamp(const char* frmt = utils::time::TIMESTAMP_FORMAT.data(),
+    static inline std::string Timestamp(const char* frmt = utils::time::TIMESTAMP_FORMAT.data(),
                                  const std::time_t *epoch_time = nullptr)
     {
         const std::time_t stamp = (epoch_time == nullptr
                                   ? std::time(nullptr)
                                   : *epoch_time);
 
-        #ifdef _MSC_VER
+        #ifdef UTILS_TRAITS_MSVC
             tm tm_l;
             localtime_s(&tm_l, &stamp);
             tm *tm = &tm_l;
@@ -170,11 +170,14 @@ namespace utils::time {
             auto tm = std::localtime(&stamp);
         #endif
 
-        return std::put_time(tm, frmt);
+        std::stringstream ss;
+        ss << std::put_time(tm, frmt);
+
+        return ss.str();
     }
 
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline auto Timestamp(const std::time_t stamp,
+    static inline std::string Timestamp(const std::time_t stamp,
                                  const char* frmt = utils::time::TIMESTAMP_FORMAT.data())
     {
         return utils::time::Timestamp(frmt, &stamp);

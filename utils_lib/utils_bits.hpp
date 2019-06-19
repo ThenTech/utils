@@ -12,8 +12,8 @@
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
  */
-#ifdef _MSC_VER
-    #define UTILS_BITS_CLZ_ULL  __lzcnt
+#ifdef UTILS_TRAITS_MSVC
+    #define UTILS_BITS_CLZ_ULL  utils::bits::internal::_clz_template
     #define UTILS_BITS_FFS_LL   utils::bits::internal::_ffs_template
     #define UTILS_BITS_CNT_LL   utils::bits::internal::_cnt_template
 #else
@@ -27,10 +27,19 @@
 
 namespace utils::bits {
     namespace internal {
-        #ifdef _MSC_VER
+        #ifdef UTILS_TRAITS_MSVC
             template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-            static inline uint_fast32_t _ffs_template(T x) {
-                if constexpr (x == 0) return 0u;
+                static inline constexpr uint_fast32_t _clz_template(T x) {
+                if (x == 0) return 0u;
+                uint_fast32_t r = 0;
+                while (x)
+                    x >>= 1, ++r;
+                return 64 - r;
+            }
+
+            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+            static inline constexpr uint_fast32_t _ffs_template(T x) {
+                if (x == 0) return 0u;
                 uint_fast32_t r = 1;
                 while ((x & 1) == 0)
                     x >>= 1, ++r;
@@ -38,8 +47,8 @@ namespace utils::bits {
             }
 
             template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-            static inline uint_fast32_t _cnt_template(T x) {
-                if constexpr (x == 0) return 0u;
+            static inline constexpr uint_fast32_t _cnt_template(T x) {
+                if (x == 0) return 0u;
                 uint_fast32_t r = 0;
                 while (x)
                     r += (x & 1) == 1, x >>= 1;
@@ -263,7 +272,7 @@ namespace utils::bits {
      *          or the current byte if no surplus bits.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr size_t round_to_byte(const size_t bits) {
+    static inline constexpr uint64_t round_to_byte(const uint64_t bits) {
         return (bits + 7ull) / 8ull;
     }
 
@@ -287,7 +296,7 @@ namespace utils::bits {
         class T,
         size_t Tlen = utils::bits::size_of<T>()
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline T shift_signed(const size_t value, const size_t src_bits) {
+    static inline T shift_signed(const uint64_t value, const size_t src_bits) {
         #if UTILS_BITS_ASSERT_SHIFT_SIGNED_SIZE
             // ASSERT that src_bits is not bigger than sizeof(T)
             ASSERT(src_bits <= Tlen);
@@ -312,7 +321,7 @@ namespace utils::bits {
      *          depending on whether value[src_bits : 0] was considered signed.
      */
     template<class T, uint_fast8_t bits> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline T extend_sign(const size_t value) {
+    static inline T extend_sign(const uint64_t value) {
         static_assert(bits > 0, "utils::bits::extend_sign: Amount of bits greater than 0 required.");
         struct { T value:bits; } s;
         return s.value = value;
@@ -375,4 +384,5 @@ namespace utils::bits {
 
 #undef UTILS_BITS_CLZ_ULL
 #undef UTILS_BITS_FFS_LL
+#undef UTILS_BITS_CNT_LL
 #endif // UTILS_BITS_HPP

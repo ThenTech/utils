@@ -113,6 +113,7 @@ namespace utils {
                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
                 if (this->canLog(level)) {
+                    const bool stamp = this->GetFileTimestamp();
                     this->Command(  utils::os::Console::FG
                                   | utils::os::Console::BOLD
                                   | hdr_colour);
@@ -120,7 +121,6 @@ namespace utils {
 
                     this->Command(utils::os::Console::RESET
                                 | utils::os::Console::WHITE);
-                    const bool stamp = this->GetFileTimestamp();
                     this->SetFileTimestamp(false);
                     this->Writef(" " + std::string(format) + utils::Logger::CRLF, args...);
                     this->SetFileTimestamp(stamp);
@@ -158,7 +158,7 @@ namespace utils {
             ~Logger() {
                 const std::string end_line =
                         utils::Logger::CRLF
-                      + utils::Logger::LINE
+                      + utils::Logger::LINE<>
                       + utils::Logger::CRLF;
 
                 if (this->file_enabled) {
@@ -265,7 +265,7 @@ namespace utils {
              *  \brief  Write a seperator (line) to the stream.
              */
             static void Separator(void) {
-                utils::Logger::Write(utils::Logger::LINE);
+                utils::Logger::Write(utils::Logger::LINE<>);
             }
 
             /**
@@ -397,7 +397,17 @@ namespace utils {
                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
                 if (utils::Logger::get().canLog()) {
+                    utils::Logger::Command(  utils::os::Console::BG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::RED);
                     utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::WHITE);
+                    utils::Logger::Write(utils::Logger::CRLF
+                                       + utils::Logger::LINE<'-'>, false);
+
+                    utils::Logger::Command(  utils::os::Console::RESET
+                                           | utils::os::Console::FG
                                            | utils::os::Console::BOLD
                                            | utils::os::Console::RED);
                     utils::Logger::Write("[ERROR] Exception thrown:\n  ", true);
@@ -407,7 +417,7 @@ namespace utils {
                     utils::Logger::Write(e.what());
 
                     utils::Logger::Command(  utils::os::Console::RESET);
-                    utils::Logger::Write("\n    in ");
+                    utils::Logger::Write("\n    at ");
 
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::BRIGHT
@@ -430,12 +440,21 @@ namespace utils {
                                            | utils::os::Console::MAGENTA);
                     utils::Logger::Write(function);
 
+                    utils::Logger::Command(  utils::os::Console::BG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::RED);
+                    utils::Logger::Command(  utils::os::Console::FG
+                                           | utils::os::Console::BRIGHT
+                                           | utils::os::Console::WHITE);
+                    utils::Logger::Write(utils::Logger::CRLF
+                                       + utils::Logger::LINE<'-'>, false);
+
                     utils::Logger::Command(  utils::os::Console::RESET);
                     utils::Logger::Write(utils::Logger::CRLF);
                 } else {
                     std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  "
                               << e.what()
-                              << "\033[0m" "\n    in " "\033[36;1m"
+                              << "\033[0m" "\n    at " "\033[36;1m"
                               << file
                               << "\033[0m" ":" "\033[36;1m"
                               << line
@@ -577,16 +596,19 @@ namespace utils {
              *  std::string_format("%c", 219)
              *  219
              */
+            static inline constexpr size_t  CONSOLE_WIDTH
+                #ifdef CATCH_CONFIG_CONSOLE_WIDTH
+                    = (CATCH_CONFIG_CONSOLE_WIDTH - 1);
+                #else
+                    = 79;
+                #endif
             static inline const std::string FILL  = "#";
             static inline const std::string EMPTY = " ";
             static inline const std::string CRLF  = "\r\n";
-            static inline const std::string LINE  = std::string(
-                       #ifdef CATCH_CONFIG_CONSOLE_WIDTH
-                          (CATCH_CONFIG_CONSOLE_WIDTH - 1)
-                       #else
-                          (79)
-                       #endif
-                          , '-')
+            template<char line_char = '-'>
+            static inline const std::string LINE
+                = std::string(utils::Logger::CONSOLE_WIDTH,
+                              line_char)
                     + utils::Logger::CRLF;
     };
 }

@@ -5,7 +5,7 @@
 #include "utils_string.hpp"
 #include "utils_traits.hpp"
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#if defined(UTILS_TRAITS_OS_WIN)
     #include <windows.h>
     #define UTILS_OS_ENABLE_VIRTUAL_TERMINAL 0x0004
 #endif
@@ -120,51 +120,49 @@ namespace utils::os {
     ATTR_MAYBE_UNUSED
     static void Command(const command_t cmd, std::ostream& out = std::cout) {
         #define BASE_ "\033["
-        std::string cmd_str = "";
+        out.flush();
 
         if (cmd & Console::CLS) {
-            cmd_str += BASE_ "2J";
+            out << BASE_ "2J";
         }
 
         if (cmd & Console::RESET) {
-            cmd_str += BASE_ "0m";
+            out << BASE_ "0m";
         }
 
         if (cmd & Console::CURSOR) {
-            cmd_str += BASE_ "H";
+            out << BASE_ "H";
         }
 
         if (cmd & Console::BOLD) {
-            cmd_str += BASE_ "1m";
+            out << BASE_ "1m";
         }
 
         if (cmd & Console::UNDERLINE) {
-            cmd_str += BASE_ "4m";
+            out << BASE_ "4m";
         }
 
         if (cmd & Console::ITALIC) {
-            cmd_str += BASE_ "3m";
+            out << BASE_ "3m";
         }
 
         if (cmd >= Console::BLACK) {
+            out << BASE_;
             // A colour will be set
             if (cmd & Console::BG) {
-                cmd_str += BASE_ "4";
+                out << "4"; // Background
             } else {
-                // Foreground
-                cmd_str += BASE_ "3";
+                out << "3"; // Foreground
             }
 
-            cmd_str += utils::string::format("%d", utils::bits::msb(uint64_t(cmd) / uint64_t(Console::BLACK)) - 1);
+            out << (utils::bits::msb(uint64_t(cmd) / uint64_t(Console::BLACK)) - 1);
 
             if (cmd & Console::BRIGHT) {
-                cmd_str += ";1";
+                out << ";1";
             }
 
-            cmd_str += "m";
+            out << "m";
         }
-
-        out << cmd_str;
     }
 
     /**
@@ -190,25 +188,25 @@ namespace utils::os {
         #ifdef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
             // Set-up Windows terminal
             int error = 0;
+            do {
+                HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+                if (hOut == INVALID_HANDLE_VALUE) {
+                    error = int(GetLastError());
+                    break;
+                }
 
-            HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-            if (hOut == INVALID_HANDLE_VALUE) {
-                error = int(GetLastError());
-            }
-
-            if (!error) {
                 DWORD dwMode = 0;
                 if (!GetConsoleMode(hOut, &dwMode)) {
                     error = int(GetLastError());
+                    break;
                 }
 
-                if (!error) {
-                    dwMode |= UTILS_OS_ENABLE_VIRTUAL_TERMINAL;
-                    if (!SetConsoleMode(hOut, dwMode)) {
-                        error = int(GetLastError());
-                    }
+                dwMode |= UTILS_OS_ENABLE_VIRTUAL_TERMINAL;
+                if (!SetConsoleMode(hOut, dwMode)) {
+                    error = int(GetLastError());
+                    break;
                 }
-            }
+            } while(false);
 
             if (error) {
                 std::cerr << "[utils::os::EnableVirtualConsole] Windows console error: " << error << std::endl;

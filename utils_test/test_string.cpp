@@ -18,46 +18,69 @@ TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
 
     SECTION("Test with char") {
         REQUIRE_FALSE(utils::string::contains("", '.'));
+        REQUIRE_FALSE(utils::string::rcontains("", '.'));
 
         REQUIRE((found = utils::string::contains("     abcd     ", 'd')));
+        REQUIRE(*found == 8);
+        REQUIRE((found = utils::string::rcontains("     abcd     ", 'd')));
         REQUIRE(*found == 8);
 
         REQUIRE((found = utils::string::contains("abcd\t\t", '\t')));
         REQUIRE(*found == 4);
+        REQUIRE((found = utils::string::rcontains("abcd\t\t", '\t')));
+        REQUIRE(*found == 5);
 
         REQUIRE((found = utils::string::contains("\n\n\n\nabcd\n\n\n", 'd')));
+        REQUIRE(*found == 7);
+        REQUIRE((found = utils::string::rcontains("\n\n\n\nabcd\n\n\n", 'd')));
         REQUIRE(*found == 7);
 
         std::string test_1(alphabet_lower);
         for (int i = 5; i--;) {
-            auto c = *utils::random::Random::get(test_1);
+            const char c = *utils::random::Random::get(test_1);
 
             REQUIRE((found = utils::string::contains(test_1, c)));
+            REQUIRE(*found == size_t(c - 'a'));
+            REQUIRE((found = utils::string::rcontains(test_1, c)));
             REQUIRE(*found == size_t(c - 'a'));
         }
 
         REQUIRE_FALSE(utils::string::contains(test_1, 'A'));
+        REQUIRE_FALSE(utils::string::rcontains(test_1, 'A'));
     }
 
     SECTION("Test with string") {
         REQUIRE_FALSE(utils::string::contains("", "."));
+        REQUIRE_FALSE(utils::string::rcontains("", "."));
 
         REQUIRE((found = utils::string::contains("     abcd     ", "d")));
+        REQUIRE(*found == 8);
+        REQUIRE((found = utils::string::rcontains("     abcd     ", "d")));
         REQUIRE(*found == 8);
 
         REQUIRE((found = utils::string::contains("     abcd     ", "  ab")));
         REQUIRE(*found == 3);
+        REQUIRE((found = utils::string::rcontains("     abcd     ", "  ab")));
+        REQUIRE(*found == 3);
 
         REQUIRE((found = utils::string::contains("abcd\t\t", "\t")));
         REQUIRE(*found == 4);
+        REQUIRE((found = utils::string::rcontains("abcd\t\t", "\t")));
+        REQUIRE(*found == 5);
 
         REQUIRE((found = utils::string::contains("abcd\t\t", "cd\t")));
+        REQUIRE(*found == 2);
+        REQUIRE((found = utils::string::rcontains("abcd\t\t", "cd\t")));
         REQUIRE(*found == 2);
 
         REQUIRE((found = utils::string::contains("\n\n\n\nabcd\n\n\n", "d")));
         REQUIRE(*found == 7);
+        REQUIRE((found = utils::string::rcontains("\n\n\n\nabcd\n\n\n", "d")));
+        REQUIRE(*found == 7);
 
         REQUIRE((found = utils::string::contains("\n\n\n\nabcd\n\n\n", "d\n")));
+        REQUIRE(*found == 7);
+        REQUIRE((found = utils::string::rcontains("\n\n\n\nabcd\n\n\n", "d\n")));
         REQUIRE(*found == 7);
 
         std::string test_1(alphabet_lower);
@@ -69,9 +92,12 @@ TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
 
             REQUIRE((found = utils::string::contains(test_1, ss.str())));
             REQUIRE(*found == size_t(c - 'a'));
+            REQUIRE((found = utils::string::rcontains(test_1, ss.str())));
+            REQUIRE(*found == size_t(c - 'a'));
         }
 
         REQUIRE_FALSE(utils::string::contains(test_1, "A"));
+        REQUIRE_FALSE(utils::string::rcontains(test_1, "A"));
     }
 }
 
@@ -611,6 +637,8 @@ TEST_CASE("Test utils::string::quote", "[utils][utils::string]") {
     CHECK(q3 == "\"Hello\"");
     utils::string::quote(q3, '_');
     CHECK(q3 == "_\"Hello\"_");
+    utils::string::quote(q3, "**");
+    CHECK(q3 == "**_\"Hello\"_**");
 }
 
 TEST_CASE("Test utils::string::quoted", "[utils][utils::string]") {
@@ -626,6 +654,7 @@ TEST_CASE("Test utils::string::quoted", "[utils][utils::string]") {
     CHECK(utils::string::quoted(q2)       == "\"'Hello'\"");
     CHECK(utils::string::quoted(q3)       == "\"Hello\"");
     CHECK(utils::string::quoted(q3, '_')  == "_Hello_");
+    CHECK(utils::string::quoted(q3, "**") == "**Hello**");
 }
 
 TEST_CASE("Test utils::string::extract_quoted", "[utils][utils::string]") {
@@ -633,27 +662,33 @@ TEST_CASE("Test utils::string::extract_quoted", "[utils][utils::string]") {
     std::string quoted;
 
     quoted = "'Hello', 'World'";
-    utils::string::extract_quoted(list, quoted);
+    utils::string::extract_quoted(list, quoted, '\'');
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "World"));
 
     quoted = "'Hello', 'Wo\'rld'";
-    utils::string::extract_quoted(list, quoted);
+    utils::string::extract_quoted(list, quoted, '\'');
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "Wo"));
 
     quoted = "''";
-    utils::string::extract_quoted(list, quoted);
-    REQUIRE(list.size() == 0);
+    utils::string::extract_quoted(list, quoted, '\'');
+    REQUIRE(list.size() == 1);
+    REQUIRE(list[0] == "");
 
     quoted = "' '";
-    utils::string::extract_quoted(list, quoted);
+    utils::string::extract_quoted(list, quoted, '\'');
     REQUIRE(list.size() == 1);
     REQUIRE(list[0] == " ");
 
     quoted = "abcdef";
-    utils::string::extract_quoted(list, quoted);
+    utils::string::extract_quoted(list, quoted, '\'');
     REQUIRE(list.size() == 0);
+
+    quoted = "\"Hello\", \"World\"";
+    utils::string::extract_quoted(list, quoted);
+    REQUIRE(list.size() == 2);
+    REQUIRE((list[0] == "Hello" && list[1] == "World"));
 }
 
 TEST_CASE("Test utils::string::join", "[utils][utils::string]") {
@@ -666,6 +701,7 @@ TEST_CASE("Test utils::string::join", "[utils][utils::string]") {
     REQUIRE(utils::string::join({"", "tset"}, "+")      == "+tset");
     REQUIRE(utils::string::join({"test", ""}, "+")      == "test+");
     REQUIRE(utils::string::join({"1", "2", "3", "4"}, " * ") == "1 * 2 * 3 * 4");
+    REQUIRE(utils::string::join({"1", "2", "3", "4"}, '*')   == "1*2*3*4");
 
     REQUIRE(utils::string::join(std::vector<char>{}, ' ') == "");
     REQUIRE(utils::string::join(std::vector<char>{'x'}, '\0') == "x");
@@ -684,17 +720,30 @@ TEST_CASE("Test utils::string::split", "[utils][utils::string]") {
     std::vector<std::string_view> splitted;
 
     utils::string::split(splitted, "");
-    REQUIRE(splitted.empty());
+    REQUIRE(splitted.size() == 1);
 
     utils::string::split(splitted, "a,b,c", ',');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
+    utils::string::split(splitted, "a,b,c,", ',');
+    REQUIRE(splitted.size() == 4);
+    REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c" && splitted[3] == ""));
+    utils::string::split(splitted, ",a,b,c,", ',');
+    REQUIRE(splitted.size() == 5);
+    REQUIRE((splitted[0] == "" && splitted[1] == "a" && splitted[2] == "b" && splitted[3] == "c" && splitted[4] == ""));
 
     utils::string::split(splitted, "a\\b\\c", '\\');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
 
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ',');
+    utils::string::split(splitted, ",,a ,\tb\n, c ;", ','); // char
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "");
+    CHECK(splitted[2] == "a ");
+    CHECK(splitted[3] == "\tb\n");
+    CHECK(splitted[4] == " c ;");
+    utils::string::split(splitted, ",,a ,\tb\n, c ;", ","); // char*
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
@@ -704,6 +753,8 @@ TEST_CASE("Test utils::string::split", "[utils][utils::string]") {
 
     utils::string::split(splitted, ",,a ,\tb\n, c ;", ',', 4);
     REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[4] == " c ;");
 
     utils::string::split(splitted, ",,a ,\tb\n, c ;", ',', 0);
     REQUIRE(splitted.size() == 1);
@@ -720,6 +771,78 @@ TEST_CASE("Test utils::string::split", "[utils][utils::string]") {
     CHECK(splitted[1] == "");
     CHECK(splitted[2] == "a ");
     CHECK(splitted[3] == "\tb\n, c ;");
+
+    utils::string::split(splitted, "**1****2**", "**"); // char*
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "1");
+    CHECK(splitted[2] == "");
+    CHECK(splitted[3] == "2");
+    CHECK(splitted[4] == "");
+}
+
+TEST_CASE("Test utils::string::rsplit", "[utils][utils::string]") {
+    std::vector<std::string_view> splitted;
+
+    utils::string::rsplit(splitted, "");
+    REQUIRE(splitted.size() == 1);
+
+    utils::string::rsplit(splitted, "a,b,c", ',');
+    REQUIRE(splitted.size() == 3);
+    REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
+    utils::string::rsplit(splitted, "a,b,c,", ',');
+    REQUIRE(splitted.size() == 4);
+    REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c" && splitted[3] == ""));
+    utils::string::rsplit(splitted, ",a,b,c,", ',');
+    REQUIRE(splitted.size() == 5);
+    REQUIRE((splitted[0] == "" && splitted[1] == "a" && splitted[2] == "b" && splitted[3] == "c" && splitted[4] == ""));
+
+    utils::string::rsplit(splitted, "a\\b\\c", '\\');
+    REQUIRE(splitted.size() == 3);
+    REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
+
+    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ','); // char
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "");
+    CHECK(splitted[2] == "a ");
+    CHECK(splitted[3] == "\tb\n");
+    CHECK(splitted[4] == " c ;");
+    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ","); // char*
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "");
+    CHECK(splitted[2] == "a ");
+    CHECK(splitted[3] == "\tb\n");
+    CHECK(splitted[4] == " c ;");
+
+    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 4);
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == ",");
+
+    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 0);
+    REQUIRE(splitted.size() == 1);
+    CHECK(splitted[0] == ",,a ,\tb\n, c ;");
+
+    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 1);
+    REQUIRE(splitted.size() == 2);
+    CHECK(splitted[0] == ",,a ,\tb\n");
+    CHECK(splitted[1] == " c ;");
+
+    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 3);
+    REQUIRE(splitted.size() == 4);
+    CHECK(splitted[0] == ",");
+    CHECK(splitted[1] == "a ");
+    CHECK(splitted[2] == "\tb\n");
+    CHECK(splitted[3] == " c ;");
+
+    utils::string::rsplit(splitted, "**1****2**", "**"); // char*
+    REQUIRE(splitted.size() == 5);
+    CHECK(splitted[0] == "");
+    CHECK(splitted[1] == "1");
+    CHECK(splitted[2] == "");
+    CHECK(splitted[3] == "2");
+    CHECK(splitted[4] == "");
 }
 
 TEST_CASE("Test utils::string::format", "[utils][utils::string]") {

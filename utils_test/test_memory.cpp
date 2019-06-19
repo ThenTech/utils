@@ -4,6 +4,8 @@
 #include "../utils_lib/utils_catch.hpp"
 
 #include "../utils_lib/utils_memory.hpp"
+#include <numeric>
+
 
 TEST_CASE("Test utils::memory::allocVar", "[utils][utils::memory]") {
     int *test     = utils::memory::new_var<int>();

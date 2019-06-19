@@ -1,10 +1,6 @@
 #ifndef UTILS_TRAITS_HPP
 #define UTILS_TRAITS_HPP
 
-#if __cplusplus < 201703L
-#error A C++17 compiler is required!
-#endif
-
 #include <type_traits>
 #include <iterator>
 
@@ -23,6 +19,29 @@
 ////////////////////////////////////////////////////////////////////////////
 /// Macro helpers
 ////////////////////////////////////////////////////////////////////////////
+#if defined(__unix__) || defined(__unix) || defined(__linux__) || defined(__CYGWIN__)
+    #define UTILS_TRAITS_OS_LINUX 1
+#elif defined(WIN32) || defined(_WIN32) || defined(_WIN64)
+    #define UTILS_TRAITS_OS_WIN 1
+
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+
+    #if defined(_MSVC_LANG)
+        #define UTILS_TRAITS_MSVC 1
+    #endif
+#elif defined(__APPLE__) || defined(__MACH__)
+    #define UTILS_TRAITS_OS_MAC 1
+#else
+    #error Unknown Platform
+#endif
+
+#if ( defined(UTILS_TRAITS_MSVC) && (_MSVC_LANG  < 201703L)) \
+ || (!defined(UTILS_TRAITS_MSVC) && (__cplusplus < 201703L))
+    #error A C++17 compiler is required!
+#endif
+
 #define VALUE_TO_STRING(x) #x
 #define VALUE(x) VALUE_TO_STRING(x)
 #define VAR_NAME_VALUE(var) #var " = "  VALUE(var)
@@ -93,7 +112,7 @@ namespace utils::traits {
     #endif
     void unused_variable(const A& ...) noexcept {}
 
-    #if defined(_MSC_VER)
+    #if defined(UTILS_TRAITS_MSVC)
         // Macro with varying number of arguments to avoid "unused variable" warnings.
         #define UNUSED(...) ((void)(__VA_ARGS__));
     #else

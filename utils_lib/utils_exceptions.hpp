@@ -28,7 +28,7 @@ namespace utils::exceptions {
 
             virtual ~Exception() {}
 
-            virtual const char *what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_USE_NOEXCEPT {
+            virtual const char *what() const noexcept {
                 return this->getMessage().c_str();
             }
 

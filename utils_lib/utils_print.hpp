@@ -21,7 +21,7 @@
 #include <variant>
 #include <algorithm>
 
-#ifdef _MSC_VER
+#if defined(UTILS_TRAITS_MSVC)
     #include <intrin.h>
     #include <typeinfo>
 #else
@@ -36,8 +36,15 @@ namespace utils::print {
     template <typename T, typename TChar, typename TCharTraits> ATTR_MAYBE_UNUSED
     static inline auto& print_quoted_helper(std::basic_ostream<TChar, TCharTraits>& stream, const T& value) {
         #if UTILS_PRINT_QUOTE_STRINGS
+            if constexpr (std::is_convertible_v<T, TChar>) {
+                stream << "\'";
+                stream.write(value.data(), value.size());
+                stream << "\'";
+            } else
             if constexpr (std::is_convertible_v<T, std::string_view>) {
-                stream << utils::string::quoted(value);
+                stream << "\"";
+                stream.write(value.data(), value.size());
+                stream << "\"";
             } else
         #endif
         stream << value;
@@ -95,7 +102,7 @@ namespace utils::print {
         // Declare pretty_ostream_iterator as checked
         template<typename T, typename TChar, typename TCharTraits>
         struct std::_Is_checked_helper<pretty_ostream_iterator<T, TChar, TCharTraits>>
-                : public std::tr1::true_type
+                : public std::true_type
         {
             // Empty
         };
@@ -559,17 +566,12 @@ namespace std {
         } else if constexpr (utils::traits::is_iterator_v<T>) {
             stream << *value;
         } else if constexpr (std::is_array_v<T>) {
-            using TBase = std::remove_pointer_t<std::decay_t<T>>;
-            stream << utils::print::array_wrapper<TBase, std::size(value)>(value);
+            stream << utils::print::array_wrapper(value);
         } else if constexpr (utils::traits::is_container<T>::value) {
             (utils::print::print_container_helper<T, TChar, TCharTraits>(value))(stream);
         } else {
-            if constexpr (std::is_member_function_pointer<T>::value) {
-                stream << "<Object.method " << utils::print::type2name(value) << " at " << &value << ">";
-            } else {
-                stream << "<Object " << utils::print::type2name(value) << ">";
-            }
-            // ASSERT(false && "Warning: Should be unreachable");
+            stream << "<Object " << utils::print::type2name(value) << ">";
+            // ASSERT(false && "Warning: Unprintable value");
         }
 
         return stream;
