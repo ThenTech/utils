@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.40.0-beta</span>
+   &#160;<span id="projectnumber">0.42.0-beta</span>
    </div>
   </td>
  </tr>
@@ -130,17 +130,17 @@ Functions</h2></td></tr>
 <tr class="memitem:a5ded9cbe3cc8af61c7729874943d58f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#a5ded9cbe3cc8af61c7729874943d58f5">round_to_multiple</a> (const int64_t value, const int64_t multiple) noexcept(false)</td></tr>
 <tr class="memdesc:a5ded9cbe3cc8af61c7729874943d58f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round the given value to the next multiple of <code>multiple</code>, greater or equal to <code>value</code> itself.  <a href="#a5ded9cbe3cc8af61c7729874943d58f5">More...</a><br /></td></tr>
 <tr class="separator:a5ded9cbe3cc8af61c7729874943d58f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5226fc96f5a2b7a6880bb236368bf156"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#a5226fc96f5a2b7a6880bb236368bf156">round_to_byte</a> (const size_t bits)</td></tr>
-<tr class="memdesc:a5226fc96f5a2b7a6880bb236368bf156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round the given bits to the next byte.  <a href="#a5226fc96f5a2b7a6880bb236368bf156">More...</a><br /></td></tr>
-<tr class="separator:a5226fc96f5a2b7a6880bb236368bf156"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae89323e6dbdecaab3c2a135d2f121213"><td class="memTemplParams" colspan="2">template&lt;class T , size_t Tlen = utils::bits::size_of&lt;T&gt;()&gt; </td></tr>
-<tr class="memitem:ae89323e6dbdecaab3c2a135d2f121213"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#ae89323e6dbdecaab3c2a135d2f121213">shift_signed</a> (const size_t value, const size_t src_bits)</td></tr>
-<tr class="memdesc:ae89323e6dbdecaab3c2a135d2f121213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a signed value of type T with the given value that is only src_bits long.  <a href="#ae89323e6dbdecaab3c2a135d2f121213">More...</a><br /></td></tr>
-<tr class="separator:ae89323e6dbdecaab3c2a135d2f121213"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a771f784cfc52ce4e29347fe04d04acf5"><td class="memTemplParams" colspan="2">template&lt;class T , uint_fast8_t bits&gt; </td></tr>
-<tr class="memitem:a771f784cfc52ce4e29347fe04d04acf5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#a771f784cfc52ce4e29347fe04d04acf5">extend_sign</a> (const size_t value)</td></tr>
-<tr class="memdesc:a771f784cfc52ce4e29347fe04d04acf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as shift_signed, but with known bit size of value at compile time.  <a href="#a771f784cfc52ce4e29347fe04d04acf5">More...</a><br /></td></tr>
-<tr class="separator:a771f784cfc52ce4e29347fe04d04acf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97a9507f02d462a8bbb6aed0d7bd60a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#a97a9507f02d462a8bbb6aed0d7bd60a5">round_to_byte</a> (const uint64_t bits)</td></tr>
+<tr class="memdesc:a97a9507f02d462a8bbb6aed0d7bd60a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round the given bits to the next byte.  <a href="#a97a9507f02d462a8bbb6aed0d7bd60a5">More...</a><br /></td></tr>
+<tr class="separator:a97a9507f02d462a8bbb6aed0d7bd60a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3078a81bf43e2b047b143d0db7aac81"><td class="memTemplParams" colspan="2">template&lt;class T , size_t Tlen = utils::bits::size_of&lt;T&gt;()&gt; </td></tr>
+<tr class="memitem:af3078a81bf43e2b047b143d0db7aac81"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#af3078a81bf43e2b047b143d0db7aac81">shift_signed</a> (const uint64_t value, const size_t src_bits)</td></tr>
+<tr class="memdesc:af3078a81bf43e2b047b143d0db7aac81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a signed value of type T with the given value that is only src_bits long.  <a href="#af3078a81bf43e2b047b143d0db7aac81">More...</a><br /></td></tr>
+<tr class="separator:af3078a81bf43e2b047b143d0db7aac81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9879bd393afd0be7069a8933d53824d"><td class="memTemplParams" colspan="2">template&lt;class T , uint_fast8_t bits&gt; </td></tr>
+<tr class="memitem:ab9879bd393afd0be7069a8933d53824d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#ab9879bd393afd0be7069a8933d53824d">extend_sign</a> (const uint64_t value)</td></tr>
+<tr class="memdesc:ab9879bd393afd0be7069a8933d53824d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as shift_signed, but with known bit size of value at compile time.  <a href="#ab9879bd393afd0be7069a8933d53824d">More...</a><br /></td></tr>
+<tr class="separator:ab9879bd393afd0be7069a8933d53824d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af17a75a6ca6b8a2b0d968995080fe01f"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:af17a75a6ca6b8a2b0d968995080fe01f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> uint_fast32_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html#af17a75a6ca6b8a2b0d968995080fe01f">bits_needed</a> (T value)</td></tr>
 <tr class="memdesc:af17a75a6ca6b8a2b0d968995080fe01f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the amount of bits needed to represent the given T.  <a href="#af17a75a6ca6b8a2b0d968995080fe01f">More...</a><br /></td></tr>
@@ -180,7 +180,7 @@ template&lt;typename... T, typename C  = std::common_type_t&lt;T...&gt;&gt; </di
 <p>Generic bitwise AND all args. </p>
 <dl class="section return"><dt>Returns</dt><dd>Return arg1 &amp; ... &amp; argn </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00070">70</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00079">79</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -219,12 +219,12 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the amount of bits required to represent the value if reshifted to size_of&lt;T&gt; bits. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00330">330</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00339">339</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a771f784cfc52ce4e29347fe04d04acf5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a771f784cfc52ce4e29347fe04d04acf5">&#9670;&nbsp;</a></span>extend_sign()</h2>
+<a id="ab9879bd393afd0be7069a8933d53824d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9879bd393afd0be7069a8933d53824d">&#9670;&nbsp;</a></span>extend_sign()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,7 +237,7 @@ template&lt;class T , uint_fast8_t bits&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T utils::bits::extend_sign </td>
           <td>(</td>
-          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -265,7 +265,7 @@ template&lt;class T , uint_fast8_t bits&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a signed or unsigned number, depending on whether value[src_bits : 0] was considered signed. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00315">315</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00324">324</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -309,7 +309,7 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00115">115</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00124">124</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -348,7 +348,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the value is even (divisable by 2). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00235">235</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00244">244</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -387,7 +387,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if the value is odd. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00222">222</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00231">231</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -426,7 +426,7 @@ template&lt;class T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if value is the result of (1 &lt;&lt; x). </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00209">209</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00218">218</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -470,7 +470,7 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00131">131</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00140">140</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -503,7 +503,7 @@ template&lt;typename... T, typename C  = std::common_type_t&lt;T...&gt;&gt; </di
 <p>Generic bitwise OR all args. </p>
 <dl class="section return"><dt>Returns</dt><dd>Return arg1 | ... | argn </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00084">84</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00093">93</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -547,7 +547,7 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00147">147</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00156">156</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -597,7 +597,7 @@ template&lt;class T , size_t bit_length = utils::bits::size_of&lt;T&gt;()&gt; </
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The result will be of type T but with <code>bit_length</code> bits used, other bits exceeding the length will become zeroes. The value will be shifted to the left, and any bits exceeding <code>bit_length</code> will be appended to the right. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00169">169</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00178">178</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -647,12 +647,12 @@ template&lt;class T , size_t bit_length = utils::bits::size_of&lt;T&gt;()&gt; </
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The result will be of type T but with <code>bit_length</code> bits used, other bits exceeding the length will become zeroes. The value will be shifted to the right, and any bits shifted out will be appended to the left starting at <code>bit_length</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00193">193</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00202">202</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a5226fc96f5a2b7a6880bb236368bf156"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5226fc96f5a2b7a6880bb236368bf156">&#9670;&nbsp;</a></span>round_to_byte()</h2>
+<a id="a97a9507f02d462a8bbb6aed0d7bd60a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97a9507f02d462a8bbb6aed0d7bd60a5">&#9670;&nbsp;</a></span>round_to_byte()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -661,9 +661,9 @@ template&lt;class T , size_t bit_length = utils::bits::size_of&lt;T&gt;()&gt; </
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr size_t utils::bits::round_to_byte </td>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr uint64_t utils::bits::round_to_byte </td>
           <td>(</td>
-          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>bits</em></td><td>)</td>
           <td></td>
         </tr>
@@ -684,7 +684,7 @@ template&lt;class T , size_t bit_length = utils::bits::size_of&lt;T&gt;()&gt; </
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the next byte if bits has 1-7 surplus bits or the current byte if no surplus bits. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00266">266</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00275">275</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -732,12 +732,12 @@ template&lt;class T , size_t bit_length = utils::bits::size_of&lt;T&gt;()&gt; </
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the nearest multiple greater than <code>value</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00251">251</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00260">260</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae89323e6dbdecaab3c2a135d2f121213"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae89323e6dbdecaab3c2a135d2f121213">&#9670;&nbsp;</a></span>shift_signed()</h2>
+<a id="af3078a81bf43e2b047b143d0db7aac81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3078a81bf43e2b047b143d0db7aac81">&#9670;&nbsp;</a></span>shift_signed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -750,7 +750,7 @@ template&lt;class T , size_t Tlen = utils::bits::size_of&lt;T&gt;()&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T utils::bits::shift_signed </td>
           <td>(</td>
-          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramtype">const uint64_t&#160;</td>
           <td class="paramname"><em>value</em>, </td>
         </tr>
         <tr>
@@ -788,7 +788,7 @@ template&lt;class T , size_t Tlen = utils::bits::size_of&lt;T&gt;()&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a signed or unsigned number, depending on whether value[src_bits : 0] was considered signed. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00290">290</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00299">299</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -820,7 +820,7 @@ template&lt;class T &gt; </div>
 
 <p>Return the size in bits of the given type. Uses sizeof(T) * CHAR_BITS or std::numeric_limits&lt;uint8_t&gt;::digits. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00057">57</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00066">66</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -866,7 +866,7 @@ template&lt;typename T , typename U  = bool, typename  = typename std::enable_if
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a <code>T</code> where the MSB is the first item in <code>bool_vec</code>, and the LSB is the last one. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00369">369</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00378">378</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>
@@ -899,7 +899,7 @@ template&lt;typename... T, typename C  = std::common_type_t&lt;T...&gt;&gt; </di
 <p>Generic bitwise XOR all args. </p>
 <dl class="section return"><dt>Returns</dt><dd>Return arg1 ^ ... ^ argn </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00098">98</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__bits_8hpp_source.html#l00107">107</a> of file <a class="el" href="utils__bits_8hpp_source.html">utils_bits.hpp</a>.</p>
 
 </div>
 </div>

@@ -32,12 +32,12 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">18</td>
-            <td class="headerCovTableEntry">80</td>
-            <td class="headerCovTableEntryLo">22.5 %</td>
+            <td class="headerCovTableEntry">83</td>
+            <td class="headerCovTableEntryLo">21.7 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -78,14 +78,14 @@
 <span class="lineNum">      16 </span>            :  *  Enable FileSystem
 <span class="lineNum">      17 </span>            :  *  Currently only included when linking with -lstdc++fs.
 <span class="lineNum">      18 </span>            :  */
-<span class="lineNum">      19 </span>            : #if __cplusplus &gt;= 201703L
-<span class="lineNum">      20 </span>            :     #if defined(__GNUC__) &amp;&amp; __GNUC__ &lt; 9
-<span class="lineNum">      21 </span>            :         #include &lt;experimental/filesystem&gt;
-<span class="lineNum">      22 </span>            :     #else
-<span class="lineNum">      23 </span>            :         #include &lt;filesystem&gt;
-<span class="lineNum">      24 </span>            :     #endif
-<span class="lineNum">      25 </span>            :     #define UTILS_IO_FS_SUPPORTED
-<span class="lineNum">      26 </span>            : #endif
+<span class="lineNum">      19 </span>            : #if __has_include(&lt;filesystem&gt;)
+<span class="lineNum">      20 </span>            :     #include &lt;filesystem&gt;
+<span class="lineNum">      21 </span>            :     #define UTILS_IO_FS_SUPPORTED
+<span class="lineNum">      22 </span>            : #elif __has_include(&lt;experimental/filesystem&gt;)
+<span class="lineNum">      23 </span>            :     #include &lt;experimental/filesystem&gt;
+<span class="lineNum">      24 </span>            :     #define UTILS_IO_FS_SUPPORTED
+<span class="lineNum">      25 </span>            : #endif
+<span class="lineNum">      26 </span>            : 
 <span class="lineNum">      27 </span>            : 
 <span class="lineNum">      28 </span>            : namespace utils::io {
 <span class="lineNum">      29 </span>            :     /**
@@ -132,503 +132,510 @@
 <span class="lineNum">      70 </span>            :             static_assert(std::is_invocable_v&lt;decltype(predicate), fs::directory_entry&amp;&gt;,
 <span class="lineNum">      71 </span>            :                           &quot;utils::io::list_contents: Callable function required.&quot;);
 <span class="lineNum">      72 </span>            : 
-<span class="lineNum">      73 </span><span class="lineNoCov">          0 :             auto contents = utils::memory::new_unique_var&lt;std::vector&lt;std::string&gt;&gt;();</span>
-<span class="lineNum">      74 </span>            : 
-<span class="lineNum">      75 </span><span class="lineNoCov">          0 :             for (const auto&amp; entry : fs::directory_iterator(folder)) {</span>
-<span class="lineNum">      76 </span><span class="lineNoCov">          0 :                 if (predicate(entry))</span>
-<span class="lineNum">      77 </span><span class="lineNoCov">          0 :                     contents-&gt;emplace_back(entry.path().string());</span>
-<span class="lineNum">      78 </span>            :             }
-<span class="lineNum">      79 </span>            : 
-<span class="lineNum">      80 </span><span class="lineNoCov">          0 :             return contents;</span>
-<span class="lineNum">      81 </span>            :         }
-<span class="lineNum">      82 </span>            : 
-<span class="lineNum">      83 </span>            :         template &lt;
-<span class="lineNum">      84 </span>            :             typename TFilter = filter::filter_t
-<span class="lineNum">      85 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      86 </span>            :         static auto list_contents_recur(const std::string_view&amp; folder,
-<span class="lineNum">      87 </span>            :                                         TFilter predicate = utils::io::filter::all())
-<span class="lineNum">      88 </span>            :         {
-<span class="lineNum">      89 </span>            :             static_assert(std::is_invocable_v&lt;decltype(predicate), fs::directory_entry&amp;&gt;,
-<span class="lineNum">      90 </span>            :                           &quot;utils::io::list_contents_recur: Callable function required.&quot;);
-<span class="lineNum">      91 </span>            : 
-<span class="lineNum">      92 </span>            :             auto contents = utils::memory::new_unique_var&lt;std::vector&lt;std::string&gt;&gt;();
-<span class="lineNum">      93 </span>            : 
-<span class="lineNum">      94 </span>            :             for (const auto&amp; entry : fs::recursive_directory_iterator(folder)) {
-<span class="lineNum">      95 </span>            :                 if (predicate(entry))
-<span class="lineNum">      96 </span>            :                     contents-&gt;emplace_back(entry.path().string());
-<span class="lineNum">      97 </span>            :             }
-<span class="lineNum">      98 </span>            : 
-<span class="lineNum">      99 </span>            :             return contents;
-<span class="lineNum">     100 </span>            :         }
-<span class="lineNum">     101 </span>            : 
-<span class="lineNum">     102 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     103 </span>            :         static inline auto list_files(const std::string_view&amp; folder) {
-<span class="lineNum">     104 </span>            :             return list_contents(folder, utils::io::filter::file());
-<span class="lineNum">     105 </span>            :         }
-<span class="lineNum">     106 </span>            : 
-<span class="lineNum">     107 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     108 </span>            :         static inline auto list_folders(const std::string_view&amp; folder) {
-<span class="lineNum">     109 </span>            :             return list_contents(folder, utils::io::filter::directory());
-<span class="lineNum">     110 </span>            :         }
-<a name="111"><span class="lineNum">     111 </span>            : </a>
-<span class="lineNum">     112 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     113 </span><span class="lineNoCov">          0 :         static size_t file_size(const std::string_view&amp; filename) {</span>
-<span class="lineNum">     114 </span><span class="lineNoCov">          0 :             if (fs::exists(filename) &amp;&amp; fs::is_regular_file(filename)) {</span>
-<span class="lineNum">     115 </span><span class="lineNoCov">          0 :                 return fs::file_size(filename);</span>
-<span class="lineNum">     116 </span>            :             }
-<span class="lineNum">     117 </span><span class="lineNoCov">          0 :             return size_t(-1);</span>
-<span class="lineNum">     118 </span>            :         }
-<a name="119"><span class="lineNum">     119 </span>            : </a>
-<span class="lineNum">     120 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     121 </span><span class="lineNoCov">          0 :         static std::time_t file_last_modified(const std::string_view&amp; filename) {</span>
-<span class="lineNum">     122 </span><span class="lineNoCov">          0 :             if (fs::exists(filename)) {</span>
-<span class="lineNum">     123 </span><span class="lineNoCov">          0 :                 const auto modified = fs::last_write_time(filename);</span>
-<span class="lineNum">     124 </span>            : 
-<span class="lineNum">     125 </span>            :                 // FIXME: No clock casting possible
-<span class="lineNum">     126 </span>            :                 // Could use:
-<span class="lineNum">     127 </span>            :                 //      decltype(modified)::clock::to_time_t(modified);
-<span class="lineNum">     128 </span>            :                 // instead, but clocks are different.
-<span class="lineNum">     129 </span>            :                 // C++20 will provide clock_cast to fix this.
-<span class="lineNum">     130 </span>            : 
-<span class="lineNum">     131 </span><span class="lineNoCov">          0 :                 return std::chrono::duration_cast&lt;std::chrono::seconds&gt;(modified.time_since_epoch()).count();</span>
-<span class="lineNum">     132 </span>            :             }
-<span class="lineNum">     133 </span>            : 
-<span class="lineNum">     134 </span><span class="lineNoCov">          0 :             return std::time_t(0);</span>
-<span class="lineNum">     135 </span>            :         }
-<a name="136"><span class="lineNum">     136 </span>            : </a>
-<span class="lineNum">     137 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     138 </span><span class="lineNoCov">          0 :         static const std::string most_recent_file(const std::vector&lt;std::string&gt;&amp; paths) {</span>
-<span class="lineNum">     139 </span><span class="lineNoCov">          0 :             std::string most_recent(&quot;&quot;);</span>
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 :                         const fs::path path{ folder.begin(), folder.end() };</span>
+<span class="lineNum">      74 </span><span class="lineNoCov">          0 :             auto contents = utils::memory::new_unique_var&lt;std::vector&lt;std::string&gt;&gt;();</span>
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span><span class="lineNoCov">          0 :             for (const auto&amp; entry : fs::directory_iterator(path)) {</span>
+<span class="lineNum">      77 </span><span class="lineNoCov">          0 :                 if (predicate(entry))</span>
+<span class="lineNum">      78 </span><span class="lineNoCov">          0 :                     contents-&gt;emplace_back(entry.path().string());</span>
+<span class="lineNum">      79 </span>            :             }
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span><span class="lineNoCov">          0 :             return contents;</span>
+<span class="lineNum">      82 </span>            :         }
+<span class="lineNum">      83 </span>            : 
+<span class="lineNum">      84 </span>            :         template &lt;
+<span class="lineNum">      85 </span>            :             typename TFilter = filter::filter_t
+<span class="lineNum">      86 </span>            :         &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      87 </span>            :         static auto list_contents_recur(const std::string_view&amp; folder,
+<span class="lineNum">      88 </span>            :                                         TFilter predicate = utils::io::filter::all())
+<span class="lineNum">      89 </span>            :         {
+<span class="lineNum">      90 </span>            :             static_assert(std::is_invocable_v&lt;decltype(predicate), fs::directory_entry&amp;&gt;,
+<span class="lineNum">      91 </span>            :                           &quot;utils::io::list_contents_recur: Callable function required.&quot;);
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            :                         const fs::path path{ folder.begin(), folder.end() };
+<span class="lineNum">      94 </span>            :             auto contents = utils::memory::new_unique_var&lt;std::vector&lt;std::string&gt;&gt;();
+<span class="lineNum">      95 </span>            : 
+<span class="lineNum">      96 </span>            :             for (const auto&amp; entry : fs::recursive_directory_iterator(path)) {
+<span class="lineNum">      97 </span>            :                 if (predicate(entry))
+<span class="lineNum">      98 </span>            :                     contents-&gt;emplace_back(entry.path().string());
+<span class="lineNum">      99 </span>            :             }
+<span class="lineNum">     100 </span>            : 
+<span class="lineNum">     101 </span>            :             return contents;
+<span class="lineNum">     102 </span>            :         }
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     105 </span>            :         static inline auto list_files(const std::string_view&amp; folder) {
+<span class="lineNum">     106 </span>            :             return list_contents(folder, utils::io::filter::file());
+<span class="lineNum">     107 </span>            :         }
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     110 </span>            :         static inline auto list_folders(const std::string_view&amp; folder) {
+<span class="lineNum">     111 </span>            :             return list_contents(folder, utils::io::filter::directory());
+<span class="lineNum">     112 </span>            :         }
+<a name="113"><span class="lineNum">     113 </span>            : </a>
+<span class="lineNum">     114 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :         static uint64_t file_size(const std::string_view&amp; filename) {</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :             const fs::path path{ filename.begin(), filename.end() };</span>
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span><span class="lineNoCov">          0 :             if (fs::exists(path) &amp;&amp; fs::is_regular_file(path)) {</span>
+<span class="lineNum">     119 </span><span class="lineNoCov">          0 :                 return fs::file_size(path);</span>
+<span class="lineNum">     120 </span>            :             }
+<span class="lineNum">     121 </span>            : 
+<span class="lineNum">     122 </span><span class="lineNoCov">          0 :             return uint64_t(-1);</span>
+<span class="lineNum">     123 </span>            :         }
+<a name="124"><span class="lineNum">     124 </span>            : </a>
+<span class="lineNum">     125 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :         static std::time_t file_last_modified(const std::string_view&amp; filename) {</span>
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :             const fs::path path{ filename.begin(), filename.end() };</span>
+<span class="lineNum">     128 </span>            : 
+<span class="lineNum">     129 </span><span class="lineNoCov">          0 :             if (fs::exists(path)) {</span>
+<span class="lineNum">     130 </span><span class="lineNoCov">          0 :                 const auto modified = fs::last_write_time(path);</span>
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span>            :                 // FIXME: No clock casting possible
+<span class="lineNum">     133 </span>            :                 // Could use:
+<span class="lineNum">     134 </span>            :                 //      decltype(modified)::clock::to_time_t(modified);
+<span class="lineNum">     135 </span>            :                 // instead, but clocks are different.
+<span class="lineNum">     136 </span>            :                 // C++20 will provide clock_cast to fix this.
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span><span class="lineNoCov">          0 :                 return std::chrono::duration_cast&lt;std::chrono::seconds&gt;(modified.time_since_epoch()).count();</span>
+<span class="lineNum">     139 </span>            :             }
 <span class="lineNum">     140 </span>            : 
-<span class="lineNum">     141 </span><span class="lineNoCov">          0 :             if (paths.size()) {</span>
-<span class="lineNum">     142 </span><span class="lineNoCov">          0 :                 std::time_t last_date(0);</span>
-<span class="lineNum">     143 </span>            : 
-<span class="lineNum">     144 </span><span class="lineNoCov">          0 :                 for (const std::string&amp; file : paths) {</span>
-<span class="lineNum">     145 </span><span class="lineNoCov">          0 :                     if (fs::is_regular_file(file))</span>
-<span class="lineNum">     146 </span><span class="lineNoCov">          0 :                     if (std::time_t mdate = utils::io::file_last_modified(file);</span>
-<span class="lineNum">     147 </span>            :                         mdate &gt;= last_date)
-<span class="lineNum">     148 </span>            :                     {
-<span class="lineNum">     149 </span><span class="lineNoCov">          0 :                         last_date = mdate;</span>
-<span class="lineNum">     150 </span><span class="lineNoCov">          0 :                         most_recent = file;</span>
-<span class="lineNum">     151 </span>            :                     }
-<span class="lineNum">     152 </span>            :                 }
-<span class="lineNum">     153 </span>            :             }
-<span class="lineNum">     154 </span>            : 
-<span class="lineNum">     155 </span><span class="lineNoCov">          0 :             return most_recent;</span>
-<span class="lineNum">     156 </span>            :         }
-<span class="lineNum">     157 </span>            :     #endif  // UTILS_IO_FS_SUPPORTED
-<a name="158"><span class="lineNum">     158 </span>            : </a>
-<span class="lineNum">     159 </span>            :     ATTR_MAYBE_UNUSED
-<span class="lineNum">     160 </span><span class="lineNoCov">          0 :     static void safe_filename(std::string&amp; filename) {</span>
-<span class="lineNum">     161 </span>            :         static constexpr std::string_view invalid_chars = &quot;\&quot;&lt;&gt;?*|/:\\\n&quot;;
-<span class="lineNum">     162 </span>            : 
-<span class="lineNum">     163 </span><span class="lineNoCov">          0 :         for (const char&amp; c : invalid_chars) {</span>
-<span class="lineNum">     164 </span><span class="lineNoCov">          0 :             utils::string::erase_all(filename, c);</span>
-<span class="lineNum">     165 </span>            :         }
-<span class="lineNum">     166 </span><span class="lineNoCov">          0 :     }</span>
-<a name="167"><span class="lineNum">     167 </span>            : </a>
-<span class="lineNum">     168 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     169 </span><span class="lineNoCov">          0 :     static std::string safe_filename(const std::string_view&amp; filename) {</span>
-<span class="lineNum">     170 </span><span class="lineNoCov">          0 :         std::string str(filename);</span>
-<span class="lineNum">     171 </span><span class="lineNoCov">          0 :         utils::io::safe_filename(str);</span>
-<span class="lineNum">     172 </span><span class="lineNoCov">          0 :         return str;</span>
-<span class="lineNum">     173 </span>            :     }
-<span class="lineNum">     174 </span>            : 
-<span class="lineNum">     175 </span>            :     /** \brief  Read the given file and return a pointer to a string containing its contents.
-<span class="lineNum">     176 </span>            :      *
-<span class="lineNum">     177 </span>            :      *  \param  filename
-<span class="lineNum">     178 </span>            :      *          The (path and) name of the file to read.
-<span class="lineNum">     179 </span>            :      *
-<span class="lineNum">     180 </span>            :      *  \return Returns a string pointer.
-<span class="lineNum">     181 </span>            :      *
-<span class="lineNum">     182 </span>            :      *  \exception      FileReadException
-<span class="lineNum">     183 </span>            :      *          Throws FileReadException if the file could not be read properly.
-<a name="184"><span class="lineNum">     184 </span>            :      */</a>
-<span class="lineNum">     185 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     186 </span><span class="lineCov">          3 :     static auto file_to_string(const std::string&amp; filename) {</span>
-<span class="lineNum">     187 </span><span class="lineCov">          3 :         auto str = utils::memory::new_unique_var&lt;std::string&gt;();</span>
-<span class="lineNum">     188 </span><span class="lineCov">          6 :         std::ifstream file;</span>
-<span class="lineNum">     189 </span>            : 
-<span class="lineNum">     190 </span>            :         try {
-<span class="lineNum">     191 </span><span class="lineCov">          3 :             file.open(filename, std::fstream::in | std::fstream::ate);</span>
-<span class="lineNum">     192 </span>            : 
-<span class="lineNum">     193 </span><span class="lineCov">          3 :             str-&gt;reserve(size_t(file.tellg()));</span>
-<span class="lineNum">     194 </span><span class="lineCov">          2 :             file.seekg(0, std::ios::beg);</span>
-<span class="lineNum">     195 </span>            : 
-<span class="lineNum">     196 </span>            :             str-&gt;assign(std::istreambuf_iterator&lt;char&gt;(file),
-<span class="lineNum">     197 </span><span class="lineCov">          2 :                         std::istreambuf_iterator&lt;char&gt;());</span>
-<span class="lineNum">     198 </span><span class="lineCov">          2 :             file.close();</span>
-<span class="lineNum">     199 </span><span class="lineCov">          2 :         } catch (...) {</span>
-<span class="lineNum">     200 </span><span class="lineCov">          1 :             file.close();</span>
-<span class="lineNum">     201 </span><span class="lineCov">          1 :             throw utils::exceptions::FileReadException(filename);</span>
-<span class="lineNum">     202 </span>            :         }
-<span class="lineNum">     203 </span>            : 
-<span class="lineNum">     204 </span><span class="lineCov">          4 :         return str;</span>
-<span class="lineNum">     205 </span>            :     }
-<span class="lineNum">     206 </span>            : 
-<span class="lineNum">     207 </span>            :     /**
-<span class="lineNum">     208 </span>            :      *  \brief TODO comment and test
-<span class="lineNum">     209 </span>            :      *  \param filename
-<span class="lineNum">     210 </span>            :      *  \param str
-<a name="211"><span class="lineNum">     211 </span>            :      */</a>
-<span class="lineNum">     212 </span>            :     ATTR_MAYBE_UNUSED
-<span class="lineNum">     213 </span><span class="lineCov">          3 :     static void string_to_file(const std::string&amp; filename, const std::string_view&amp; str) {</span>
-<span class="lineNum">     214 </span><span class="lineCov">          6 :         std::ofstream file;</span>
-<span class="lineNum">     215 </span>            : 
-<span class="lineNum">     216 </span>            :         try {
-<span class="lineNum">     217 </span><span class="lineCov">          3 :             file.open(filename);</span>
-<span class="lineNum">     218 </span><span class="lineCov">          3 :             file &lt;&lt; str;</span>
-<span class="lineNum">     219 </span><span class="lineCov">          3 :             file.close();</span>
-<span class="lineNum">     220 </span><span class="lineNoCov">          0 :         } catch (...) {</span>
-<span class="lineNum">     221 </span><span class="lineNoCov">          0 :             file.close();</span>
-<span class="lineNum">     222 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileWriteException(filename);</span>
-<span class="lineNum">     223 </span>            :         }
-<span class="lineNum">     224 </span><span class="lineCov">          3 :     }</span>
-<span class="lineNum">     225 </span>            : 
-<span class="lineNum">     226 </span>            :     /**
-<span class="lineNum">     227 </span>            :      *  \brief  Read the given file and return a pointer to a list containing its contents in binary data (raw chars).
-<span class="lineNum">     228 </span>            :      *
-<span class="lineNum">     229 </span>            :      *  \param  filename
-<span class="lineNum">     230 </span>            :      *          The (path and) name of the file to read.
-<span class="lineNum">     231 </span>            :      *
-<span class="lineNum">     232 </span>            :      *  \return std::vector&lt;char&gt;*
-<span class="lineNum">     233 </span>            :      *                  A vector with buffer-&gt;size() bytes containing a program in raw binary.
-<span class="lineNum">     234 </span>            :      *                  Print with cast to (unsigned char) for proper viewing.
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :             return std::time_t(0);</span>
+<span class="lineNum">     142 </span>            :         }
+<a name="143"><span class="lineNum">     143 </span>            : </a>
+<span class="lineNum">     144 </span>            :         ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     145 </span><span class="lineNoCov">          0 :         static const std::string most_recent_file(const std::vector&lt;std::string&gt;&amp; paths) {</span>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             std::string most_recent(&quot;&quot;);</span>
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :             if (paths.size()) {</span>
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :                 std::time_t last_date(0);</span>
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :                 for (const std::string&amp; file : paths) {</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                     if (fs::is_regular_file(file))</span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :                     if (std::time_t mdate = utils::io::file_last_modified(file);</span>
+<span class="lineNum">     154 </span>            :                         mdate &gt;= last_date)
+<span class="lineNum">     155 </span>            :                     {
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :                         last_date = mdate;</span>
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :                         most_recent = file;</span>
+<span class="lineNum">     158 </span>            :                     }
+<span class="lineNum">     159 </span>            :                 }
+<span class="lineNum">     160 </span>            :             }
+<span class="lineNum">     161 </span>            : 
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :             return most_recent;</span>
+<span class="lineNum">     163 </span>            :         }
+<span class="lineNum">     164 </span>            :     #endif  // UTILS_IO_FS_SUPPORTED
+<a name="165"><span class="lineNum">     165 </span>            : </a>
+<span class="lineNum">     166 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :     static void safe_filename(std::string&amp; filename) {</span>
+<span class="lineNum">     168 </span>            :         static constexpr std::string_view invalid_chars = &quot;\&quot;&lt;&gt;?*|/:\\\n&quot;;
+<span class="lineNum">     169 </span>            : 
+<span class="lineNum">     170 </span><span class="lineNoCov">          0 :         for (const char&amp; c : invalid_chars) {</span>
+<span class="lineNum">     171 </span><span class="lineNoCov">          0 :             utils::string::erase_all(filename, c);</span>
+<span class="lineNum">     172 </span>            :         }
+<span class="lineNum">     173 </span><span class="lineNoCov">          0 :     }</span>
+<a name="174"><span class="lineNum">     174 </span>            : </a>
+<span class="lineNum">     175 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     176 </span><span class="lineNoCov">          0 :     static std::string safe_filename(const std::string_view&amp; filename) {</span>
+<span class="lineNum">     177 </span><span class="lineNoCov">          0 :         std::string str(filename);</span>
+<span class="lineNum">     178 </span><span class="lineNoCov">          0 :         utils::io::safe_filename(str);</span>
+<span class="lineNum">     179 </span><span class="lineNoCov">          0 :         return str;</span>
+<span class="lineNum">     180 </span>            :     }
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span>            :     /** \brief  Read the given file and return a pointer to a string containing its contents.
+<span class="lineNum">     183 </span>            :      *
+<span class="lineNum">     184 </span>            :      *  \param  filename
+<span class="lineNum">     185 </span>            :      *          The (path and) name of the file to read.
+<span class="lineNum">     186 </span>            :      *
+<span class="lineNum">     187 </span>            :      *  \return Returns a string pointer.
+<span class="lineNum">     188 </span>            :      *
+<span class="lineNum">     189 </span>            :      *  \exception      FileReadException
+<span class="lineNum">     190 </span>            :      *          Throws FileReadException if the file could not be read properly.
+<a name="191"><span class="lineNum">     191 </span>            :      */</a>
+<span class="lineNum">     192 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     193 </span><span class="lineCov">          3 :     static auto file_to_string(const std::string&amp; filename) {</span>
+<span class="lineNum">     194 </span><span class="lineCov">          3 :         auto str = utils::memory::new_unique_var&lt;std::string&gt;();</span>
+<span class="lineNum">     195 </span><span class="lineCov">          6 :         std::ifstream file;</span>
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :         try {
+<span class="lineNum">     198 </span><span class="lineCov">          3 :             file.open(filename, std::fstream::in | std::fstream::ate);</span>
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span><span class="lineCov">          3 :             str-&gt;reserve(size_t(file.tellg()));</span>
+<span class="lineNum">     201 </span><span class="lineCov">          2 :             file.seekg(0, std::ios::beg);</span>
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span>            :             str-&gt;assign(std::istreambuf_iterator&lt;char&gt;(file),
+<span class="lineNum">     204 </span><span class="lineCov">          2 :                         std::istreambuf_iterator&lt;char&gt;());</span>
+<span class="lineNum">     205 </span><span class="lineCov">          2 :             file.close();</span>
+<span class="lineNum">     206 </span><span class="lineCov">          2 :         } catch (...) {</span>
+<span class="lineNum">     207 </span><span class="lineCov">          1 :             file.close();</span>
+<span class="lineNum">     208 </span><span class="lineCov">          1 :             throw utils::exceptions::FileReadException(filename);</span>
+<span class="lineNum">     209 </span>            :         }
+<span class="lineNum">     210 </span>            : 
+<span class="lineNum">     211 </span><span class="lineCov">          4 :         return str;</span>
+<span class="lineNum">     212 </span>            :     }
+<span class="lineNum">     213 </span>            : 
+<span class="lineNum">     214 </span>            :     /**
+<span class="lineNum">     215 </span>            :      *  \brief TODO comment and test
+<span class="lineNum">     216 </span>            :      *  \param filename
+<span class="lineNum">     217 </span>            :      *  \param str
+<a name="218"><span class="lineNum">     218 </span>            :      */</a>
+<span class="lineNum">     219 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     220 </span><span class="lineCov">          3 :     static void string_to_file(const std::string&amp; filename, const std::string_view&amp; str) {</span>
+<span class="lineNum">     221 </span><span class="lineCov">          6 :         std::ofstream file;</span>
+<span class="lineNum">     222 </span>            : 
+<span class="lineNum">     223 </span>            :         try {
+<span class="lineNum">     224 </span><span class="lineCov">          3 :             file.open(filename);</span>
+<span class="lineNum">     225 </span><span class="lineCov">          3 :             file &lt;&lt; str;</span>
+<span class="lineNum">     226 </span><span class="lineCov">          3 :             file.close();</span>
+<span class="lineNum">     227 </span><span class="lineNoCov">          0 :         } catch (...) {</span>
+<span class="lineNum">     228 </span><span class="lineNoCov">          0 :             file.close();</span>
+<span class="lineNum">     229 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileWriteException(filename);</span>
+<span class="lineNum">     230 </span>            :         }
+<span class="lineNum">     231 </span><span class="lineCov">          3 :     }</span>
+<span class="lineNum">     232 </span>            : 
+<span class="lineNum">     233 </span>            :     /**
+<span class="lineNum">     234 </span>            :      *  \brief  Read the given file and return a pointer to a list containing its contents in binary data (raw chars).
 <span class="lineNum">     235 </span>            :      *
-<span class="lineNum">     236 </span>            :      *  \exception      FileReadException
-<span class="lineNum">     237 </span>            :      *          Throws FileReadException if the file could not be read properly.
-<a name="238"><span class="lineNum">     238 </span>            :      */</a>
-<span class="lineNum">     239 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     240 </span><span class="lineNoCov">          0 :     static auto file_to_bytes(const std::string&amp; filename) {</span>
-<span class="lineNum">     241 </span><span class="lineNoCov">          0 :         std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);</span>
-<span class="lineNum">     242 </span>            : 
-<span class="lineNum">     243 </span><span class="lineNoCov">          0 :         if (!file.good()) {</span>
-<span class="lineNum">     244 </span><span class="lineNoCov">          0 :             file.close();</span>
-<span class="lineNum">     245 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileReadException(filename);</span>
-<span class="lineNum">     246 </span>            :         }
-<span class="lineNum">     247 </span>            : 
-<span class="lineNum">     248 </span><span class="lineNoCov">          0 :         auto v_buff = utils::memory::new_unique_var&lt;std::vector&lt;uint8_t&gt;&gt;();</span>
+<span class="lineNum">     236 </span>            :      *  \param  filename
+<span class="lineNum">     237 </span>            :      *          The (path and) name of the file to read.
+<span class="lineNum">     238 </span>            :      *
+<span class="lineNum">     239 </span>            :      *  \return std::vector&lt;char&gt;*
+<span class="lineNum">     240 </span>            :      *                  A vector with buffer-&gt;size() bytes containing a program in raw binary.
+<span class="lineNum">     241 </span>            :      *                  Print with cast to (unsigned char) for proper viewing.
+<span class="lineNum">     242 </span>            :      *
+<span class="lineNum">     243 </span>            :      *  \exception      FileReadException
+<span class="lineNum">     244 </span>            :      *          Throws FileReadException if the file could not be read properly.
+<a name="245"><span class="lineNum">     245 </span>            :      */</a>
+<span class="lineNum">     246 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     247 </span><span class="lineNoCov">          0 :     static auto file_to_bytes(const std::string&amp; filename) {</span>
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :         std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);</span>
 <span class="lineNum">     249 </span>            : 
-<span class="lineNum">     250 </span>            :         try {
-<span class="lineNum">     251 </span>            :             // Filepointer is already at end due to ::ate option, so tellg() gives filesize
-<span class="lineNum">     252 </span><span class="lineNoCov">          0 :             v_buff-&gt;reserve(size_t(file.tellg()));</span>
-<span class="lineNum">     253 </span><span class="lineNoCov">          0 :             file.seekg(0, std::ios::beg);</span>
-<span class="lineNum">     254 </span><span class="lineNoCov">          0 :             v_buff-&gt;assign(std::istreambuf_iterator&lt;char&gt;(file),</span>
-<span class="lineNum">     255 </span>            :                            std::istreambuf_iterator&lt;char&gt;());
-<span class="lineNum">     256 </span><span class="lineNoCov">          0 :         } catch (...) {</span>
-<span class="lineNum">     257 </span><span class="lineNoCov">          0 :             file.close();</span>
-<span class="lineNum">     258 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileReadException(filename);</span>
-<span class="lineNum">     259 </span>            :         }
-<span class="lineNum">     260 </span>            : 
-<span class="lineNum">     261 </span><span class="lineNoCov">          0 :         file.close();</span>
-<span class="lineNum">     262 </span><span class="lineNoCov">          0 :         return v_buff;</span>
-<span class="lineNum">     263 </span>            :     }
-<span class="lineNum">     264 </span>            : 
-<span class="lineNum">     265 </span>            :     /**
-<span class="lineNum">     266 </span>            :      *  \brief  Write the given char buffer to the given file.
-<span class="lineNum">     267 </span>            :      *
-<span class="lineNum">     268 </span>            :      *  \param  filename
-<span class="lineNum">     269 </span>            :      *          The (path and) name of the file to write to (will be created if it does not exist).
-<span class="lineNum">     270 </span>            :      *  \param  buffer
-<span class="lineNum">     271 </span>            :      *          The char buffer to write to a file.
-<span class="lineNum">     272 </span>            :      *  \param  length
-<span class="lineNum">     273 </span>            :      *          The length of the given char buffer.
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 :         if (!file.good()) {</span>
+<span class="lineNum">     251 </span><span class="lineNoCov">          0 :             file.close();</span>
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileReadException(filename);</span>
+<span class="lineNum">     253 </span>            :         }
+<span class="lineNum">     254 </span>            : 
+<span class="lineNum">     255 </span><span class="lineNoCov">          0 :         auto v_buff = utils::memory::new_unique_var&lt;std::vector&lt;uint8_t&gt;&gt;();</span>
+<span class="lineNum">     256 </span>            : 
+<span class="lineNum">     257 </span>            :         try {
+<span class="lineNum">     258 </span>            :             // Filepointer is already at end due to ::ate option, so tellg() gives filesize
+<span class="lineNum">     259 </span><span class="lineNoCov">          0 :             v_buff-&gt;reserve(size_t(file.tellg()));</span>
+<span class="lineNum">     260 </span><span class="lineNoCov">          0 :             file.seekg(0, std::ios::beg);</span>
+<span class="lineNum">     261 </span><span class="lineNoCov">          0 :             v_buff-&gt;assign(std::istreambuf_iterator&lt;char&gt;(file),</span>
+<span class="lineNum">     262 </span>            :                            std::istreambuf_iterator&lt;char&gt;());
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :         } catch (...) {</span>
+<span class="lineNum">     264 </span><span class="lineNoCov">          0 :             file.close();</span>
+<span class="lineNum">     265 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileReadException(filename);</span>
+<span class="lineNum">     266 </span>            :         }
+<span class="lineNum">     267 </span>            : 
+<span class="lineNum">     268 </span><span class="lineNoCov">          0 :         file.close();</span>
+<span class="lineNum">     269 </span><span class="lineNoCov">          0 :         return v_buff;</span>
+<span class="lineNum">     270 </span>            :     }
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :     /**
+<span class="lineNum">     273 </span>            :      *  \brief  Write the given char buffer to the given file.
 <span class="lineNum">     274 </span>            :      *
-<span class="lineNum">     275 </span>            :      *  \exception      FileWriteException
-<span class="lineNum">     276 </span>            :      *          Throws FileWriteException if the file could not be written properly.
-<a name="277"><span class="lineNum">     277 </span>            :      */</a>
-<span class="lineNum">     278 </span>            :     ATTR_MAYBE_UNUSED
-<span class="lineNum">     279 </span><span class="lineNoCov">          0 :     static void bytes_to_file(const std::string&amp; filename, const uint8_t* buffer, size_t length) {</span>
-<span class="lineNum">     280 </span><span class="lineNoCov">          0 :         std::ofstream file(filename, std::ofstream::binary);</span>
-<span class="lineNum">     281 </span>            : 
-<span class="lineNum">     282 </span>            :         try {
-<span class="lineNum">     283 </span><span class="lineNoCov">          0 :             file.write(reinterpret_cast&lt;const char*&gt;(buffer), std::streamsize(length));</span>
-<span class="lineNum">     284 </span><span class="lineNoCov">          0 :         } catch (...) {</span>
-<span class="lineNum">     285 </span><span class="lineNoCov">          0 :             file.close();</span>
-<span class="lineNum">     286 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileWriteException(filename);</span>
-<span class="lineNum">     287 </span>            :         }
+<span class="lineNum">     275 </span>            :      *  \param  filename
+<span class="lineNum">     276 </span>            :      *          The (path and) name of the file to write to (will be created if it does not exist).
+<span class="lineNum">     277 </span>            :      *  \param  buffer
+<span class="lineNum">     278 </span>            :      *          The char buffer to write to a file.
+<span class="lineNum">     279 </span>            :      *  \param  length
+<span class="lineNum">     280 </span>            :      *          The length of the given char buffer.
+<span class="lineNum">     281 </span>            :      *
+<span class="lineNum">     282 </span>            :      *  \exception      FileWriteException
+<span class="lineNum">     283 </span>            :      *          Throws FileWriteException if the file could not be written properly.
+<a name="284"><span class="lineNum">     284 </span>            :      */</a>
+<span class="lineNum">     285 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     286 </span><span class="lineNoCov">          0 :     static void bytes_to_file(const std::string&amp; filename, const uint8_t* buffer, size_t length) {</span>
+<span class="lineNum">     287 </span><span class="lineNoCov">          0 :         std::ofstream file(filename, std::ofstream::binary);</span>
 <span class="lineNum">     288 </span>            : 
-<span class="lineNum">     289 </span><span class="lineNoCov">          0 :         file.close();</span>
-<span class="lineNum">     290 </span><span class="lineNoCov">          0 :     }</span>
-<span class="lineNum">     291 </span>            : 
-<span class="lineNum">     292 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">     293 </span>            : 
-<span class="lineNum">     294 </span>            :     class BitStream {
-<span class="lineNum">     295 </span>            :         protected:
-<span class="lineNum">     296 </span>            :             uint8_t *buffer;
-<span class="lineNum">     297 </span>            :             size_t  size;        ///&lt; Size in bytes
-<span class="lineNum">     298 </span>            :             size_t  position;    ///&lt; Position in bits
-<span class="lineNum">     299 </span>            :             bool    managed;
+<span class="lineNum">     289 </span>            :         try {
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :             file.write(reinterpret_cast&lt;const char*&gt;(buffer), std::streamsize(length));</span>
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :         } catch (...) {</span>
+<span class="lineNum">     292 </span><span class="lineNoCov">          0 :             file.close();</span>
+<span class="lineNum">     293 </span><span class="lineNoCov">          0 :             throw utils::exceptions::FileWriteException(filename);</span>
+<span class="lineNum">     294 </span>            :         }
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span><span class="lineNoCov">          0 :         file.close();</span>
+<span class="lineNum">     297 </span><span class="lineNoCov">          0 :     }</span>
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span>            :     ////////////////////////////////////////////////////////////////////////////
 <span class="lineNum">     300 </span>            : 
-<span class="lineNum">     301 </span>            :             static constexpr inline uint8_t bitmasks[] = { 255, 128, 192, 224, 240, 248, 252, 254 };
-<span class="lineNum">     302 </span>            : 
-<span class="lineNum">     303 </span>            :             UTILS_TRAITS_ADD_PADDING(uint8_t, 8)
-<span class="lineNum">     304 </span>            : 
-<span class="lineNum">     305 </span>            :         public:
-<span class="lineNum">     306 </span>            :             BitStream(uint8_t *b = nullptr, size_t s = 0, size_t p = 0, bool m = false)
-<span class="lineNum">     307 </span>            :                 : buffer(b), size(s), position(p), managed(m) {}
-<span class="lineNum">     308 </span>            : 
-<span class="lineNum">     309 </span>            :             virtual ~BitStream(void) {
-<span class="lineNum">     310 </span>            :                 if (this-&gt;managed) {
-<span class="lineNum">     311 </span>            :                     utils::memory::delete_array(this-&gt;buffer);
-<span class="lineNum">     312 </span>            :                 }
-<span class="lineNum">     313 </span>            :             }
-<span class="lineNum">     314 </span>            : 
-<span class="lineNum">     315 </span>            :             inline uint8_t* get_buffer(void) {
-<span class="lineNum">     316 </span>            :                 return this-&gt;buffer;
-<span class="lineNum">     317 </span>            :             }
-<span class="lineNum">     318 </span>            : 
-<span class="lineNum">     319 </span>            :             inline const uint8_t* get_buffer() const {
-<span class="lineNum">     320 </span>            :                 return this-&gt;buffer;
-<span class="lineNum">     321 </span>            :             }
-<span class="lineNum">     322 </span>            : 
-<span class="lineNum">     323 </span>            :             inline uint8_t operator[](size_t idx) const {
-<span class="lineNum">     324 </span>            :                 return this-&gt;buffer[idx];
-<span class="lineNum">     325 </span>            :             }
-<span class="lineNum">     326 </span>            : 
-<span class="lineNum">     327 </span>            :             inline size_t get_size(void) const {
-<span class="lineNum">     328 </span>            :                 return this-&gt;size;
-<span class="lineNum">     329 </span>            :             }
-<span class="lineNum">     330 </span>            : 
-<span class="lineNum">     331 </span>            :             inline size_t get_size_bits(void) const {
-<span class="lineNum">     332 </span>            :                 return this-&gt;size * 8u;
-<span class="lineNum">     333 </span>            :             }
-<span class="lineNum">     334 </span>            : 
-<span class="lineNum">     335 </span>            :             inline void set_managed(bool m) {
-<span class="lineNum">     336 </span>            :                 this-&gt;managed = m;
-<span class="lineNum">     337 </span>            :             }
-<span class="lineNum">     338 </span>            : 
-<span class="lineNum">     339 </span>            :             inline void set_position(size_t p) {
-<span class="lineNum">     340 </span>            :                 this-&gt;position = p;
-<span class="lineNum">     341 </span>            :             }
-<span class="lineNum">     342 </span>            : 
-<span class="lineNum">     343 </span>            :             inline size_t get_position(void) const {
-<span class="lineNum">     344 </span>            :                 return this-&gt;position;
-<span class="lineNum">     345 </span>            :             }
-<span class="lineNum">     346 </span>            : 
-<span class="lineNum">     347 </span>            :             inline size_t get_last_byte_position(void) const {
-<span class="lineNum">     348 </span>            :                 return utils::bits::round_to_byte(this-&gt;position);
-<span class="lineNum">     349 </span>            :             }
-<span class="lineNum">     350 </span>            : 
-<span class="lineNum">     351 </span>            :             inline void reset(void) {
-<span class="lineNum">     352 </span>            :                 this-&gt;set_position(0);
-<span class="lineNum">     353 </span>            :             }
-<span class="lineNum">     354 </span>            : 
-<span class="lineNum">     355 </span>            :             /**
-<span class="lineNum">     356 </span>            :              * Move the bitwise position pointer to the next byte boundary
-<span class="lineNum">     357 </span>            :              */
-<span class="lineNum">     358 </span>            :             virtual inline void flush() {
-<span class="lineNum">     359 </span>            :                 this-&gt;position = this-&gt;get_last_byte_position() * 8u;
+<span class="lineNum">     301 </span>            :     class BitStream {
+<span class="lineNum">     302 </span>            :         protected:
+<span class="lineNum">     303 </span>            :             uint8_t *buffer;
+<span class="lineNum">     304 </span>            :             size_t  size;        ///&lt; Size in bytes
+<span class="lineNum">     305 </span>            :             size_t  position;    ///&lt; Position in bits
+<span class="lineNum">     306 </span>            :             bool    managed;
+<span class="lineNum">     307 </span>            : 
+<span class="lineNum">     308 </span>            :             static constexpr inline uint8_t bitmasks[] = { 255, 128, 192, 224, 240, 248, 252, 254 };
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span>            :             UTILS_TRAITS_ADD_PADDING(uint8_t, 8)
+<span class="lineNum">     311 </span>            : 
+<span class="lineNum">     312 </span>            :         public:
+<span class="lineNum">     313 </span>            :             BitStream(uint8_t *b = nullptr, size_t s = 0, size_t p = 0, bool m = false)
+<span class="lineNum">     314 </span>            :                 : buffer(b), size(s), position(p), managed(m) {}
+<span class="lineNum">     315 </span>            : 
+<span class="lineNum">     316 </span>            :             virtual ~BitStream(void) {
+<span class="lineNum">     317 </span>            :                 if (this-&gt;managed) {
+<span class="lineNum">     318 </span>            :                     utils::memory::delete_array(this-&gt;buffer);
+<span class="lineNum">     319 </span>            :                 }
+<span class="lineNum">     320 </span>            :             }
+<span class="lineNum">     321 </span>            : 
+<span class="lineNum">     322 </span>            :             inline uint8_t* get_buffer(void) {
+<span class="lineNum">     323 </span>            :                 return this-&gt;buffer;
+<span class="lineNum">     324 </span>            :             }
+<span class="lineNum">     325 </span>            : 
+<span class="lineNum">     326 </span>            :             inline const uint8_t* get_buffer() const {
+<span class="lineNum">     327 </span>            :                 return this-&gt;buffer;
+<span class="lineNum">     328 </span>            :             }
+<span class="lineNum">     329 </span>            : 
+<span class="lineNum">     330 </span>            :             inline uint8_t operator[](size_t idx) const {
+<span class="lineNum">     331 </span>            :                 return this-&gt;buffer[idx];
+<span class="lineNum">     332 </span>            :             }
+<span class="lineNum">     333 </span>            : 
+<span class="lineNum">     334 </span>            :             inline size_t get_size(void) const {
+<span class="lineNum">     335 </span>            :                 return this-&gt;size;
+<span class="lineNum">     336 </span>            :             }
+<span class="lineNum">     337 </span>            : 
+<span class="lineNum">     338 </span>            :             inline size_t get_size_bits(void) const {
+<span class="lineNum">     339 </span>            :                 return this-&gt;size * 8u;
+<span class="lineNum">     340 </span>            :             }
+<span class="lineNum">     341 </span>            : 
+<span class="lineNum">     342 </span>            :             inline void set_managed(bool m) {
+<span class="lineNum">     343 </span>            :                 this-&gt;managed = m;
+<span class="lineNum">     344 </span>            :             }
+<span class="lineNum">     345 </span>            : 
+<span class="lineNum">     346 </span>            :             inline void set_position(size_t p) {
+<span class="lineNum">     347 </span>            :                 this-&gt;position = p;
+<span class="lineNum">     348 </span>            :             }
+<span class="lineNum">     349 </span>            : 
+<span class="lineNum">     350 </span>            :             inline size_t get_position(void) const {
+<span class="lineNum">     351 </span>            :                 return this-&gt;position;
+<span class="lineNum">     352 </span>            :             }
+<span class="lineNum">     353 </span>            : 
+<span class="lineNum">     354 </span>            :             inline size_t get_last_byte_position(void) const {
+<span class="lineNum">     355 </span>            :                 return utils::bits::round_to_byte(this-&gt;position);
+<span class="lineNum">     356 </span>            :             }
+<span class="lineNum">     357 </span>            : 
+<span class="lineNum">     358 </span>            :             inline void reset(void) {
+<span class="lineNum">     359 </span>            :                 this-&gt;set_position(0);
 <span class="lineNum">     360 </span>            :             }
 <span class="lineNum">     361 </span>            : 
 <span class="lineNum">     362 </span>            :             /**
-<span class="lineNum">     363 </span>            :              *  @brief  Resize the internal buffer if needed.
-<span class="lineNum">     364 </span>            :              *          Default resize is by 50% increase.
-<span class="lineNum">     365 </span>            :              *  @param  new_size
-<span class="lineNum">     366 </span>            :              *      The new size for the buffer.
-<span class="lineNum">     367 </span>            :              *  @return Returns the size after resizing.
-<span class="lineNum">     368 </span>            :              */
-<span class="lineNum">     369 </span>            :             size_t resize(size_t new_size=0u) {
-<span class="lineNum">     370 </span>            :                 if (this-&gt;managed /*&amp;&amp; this-&gt;malloc*/) {
-<span class="lineNum">     371 </span>            :                     if (new_size == 0) {
-<span class="lineNum">     372 </span>            :                         // Resize by 50%
-<span class="lineNum">     373 </span>            :                         new_size = this-&gt;size + this-&gt;size / 2u;
-<span class="lineNum">     374 </span>            :                     } else if (new_size &lt;= this-&gt;get_size()) {
-<span class="lineNum">     375 </span>            :                         return this-&gt;get_size();
-<span class="lineNum">     376 </span>            :                     }
-<span class="lineNum">     377 </span>            : 
-<span class="lineNum">     378 </span>            :                     utils::memory::realloc_array(this-&gt;buffer, this-&gt;size, new_size);
-<span class="lineNum">     379 </span>            :                 }
-<span class="lineNum">     380 </span>            : 
-<span class="lineNum">     381 </span>            :                 return this-&gt;get_size();
-<span class="lineNum">     382 </span>            :             }
-<span class="lineNum">     383 </span>            :     };
+<span class="lineNum">     363 </span>            :              * Move the bitwise position pointer to the next byte boundary
+<span class="lineNum">     364 </span>            :              */
+<span class="lineNum">     365 </span>            :             virtual inline void flush() {
+<span class="lineNum">     366 </span>            :                 this-&gt;position = this-&gt;get_last_byte_position() * 8u;
+<span class="lineNum">     367 </span>            :             }
+<span class="lineNum">     368 </span>            : 
+<span class="lineNum">     369 </span>            :             /**
+<span class="lineNum">     370 </span>            :              *  @brief  Resize the internal buffer if needed.
+<span class="lineNum">     371 </span>            :              *          Default resize is by 50% increase.
+<span class="lineNum">     372 </span>            :              *  @param  new_size
+<span class="lineNum">     373 </span>            :              *      The new size for the buffer.
+<span class="lineNum">     374 </span>            :              *  @return Returns the size after resizing.
+<span class="lineNum">     375 </span>            :              */
+<span class="lineNum">     376 </span>            :             size_t resize(size_t new_size=0u) {
+<span class="lineNum">     377 </span>            :                 if (this-&gt;managed /*&amp;&amp; this-&gt;malloc*/) {
+<span class="lineNum">     378 </span>            :                     if (new_size == 0) {
+<span class="lineNum">     379 </span>            :                         // Resize by 50%
+<span class="lineNum">     380 </span>            :                         new_size = this-&gt;size + this-&gt;size / 2u;
+<span class="lineNum">     381 </span>            :                     } else if (new_size &lt;= this-&gt;get_size()) {
+<span class="lineNum">     382 </span>            :                         return this-&gt;get_size();
+<span class="lineNum">     383 </span>            :                     }
 <span class="lineNum">     384 </span>            : 
-<span class="lineNum">     385 </span>            :     /**
-<span class="lineNum">     386 </span>            :      * Class which eases reading bitwise from a buffer.
-<span class="lineNum">     387 </span>            :      */
-<span class="lineNum">     388 </span>            :     class BitStreamReader : public BitStream {
-<span class="lineNum">     389 </span>            :         public:
-<span class="lineNum">     390 </span>            :             /**
-<span class="lineNum">     391 </span>            :              * Create a bitstreamreader which reads from the provided buffer.
-<span class="lineNum">     392 </span>            :              *
-<span class="lineNum">     393 </span>            :              * @param [in] buffer The buffer from which bits will be read.
-<span class="lineNum">     394 </span>            :              * @param [in] size The size (expressed in bytes) of the buffer from which bits will be read.
-<span class="lineNum">     395 </span>            :              */
-<span class="lineNum">     396 </span>            :             BitStreamReader(uint8_t *buffer, size_t size)
-<span class="lineNum">     397 </span>            :                 : BitStream(buffer, size, 0, false)
-<span class="lineNum">     398 </span>            :             {
-<span class="lineNum">     399 </span>            :                 // Empty
-<span class="lineNum">     400 </span>            :             }
-<span class="lineNum">     401 </span>            : 
-<span class="lineNum">     402 </span>            :             template &lt;
-<span class="lineNum">     403 </span>            :                 typename Iterator,
-<span class="lineNum">     404 </span>            :                 typename = typename std::enable_if_t&lt;
-<span class="lineNum">     405 </span>            :                         utils::traits::is_iterator_v&lt;Iterator&gt;
-<span class="lineNum">     406 </span>            :                      &amp;&amp; std::is_same_v&lt;uint8_t, typename std::iterator_traits&lt;Iterator&gt;::value_type&gt;&gt;
-<span class="lineNum">     407 </span>            :             &gt;
-<span class="lineNum">     408 </span>            :             BitStreamReader(Iterator start, Iterator end)
-<span class="lineNum">     409 </span>            :                 : BitStream(nullptr, 0, 0, true)
-<span class="lineNum">     410 </span>            :             {
-<span class="lineNum">     411 </span>            :                 this-&gt;resize(size_t(std::distance(start, end)));
-<span class="lineNum">     412 </span>            :                 std::copy(start, end, this-&gt;get_buffer());
-<span class="lineNum">     413 </span>            :             }
-<span class="lineNum">     414 </span>            : 
-<span class="lineNum">     415 </span>            :             template&lt;
-<span class="lineNum">     416 </span>            :                 typename Container,
-<span class="lineNum">     417 </span>            :                 typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;
-<span class="lineNum">     418 </span>            :             &gt;
-<span class="lineNum">     419 </span>            :             BitStreamReader(const Container&amp; cont)
-<span class="lineNum">     420 </span>            :                 : BitStreamReader(std::begin(cont), std::end(cont))
-<span class="lineNum">     421 </span>            :             {
-<span class="lineNum">     422 </span>            :                 // Empty
-<span class="lineNum">     423 </span>            :             }
-<span class="lineNum">     424 </span>            : 
-<span class="lineNum">     425 </span>            :             ~BitStreamReader() {}
-<span class="lineNum">     426 </span>            : 
-<span class="lineNum">     427 </span>            :             /**
-<span class="lineNum">     428 </span>            :              * Read one bit from the bitstream.
-<span class="lineNum">     429 </span>            :              *
-<span class="lineNum">     430 </span>            :              * @return The value of the bit.
-<span class="lineNum">     431 </span>            :              */
-<span class="lineNum">     432 </span>            :             uint8_t get_bit(void) {
-<span class="lineNum">     433 </span>            :                 const size_t current_start_byte = this-&gt;position / 8u;
-<span class="lineNum">     434 </span>            : 
-<span class="lineNum">     435 </span>            :                 if (current_start_byte &gt;= this-&gt;get_size()) {
-<span class="lineNum">     436 </span>            :                     // Prevent reading byte outside of array (-&gt; Valgrind flagged)
-<span class="lineNum">     437 </span>            :                     return 0u;
-<span class="lineNum">     438 </span>            :                 }
-<span class="lineNum">     439 </span>            : 
-<span class="lineNum">     440 </span>            :                 const size_t  bits_taken = this-&gt;position % 8;
-<span class="lineNum">     441 </span>            :                 const uint8_t value      = this-&gt;buffer[current_start_byte];
-<span class="lineNum">     442 </span>            : 
-<span class="lineNum">     443 </span>            :                 this-&gt;position++;
-<span class="lineNum">     444 </span>            : 
-<span class="lineNum">     445 </span>            :                 return (value &amp; (1 &lt;&lt; (7 - bits_taken))) != 0;
-<span class="lineNum">     446 </span>            :             }
-<span class="lineNum">     447 </span>            : 
-<span class="lineNum">     448 </span>            :             /**
-<span class="lineNum">     449 </span>            :              * Get l bits from the bitstream
-<span class="lineNum">     450 </span>            :              *
-<span class="lineNum">     451 </span>            :              * @param [in] l number of bits to read
-<span class="lineNum">     452 </span>            :              * @return The value of the bits read
-<span class="lineNum">     453 </span>            :              *
-<span class="lineNum">     454 </span>            :              * buffer: 0101 1100, position==0
-<span class="lineNum">     455 </span>            :              * get(4) returns value 5, position==4
-<span class="lineNum">     456 </span>            :              */
-<span class="lineNum">     457 </span>            :             uint32_t get(size_t l) {
-<span class="lineNum">     458 </span>            :                 uint32_t value = 0;
-<span class="lineNum">     459 </span>            : 
-<span class="lineNum">     460 </span>            :                 for (size_t i = 0; i &lt; l; i++) {
-<span class="lineNum">     461 </span>            :                     const uint32_t v = this-&gt;get_bit();
-<span class="lineNum">     462 </span>            :                     value |= v &lt;&lt; (l - i - 1);
-<span class="lineNum">     463 </span>            :                 }
-<span class="lineNum">     464 </span>            : 
-<span class="lineNum">     465 </span>            :                 return value;
-<span class="lineNum">     466 </span>            :             }
-<span class="lineNum">     467 </span>            : 
-<span class="lineNum">     468 </span>            :             /**
-<span class="lineNum">     469 </span>            :              * @brief from_file
-<span class="lineNum">     470 </span>            :              * @param filename
-<span class="lineNum">     471 </span>            :              * @return
-<span class="lineNum">     472 </span>            :              */
-<span class="lineNum">     473 </span>            :             static auto from_file(const std::string&amp; filename) {
-<span class="lineNum">     474 </span>            :                 utils::memory::unique_t&lt;BitStreamReader&gt; reader;
-<span class="lineNum">     475 </span>            : 
-<span class="lineNum">     476 </span>            :                 try {
-<span class="lineNum">     477 </span>            :                     auto invec = utils::io::file_to_bytes(filename);
-<span class="lineNum">     478 </span>            :                     reader.reset(utils::memory::new_var&lt;BitStreamReader&gt;(*invec));
-<span class="lineNum">     479 </span>            :                 } catch (utils::exceptions::FileReadException const&amp; e) {
-<span class="lineNum">     480 </span>            :                     reader.reset(nullptr);
-<span class="lineNum">     481 </span>            :                     throw e;
-<span class="lineNum">     482 </span>            :                 }
-<span class="lineNum">     483 </span>            : 
-<span class="lineNum">     484 </span>            :                 return reader;
-<span class="lineNum">     485 </span>            :             }
-<span class="lineNum">     486 </span>            :     };
-<span class="lineNum">     487 </span>            : 
-<span class="lineNum">     488 </span>            :     /**
-<span class="lineNum">     489 </span>            :      * Class which eases writing bitwise into a buffer.
-<span class="lineNum">     490 </span>            :      */
-<span class="lineNum">     491 </span>            :     class BitStreamWriter : public BitStream {
-<span class="lineNum">     492 </span>            :         public:
-<span class="lineNum">     493 </span>            :             /**
-<span class="lineNum">     494 </span>            :              * Create a bitstreamwriter which writes into the provided buffer.
-<span class="lineNum">     495 </span>            :              *
-<span class="lineNum">     496 </span>            :              * @param [in] buffer The buffer into which bits will be written.
-<span class="lineNum">     497 </span>            :              * @param [in] size The size (expressed in bytes) of the buffer into which bits will be written.
-<span class="lineNum">     498 </span>            :              */
-<span class="lineNum">     499 </span>            :             BitStreamWriter(uint8_t *buffer, size_t size)
-<span class="lineNum">     500 </span>            :                 : BitStream(buffer, size, 0, false)
-<span class="lineNum">     501 </span>            :             {
-<span class="lineNum">     502 </span>            :                 // Empty
-<span class="lineNum">     503 </span>            :             }
-<span class="lineNum">     504 </span>            : 
-<span class="lineNum">     505 </span>            :             /**
-<span class="lineNum">     506 </span>            :              * Create a bitstreamwriter and allocate a buffer for it.
-<span class="lineNum">     507 </span>            :              *
-<span class="lineNum">     508 </span>            :              * @param [in] size The size (expressed in bytes) of the buffer into which bits will be written.
-<span class="lineNum">     509 </span>            :              */
-<span class="lineNum">     510 </span>            :             BitStreamWriter(size_t s)
-<span class="lineNum">     511 </span>            :                 : BitStream(utils::memory::new_array&lt;uint8_t&gt;(s), s, 0, true)
-<span class="lineNum">     512 </span>            :             {
-<span class="lineNum">     513 </span>            :                 // Empty
-<span class="lineNum">     514 </span>            :             }
-<span class="lineNum">     515 </span>            : 
-<span class="lineNum">     516 </span>            :             ~BitStreamWriter() {}
-<span class="lineNum">     517 </span>            : 
-<span class="lineNum">     518 </span>            :             /**
-<span class="lineNum">     519 </span>            :              * Write one bit into the bitstream.
-<span class="lineNum">     520 </span>            :              * @param [in] value The value to put into the bitstream.
-<span class="lineNum">     521 </span>            :              */
-<span class="lineNum">     522 </span>            :             void put_bit(int8_t value) {
-<span class="lineNum">     523 </span>            :                 const size_t current_start_byte = this-&gt;position / 8u;
-<span class="lineNum">     524 </span>            :                 const size_t bits_taken = this-&gt;position % 8;
-<span class="lineNum">     525 </span>            : 
-<span class="lineNum">     526 </span>            :                 if (value) {
-<span class="lineNum">     527 </span>            :                     this-&gt;buffer[current_start_byte] |= 1 &lt;&lt; (7 - bits_taken);
-<span class="lineNum">     528 </span>            :                 } else {
-<span class="lineNum">     529 </span>            :                     this-&gt;buffer[current_start_byte] &amp;= ~(1 &lt;&lt; (7 - bits_taken));
-<span class="lineNum">     530 </span>            :                 }
-<span class="lineNum">     531 </span>            : 
-<span class="lineNum">     532 </span>            :                 this-&gt;position++;
-<span class="lineNum">     533 </span>            :             }
-<span class="lineNum">     534 </span>            : 
-<span class="lineNum">     535 </span>            :             /**
-<span class="lineNum">     536 </span>            :              * Put 'length' bits with value 'value' into the bitstream
-<span class="lineNum">     537 </span>            :              *
-<span class="lineNum">     538 </span>            :              * @param [in] length Number of bits to use for storing the value
-<span class="lineNum">     539 </span>            :              * @param [in] value The value to store
-<span class="lineNum">     540 </span>            :              *
-<span class="lineNum">     541 </span>            :              * buffer: xxxx xxxx, position==0
-<span class="lineNum">     542 </span>            :              * put(4, 5)
-<span class="lineNum">     543 </span>            :              * buffer: 1010 xxxx, position==4
-<span class="lineNum">     544 </span>            :              */
-<span class="lineNum">     545 </span>            :             void put(size_t length, uint32_t value) {
-<span class="lineNum">     546 </span>            :                 for (size_t p = 0; p &lt; length; p++) {
-<span class="lineNum">     547 </span>            :                     put_bit(1 &amp; (value &gt;&gt; (length - 1 - p)));
-<span class="lineNum">     548 </span>            :                 }
-<span class="lineNum">     549 </span>            :             }
-<span class="lineNum">     550 </span>            : 
-<span class="lineNum">     551 </span>            :             /**
-<span class="lineNum">     552 </span>            :              * Byte-align: Move the bitwise position pointer to the next byte boundary
-<span class="lineNum">     553 </span>            :              */
-<span class="lineNum">     554 </span>            :             void flush(void) {
-<span class="lineNum">     555 </span>            :                 // Only keep written bits in current byte, make rest 0
-<span class="lineNum">     556 </span>            :                 this-&gt;buffer[this-&gt;position / 8] &amp;= BitStream::bitmasks[this-&gt;position % 8];
+<span class="lineNum">     385 </span>            :                     utils::memory::realloc_array(this-&gt;buffer, this-&gt;size, new_size);
+<span class="lineNum">     386 </span>            :                 }
+<span class="lineNum">     387 </span>            : 
+<span class="lineNum">     388 </span>            :                 return this-&gt;get_size();
+<span class="lineNum">     389 </span>            :             }
+<span class="lineNum">     390 </span>            :     };
+<span class="lineNum">     391 </span>            : 
+<span class="lineNum">     392 </span>            :     /**
+<span class="lineNum">     393 </span>            :      * Class which eases reading bitwise from a buffer.
+<span class="lineNum">     394 </span>            :      */
+<span class="lineNum">     395 </span>            :     class BitStreamReader : public BitStream {
+<span class="lineNum">     396 </span>            :         public:
+<span class="lineNum">     397 </span>            :             /**
+<span class="lineNum">     398 </span>            :              * Create a bitstreamreader which reads from the provided buffer.
+<span class="lineNum">     399 </span>            :              *
+<span class="lineNum">     400 </span>            :              * @param [in] buffer The buffer from which bits will be read.
+<span class="lineNum">     401 </span>            :              * @param [in] size The size (expressed in bytes) of the buffer from which bits will be read.
+<span class="lineNum">     402 </span>            :              */
+<span class="lineNum">     403 </span>            :             BitStreamReader(uint8_t *buffer, size_t size)
+<span class="lineNum">     404 </span>            :                 : BitStream(buffer, size, 0, false)
+<span class="lineNum">     405 </span>            :             {
+<span class="lineNum">     406 </span>            :                 // Empty
+<span class="lineNum">     407 </span>            :             }
+<span class="lineNum">     408 </span>            : 
+<span class="lineNum">     409 </span>            :             template &lt;
+<span class="lineNum">     410 </span>            :                 typename Iterator,
+<span class="lineNum">     411 </span>            :                 typename = typename std::enable_if_t&lt;
+<span class="lineNum">     412 </span>            :                         utils::traits::is_iterator_v&lt;Iterator&gt;
+<span class="lineNum">     413 </span>            :                      &amp;&amp; std::is_same_v&lt;uint8_t, typename std::iterator_traits&lt;Iterator&gt;::value_type&gt;&gt;
+<span class="lineNum">     414 </span>            :             &gt;
+<span class="lineNum">     415 </span>            :             BitStreamReader(Iterator start, Iterator end)
+<span class="lineNum">     416 </span>            :                 : BitStream(nullptr, 0, 0, true)
+<span class="lineNum">     417 </span>            :             {
+<span class="lineNum">     418 </span>            :                 this-&gt;resize(size_t(std::distance(start, end)));
+<span class="lineNum">     419 </span>            :                 std::copy(start, end, this-&gt;get_buffer());
+<span class="lineNum">     420 </span>            :             }
+<span class="lineNum">     421 </span>            : 
+<span class="lineNum">     422 </span>            :             template&lt;
+<span class="lineNum">     423 </span>            :                 typename Container,
+<span class="lineNum">     424 </span>            :                 typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;
+<span class="lineNum">     425 </span>            :             &gt;
+<span class="lineNum">     426 </span>            :             BitStreamReader(const Container&amp; cont)
+<span class="lineNum">     427 </span>            :                 : BitStreamReader(std::begin(cont), std::end(cont))
+<span class="lineNum">     428 </span>            :             {
+<span class="lineNum">     429 </span>            :                 // Empty
+<span class="lineNum">     430 </span>            :             }
+<span class="lineNum">     431 </span>            : 
+<span class="lineNum">     432 </span>            :             ~BitStreamReader() {}
+<span class="lineNum">     433 </span>            : 
+<span class="lineNum">     434 </span>            :             /**
+<span class="lineNum">     435 </span>            :              * Read one bit from the bitstream.
+<span class="lineNum">     436 </span>            :              *
+<span class="lineNum">     437 </span>            :              * @return The value of the bit.
+<span class="lineNum">     438 </span>            :              */
+<span class="lineNum">     439 </span>            :             uint8_t get_bit(void) {
+<span class="lineNum">     440 </span>            :                 const size_t current_start_byte = this-&gt;position / 8u;
+<span class="lineNum">     441 </span>            : 
+<span class="lineNum">     442 </span>            :                 if (current_start_byte &gt;= this-&gt;get_size()) {
+<span class="lineNum">     443 </span>            :                     // Prevent reading byte outside of array (-&gt; Valgrind flagged)
+<span class="lineNum">     444 </span>            :                     return 0u;
+<span class="lineNum">     445 </span>            :                 }
+<span class="lineNum">     446 </span>            : 
+<span class="lineNum">     447 </span>            :                 const size_t  bits_taken = this-&gt;position % 8;
+<span class="lineNum">     448 </span>            :                 const uint8_t value      = this-&gt;buffer[current_start_byte];
+<span class="lineNum">     449 </span>            : 
+<span class="lineNum">     450 </span>            :                 this-&gt;position++;
+<span class="lineNum">     451 </span>            : 
+<span class="lineNum">     452 </span>            :                 return (value &amp; (1 &lt;&lt; (7 - bits_taken))) != 0;
+<span class="lineNum">     453 </span>            :             }
+<span class="lineNum">     454 </span>            : 
+<span class="lineNum">     455 </span>            :             /**
+<span class="lineNum">     456 </span>            :              * Get l bits from the bitstream
+<span class="lineNum">     457 </span>            :              *
+<span class="lineNum">     458 </span>            :              * @param [in] l number of bits to read
+<span class="lineNum">     459 </span>            :              * @return The value of the bits read
+<span class="lineNum">     460 </span>            :              *
+<span class="lineNum">     461 </span>            :              * buffer: 0101 1100, position==0
+<span class="lineNum">     462 </span>            :              * get(4) returns value 5, position==4
+<span class="lineNum">     463 </span>            :              */
+<span class="lineNum">     464 </span>            :             uint32_t get(size_t l) {
+<span class="lineNum">     465 </span>            :                 uint32_t value = 0;
+<span class="lineNum">     466 </span>            : 
+<span class="lineNum">     467 </span>            :                 for (size_t i = 0; i &lt; l; i++) {
+<span class="lineNum">     468 </span>            :                     const uint32_t v = this-&gt;get_bit();
+<span class="lineNum">     469 </span>            :                     value |= v &lt;&lt; (l - i - 1);
+<span class="lineNum">     470 </span>            :                 }
+<span class="lineNum">     471 </span>            : 
+<span class="lineNum">     472 </span>            :                 return value;
+<span class="lineNum">     473 </span>            :             }
+<span class="lineNum">     474 </span>            : 
+<span class="lineNum">     475 </span>            :             /**
+<span class="lineNum">     476 </span>            :              * @brief from_file
+<span class="lineNum">     477 </span>            :              * @param filename
+<span class="lineNum">     478 </span>            :              * @return
+<span class="lineNum">     479 </span>            :              */
+<span class="lineNum">     480 </span>            :             static auto from_file(const std::string&amp; filename) {
+<span class="lineNum">     481 </span>            :                 utils::memory::unique_t&lt;BitStreamReader&gt; reader;
+<span class="lineNum">     482 </span>            : 
+<span class="lineNum">     483 </span>            :                 try {
+<span class="lineNum">     484 </span>            :                     auto invec = utils::io::file_to_bytes(filename);
+<span class="lineNum">     485 </span>            :                     reader.reset(utils::memory::new_var&lt;BitStreamReader&gt;(*invec));
+<span class="lineNum">     486 </span>            :                 } catch (utils::exceptions::FileReadException const&amp; e) {
+<span class="lineNum">     487 </span>            :                     reader.reset(nullptr);
+<span class="lineNum">     488 </span>            :                     throw e;
+<span class="lineNum">     489 </span>            :                 }
+<span class="lineNum">     490 </span>            : 
+<span class="lineNum">     491 </span>            :                 return reader;
+<span class="lineNum">     492 </span>            :             }
+<span class="lineNum">     493 </span>            :     };
+<span class="lineNum">     494 </span>            : 
+<span class="lineNum">     495 </span>            :     /**
+<span class="lineNum">     496 </span>            :      * Class which eases writing bitwise into a buffer.
+<span class="lineNum">     497 </span>            :      */
+<span class="lineNum">     498 </span>            :     class BitStreamWriter : public BitStream {
+<span class="lineNum">     499 </span>            :         public:
+<span class="lineNum">     500 </span>            :             /**
+<span class="lineNum">     501 </span>            :              * Create a bitstreamwriter which writes into the provided buffer.
+<span class="lineNum">     502 </span>            :              *
+<span class="lineNum">     503 </span>            :              * @param [in] buffer The buffer into which bits will be written.
+<span class="lineNum">     504 </span>            :              * @param [in] size The size (expressed in bytes) of the buffer into which bits will be written.
+<span class="lineNum">     505 </span>            :              */
+<span class="lineNum">     506 </span>            :             BitStreamWriter(uint8_t *buffer, size_t size)
+<span class="lineNum">     507 </span>            :                 : BitStream(buffer, size, 0, false)
+<span class="lineNum">     508 </span>            :             {
+<span class="lineNum">     509 </span>            :                 // Empty
+<span class="lineNum">     510 </span>            :             }
+<span class="lineNum">     511 </span>            : 
+<span class="lineNum">     512 </span>            :             /**
+<span class="lineNum">     513 </span>            :              * Create a bitstreamwriter and allocate a buffer for it.
+<span class="lineNum">     514 </span>            :              *
+<span class="lineNum">     515 </span>            :              * @param [in] size The size (expressed in bytes) of the buffer into which bits will be written.
+<span class="lineNum">     516 </span>            :              */
+<span class="lineNum">     517 </span>            :             BitStreamWriter(size_t s)
+<span class="lineNum">     518 </span>            :                 : BitStream(utils::memory::new_array&lt;uint8_t&gt;(s), s, 0, true)
+<span class="lineNum">     519 </span>            :             {
+<span class="lineNum">     520 </span>            :                 // Empty
+<span class="lineNum">     521 </span>            :             }
+<span class="lineNum">     522 </span>            : 
+<span class="lineNum">     523 </span>            :             ~BitStreamWriter() {}
+<span class="lineNum">     524 </span>            : 
+<span class="lineNum">     525 </span>            :             /**
+<span class="lineNum">     526 </span>            :              * Write one bit into the bitstream.
+<span class="lineNum">     527 </span>            :              * @param [in] value The value to put into the bitstream.
+<span class="lineNum">     528 </span>            :              */
+<span class="lineNum">     529 </span>            :             void put_bit(int8_t value) {
+<span class="lineNum">     530 </span>            :                 const size_t current_start_byte = this-&gt;position / 8u;
+<span class="lineNum">     531 </span>            :                 const size_t bits_taken = this-&gt;position % 8;
+<span class="lineNum">     532 </span>            : 
+<span class="lineNum">     533 </span>            :                 if (value) {
+<span class="lineNum">     534 </span>            :                     this-&gt;buffer[current_start_byte] |= 1 &lt;&lt; (7 - bits_taken);
+<span class="lineNum">     535 </span>            :                 } else {
+<span class="lineNum">     536 </span>            :                     this-&gt;buffer[current_start_byte] &amp;= ~(1 &lt;&lt; (7 - bits_taken));
+<span class="lineNum">     537 </span>            :                 }
+<span class="lineNum">     538 </span>            : 
+<span class="lineNum">     539 </span>            :                 this-&gt;position++;
+<span class="lineNum">     540 </span>            :             }
+<span class="lineNum">     541 </span>            : 
+<span class="lineNum">     542 </span>            :             /**
+<span class="lineNum">     543 </span>            :              * Put 'length' bits with value 'value' into the bitstream
+<span class="lineNum">     544 </span>            :              *
+<span class="lineNum">     545 </span>            :              * @param [in] length Number of bits to use for storing the value
+<span class="lineNum">     546 </span>            :              * @param [in] value The value to store
+<span class="lineNum">     547 </span>            :              *
+<span class="lineNum">     548 </span>            :              * buffer: xxxx xxxx, position==0
+<span class="lineNum">     549 </span>            :              * put(4, 5)
+<span class="lineNum">     550 </span>            :              * buffer: 1010 xxxx, position==4
+<span class="lineNum">     551 </span>            :              */
+<span class="lineNum">     552 </span>            :             void put(size_t length, uint32_t value) {
+<span class="lineNum">     553 </span>            :                 for (size_t p = 0; p &lt; length; p++) {
+<span class="lineNum">     554 </span>            :                     put_bit(1 &amp; (value &gt;&gt; (length - 1 - p)));
+<span class="lineNum">     555 </span>            :                 }
+<span class="lineNum">     556 </span>            :             }
 <span class="lineNum">     557 </span>            : 
-<span class="lineNum">     558 </span>            :                 BitStream::flush();
-<span class="lineNum">     559 </span>            :             }
-<span class="lineNum">     560 </span>            : 
-<span class="lineNum">     561 </span>            :             void write_to_file(const std::string &amp;filename) {
-<span class="lineNum">     562 </span>            :                 utils::io::bytes_to_file(filename,
-<span class="lineNum">     563 </span>            :                                          this-&gt;get_buffer(),
-<span class="lineNum">     564 </span>            :                                          this-&gt;get_last_byte_position());
-<span class="lineNum">     565 </span>            :             }
-<span class="lineNum">     566 </span>            :     };
-<span class="lineNum">     567 </span>            : }
-<span class="lineNum">     568 </span>            : 
-<span class="lineNum">     569 </span>            : #endif // UTILS_IO_HPP
+<span class="lineNum">     558 </span>            :             /**
+<span class="lineNum">     559 </span>            :              * Byte-align: Move the bitwise position pointer to the next byte boundary
+<span class="lineNum">     560 </span>            :              */
+<span class="lineNum">     561 </span>            :             void flush(void) {
+<span class="lineNum">     562 </span>            :                 // Only keep written bits in current byte, make rest 0
+<span class="lineNum">     563 </span>            :                 this-&gt;buffer[this-&gt;position / 8] &amp;= BitStream::bitmasks[this-&gt;position % 8];
+<span class="lineNum">     564 </span>            : 
+<span class="lineNum">     565 </span>            :                 BitStream::flush();
+<span class="lineNum">     566 </span>            :             }
+<span class="lineNum">     567 </span>            : 
+<span class="lineNum">     568 </span>            :             void write_to_file(const std::string &amp;filename) {
+<span class="lineNum">     569 </span>            :                 utils::io::bytes_to_file(filename,
+<span class="lineNum">     570 </span>            :                                          this-&gt;get_buffer(),
+<span class="lineNum">     571 </span>            :                                          this-&gt;get_last_byte_position());
+<span class="lineNum">     572 </span>            :             }
+<span class="lineNum">     573 </span>            :     };
+<span class="lineNum">     574 </span>            : }
+<span class="lineNum">     575 </span>            : 
+<span class="lineNum">     576 </span>            : #endif // UTILS_IO_HPP
 </pre>
       </td>
     </tr>

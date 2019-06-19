@@ -1,5 +1,6 @@
 var classutils_1_1algo_1_1_huffman =
 [
+    [ "KeyPair", "classutils_1_1algo_1_1_huffman.html#a6fa37f9be7ff9a5576f29ad43ee27122", null ],
     [ "Huffman", "classutils_1_1algo_1_1_huffman.html#addd4cf15b5f7f736607233c52133c111", null ],
     [ "~Huffman", "classutils_1_1algo_1_1_huffman.html#a606958997f22d2dd49fcd4ccc9aa556a", null ],
     [ "decode", "classutils_1_1algo_1_1_huffman.html#abd42564338ad202cc673bf608a8c336f", null ],

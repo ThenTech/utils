@@ -18,7 +18,7 @@ var dir_ffc023cc0a1f906930dedc5d64054ec4 =
       [ "KeyDoesNotExistException", "classutils_1_1exceptions_1_1_key_does_not_exist_exception.html", "classutils_1_1exceptions_1_1_key_does_not_exist_exception" ]
     ] ],
     [ "utils_ini.hpp", "utils__ini_8hpp.html", [
-      [ "Delimiters", "structutils_1_1ini_1_1_delimiters.html", "structutils_1_1ini_1_1_delimiters" ],
+      [ "delimiters", "structutils_1_1ini_1_1delimiters.html", "structutils_1_1ini_1_1delimiters" ],
       [ "ConfigReader", "classutils_1_1ini_1_1_config_reader.html", "classutils_1_1ini_1_1_config_reader" ]
     ] ],
     [ "utils_io.hpp", "utils__io_8hpp.html", "utils__io_8hpp" ],

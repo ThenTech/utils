@@ -1,0 +1,4 @@
+<map id="utils::string::basic_string_view&lt; _CharT, _Traits &gt;" name="utils::string::basic_string_view&lt; _CharT, _Traits &gt;">
+<area shape="rect" id="node1" title="Struct to wrap a char in a std::string_view, and act as a string_view in all other cases." alt="" coords="5,95,155,151"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,155,47"/>
+</map>

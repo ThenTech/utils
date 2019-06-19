@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.40.0-beta</span>
+   &#160;<span id="projectnumber">0.42.0-beta</span>
    </div>
   </td>
  </tr>
@@ -65,6 +65,8 @@ $(document).ready(function(){initNavTree('namespaceutils_1_1string.html','');});
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -72,26 +74,33 @@ $(document).ready(function(){initNavTree('namespaceutils_1_1string.html','');});
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct to wrap a char in a std::string_view, and act as a string_view in all other cases.  <a href="structutils_1_1string_1_1basic__string__view.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a217f0ba0b7fab7769b818441a0fd8ef3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">string_view</a> = <a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a>&lt; char &gt;</td></tr>
+<tr class="separator:a217f0ba0b7fab7769b818441a0fd8ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab70f236a9673ec708f6651b57f04776e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ab70f236a9673ec708f6651b57f04776e">wstring_view</a> = <a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a>&lt; wchar_t &gt;</td></tr>
+<tr class="separator:ab70f236a9673ec708f6651b57f04776e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1a2eabe1037d997a8aeb6e0302aa92f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a1a2eabe1037d997a8aeb6e0302aa92f7">contains</a> (const std::string_view &amp;str, const char ch, const size_t start=0)</td></tr>
-<tr class="memdesc:a1a2eabe1037d997a8aeb6e0302aa92f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the given string <code>str</code> contains the given char <code>ch</code>.  <a href="#a1a2eabe1037d997a8aeb6e0302aa92f7">More...</a><br /></td></tr>
-<tr class="separator:a1a2eabe1037d997a8aeb6e0302aa92f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9356b607329c236ebb5de472e785ca1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a9356b607329c236ebb5de472e785ca1d">contains</a> (const std::string_view &amp;str, const std::string_view &amp;part, const size_t start=0)</td></tr>
-<tr class="memdesc:a9356b607329c236ebb5de472e785ca1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the given string <code>str</code> contains the other string <code>part</code>.  <a href="#a9356b607329c236ebb5de472e785ca1d">More...</a><br /></td></tr>
-<tr class="separator:a9356b607329c236ebb5de472e785ca1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac080667a6c44572286064f83b7a96c64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ac080667a6c44572286064f83b7a96c64">starts_with</a> (const std::string_view &amp;str, const char ch)</td></tr>
-<tr class="memdesc:ac080667a6c44572286064f83b7a96c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>str</code> starts with the given char.  <a href="#ac080667a6c44572286064f83b7a96c64">More...</a><br /></td></tr>
-<tr class="separator:ac080667a6c44572286064f83b7a96c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34cf44b51cdcd74af863790193043c4f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a34cf44b51cdcd74af863790193043c4f">starts_with</a> (const std::string_view &amp;str, const std::string_view &amp;start)</td></tr>
-<tr class="memdesc:a34cf44b51cdcd74af863790193043c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>str</code> starts with the given string.  <a href="#a34cf44b51cdcd74af863790193043c4f">More...</a><br /></td></tr>
-<tr class="separator:a34cf44b51cdcd74af863790193043c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac98b21760142c3183f3736e729f5d6b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ac98b21760142c3183f3736e729f5d6b9">ends_with</a> (const std::string_view &amp;str, const char ch)</td></tr>
-<tr class="memdesc:ac98b21760142c3183f3736e729f5d6b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>str</code> ends with the given char.  <a href="#ac98b21760142c3183f3736e729f5d6b9">More...</a><br /></td></tr>
-<tr class="separator:ac98b21760142c3183f3736e729f5d6b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3267a5ab88911862ff562139d8b2aee1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a3267a5ab88911862ff562139d8b2aee1">ends_with</a> (const std::string_view &amp;str, const std::string_view &amp;end)</td></tr>
-<tr class="memdesc:a3267a5ab88911862ff562139d8b2aee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>str</code> ends with the given string.  <a href="#a3267a5ab88911862ff562139d8b2aee1">More...</a><br /></td></tr>
-<tr class="separator:a3267a5ab88911862ff562139d8b2aee1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54694fbc8ba09832b3124d1a8dad37c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a54694fbc8ba09832b3124d1a8dad37c4">contains</a> (const std::string_view &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;part, const size_t start=0)</td></tr>
+<tr class="memdesc:a54694fbc8ba09832b3124d1a8dad37c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the given string <code>str</code> contains the other string <code>part</code>.  <a href="#a54694fbc8ba09832b3124d1a8dad37c4">More...</a><br /></td></tr>
+<tr class="separator:a54694fbc8ba09832b3124d1a8dad37c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68b4b7f6ebabdbe29204a92b4e75b9cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a68b4b7f6ebabdbe29204a92b4e75b9cc">rcontains</a> (const std::string_view &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;part, const size_t start=std::string_view::npos)</td></tr>
+<tr class="memdesc:a68b4b7f6ebabdbe29204a92b4e75b9cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test if the given string <code>str</code> contains the other string <code>part</code>.  <a href="#a68b4b7f6ebabdbe29204a92b4e75b9cc">More...</a><br /></td></tr>
+<tr class="separator:a68b4b7f6ebabdbe29204a92b4e75b9cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4dfbb9e3ef10a5d59efed058ad81f14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#aa4dfbb9e3ef10a5d59efed058ad81f14">starts_with</a> (const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;start)</td></tr>
+<tr class="memdesc:aa4dfbb9e3ef10a5d59efed058ad81f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>str</code> starts with the given string.  <a href="#aa4dfbb9e3ef10a5d59efed058ad81f14">More...</a><br /></td></tr>
+<tr class="separator:aa4dfbb9e3ef10a5d59efed058ad81f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83b99122502e4e773993f38b17f908db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a83b99122502e4e773993f38b17f908db">ends_with</a> (const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;end)</td></tr>
+<tr class="memdesc:a83b99122502e4e773993f38b17f908db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>str</code> ends with the given string.  <a href="#a83b99122502e4e773993f38b17f908db">More...</a><br /></td></tr>
+<tr class="separator:a83b99122502e4e773993f38b17f908db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13554c6a4f45ef6715a99202c80b71f1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a13554c6a4f45ef6715a99202c80b71f1">ltrim</a> (std::string &amp;s)</td></tr>
 <tr class="memdesc:a13554c6a4f45ef6715a99202c80b71f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trim whitespace from the start of the given string (in-place).  <a href="#a13554c6a4f45ef6715a99202c80b71f1">More...</a><br /></td></tr>
 <tr class="separator:a13554c6a4f45ef6715a99202c80b71f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -104,18 +113,18 @@ Functions</h2></td></tr>
 <tr class="memitem:aa4c9871077c2c1dd6f134ec61003e874"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#aa4c9871077c2c1dd6f134ec61003e874">trimmed</a> (std::string s)</td></tr>
 <tr class="memdesc:aa4c9871077c2c1dd6f134ec61003e874"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trim whitespace from both start and end of the given string (copy).  <a href="#aa4c9871077c2c1dd6f134ec61003e874">More...</a><br /></td></tr>
 <tr class="separator:aa4c9871077c2c1dd6f134ec61003e874"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad170ea7d4a2985a45530d0b842dcb69b"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ad170ea7d4a2985a45530d0b842dcb69b">erase_from</a> (std::string &amp;str, const std::string_view &amp;erasefrom)</td></tr>
-<tr class="memdesc:ad170ea7d4a2985a45530d0b842dcb69b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from <code>erasefrom</code> (inclusive; in place).  <a href="#ad170ea7d4a2985a45530d0b842dcb69b">More...</a><br /></td></tr>
-<tr class="separator:ad170ea7d4a2985a45530d0b842dcb69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a397cc1695befa54018f950c3fc626395"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a397cc1695befa54018f950c3fc626395">erase_to</a> (std::string &amp;str, const std::string_view &amp;eraseto)</td></tr>
-<tr class="memdesc:a397cc1695befa54018f950c3fc626395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from the beginning of the string to <code>eraseto</code> (exclusive; in place).  <a href="#a397cc1695befa54018f950c3fc626395">More...</a><br /></td></tr>
-<tr class="separator:a397cc1695befa54018f950c3fc626395"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47cf28acc36344306a10177d2ac2147d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a47cf28acc36344306a10177d2ac2147d">erased_from</a> (std::string str, const std::string_view &amp;erasefrom)</td></tr>
-<tr class="memdesc:a47cf28acc36344306a10177d2ac2147d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from <code>erasefrom</code> (inclusive; copy).  <a href="#a47cf28acc36344306a10177d2ac2147d">More...</a><br /></td></tr>
-<tr class="separator:a47cf28acc36344306a10177d2ac2147d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73db7bb8204a3213720b088c56e038f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a73db7bb8204a3213720b088c56e038f6">erased_to</a> (std::string str, const std::string_view &amp;eraseto)</td></tr>
-<tr class="memdesc:a73db7bb8204a3213720b088c56e038f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from the beginning of the string to <code>eraseto</code> (exclusive; copy).  <a href="#a73db7bb8204a3213720b088c56e038f6">More...</a><br /></td></tr>
-<tr class="separator:a73db7bb8204a3213720b088c56e038f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a7e4e873b6b945c837ac58717e0d3fa"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a2a7e4e873b6b945c837ac58717e0d3fa">erase_from</a> (std::string &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;erasefrom)</td></tr>
+<tr class="memdesc:a2a7e4e873b6b945c837ac58717e0d3fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from <code>erasefrom</code> (inclusive; in place).  <a href="#a2a7e4e873b6b945c837ac58717e0d3fa">More...</a><br /></td></tr>
+<tr class="separator:a2a7e4e873b6b945c837ac58717e0d3fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a362a696296c8da159dc00a232b9d4971"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a362a696296c8da159dc00a232b9d4971">erase_to</a> (std::string &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;eraseto)</td></tr>
+<tr class="memdesc:a362a696296c8da159dc00a232b9d4971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from the beginning of the string to <code>eraseto</code> (exclusive; in place).  <a href="#a362a696296c8da159dc00a232b9d4971">More...</a><br /></td></tr>
+<tr class="separator:a362a696296c8da159dc00a232b9d4971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54f5fc75fb7bbaf018b729d23f08faa3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a54f5fc75fb7bbaf018b729d23f08faa3">erased_from</a> (std::string str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;erasefrom)</td></tr>
+<tr class="memdesc:a54f5fc75fb7bbaf018b729d23f08faa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from <code>erasefrom</code> (inclusive; copy).  <a href="#a54f5fc75fb7bbaf018b729d23f08faa3">More...</a><br /></td></tr>
+<tr class="separator:a54f5fc75fb7bbaf018b729d23f08faa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab73564f19677a342e877613f0e75c3c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ab73564f19677a342e877613f0e75c3c2">erased_to</a> (std::string str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;eraseto)</td></tr>
+<tr class="memdesc:ab73564f19677a342e877613f0e75c3c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase everything starting from the beginning of the string to <code>eraseto</code> (exclusive; copy).  <a href="#ab73564f19677a342e877613f0e75c3c2">More...</a><br /></td></tr>
+<tr class="separator:ab73564f19677a342e877613f0e75c3c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1829dfa7607271f8bec6f3b2d22de1d9"><td class="memTemplParams" colspan="2">template&lt;typename CharT &gt; </td></tr>
 <tr class="memitem:a1829dfa7607271f8bec6f3b2d22de1d9"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a1829dfa7607271f8bec6f3b2d22de1d9">to_upper</a> (std::basic_string&lt; CharT &gt; &amp;str)</td></tr>
 <tr class="memdesc:a1829dfa7607271f8bec6f3b2d22de1d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform the string contents to uppercase (within the current locale) (in-place).  <a href="#a1829dfa7607271f8bec6f3b2d22de1d9">More...</a><br /></td></tr>
@@ -135,43 +144,40 @@ Functions</h2></td></tr>
 <tr class="memitem:adab39e685756b5170366b61f19a3b259"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#adab39e685756b5170366b61f19a3b259">erase_consecutive</a> (std::string &amp;str, const char ch)</td></tr>
 <tr class="memdesc:adab39e685756b5170366b61f19a3b259"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase all consecutive occurrences of the given char within the given string (in-place). Only erase consecutive and repeating chars, keep unique.  <a href="#adab39e685756b5170366b61f19a3b259">More...</a><br /></td></tr>
 <tr class="separator:adab39e685756b5170366b61f19a3b259"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab674204dd304a835829ad2955728bd71"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ab674204dd304a835829ad2955728bd71">replace_all</a> (std::string &amp;str, const std::string_view &amp;from, const std::string_view &amp;to)</td></tr>
-<tr class="memdesc:ab674204dd304a835829ad2955728bd71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace all occurrences of from with to in the given std::string str.  <a href="#ab674204dd304a835829ad2955728bd71">More...</a><br /></td></tr>
-<tr class="separator:ab674204dd304a835829ad2955728bd71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac269bb2c8fd589d44fe20bb528dd8447"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ac269bb2c8fd589d44fe20bb528dd8447">replace_all</a> (std::string &amp;str, const char from, const std::string_view &amp;to=&quot;&quot;)</td></tr>
-<tr class="memdesc:ac269bb2c8fd589d44fe20bb528dd8447"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace all occurrences of from with to in the given std::string str.  <a href="#ac269bb2c8fd589d44fe20bb528dd8447">More...</a><br /></td></tr>
-<tr class="separator:ac269bb2c8fd589d44fe20bb528dd8447"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1d4436e8cf7f3f84a133d66f2fb5f14"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#af1d4436e8cf7f3f84a133d66f2fb5f14">replace_all</a> (std::string &amp;str, const char from, const char to)</td></tr>
-<tr class="memdesc:af1d4436e8cf7f3f84a133d66f2fb5f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace all occurrences of from with to in the given std::string str.  <a href="#af1d4436e8cf7f3f84a133d66f2fb5f14">More...</a><br /></td></tr>
-<tr class="separator:af1d4436e8cf7f3f84a133d66f2fb5f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80fd44d1ed571740684851580c112562"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a80fd44d1ed571740684851580c112562">erase_all</a> (std::string &amp;str, const char erase)</td></tr>
-<tr class="memdesc:a80fd44d1ed571740684851580c112562"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase all occurrences of erase in the given std::string str.  <a href="#a80fd44d1ed571740684851580c112562">More...</a><br /></td></tr>
-<tr class="separator:a80fd44d1ed571740684851580c112562"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4394dfd58d875c251b4a2c492f84690e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a4394dfd58d875c251b4a2c492f84690e">erase_all</a> (std::string &amp;str, const std::string_view &amp;erase)</td></tr>
-<tr class="memdesc:a4394dfd58d875c251b4a2c492f84690e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase all occurrences of erase in the given std::string str.  <a href="#a4394dfd58d875c251b4a2c492f84690e">More...</a><br /></td></tr>
-<tr class="separator:a4394dfd58d875c251b4a2c492f84690e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64e7ad63b3cb675b21710100a2ab66e2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a64e7ad63b3cb675b21710100a2ab66e2">replace_all</a> (std::string &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;from, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;to=&quot;&quot;)</td></tr>
+<tr class="memdesc:a64e7ad63b3cb675b21710100a2ab66e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace all occurrences of from with to in the given std::string str.  <a href="#a64e7ad63b3cb675b21710100a2ab66e2">More...</a><br /></td></tr>
+<tr class="separator:a64e7ad63b3cb675b21710100a2ab66e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a859cc913eb532750d389f200ab38b113"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a859cc913eb532750d389f200ab38b113">erase_all</a> (std::string &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;erase)</td></tr>
+<tr class="memdesc:a859cc913eb532750d389f200ab38b113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase all occurrences of erase in the given std::string str.  <a href="#a859cc913eb532750d389f200ab38b113">More...</a><br /></td></tr>
+<tr class="separator:a859cc913eb532750d389f200ab38b113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cf545cac0f4025e06e4526eb6277452"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::wstring&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a2cf545cac0f4025e06e4526eb6277452">to_wstring</a> (const std::string_view &amp;str)</td></tr>
 <tr class="memdesc:a2cf545cac0f4025e06e4526eb6277452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given string to an std::wstring.  <a href="#a2cf545cac0f4025e06e4526eb6277452">More...</a><br /></td></tr>
 <tr class="separator:a2cf545cac0f4025e06e4526eb6277452"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4129ff62f02d939fa93592773eb207e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a4129ff62f02d939fa93592773eb207e5">to_string</a> (const std::wstring_view &amp;str)</td></tr>
 <tr class="memdesc:a4129ff62f02d939fa93592773eb207e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given wide string to an std::string.  <a href="#a4129ff62f02d939fa93592773eb207e5">More...</a><br /></td></tr>
 <tr class="separator:a4129ff62f02d939fa93592773eb207e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbd71f016eb0bd85837bb34d68606fb1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#abbd71f016eb0bd85837bb34d68606fb1">extract_quoted</a> (std::vector&lt; std::string_view &gt; &amp;v, const std::string_view &amp;s, const char str_char='\'')</td></tr>
-<tr class="memdesc:abbd71f016eb0bd85837bb34d68606fb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract a vector of strings from the given string <code>s</code> that have been quoted with char <code>str_char</code>.  <a href="#abbd71f016eb0bd85837bb34d68606fb1">More...</a><br /></td></tr>
-<tr class="separator:abbd71f016eb0bd85837bb34d68606fb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b33bc006328ad3f5c3f5a36242a671a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a7b33bc006328ad3f5c3f5a36242a671a">join</a> (const std::vector&lt; std::string &gt; &amp;v, const std::string_view &amp;join_with=&quot;,&quot;)</td></tr>
-<tr class="memdesc:a7b33bc006328ad3f5c3f5a36242a671a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join the strings in <code>v</code> with the string <code>join_with</code> between them.  <a href="#a7b33bc006328ad3f5c3f5a36242a671a">More...</a><br /></td></tr>
-<tr class="separator:a7b33bc006328ad3f5c3f5a36242a671a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfc9726e4d5fe04082cf9a83df853e0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#acfc9726e4d5fe04082cf9a83df853e0a">join</a> (const std::vector&lt; std::string &gt; &amp;v, const char join_with)</td></tr>
-<tr class="memdesc:acfc9726e4d5fe04082cf9a83df853e0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join the strings in <code>v</code> with the char <code>join_with</code> between them.  <a href="#acfc9726e4d5fe04082cf9a83df853e0a">More...</a><br /></td></tr>
-<tr class="separator:acfc9726e4d5fe04082cf9a83df853e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc29829e0a09ef0b0364a8121fb72c9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#abfc29829e0a09ef0b0364a8121fb72c9">quote</a> (std::string &amp;str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;quote='\&quot;') </td></tr>
+<tr class="memdesc:abfc29829e0a09ef0b0364a8121fb72c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surround the given string with the <code>quote</code> char. (in-place) If it is already surrounded, do nothing.  <a href="#abfc29829e0a09ef0b0364a8121fb72c9">More...</a><br /></td></tr>
+<tr class="separator:abfc29829e0a09ef0b0364a8121fb72c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ee6a1bd3b1c2bac4256d09bbc66181e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a0ee6a1bd3b1c2bac4256d09bbc66181e">quoted</a> (std::string str, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;<a class="el" href="namespaceutils_1_1string.html#abfc29829e0a09ef0b0364a8121fb72c9">quote</a>='\&quot;') </td></tr>
+<tr class="memdesc:a0ee6a1bd3b1c2bac4256d09bbc66181e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surround the given string with the <code>quote</code> char. (copy) If it is already surrounded, do nothing.  <a href="#a0ee6a1bd3b1c2bac4256d09bbc66181e">More...</a><br /></td></tr>
+<tr class="separator:a0ee6a1bd3b1c2bac4256d09bbc66181e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac829a514dda645e24cbeebe5b15c5a3a"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#ac829a514dda645e24cbeebe5b15c5a3a">extract_quoted</a> (std::vector&lt; std::string_view &gt; &amp;v, const std::string_view &amp;s, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;<a class="el" href="namespaceutils_1_1string.html#abfc29829e0a09ef0b0364a8121fb72c9">quote</a>='\&quot;') </td></tr>
+<tr class="memdesc:ac829a514dda645e24cbeebe5b15c5a3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract a vector of strings from the given string <code>s</code> that have been quoted with char <code>str_char</code>.  <a href="#ac829a514dda645e24cbeebe5b15c5a3a">More...</a><br /></td></tr>
+<tr class="separator:ac829a514dda645e24cbeebe5b15c5a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cdedc3d71a886b103713f6e18b3f793"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a7cdedc3d71a886b103713f6e18b3f793">join</a> (const std::vector&lt; std::string &gt; &amp;v, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;join_with=&quot;,&quot;)</td></tr>
+<tr class="memdesc:a7cdedc3d71a886b103713f6e18b3f793"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join the strings in <code>v</code> with the string <code>join_with</code> between them.  <a href="#a7cdedc3d71a886b103713f6e18b3f793">More...</a><br /></td></tr>
+<tr class="separator:a7cdedc3d71a886b103713f6e18b3f793"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f0e6fcc5cc4138a38a140679a5646d7"><td class="memTemplParams" colspan="2">template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, char &gt;::value||std::is_same&lt; CharT, int8_t &gt;::value||std::is_same&lt; CharT, uint8_t &gt;::value||std::is_same&lt; CharT, wchar_t &gt;::value||std::is_same&lt; CharT, char16_t &gt;::value||std::is_same&lt; CharT, char32_t &gt;::value, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a1f0e6fcc5cc4138a38a140679a5646d7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a1f0e6fcc5cc4138a38a140679a5646d7">join</a> (const std::vector&lt; CharT &gt; &amp;v, const char join_with='\0')</td></tr>
 <tr class="memdesc:a1f0e6fcc5cc4138a38a140679a5646d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join the chars in <code>v</code> with the char <code>join_with</code> between them.  <a href="#a1f0e6fcc5cc4138a38a140679a5646d7">More...</a><br /></td></tr>
 <tr class="separator:a1f0e6fcc5cc4138a38a140679a5646d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abec709ba4fe1e0fff0669354b5e4dd7e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#abec709ba4fe1e0fff0669354b5e4dd7e">split</a> (std::vector&lt; std::string_view &gt; &amp;v, const std::string_view &amp;s, const char delim=',', int max_splits=-1)</td></tr>
-<tr class="memdesc:abec709ba4fe1e0fff0669354b5e4dd7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the given string <code>s</code> into parts delimited by <code>delim</code>.  <a href="#abec709ba4fe1e0fff0669354b5e4dd7e">More...</a><br /></td></tr>
-<tr class="separator:abec709ba4fe1e0fff0669354b5e4dd7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a7074b85cf215fbc22ad18fd7e37137"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a4a7074b85cf215fbc22ad18fd7e37137">split</a> (std::vector&lt; std::string_view &gt; &amp;v, const std::string_view &amp;s, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;delim=',', int max_splits=-1)</td></tr>
+<tr class="memdesc:a4a7074b85cf215fbc22ad18fd7e37137"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the given string <code>s</code> into parts delimited by <code>delim</code>.  <a href="#a4a7074b85cf215fbc22ad18fd7e37137">More...</a><br /></td></tr>
+<tr class="separator:a4a7074b85cf215fbc22ad18fd7e37137"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a119cf0060c528d029bea090bd0f7e511"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a119cf0060c528d029bea090bd0f7e511">rsplit</a> (std::vector&lt; std::string_view &gt; &amp;v, const std::string_view &amp;s, const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> delim=&quot;,&quot;, int max_splits=-1)</td></tr>
+<tr class="memdesc:a119cf0060c528d029bea090bd0f7e511"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split the given string <code>s</code> into parts delimited by <code>delim</code>, but start from the end.  <a href="#a119cf0060c528d029bea090bd0f7e511">More...</a><br /></td></tr>
+<tr class="separator:a119cf0060c528d029bea090bd0f7e511"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d3251109a958bf14758061a12130bd4"><td class="memTemplParams" colspan="2">template&lt;typename ... Type&gt; </td></tr>
 <tr class="memitem:a7d3251109a958bf14758061a12130bd4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a7d3251109a958bf14758061a12130bd4">format</a> (const std::string_view &amp;format, Type &amp;&amp;...args)</td></tr>
 <tr class="memdesc:a7d3251109a958bf14758061a12130bd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Format the given args into the format string. If no arguments are given, the given format string will be returned as-is.  <a href="#a7d3251109a958bf14758061a12130bd4">More...</a><br /></td></tr>
@@ -200,68 +206,53 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a80d97b7f66aef2cd56ae88793e85ead5"><td class="memTemplParams" colspan="2">template&lt;class CharT &gt; </td></tr>
+<tr class="memitem:a80d97b7f66aef2cd56ae88793e85ead5"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a80d97b7f66aef2cd56ae88793e85ead5">facet</a> = std::use_facet&lt;std::ctype&lt;CharT&gt;&gt;(std::locale())</td></tr>
+<tr class="separator:a80d97b7f66aef2cd56ae88793e85ead5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f4f00ab3a7fa44a834b8317aa10b346"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a9f4f00ab3a7fa44a834b8317aa10b346">facetch</a> = <a class="el" href="namespaceutils_1_1string.html#a80d97b7f66aef2cd56ae88793e85ead5">facet</a>&lt;char&gt;</td></tr>
+<tr class="separator:a9f4f00ab3a7fa44a834b8317aa10b346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84c3cfe8e28c877f9477efb440890c0c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const auto &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a84c3cfe8e28c877f9477efb440890c0c">facetwch</a> = <a class="el" href="namespaceutils_1_1string.html#a80d97b7f66aef2cd56ae88793e85ead5">facet</a>&lt;wchar_t&gt;</td></tr>
+<tr class="separator:a84c3cfe8e28c877f9477efb440890c0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eba1f7085816d64cb57def5f3d25071"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html#a2eba1f7085816d64cb57def5f3d25071">_base64_chars</a></td></tr>
 <tr class="memdesc:a2eba1f7085816d64cb57def5f3d25071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static buffer with all valid base64 chars.  <a href="#a2eba1f7085816d64cb57def5f3d25071">More...</a><br /></td></tr>
 <tr class="separator:a2eba1f7085816d64cb57def5f3d25071"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a1a2eabe1037d997a8aeb6e0302aa92f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a2eabe1037d997a8aeb6e0302aa92f7">&#9670;&nbsp;</a></span>contains() <span class="overload">[1/2]</span></h2>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a217f0ba0b7fab7769b818441a0fd8ef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a217f0ba0b7fab7769b818441a0fd8ef3">&#9670;&nbsp;</a></span>string_view</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a> utils::string::contains </td>
-          <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>ch</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const size_t&#160;</td>
-          <td class="paramname"><em>start</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">using <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> = typedef <a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a>&lt;char&gt;</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Test if the given string <code>str</code> contains the given char <code>ch</code>. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>The std::string to check. </td></tr>
-    <tr><td class="paramname">ch</td><td>The char to look for. </td></tr>
-    <tr><td class="paramname">start</td><td>The starting offset to start looking. (default: 0) </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns an <code>std:optional&lt;size_t&gt;</code> holding the offset from <code>str.begin()</code> if the char was found, or nothing if not. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00032">32</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00072">72</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9356b607329c236ebb5de472e785ca1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9356b607329c236ebb5de472e785ca1d">&#9670;&nbsp;</a></span>contains() <span class="overload">[2/2]</span></h2>
+<a id="ab70f236a9673ec708f6651b57f04776e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab70f236a9673ec708f6651b57f04776e">&#9670;&nbsp;</a></span>wstring_view</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespaceutils_1_1string.html#ab70f236a9673ec708f6651b57f04776e">utils::string::wstring_view</a> = typedef <a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a>&lt;wchar_t&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00073">73</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a54694fbc8ba09832b3124d1a8dad37c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54694fbc8ba09832b3124d1a8dad37c4">&#9670;&nbsp;</a></span>contains()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,7 +269,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>part</em>, </td>
         </tr>
         <tr>
@@ -311,12 +302,12 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns an <code>std:optional&lt;size_t&gt;</code> holding the offset from <code>str.begin()</code> if the part was found, or nothing if not. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00054">54</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00088">88</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ac98b21760142c3183f3736e729f5d6b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac98b21760142c3183f3736e729f5d6b9">&#9670;&nbsp;</a></span>ends_with() <span class="overload">[1/2]</span></h2>
+<a id="a83b99122502e4e773993f38b17f908db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83b99122502e4e773993f38b17f908db">&#9670;&nbsp;</a></span>ends_with()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,61 +318,13 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::string::ends_with </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>ch</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check if <code>str</code> ends with the given char. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>The std::string to check. </td></tr>
-    <tr><td class="paramname">ch</td><td>The char to look for. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns true if str[-1] == ch. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00104">104</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a3267a5ab88911862ff562139d8b2aee1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3267a5ab88911862ff562139d8b2aee1">&#9670;&nbsp;</a></span>ends_with() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::string::ends_with </td>
-          <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>end</em>&#160;</td>
         </tr>
         <tr>
@@ -407,12 +350,12 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if str[-end.size():] == end. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00118">118</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00152">152</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a80fd44d1ed571740684851580c112562"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80fd44d1ed571740684851580c112562">&#9670;&nbsp;</a></span>erase_all() <span class="overload">[1/2]</span></h2>
+<a id="a859cc913eb532750d389f200ab38b113"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a859cc913eb532750d389f200ab38b113">&#9670;&nbsp;</a></span>erase_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,54 +372,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>erase</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Erase all occurrences of erase in the given std::string str. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>A reference to the string to erase a char. </td></tr>
-    <tr><td class="paramname">erase</td><td>A char to erase. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00361">361</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a4394dfd58d875c251b4a2c492f84690e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4394dfd58d875c251b4a2c492f84690e">&#9670;&nbsp;</a></span>erase_all() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::string::erase_all </td>
-          <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>erase</em>&#160;</td>
         </tr>
         <tr>
@@ -501,7 +397,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00373">373</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00355">355</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -548,12 +444,12 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00290">290</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00318">318</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ad170ea7d4a2985a45530d0b842dcb69b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad170ea7d4a2985a45530d0b842dcb69b">&#9670;&nbsp;</a></span>erase_from()</h2>
+<a id="a2a7e4e873b6b945c837ac58717e0d3fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a7e4e873b6b945c837ac58717e0d3fa">&#9670;&nbsp;</a></span>erase_from()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -570,7 +466,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>erasefrom</em>&#160;</td>
         </tr>
         <tr>
@@ -595,12 +491,12 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00178">178</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00212">212</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a397cc1695befa54018f950c3fc626395"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a397cc1695befa54018f950c3fc626395">&#9670;&nbsp;</a></span>erase_to()</h2>
+<a id="a362a696296c8da159dc00a232b9d4971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a362a696296c8da159dc00a232b9d4971">&#9670;&nbsp;</a></span>erase_to()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -617,7 +513,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>eraseto</em>&#160;</td>
         </tr>
         <tr>
@@ -642,12 +538,12 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00194">194</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00228">228</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a47cf28acc36344306a10177d2ac2147d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a47cf28acc36344306a10177d2ac2147d">&#9670;&nbsp;</a></span>erased_from()</h2>
+<a id="a54f5fc75fb7bbaf018b729d23f08faa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54f5fc75fb7bbaf018b729d23f08faa3">&#9670;&nbsp;</a></span>erased_from()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -664,7 +560,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>erasefrom</em>&#160;</td>
         </tr>
         <tr>
@@ -690,12 +586,12 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a copy where the appropriate parts were erased. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00210">210</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00244">244</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a73db7bb8204a3213720b088c56e038f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73db7bb8204a3213720b088c56e038f6">&#9670;&nbsp;</a></span>erased_to()</h2>
+<a id="ab73564f19677a342e877613f0e75c3c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab73564f19677a342e877613f0e75c3c2">&#9670;&nbsp;</a></span>erased_to()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -712,7 +608,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>eraseto</em>&#160;</td>
         </tr>
         <tr>
@@ -737,12 +633,12 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00225">225</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00259">259</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="abbd71f016eb0bd85837bb34d68606fb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbd71f016eb0bd85837bb34d68606fb1">&#9670;&nbsp;</a></span>extract_quoted()</h2>
+<a id="ac829a514dda645e24cbeebe5b15c5a3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac829a514dda645e24cbeebe5b15c5a3a">&#9670;&nbsp;</a></span>extract_quoted()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -765,8 +661,8 @@ Variables</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>str_char</em> = <code>'\''</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
+          <td class="paramname"><em>quote</em> = <code>'\&quot;'</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -787,13 +683,13 @@ Variables</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">v</td><td>The vector to add the strings to. Will be cleared on start. </td></tr>
     <tr><td class="paramname">s</td><td>The string to look for quoted strings in. </td></tr>
-    <tr><td class="paramname">str_char</td><td>The char the strings are quoted in. </td></tr>
+    <tr><td class="paramname">quote</td><td>The char the strings are quoted in. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the list of quoted strings, without quotes. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00424">424</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00442">442</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -849,7 +745,7 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the format expanded with the args. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00586">586</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00646">646</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -897,7 +793,7 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return an std::string containing the decoded buffer. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00739">739</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00799">799</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -934,7 +830,7 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return an std::string containing the decoded string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00803">803</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00863">863</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -971,7 +867,7 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if _base64_chars.find(c) != npos </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00615">615</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00675">675</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1019,7 +915,7 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if buffer contains a valid base64 encoded string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00631">631</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00691">691</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1056,12 +952,12 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if string contains a valid base64 encoded string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00665">665</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00725">725</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a7b33bc006328ad3f5c3f5a36242a671a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b33bc006328ad3f5c3f5a36242a671a">&#9670;&nbsp;</a></span>join() <span class="overload">[1/3]</span></h2>
+<a id="a7cdedc3d71a886b103713f6e18b3f793"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cdedc3d71a886b103713f6e18b3f793">&#9670;&nbsp;</a></span>join() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1078,7 +974,7 @@ template&lt;typename ... Type&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>join_with</em> = <code>&quot;,&quot;</code>&#160;</td>
         </tr>
         <tr>
@@ -1104,60 +1000,12 @@ template&lt;typename ... Type&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns one string containing all the strings in <code>v</code> appended to eachother, joined by <code>join_with</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00453">453</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="acfc9726e4d5fe04082cf9a83df853e0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acfc9726e4d5fe04082cf9a83df853e0a">&#9670;&nbsp;</a></span>join() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::string::join </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>v</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>join_with</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Join the strings in <code>v</code> with the char <code>join_with</code> between them. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">v</td><td>The list of strings to join. </td></tr>
-    <tr><td class="paramname">join_with</td><td>The char to join with. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns one string containing all the strings in <code>v</code> appended to eachother, joined by <code>join_with</code>. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00490">490</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00473">473</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a1f0e6fcc5cc4138a38a140679a5646d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f0e6fcc5cc4138a38a140679a5646d7">&#9670;&nbsp;</a></span>join() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f0e6fcc5cc4138a38a140679a5646d7">&#9670;&nbsp;</a></span>join() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1202,7 +1050,7 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns one string containing all the chars in <code>v</code> appended to eachother, joined by <code>join_with</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00514">514</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00519">519</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1238,12 +1086,161 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00131">131</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00165">165</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ab674204dd304a835829ad2955728bd71"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab674204dd304a835829ad2955728bd71">&#9670;&nbsp;</a></span>replace_all() <span class="overload">[1/3]</span></h2>
+<a id="abfc29829e0a09ef0b0364a8121fb72c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfc29829e0a09ef0b0364a8121fb72c9">&#9670;&nbsp;</a></span>quote()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::string::quote </td>
+          <td>(</td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
+          <td class="paramname"><em>quote</em> = <code>'\&quot;'</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Surround the given string with the <code>quote</code> char. (in-place) If it is already surrounded, do nothing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to surround. </td></tr>
+    <tr><td class="paramname">quote</td><td>The character to surround the string with. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00400">400</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0ee6a1bd3b1c2bac4256d09bbc66181e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ee6a1bd3b1c2bac4256d09bbc66181e">&#9670;&nbsp;</a></span>quoted()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::string::quoted </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
+          <td class="paramname"><em>quote</em> = <code>'\&quot;'</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Surround the given string with the <code>quote</code> char. (copy) If it is already surrounded, do nothing. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The string to surround. </td></tr>
+    <tr><td class="paramname">quote</td><td>The character to surround the string with. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00421">421</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a68b4b7f6ebabdbe29204a92b4e75b9cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68b4b7f6ebabdbe29204a92b4e75b9cc">&#9670;&nbsp;</a></span>rcontains()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr <a class="el" href="namespaceutils_1_1traits.html#a29a39f74ad82b02bae0e83cb10eadeca">utils::traits::found_t</a> utils::string::rcontains </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
+          <td class="paramname"><em>part</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>start</em> = <code>std::string_view::npos</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Test if the given string <code>str</code> contains the other string <code>part</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>The std::string to check. </td></tr>
+    <tr><td class="paramname">part</td><td>The std::string to look for. </td></tr>
+    <tr><td class="paramname">start</td><td>The starting offset to start looking. (default: 0) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns an <code>std:optional&lt;size_t&gt;</code> holding the offset from <code>str.begin()</code> if the part was found, or nothing if not. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00113">113</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a64e7ad63b3cb675b21710100a2ab66e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64e7ad63b3cb675b21710100a2ab66e2">&#9670;&nbsp;</a></span>replace_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1260,14 +1257,14 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>from</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>to</em>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
+          <td class="paramname"><em>to</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1292,12 +1289,12 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00309">309</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00337">337</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ac269bb2c8fd589d44fe20bb528dd8447"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac269bb2c8fd589d44fe20bb528dd8447">&#9670;&nbsp;</a></span>replace_all() <span class="overload">[2/3]</span></h2>
+<a id="a119cf0060c528d029bea090bd0f7e511"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a119cf0060c528d029bea090bd0f7e511">&#9670;&nbsp;</a></span>rsplit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1306,22 +1303,28 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::string::replace_all </td>
+          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::string::rsplit </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>from</em>, </td>
+          <td class="paramtype">std::vector&lt; std::string_view &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>to</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a>&#160;</td>
+          <td class="paramname"><em>delim</em> = <code>&quot;,&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>max_splits</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1331,76 +1334,24 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Replace all occurrences of from with to in the given std::string str. </p>
+<p>Split the given string <code>s</code> into parts delimited by <code>delim</code>, but start from the end. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">str</td><td>A reference to the string to replace a substring. </td></tr>
-    <tr><td class="paramname">from</td><td>A char to replace. </td></tr>
-    <tr><td class="paramname">to</td><td>A reference to a string to replace with. </td></tr>
+    <tr><td class="paramname">v</td><td>The vector to add the splitted strings to. </td></tr>
+    <tr><td class="paramname">s</td><td>The string to split. </td></tr>
+    <tr><td class="paramname">delim</td><td>The string delimiter. </td></tr>
+    <tr><td class="paramname">max_splits</td><td>The maximum amount of splits to make. <code>-1</code> split on all delimiters <code>0</code> don't split: vector will contain the original string <code>s</code> <code>1</code> vector has the first splitted element (at its end), and the rest of the string as previous elements. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns a list of seperate strings that were delimited by <code>delim</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00330">330</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="af1d4436e8cf7f3f84a133d66f2fb5f14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1d4436e8cf7f3f84a133d66f2fb5f14">&#9670;&nbsp;</a></span>replace_all() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::string::replace_all </td>
-          <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>from</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>to</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Replace all occurrences of from with to in the given std::string str. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>A reference to the string to replace a substring. </td></tr>
-    <tr><td class="paramname">from</td><td>A char to replace. </td></tr>
-    <tr><td class="paramname">to</td><td>A char to replace with. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00345">345</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00602">602</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1436,12 +1387,12 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00142">142</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00176">176</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="abec709ba4fe1e0fff0669354b5e4dd7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abec709ba4fe1e0fff0669354b5e4dd7e">&#9670;&nbsp;</a></span>split()</h2>
+<a id="a4a7074b85cf215fbc22ad18fd7e37137"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a7074b85cf215fbc22ad18fd7e37137">&#9670;&nbsp;</a></span>split()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1464,7 +1415,7 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>delim</em> = <code>','</code>, </td>
         </tr>
         <tr>
@@ -1491,19 +1442,19 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
   <table class="params">
     <tr><td class="paramname">v</td><td>The vector to add the splitted strings to. </td></tr>
     <tr><td class="paramname">s</td><td>The string to split. </td></tr>
-    <tr><td class="paramname">delim</td><td>The character delimiter. </td></tr>
+    <tr><td class="paramname">delim</td><td>The string delimiter. </td></tr>
     <tr><td class="paramname">max_splits</td><td>The maximum amount of splits to make. <code>-1</code> split on all delimiters <code>0</code> don't split: vector will contain the original string <code>s</code> <code>1</code> vector has the first splitted element, and the rest of the string as second element </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a list of seperate strings that were delimited by <code>delim</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00554">554</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00559">559</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ac080667a6c44572286064f83b7a96c64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac080667a6c44572286064f83b7a96c64">&#9670;&nbsp;</a></span>starts_with() <span class="overload">[1/2]</span></h2>
+<a id="aa4dfbb9e3ef10a5d59efed058ad81f14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4dfbb9e3ef10a5d59efed058ad81f14">&#9670;&nbsp;</a></span>starts_with()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1514,61 +1465,13 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
         <tr>
           <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::string::starts_with </td>
           <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const char&#160;</td>
-          <td class="paramname"><em>ch</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check if <code>str</code> starts with the given char. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">str</td><td>The std::string to check. </td></tr>
-    <tr><td class="paramname">ch</td><td>The char to look for. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns true if str[0] == ch. </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00073">73</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a34cf44b51cdcd74af863790193043c4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34cf44b51cdcd74af863790193043c4f">&#9670;&nbsp;</a></span>starts_with() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::string::starts_with </td>
-          <td>(</td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
-          <td class="paramname"><em>str</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceutils_1_1string.html#a217f0ba0b7fab7769b818441a0fd8ef3">utils::string::string_view</a> &amp;&#160;</td>
           <td class="paramname"><em>start</em>&#160;</td>
         </tr>
         <tr>
@@ -1594,7 +1497,7 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns true if str[0:start.size()] == start. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00087">87</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00135">135</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1642,7 +1545,7 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return an std::string containing the encoded buffer. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00679">679</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00739">739</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1679,7 +1582,7 @@ template&lt;class CharT , typename std::enable_if_t&lt; std::is_same&lt; CharT, 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return an std::string containing the encoded string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00725">725</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00785">785</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1717,7 +1620,7 @@ template&lt;typename CharT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00261">261</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00292">292</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1755,7 +1658,7 @@ template&lt;typename CharT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00275">275</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00303">303</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1792,7 +1695,7 @@ template&lt;typename CharT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the converted data as an std::string. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00404">404</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00386">386</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1830,7 +1733,7 @@ template&lt;typename CharT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00236">236</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00270">270</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1868,7 +1771,7 @@ template&lt;typename CharT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00250">250</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00281">281</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1905,7 +1808,7 @@ template&lt;typename CharT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the converted data as an std::wstring. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00391">391</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00373">373</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1941,7 +1844,7 @@ template&lt;typename CharT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00153">153</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00187">187</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -1977,7 +1880,7 @@ template&lt;typename CharT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00164">164</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00198">198</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -2004,7 +1907,82 @@ template&lt;typename CharT &gt; </div>
 <b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;</span></div><div class="line">                                                      <span class="stringliteral">&quot;abcdefghijklmnopqrstuvwxyz&quot;</span></div><div class="line">                                                      <span class="stringliteral">&quot;0123456789+/&quot;</span></div></div><!-- fragment -->
 <p>Static buffer with all valid base64 chars. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00602">602</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00662">662</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a80d97b7f66aef2cd56ae88793e85ead5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80d97b7f66aef2cd56ae88793e85ead5">&#9670;&nbsp;</a></span>facet</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class CharT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const auto&amp; utils::string::facet = std::use_facet&lt;std::ctype&lt;CharT&gt;&gt;(std::locale())</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Crate a facet for the current locale. </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00023">23</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9f4f00ab3a7fa44a834b8317aa10b346"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f4f00ab3a7fa44a834b8317aa10b346">&#9670;&nbsp;</a></span>facetch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const auto&amp; utils::string::facetch = <a class="el" href="namespaceutils_1_1string.html#a80d97b7f66aef2cd56ae88793e85ead5">facet</a>&lt;char&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00026">26</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a84c3cfe8e28c877f9477efb440890c0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84c3cfe8e28c877f9477efb440890c0c">&#9670;&nbsp;</a></span>facetwch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const auto&amp; utils::string::facetwch = <a class="el" href="namespaceutils_1_1string.html#a80d97b7f66aef2cd56ae88793e85ead5">facet</a>&lt;wchar_t&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00029">29</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>

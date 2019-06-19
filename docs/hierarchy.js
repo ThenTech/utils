@@ -3,6 +3,9 @@ var hierarchy =
     [ "utils::print::array_wrapper< T, N >", "structutils_1_1print_1_1array__wrapper.html", null ],
     [ "utils::algo::AVLTree< T >", "classutils_1_1algo_1_1_a_v_l_tree.html", null ],
     [ "utils::algo::AVLTreeNodeBase< T >", "classutils_1_1algo_1_1_a_v_l_tree_node_base.html", null ],
+    [ "basic_string_view", null, [
+      [ "utils::string::basic_string_view< _CharT, _Traits >", "structutils_1_1string_1_1basic__string__view.html", null ]
+    ] ],
     [ "utils::io::BitStream", "classutils_1_1io_1_1_bit_stream.html", [
       [ "utils::io::BitStreamReader", "classutils_1_1io_1_1_bit_stream_reader.html", null ],
       [ "utils::io::BitStreamWriter", "classutils_1_1io_1_1_bit_stream_writer.html", null ]
@@ -16,25 +19,10 @@ var hierarchy =
     [ "utils::colour::Colour", "structutils_1_1colour_1_1_colour.html", null ],
     [ "utils::algo::Node< T >::comparator", "structutils_1_1algo_1_1_node_1_1comparator.html", null ],
     [ "utils::ini::ConfigReader< TDelimiters >", "classutils_1_1ini_1_1_config_reader.html", null ],
-    [ "utils::ini::Delimiters", "structutils_1_1ini_1_1_delimiters.html", null ],
+    [ "utils::ini::delimiters", "structutils_1_1ini_1_1delimiters.html", null ],
     [ "utils::print::delimiters< T, TChar >", "structutils_1_1print_1_1delimiters.html", null ],
-    [ "utils::print::delimiters< std::optional< T >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1optional_3_01_t_01_4_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< std::optional< T >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1optional_3_01_t_01_4_00_01wchar__t_01_4.html", null ],
-    [ "utils::print::delimiters< std::pair< T1, T2 >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< std::pair< T1, T2 >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_00_01wchar__t_01_4.html", null ],
-    [ "utils::print::delimiters< std::set< T, TTraits, TAllocator >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1set_3_01_t_00_01_t_traits_00_01_t_allocator_01_4_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< std::set< T, TTraits, TAllocator >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1set_3_01_t_00_01_t_traits_00_01_t_allocator_01_4_00_01wchar__t_01_4.html", null ],
-    [ "utils::print::delimiters< std::tuple< Args... >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1tuple_3_01_args_8_8_8_01_4_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< std::tuple< Args... >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1tuple_3_01_args_8_8_8_01_4_00_01wchar__t_01_4.html", null ],
-    [ "utils::print::delimiters< std::vector< std::string >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< std::vector< std::string >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01wchar__t_01_4.html", null ],
-    [ "utils::print::delimiters< std::vector< std::string_view >, char >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string__view_01_4_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< std::vector< std::string_view >, wchar_t >", "structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string__view_01_4_00_01wchar__t_01_4.html", null ],
-    [ "utils::print::delimiters< T, char >", "structutils_1_1print_1_1delimiters_3_01_t_00_01char_01_4.html", null ],
-    [ "utils::print::delimiters< T, wchar_t >", "structutils_1_1print_1_1delimiters_3_01_t_00_01wchar__t_01_4.html", null ],
     [ "utils::print::delimiters_values< TChar >", "structutils_1_1print_1_1delimiters__values.html", null ],
     [ "utils::print::delimiters_values< char >", "structutils_1_1print_1_1delimiters__values.html", null ],
-    [ "utils::print::delimiters_values< wchar_t >", "structutils_1_1print_1_1delimiters__values.html", null ],
     [ "disjunction", null, [
       [ "utils::traits::is_variant_member< T, std::variant< ALL_T... > >", "structutils_1_1traits_1_1is__variant__member_3_01_t_00_01std_1_1variant_3_01_a_l_l___t_8_8_8_01_4_01_4.html", null ]
     ] ],
@@ -80,10 +68,14 @@ var hierarchy =
     [ "true_type", null, [
       [ "utils::traits::internal::can_apply< Z, std::void_t< Z< Ts... > >, Ts... >", "structutils_1_1traits_1_1internal_1_1can__apply_3_01_z_00_01std_1_1void__t_3_01_z_3_01_ts_8_8_8_01_4_01_4_00_01_ts_8_8_8_01_4.html", null ],
       [ "utils::traits::is_container< std::array< T, N > >", "structutils_1_1traits_1_1is__container_3_01std_1_1array_3_01_t_00_01_n_01_4_01_4.html", null ],
+      [ "utils::traits::is_container< std::initializer_list< T > >", "structutils_1_1traits_1_1is__container_3_01std_1_1initializer__list_3_01_t_01_4_01_4.html", null ],
       [ "utils::traits::is_container< std::list< T, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1list_3_01_t_00_01_t_allocator_01_4_01_4.html", null ],
-      [ "utils::traits::is_container< std::map< TKey, TValue, TTraits, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1map_3_01_t_key_00_01_t_value_00_01_t_traits_00_01_t_allocator_01_4_01_4.html", null ],
-      [ "utils::traits::is_container< std::set< T, TTraits, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1set_3_01_t_00_01_t_traits_00_01_t_allocator_01_4_01_4.html", null ],
+      [ "utils::traits::is_container< std::map< TKey, TValue, TCompare, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1map_3_01_t_key_00_01_t_value_00_01_t_compare_00_01_t_allocator_01_4_01_4.html", null ],
+      [ "utils::traits::is_container< std::multiset< T, TCompare, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1multiset_3_01_t_00_01_t_compare_00_01_t_allocator_01_4_01_4.html", null ],
+      [ "utils::traits::is_container< std::set< T, TCompare, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1set_3_01_t_00_01_t_compare_00_01_t_allocator_01_4_01_4.html", null ],
       [ "utils::traits::is_container< std::unordered_map< TKey, TValue, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__map_3_01_t_key_00_01_t_value_00_01_36216da77d37e11cb184e4ea3bbd5fe2.html", null ],
+      [ "utils::traits::is_container< std::unordered_multiset< T, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__multiset_3_01_t_00_01_t_hash_00_01_dc569dda2d998d617d09b1dbde4816a5.html", null ],
+      [ "utils::traits::is_container< std::unordered_set< T, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__set_3_01_t_00_01_t_hash_00_01_t_pred_00_01_t_allocator_01_4_01_4.html", null ],
       [ "utils::traits::is_container< std::vector< T, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html", null ],
       [ "utils::traits::is_container< T[N]>", "structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html", null ],
       [ "utils::traits::is_iterable< T, std::void_t< utils::traits::is_iterator< decltype(std::begin(std::declval< T & >()))>, utils::traits::is_iterator< decltype(std::end(std::declval< T & >()))> > >", "structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html", null ],

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">10</td>
@@ -257,7 +257,7 @@
 <span class="lineNum">     195 </span>            : 
 <span class="lineNum">     196 </span><span class="lineCov">          6 :     const std::vector&lt;int&gt; test2 = utils::random::generate_x&lt;int&gt;(3, -1000, 1000);</span>
 <span class="lineNum">     197 </span>            : 
-<span class="lineNum">     198 </span><span class="lineCov">          4 :     SECTION(&quot;utils::math::stats::mean&quot;) {</span>
+<span class="lineNum">     198 </span><span class="lineCov">          4 :     SECTION(&quot;Test utils::math::stats::mean&quot;) {</span>
 <span class="lineNum">     199 </span><span class="lineCov">          1 :         const double result = double(0+1+2+3+4+5+6+7+8) / len;</span>
 <span class="lineNum">     200 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::mean(test.begin(), test.end());</span>
 <span class="lineNum">     201 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::mean(test);</span>
@@ -271,7 +271,7 @@
 <span class="lineNum">     209 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::mean&lt;std::vector&lt;int&gt;&gt;, one);</span>
 <span class="lineNum">     210 </span>            :     }
 <span class="lineNum">     211 </span>            : 
-<span class="lineNum">     212 </span><span class="lineCov">          4 :     SECTION(&quot;utils::math::stats::variance&quot;) {</span>
+<span class="lineNum">     212 </span><span class="lineCov">          4 :     SECTION(&quot;Test utils::math::stats::variance&quot;) {</span>
 <span class="lineNum">     213 </span><span class="lineCov">          1 :         const double result = 7.5;</span>
 <span class="lineNum">     214 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::variance(test.begin(), test.end());</span>
 <span class="lineNum">     215 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::variance(test);</span>
@@ -291,7 +291,7 @@
 <span class="lineNum">     229 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, two);</span>
 <span class="lineNum">     230 </span>            :     }
 <span class="lineNum">     231 </span>            : 
-<span class="lineNum">     232 </span><span class="lineCov">          4 :     SECTION(&quot;utils::math::stats::stddev&quot;) {</span>
+<span class="lineNum">     232 </span><span class="lineCov">          4 :     SECTION(&quot;Test utils::math::stats::stddev&quot;) {</span>
 <span class="lineNum">     233 </span><span class="lineCov">          1 :         const double result = 2.7386127875258;</span>
 <span class="lineNum">     234 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::stddev(test.begin(), test.end());</span>
 <span class="lineNum">     235 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::stddev(test);</span>

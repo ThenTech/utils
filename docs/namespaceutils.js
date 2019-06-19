@@ -10,6 +10,7 @@ var namespaceutils =
     [ "math", "namespaceutils_1_1math.html", null ],
     [ "os", "namespaceutils_1_1os.html", null ],
     [ "print", "namespaceutils_1_1print.html", "namespaceutils_1_1print" ],
+    [ "string", "namespaceutils_1_1string.html", "namespaceutils_1_1string" ],
     [ "threading", "namespaceutils_1_1threading.html", "namespaceutils_1_1threading" ],
     [ "time", "namespaceutils_1_1time.html", "namespaceutils_1_1time" ],
     [ "traits", "namespaceutils_1_1traits.html", "namespaceutils_1_1traits" ],

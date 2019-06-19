@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">35</td>
@@ -147,8 +147,8 @@
 <span class="lineNum">      85 </span>            :      *          A pointer to the newly allocated object.
 <a name="86"><span class="lineNum">      86 </span>            :      */</a>
 <span class="lineNum">      87 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      88 </span><span class="lineCov">         67 :     static inline T* new_array(size_t x) {</span>
-<span class="lineNum">      89 </span><span class="lineCov">        535 :         return new T[x]();</span>
+<span class="lineNum">      88 </span><span class="lineCov">         68 :     static inline T* new_array(size_t x) {</span>
+<span class="lineNum">      89 </span><span class="lineCov">        552 :         return new T[x]();</span>
 <span class="lineNum">      90 </span>            :     }
 <span class="lineNum">      91 </span>            : 
 <span class="lineNum">      92 </span>            :     /**
@@ -174,12 +174,12 @@
 <span class="lineNum">     112 </span>            :      *          A pointer to the object to deallocate.
 <a name="113"><span class="lineNum">     113 </span>            :      */</a>
 <span class="lineNum">     114 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED
-<span class="lineNum">     115 </span><span class="lineCov">         67 :     static inline void delete_array(T* a) {</span>
+<span class="lineNum">     115 </span><span class="lineCov">         68 :     static inline void delete_array(T* a) {</span>
 <span class="lineNum">     116 </span>            :         #if UTILS_MEMORY_ALLOC_LOG
 <span class="lineNum">     117 </span>            :             std::fprintf(stderr, &quot;[delete_array] at 0x%p\n&quot;, a);
 <span class="lineNum">     118 </span>            :         #endif
-<span class="lineNum">     119 </span><span class="lineCov">         67 :         delete[] a;</span>
-<span class="lineNum">     120 </span><span class="lineCov">         67 :     }</span>
+<span class="lineNum">     119 </span><span class="lineCov">         68 :         delete[] a;</span>
+<span class="lineNum">     120 </span><span class="lineCov">         68 :     }</span>
 <span class="lineNum">     121 </span>            : 
 <span class="lineNum">     122 </span>            :     /** \brief  Reallocate the given array to a new array with different size.
 <span class="lineNum">     123 </span>            :      *          Elements will be copied to the new array.
@@ -227,8 +227,8 @@
 <span class="lineNum">     165 </span>            :      *      A unique_arr_t instance with the newly allocated object.
 <a name="166"><span class="lineNum">     166 </span>            :      */</a>
 <span class="lineNum">     167 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     168 </span><span class="lineCov">         53 :     static inline unique_arr_t&lt;T&gt; new_unique_array(size_t x) {</span>
-<span class="lineNum">     169 </span><span class="lineCov">         53 :         return unique_arr_t&lt;T&gt;(new_array&lt;T&gt;(x), &amp;delete_array&lt;T&gt;);</span>
+<span class="lineNum">     168 </span><span class="lineCov">         54 :     static inline unique_arr_t&lt;T&gt; new_unique_array(size_t x) {</span>
+<span class="lineNum">     169 </span><span class="lineCov">         54 :         return unique_arr_t&lt;T&gt;(new_array&lt;T&gt;(x), &amp;delete_array&lt;T&gt;);</span>
 <span class="lineNum">     170 </span>            :     }
 <span class="lineNum">     171 </span>            : 
 <span class="lineNum">     172 </span>            :     /**

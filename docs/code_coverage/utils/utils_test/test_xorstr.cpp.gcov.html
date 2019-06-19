@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -66,45 +66,53 @@
 <span class="lineNum">       4 </span>            : #include &quot;../utils_lib/utils_catch.hpp&quot;
 <span class="lineNum">       5 </span>            : 
 <span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_xorstring.hpp&quot;
-<span class="lineNum">       7 </span>            : 
-<span class="lineNum">       8 </span>            : #define ori_str \
-<span class="lineNum">       9 </span>            :     &quot;e|f@,b#b4?[a:()~6a8b?&lt;~)e'bb5,ce'&lt;.8.^]#970:]?=1]=66!)d&lt;:*6:2?2';d}{&amp;&amp;!@&quot; \
-<span class="lineNum">      10 </span>            :     &quot;}.$2|c&amp;)%d:c:(4[/:c,6#)1)_]:%;da_&gt;{&amp;#~^&gt;&gt;6?5+]++3#&gt;3?:/*{]]a4/[=(|[52)&gt;4&quot; \
-<span class="lineNum">      11 </span>            :     &quot;8{:?4!:4;c(@8*8|:3&amp;@%&lt;&gt;3~=0&lt;4^)2^;.(d?;6*/}[.@;.,,%f[]$|);+[&gt;1',0&amp;{&gt;96[{&quot; \
-<span class="lineNum">      12 </span>            :     &quot;~=_[2248?&gt;&gt;&amp;2@5(b1~}'db2/=,{)#_b$e62*/'7&gt;~40_:6_|=~_5&gt;f(^.5*102d{&amp;_75'f&amp;&quot; \
-<span class="lineNum">      13 </span>            :     &quot;&gt;4|}7).e&gt;&amp;+=~)9+&amp;&gt;8(1;7_@1=7|',]&lt;?=,@9&amp;&amp;f|#%'0*~]@+?f?'=e)fc=:*e8^!,=/@}&quot; \
-<span class="lineNum">      14 </span>            :     &quot;4_a%0f)[|+_!]|_7]'9{c3ae6[63]#@c+%@&gt;8~:f0$#|_d]=&amp;&gt;3|$()5~50+4^2:5)/+4e[&amp;&quot; \
-<span class="lineNum">      15 </span>            :     &quot;e:9&lt;3~e)|}d&gt;*+9[/?)_%+/&amp;7(9%{a82_%#.5@ad{#1d0&lt;/0%:&gt;:@#(5_^@[)'&amp;:5]b7~(:)&quot; \
-<span class="lineNum">      16 </span>            :     &quot;3*&lt;8]:[%5f%^aa54+7*(126;5&amp;}}_2+&gt;5/8?(1[6a?(0849+a_32&amp;~]d=,fe8c@{ab;}@9([&quot; \
-<span class="lineNum">      17 </span>            :     &quot;a40e&gt;b.|d)84{a1e}_+&gt;19,+#*^~:4^}36%])b6c4@e+^1.8?4;f!^|9:_2b!:&lt;[!$^'&amp;9a5&quot; \
-<span class="lineNum">      18 </span>            :     &quot;.@?;%:$%~c*;?|0c)d=[ee~1}&gt;.d:;!6.e/01d_+f621.7af%*e,{ca36?{3/ed=&gt;)%&amp;2+ee&quot; \
-<span class="lineNum">      19 </span>            :     &quot;4[([/.|#=;/&amp;d/_':37{1@05'8&gt;=:40];9&amp;e0:3;+04c$(|/95=1;9+%0b'c##f1]~).{/?/&quot; \
-<span class="lineNum">      20 </span>            :     &quot;{,60'~31=||{:7.$##0@]=&gt;!!&lt;@3?'0@(d+%;e|}:d%c0.f|)!./+;.,7a&lt;6=d^{~&gt;c8@';$&quot; \
-<span class="lineNum">      21 </span>            :     &quot;0f6/f$]1.:+;_@9)'?/?48@6&gt;{@5eca=:#},9];5;+}}|:;f)%2$,&gt;72.&amp;c_5@%0'(&gt;(}7({&quot; \
-<span class="lineNum">      22 </span>            :     &quot;c6=%,_.&amp;)_+4^+9,&amp;&gt;f),}.2f9,b$~.{b[+*]}!&amp;::74d,#e;/?,*d8:[a&amp;;#?e2e5]9[ab;&quot; \
-<span class="lineNum">      23 </span>            :     &quot;$.9a&gt;0):/?$*?c5&gt;2^~]]4&gt;]e#*80#|:9^,c,!7,|?]2&gt;8%&lt;f53#0:[]*752]&gt;7c=6|[b;4~&quot; \
-<span class="lineNum">      24 </span>            :     &quot;$&amp;::7e/$*+[{{+^{|*,50{.?3(c+}~&amp;0,+27=&lt;d0f'7,&gt;,&amp;[#*.|a?&gt;|&amp;6&amp;4;$:?.[e4797)&quot; \
-<span class="lineNum">      25 </span>            :     &quot;+=e^{@[c&lt;!]c4;80c=d5/$*]be';]+%&amp;)517#417*|&gt;*5*%'7#9&amp;(7e+.}=,30a}(.|+~{0a&quot; \
-<span class="lineNum">      26 </span>            :     &quot;d^&gt;b{2*:)_!^{;'&gt;41)^))b0~0&amp;2?#*;}2:./21:6398$d?#.@/8d7|e~da+!4~/=2:'&lt;e!;&quot; \
-<span class="lineNum">      27 </span>            :     &quot;,&lt;+%,&amp;&amp;%@/_0^0[c_'](c&lt;}_e*)8&amp;#~28f2*.(?]&amp;0@!4%6a).8d~~?f|/]|%|#9_'@$[b&amp;#&quot; \
-<span class="lineNum">      28 </span>            :     &quot;&gt;}@&lt;5&gt;8&amp;;&lt;&lt;~6]b4|7,_%0~38?~2#e[||+(4&amp;52=@&gt;,|a''51&amp;]d@e'%40{[5!)43*/~=^6[&quot; \
-<span class="lineNum">      29 </span>            :     &quot;b&amp;3c@221^5@4.,/'$2._1e4#{,7}c&lt;f(.)/*5f7]}2/)!'*7(%&amp;3^&lt;,6&lt;b=88=1]~?|+3,}@&quot; \
-<span class="lineNum">      30 </span>            :     &quot;'%b0~;6*74]&amp;|&amp;$!}&amp;2_&amp;d+*,5[+(_/2&amp;33%1f5({$2_15|c6~!&lt;f58&gt;23[fee;'?84,31!!&quot; \
-<span class="lineNum">      31 </span>            :     &quot;e.(d_'a4^&gt;/&lt;2.41*8'?._][9{[&lt;8)2&lt;/&lt;'&amp;,4/1(3f;*)77)*5}f$&amp;.*'5=!#{}95|^d*bd&quot; \
-<span class="lineNum">      32 </span>            :     &quot;&gt;}e+..$!)1|)ed{8]2a;,$6;{b#:|(1{$#[4^a|69*{d&amp;@&gt;:~8)?e&gt;7?[b4|}+[{5554$.^%&quot; \
-<span class="lineNum">      33 </span>            :     &quot;#0[@@2]29/1a{;5a*.7:c5{~[.c7!#&amp;*%b]&gt;?@,'d&gt;2b+%9,!))(9d/_9bf:*:&amp;{a4&amp;@^a':&quot; \
-<span class="lineNum">      34 </span>            :     &quot;+^;_]#:e?*+1b.|&amp;~0.$df6,,2?]]}e;#'+6.5&lt;#'91{3[|8@:{b0/{);a})6&gt;?5]f%{;'4e&quot; \
-<span class="lineNum">      35 </span>            :     &quot;e46f%*6/c.;&amp;4/7]{*@4c|0~;&gt;(b+!2]?%3]!0,75[~&amp;d;{.8{@#{4[c]&lt;88&amp;5===51{0)5*&quot; \
-<span class="lineNum">      36 </span>            :     &quot;6+1;&gt;1&lt;&lt;^2b8+}bf].e^]'$,+.]%)(8b%37b!a[2@,?9*!dd#d^|9!33}};db4,%080,(4@*&quot; \
-<a name="37"><span class="lineNum">      37 </span>            :     &quot;''|7+[{e&lt;(&gt;3!9e8[?!&lt;_&amp;e568c27ba+                                        &quot;</a>
-<span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::xorstr&quot;, &quot;[utils][utils::xorstr]&quot; ) {</span>
-<span class="lineNum">      40 </span><span class="lineCov">          2 :     const std::string test_str = xorstr(ori_str);</span>
-<span class="lineNum">      41 </span>            : 
-<span class="lineNum">      42 </span><span class="lineCov">          2 :     REQUIRE(ori_str == test_str);</span>
-<span class="lineNum">      43 </span><span class="lineCov">          1 : }</span>
-<span class="lineNum">      44 </span>            : 
-<span class="lineNum">      45 </span>            : #endif
+<span class="lineNum">       7 </span>            : #include &quot;../utils_lib/utils_traits.hpp&quot;
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #ifdef UTILS_TRAITS_MSVC
+<span class="lineNum">      10 </span>            :     #define ori_str \
+<span class="lineNum">      11 </span>            :         &quot;e|f@,b#b4?[a:()~6a8b?&lt;~)e'bb5,ce'&lt;.8.^]#970:]?=1]=66!)d&lt;:*6:2?2';d}{&amp;&amp;!@&quot; \
+<span class="lineNum">      12 </span>            :         &quot;}.$2|c&amp;)%d:c:(4[/:c,6#)1)_]:%;da_&gt;{&amp;#~^&gt;&gt;6?5+]++3#&gt;3?:/*{]]a4/[=(|[52)&gt;4&quot;
+<span class="lineNum">      13 </span>            : #else
+<span class="lineNum">      14 </span>            :     #define ori_str \
+<span class="lineNum">      15 </span>            :         &quot;e|f@,b#b4?[a:()~6a8b?&lt;~)e'bb5,ce'&lt;.8.^]#970:]?=1]=66!)d&lt;:*6:2?2';d}{&amp;&amp;!@&quot; \
+<span class="lineNum">      16 </span>            :         &quot;}.$2|c&amp;)%d:c:(4[/:c,6#)1)_]:%;da_&gt;{&amp;#~^&gt;&gt;6?5+]++3#&gt;3?:/*{]]a4/[=(|[52)&gt;4&quot; \
+<span class="lineNum">      17 </span>            :         &quot;8{:?4!:4;c(@8*8|:3&amp;@%&lt;&gt;3~=0&lt;4^)2^;.(d?;6*/}[.@;.,,%f[]$|);+[&gt;1',0&amp;{&gt;96[{&quot; \
+<span class="lineNum">      18 </span>            :         &quot;~=_[2248?&gt;&gt;&amp;2@5(b1~}'db2/=,{)#_b$e62*/'7&gt;~40_:6_|=~_5&gt;f(^.5*102d{&amp;_75'f&amp;&quot; \
+<span class="lineNum">      19 </span>            :         &quot;&gt;4|}7).e&gt;&amp;+=~)9+&amp;&gt;8(1;7_@1=7|',]&lt;?=,@9&amp;&amp;f|#%'0*~]@+?f?'=e)fc=:*e8^!,=/@}&quot; \
+<span class="lineNum">      20 </span>            :         &quot;4_a%0f)[|+_!]|_7]'9{c3ae6[63]#@c+%@&gt;8~:f0$#|_d]=&amp;&gt;3|$()5~50+4^2:5)/+4e[&amp;&quot; \
+<span class="lineNum">      21 </span>            :         &quot;e:9&lt;3~e)|}d&gt;*+9[/?)_%+/&amp;7(9%{a82_%#.5@ad{#1d0&lt;/0%:&gt;:@#(5_^@[)'&amp;:5]b7~(:)&quot; \
+<span class="lineNum">      22 </span>            :         &quot;3*&lt;8]:[%5f%^aa54+7*(126;5&amp;}}_2+&gt;5/8?(1[6a?(0849+a_32&amp;~]d=,fe8c@{ab;}@9([&quot; \
+<span class="lineNum">      23 </span>            :         &quot;a40e&gt;b.|d)84{a1e}_+&gt;19,+#*^~:4^}36%])b6c4@e+^1.8?4;f!^|9:_2b!:&lt;[!$^'&amp;9a5&quot; \
+<span class="lineNum">      24 </span>            :         &quot;.@?;%:$%~c*;?|0c)d=[ee~1}&gt;.d:;!6.e/01d_+f621.7af%*e,{ca36?{3/ed=&gt;)%&amp;2+ee&quot; \
+<span class="lineNum">      25 </span>            :         &quot;4[([/.|#=;/&amp;d/_':37{1@05'8&gt;=:40];9&amp;e0:3;+04c$(|/95=1;9+%0b'c##f1]~).{/?/&quot; \
+<span class="lineNum">      26 </span>            :         &quot;{,60'~31=||{:7.$##0@]=&gt;!!&lt;@3?'0@(d+%;e|}:d%c0.f|)!./+;.,7a&lt;6=d^{~&gt;c8@';$&quot; \
+<span class="lineNum">      27 </span>            :         &quot;0f6/f$]1.:+;_@9)'?/?48@6&gt;{@5eca=:#},9];5;+}}|:;f)%2$,&gt;72.&amp;c_5@%0'(&gt;(}7({&quot; \
+<span class="lineNum">      28 </span>            :         &quot;c6=%,_.&amp;)_+4^+9,&amp;&gt;f),}.2f9,b$~.{b[+*]}!&amp;::74d,#e;/?,*d8:[a&amp;;#?e2e5]9[ab;&quot; \
+<span class="lineNum">      29 </span>            :         &quot;$.9a&gt;0):/?$*?c5&gt;2^~]]4&gt;]e#*80#|:9^,c,!7,|?]2&gt;8%&lt;f53#0:[]*752]&gt;7c=6|[b;4~&quot; \
+<span class="lineNum">      30 </span>            :         &quot;$&amp;::7e/$*+[{{+^{|*,50{.?3(c+}~&amp;0,+27=&lt;d0f'7,&gt;,&amp;[#*.|a?&gt;|&amp;6&amp;4;$:?.[e4797)&quot; \
+<span class="lineNum">      31 </span>            :         &quot;+=e^{@[c&lt;!]c4;80c=d5/$*]be';]+%&amp;)517#417*|&gt;*5*%'7#9&amp;(7e+.}=,30a}(.|+~{0a&quot; \
+<span class="lineNum">      32 </span>            :         &quot;d^&gt;b{2*:)_!^{;'&gt;41)^))b0~0&amp;2?#*;}2:./21:6398$d?#.@/8d7|e~da+!4~/=2:'&lt;e!;&quot; \
+<span class="lineNum">      33 </span>            :         &quot;,&lt;+%,&amp;&amp;%@/_0^0[c_'](c&lt;}_e*)8&amp;#~28f2*.(?]&amp;0@!4%6a).8d~~?f|/]|%|#9_'@$[b&amp;#&quot; \
+<span class="lineNum">      34 </span>            :         &quot;&gt;}@&lt;5&gt;8&amp;;&lt;&lt;~6]b4|7,_%0~38?~2#e[||+(4&amp;52=@&gt;,|a''51&amp;]d@e'%40{[5!)43*/~=^6[&quot; \
+<span class="lineNum">      35 </span>            :         &quot;b&amp;3c@221^5@4.,/'$2._1e4#{,7}c&lt;f(.)/*5f7]}2/)!'*7(%&amp;3^&lt;,6&lt;b=88=1]~?|+3,}@&quot; \
+<span class="lineNum">      36 </span>            :         &quot;'%b0~;6*74]&amp;|&amp;$!}&amp;2_&amp;d+*,5[+(_/2&amp;33%1f5({$2_15|c6~!&lt;f58&gt;23[fee;'?84,31!!&quot; \
+<span class="lineNum">      37 </span>            :         &quot;e.(d_'a4^&gt;/&lt;2.41*8'?._][9{[&lt;8)2&lt;/&lt;'&amp;,4/1(3f;*)77)*5}f$&amp;.*'5=!#{}95|^d*bd&quot; \
+<span class="lineNum">      38 </span>            :         &quot;&gt;}e+..$!)1|)ed{8]2a;,$6;{b#:|(1{$#[4^a|69*{d&amp;@&gt;:~8)?e&gt;7?[b4|}+[{5554$.^%&quot; \
+<span class="lineNum">      39 </span>            :         &quot;#0[@@2]29/1a{;5a*.7:c5{~[.c7!#&amp;*%b]&gt;?@,'d&gt;2b+%9,!))(9d/_9bf:*:&amp;{a4&amp;@^a':&quot; \
+<span class="lineNum">      40 </span>            :         &quot;+^;_]#:e?*+1b.|&amp;~0.$df6,,2?]]}e;#'+6.5&lt;#'91{3[|8@:{b0/{);a})6&gt;?5]f%{;'4e&quot; \
+<span class="lineNum">      41 </span>            :         &quot;e46f%*6/c.;&amp;4/7]{*@4c|0~;&gt;(b+!2]?%3]!0,75[~&amp;d;{.8{@#{4[c]&lt;88&amp;5===51{0)5*&quot; \
+<span class="lineNum">      42 </span>            :         &quot;6+1;&gt;1&lt;&lt;^2b8+}bf].e^]'$,+.]%)(8b%37b!a[2@,?9*!dd#d^|9!33}};db4,%080,(4@*&quot; \
+<span class="lineNum">      43 </span>            :         &quot;''|7+[{e&lt;(&gt;3!9e8[?!&lt;_&amp;e568c27ba+                                        &quot;
+<span class="lineNum">      44 </span>            : #endif
+<a name="45"><span class="lineNum">      45 </span>            : </a>
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::xorstr&quot;, &quot;[utils][utils::xorstr]&quot; ) {</span>
+<span class="lineNum">      48 </span><span class="lineCov">          2 :     const std::string test_str = xorstr(ori_str);</span>
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span><span class="lineCov">          2 :     REQUIRE(ori_str == test_str);</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            : #endif
 </pre>
       </td>
     </tr>

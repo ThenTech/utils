@@ -31,18 +31,18 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">5</td>
-            <td class="headerCovTableEntry">31</td>
-            <td class="headerCovTableEntryLo">16.1 %</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">33</td>
+            <td class="headerCovTableEntryMed">87.9 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">2</td>
-            <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntryLo">50.0 %</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -67,7 +67,7 @@
 <span class="lineNum">       5 </span>            : #include &quot;utils_string.hpp&quot;
 <span class="lineNum">       6 </span>            : #include &quot;utils_traits.hpp&quot;
 <span class="lineNum">       7 </span>            : 
-<span class="lineNum">       8 </span>            : #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) &amp;&amp; !defined(__CYGWIN__)
+<span class="lineNum">       8 </span>            : #if defined(UTILS_TRAITS_OS_WIN)
 <span class="lineNum">       9 </span>            :     #include &lt;windows.h&gt;
 <span class="lineNum">      10 </span>            :     #define UTILS_OS_ENABLE_VIRTUAL_TERMINAL 0x0004
 <span class="lineNum">      11 </span>            : #endif
@@ -101,13 +101,13 @@
 <span class="lineNum">      39 </span>            :         };
 <a name="40"><span class="lineNum">      40 </span>            : </a>
 <span class="lineNum">      41 </span>            :         inline constexpr _Console_commands
-<span class="lineNum">      42 </span><span class="lineNoCov">          0 :         operator&amp;(const _Console_commands __a, const _Console_commands __b) {</span>
-<span class="lineNum">      43 </span><span class="lineNoCov">          0 :             return _Console_commands(utils::traits::to_underlying(__a) &amp; utils::traits::to_underlying(__b));</span>
+<span class="lineNum">      42 </span><span class="lineCov">         22 :         operator&amp;(const _Console_commands __a, const _Console_commands __b) {</span>
+<span class="lineNum">      43 </span><span class="lineCov">         22 :             return _Console_commands(utils::traits::to_underlying(__a) &amp; utils::traits::to_underlying(__b));</span>
 <span class="lineNum">      44 </span>            :         }
-<span class="lineNum">      45 </span>            : 
+<a name="45"><span class="lineNum">      45 </span>            : </a>
 <span class="lineNum">      46 </span>            :         inline constexpr _Console_commands
-<span class="lineNum">      47 </span>            :         operator|(const _Console_commands __a, const _Console_commands __b) {
-<span class="lineNum">      48 </span>            :             return _Console_commands(utils::traits::to_underlying(__a) | utils::traits::to_underlying(__b));
+<span class="lineNum">      47 </span><span class="lineCov">          5 :         operator|(const _Console_commands __a, const _Console_commands __b) {</span>
+<span class="lineNum">      48 </span><span class="lineCov">          5 :             return _Console_commands(utils::traits::to_underlying(__a) | utils::traits::to_underlying(__b));</span>
 <span class="lineNum">      49 </span>            :         }
 <span class="lineNum">      50 </span>            : 
 <span class="lineNum">      51 </span>            :         inline constexpr _Console_commands
@@ -180,109 +180,107 @@
 <span class="lineNum">     118 </span>            :      *      The stream to write the virtual codes to. (default: std::cout)
 <a name="119"><span class="lineNum">     119 </span>            :      */</a>
 <span class="lineNum">     120 </span>            :     ATTR_MAYBE_UNUSED
-<span class="lineNum">     121 </span><span class="lineNoCov">          0 :     static void Command(const command_t cmd, std::ostream&amp; out = std::cout) {</span>
+<span class="lineNum">     121 </span><span class="lineCov">          3 :     static void Command(const command_t cmd, std::ostream&amp; out = std::cout) {</span>
 <span class="lineNum">     122 </span>            :         #define BASE_ &quot;\033[&quot;
-<span class="lineNum">     123 </span><span class="lineNoCov">          0 :         std::string cmd_str = &quot;&quot;;</span>
+<span class="lineNum">     123 </span><span class="lineCov">          3 :         out.flush();</span>
 <span class="lineNum">     124 </span>            : 
-<span class="lineNum">     125 </span><span class="lineNoCov">          0 :         if (cmd &amp; Console::CLS) {</span>
-<span class="lineNum">     126 </span><span class="lineNoCov">          0 :             cmd_str += BASE_ &quot;2J&quot;;</span>
+<span class="lineNum">     125 </span><span class="lineCov">          3 :         if (cmd &amp; Console::CLS) {</span>
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :             out &lt;&lt; BASE_ &quot;2J&quot;;</span>
 <span class="lineNum">     127 </span>            :         }
 <span class="lineNum">     128 </span>            : 
-<span class="lineNum">     129 </span><span class="lineNoCov">          0 :         if (cmd &amp; Console::RESET) {</span>
-<span class="lineNum">     130 </span><span class="lineNoCov">          0 :             cmd_str += BASE_ &quot;0m&quot;;</span>
+<span class="lineNum">     129 </span><span class="lineCov">          3 :         if (cmd &amp; Console::RESET) {</span>
+<span class="lineNum">     130 </span><span class="lineCov">          2 :             out &lt;&lt; BASE_ &quot;0m&quot;;</span>
 <span class="lineNum">     131 </span>            :         }
 <span class="lineNum">     132 </span>            : 
-<span class="lineNum">     133 </span><span class="lineNoCov">          0 :         if (cmd &amp; Console::CURSOR) {</span>
-<span class="lineNum">     134 </span><span class="lineNoCov">          0 :             cmd_str += BASE_ &quot;H&quot;;</span>
+<span class="lineNum">     133 </span><span class="lineCov">          3 :         if (cmd &amp; Console::CURSOR) {</span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :             out &lt;&lt; BASE_ &quot;H&quot;;</span>
 <span class="lineNum">     135 </span>            :         }
 <span class="lineNum">     136 </span>            : 
-<span class="lineNum">     137 </span><span class="lineNoCov">          0 :         if (cmd &amp; Console::BOLD) {</span>
-<span class="lineNum">     138 </span><span class="lineNoCov">          0 :             cmd_str += BASE_ &quot;1m&quot;;</span>
+<span class="lineNum">     137 </span><span class="lineCov">          3 :         if (cmd &amp; Console::BOLD) {</span>
+<span class="lineNum">     138 </span><span class="lineCov">          1 :             out &lt;&lt; BASE_ &quot;1m&quot;;</span>
 <span class="lineNum">     139 </span>            :         }
 <span class="lineNum">     140 </span>            : 
-<span class="lineNum">     141 </span><span class="lineNoCov">          0 :         if (cmd &amp; Console::UNDERLINE) {</span>
-<span class="lineNum">     142 </span><span class="lineNoCov">          0 :             cmd_str += BASE_ &quot;4m&quot;;</span>
+<span class="lineNum">     141 </span><span class="lineCov">          3 :         if (cmd &amp; Console::UNDERLINE) {</span>
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :             out &lt;&lt; BASE_ &quot;4m&quot;;</span>
 <span class="lineNum">     143 </span>            :         }
 <span class="lineNum">     144 </span>            : 
-<span class="lineNum">     145 </span><span class="lineNoCov">          0 :         if (cmd &amp; Console::ITALIC) {</span>
-<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             cmd_str += BASE_ &quot;3m&quot;;</span>
+<span class="lineNum">     145 </span><span class="lineCov">          3 :         if (cmd &amp; Console::ITALIC) {</span>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             out &lt;&lt; BASE_ &quot;3m&quot;;</span>
 <span class="lineNum">     147 </span>            :         }
 <span class="lineNum">     148 </span>            : 
-<span class="lineNum">     149 </span><span class="lineNoCov">          0 :         if (cmd &gt;= Console::BLACK) {</span>
-<span class="lineNum">     150 </span>            :             // A colour will be set
-<span class="lineNum">     151 </span><span class="lineNoCov">          0 :             if (cmd &amp; Console::BG) {</span>
-<span class="lineNum">     152 </span><span class="lineNoCov">          0 :                 cmd_str += BASE_ &quot;4&quot;;</span>
-<span class="lineNum">     153 </span>            :             } else {
-<span class="lineNum">     154 </span>            :                 // Foreground
-<span class="lineNum">     155 </span><span class="lineNoCov">          0 :                 cmd_str += BASE_ &quot;3&quot;;</span>
+<span class="lineNum">     149 </span><span class="lineCov">          3 :         if (cmd &gt;= Console::BLACK) {</span>
+<span class="lineNum">     150 </span><span class="lineCov">          2 :             out &lt;&lt; BASE_;</span>
+<span class="lineNum">     151 </span>            :             // A colour will be set
+<span class="lineNum">     152 </span><span class="lineCov">          2 :             if (cmd &amp; Console::BG) {</span>
+<span class="lineNum">     153 </span><span class="lineCov">          1 :                 out &lt;&lt; &quot;4&quot;; // Background</span>
+<span class="lineNum">     154 </span>            :             } else {
+<span class="lineNum">     155 </span><span class="lineCov">          1 :                 out &lt;&lt; &quot;3&quot;; // Foreground</span>
 <span class="lineNum">     156 </span>            :             }
 <span class="lineNum">     157 </span>            : 
-<span class="lineNum">     158 </span><span class="lineNoCov">          0 :             cmd_str += utils::string::format(&quot;%d&quot;, utils::bits::msb(uint64_t(cmd) / uint64_t(Console::BLACK)) - 1);</span>
+<span class="lineNum">     158 </span><span class="lineCov">          2 :             out &lt;&lt; (utils::bits::msb(uint64_t(cmd) / uint64_t(Console::BLACK)) - 1);</span>
 <span class="lineNum">     159 </span>            : 
-<span class="lineNum">     160 </span><span class="lineNoCov">          0 :             if (cmd &amp; Console::BRIGHT) {</span>
-<span class="lineNum">     161 </span><span class="lineNoCov">          0 :                 cmd_str += &quot;;1&quot;;</span>
+<span class="lineNum">     160 </span><span class="lineCov">          2 :             if (cmd &amp; Console::BRIGHT) {</span>
+<span class="lineNum">     161 </span><span class="lineCov">          1 :                 out &lt;&lt; &quot;;1&quot;;</span>
 <span class="lineNum">     162 </span>            :             }
 <span class="lineNum">     163 </span>            : 
-<span class="lineNum">     164 </span><span class="lineNoCov">          0 :             cmd_str += &quot;m&quot;;</span>
+<span class="lineNum">     164 </span><span class="lineCov">          2 :             out &lt;&lt; &quot;m&quot;;</span>
 <span class="lineNum">     165 </span>            :         }
-<span class="lineNum">     166 </span>            : 
-<span class="lineNum">     167 </span><span class="lineNoCov">          0 :         out &lt;&lt; cmd_str;</span>
-<span class="lineNum">     168 </span><span class="lineNoCov">          0 :     }</span>
-<span class="lineNum">     169 </span>            : 
-<span class="lineNum">     170 </span>            :     /**
-<span class="lineNum">     171 </span>            :      *  \brief  Set the title of the current terminal window
-<span class="lineNum">     172 </span>            :      *          by calling the corresponding virtual code.
-<span class="lineNum">     173 </span>            :      *
-<span class="lineNum">     174 </span>            :      *  \param  title
-<span class="lineNum">     175 </span>            :      *      The value to set the title to.
-<span class="lineNum">     176 </span>            :      *  \param  out
-<span class="lineNum">     177 </span>            :      *      The stream to write the virtual codes to. (default: std::cout)
-<a name="178"><span class="lineNum">     178 </span>            :      */</a>
-<span class="lineNum">     179 </span>            :     ATTR_MAYBE_UNUSED
-<span class="lineNum">     180 </span><span class="lineCov">          1 :     static void SetScreenTitle(const std::string_view&amp; title, std::ostream&amp; out = std::cout) {</span>
-<span class="lineNum">     181 </span><span class="lineCov">          1 :         out &lt;&lt; &quot;\033]2;&quot; &lt;&lt; title &lt;&lt; &quot;\007&quot;;</span>
-<span class="lineNum">     182 </span><span class="lineCov">          1 :     }</span>
-<span class="lineNum">     183 </span>            : 
-<span class="lineNum">     184 </span>            :     /**
-<span class="lineNum">     185 </span>            :      *  \brief  Enable virtual commands processing for the default output handle
-<span class="lineNum">     186 </span>            :      *          on Windows. Unix is supported by default.
-<a name="187"><span class="lineNum">     187 </span>            :      */</a>
-<span class="lineNum">     188 </span>            :     ATTR_MAYBE_UNUSED
-<span class="lineNum">     189 </span><span class="lineCov">          1 :     static void EnableVirtualConsole() {</span>
-<span class="lineNum">     190 </span>            :         #ifdef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
-<span class="lineNum">     191 </span>            :             // Set-up Windows terminal
-<span class="lineNum">     192 </span>            :             int error = 0;
-<span class="lineNum">     193 </span>            : 
-<span class="lineNum">     194 </span>            :             HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-<span class="lineNum">     195 </span>            :             if (hOut == INVALID_HANDLE_VALUE) {
-<span class="lineNum">     196 </span>            :                 error = int(GetLastError());
-<span class="lineNum">     197 </span>            :             }
-<span class="lineNum">     198 </span>            : 
-<span class="lineNum">     199 </span>            :             if (!error) {
-<span class="lineNum">     200 </span>            :                 DWORD dwMode = 0;
-<span class="lineNum">     201 </span>            :                 if (!GetConsoleMode(hOut, &amp;dwMode)) {
-<span class="lineNum">     202 </span>            :                     error = int(GetLastError());
-<span class="lineNum">     203 </span>            :                 }
-<span class="lineNum">     204 </span>            : 
-<span class="lineNum">     205 </span>            :                 if (!error) {
-<span class="lineNum">     206 </span>            :                     dwMode |= UTILS_OS_ENABLE_VIRTUAL_TERMINAL;
-<span class="lineNum">     207 </span>            :                     if (!SetConsoleMode(hOut, dwMode)) {
-<span class="lineNum">     208 </span>            :                         error = int(GetLastError());
-<span class="lineNum">     209 </span>            :                     }
-<span class="lineNum">     210 </span>            :                 }
-<span class="lineNum">     211 </span>            :             }
-<span class="lineNum">     212 </span>            : 
-<span class="lineNum">     213 </span>            :             if (error) {
-<span class="lineNum">     214 </span>            :                 std::cerr &lt;&lt; &quot;[utils::os::EnableVirtualConsole] Windows console error: &quot; &lt;&lt; error &lt;&lt; std::endl;
-<span class="lineNum">     215 </span>            :             }
-<span class="lineNum">     216 </span>            :         #else
-<span class="lineNum">     217 </span>            :             // Unix is already good.
-<span class="lineNum">     218 </span>            :         #endif
-<span class="lineNum">     219 </span><span class="lineCov">          1 :     }</span>
-<span class="lineNum">     220 </span>            : }
-<span class="lineNum">     221 </span>            : 
-<span class="lineNum">     222 </span>            : #undef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
-<span class="lineNum">     223 </span>            : #endif // UTILS_OS_HPP
+<span class="lineNum">     166 </span><span class="lineCov">          3 :     }</span>
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span>            :     /**
+<span class="lineNum">     169 </span>            :      *  \brief  Set the title of the current terminal window
+<span class="lineNum">     170 </span>            :      *          by calling the corresponding virtual code.
+<span class="lineNum">     171 </span>            :      *
+<span class="lineNum">     172 </span>            :      *  \param  title
+<span class="lineNum">     173 </span>            :      *      The value to set the title to.
+<span class="lineNum">     174 </span>            :      *  \param  out
+<span class="lineNum">     175 </span>            :      *      The stream to write the virtual codes to. (default: std::cout)
+<a name="176"><span class="lineNum">     176 </span>            :      */</a>
+<span class="lineNum">     177 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     178 </span><span class="lineCov">          1 :     static void SetScreenTitle(const std::string_view&amp; title, std::ostream&amp; out = std::cout) {</span>
+<span class="lineNum">     179 </span><span class="lineCov">          1 :         out &lt;&lt; &quot;\033]2;&quot; &lt;&lt; title &lt;&lt; &quot;\007&quot;;</span>
+<span class="lineNum">     180 </span><span class="lineCov">          1 :     }</span>
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span>            :     /**
+<span class="lineNum">     183 </span>            :      *  \brief  Enable virtual commands processing for the default output handle
+<span class="lineNum">     184 </span>            :      *          on Windows. Unix is supported by default.
+<a name="185"><span class="lineNum">     185 </span>            :      */</a>
+<span class="lineNum">     186 </span>            :     ATTR_MAYBE_UNUSED
+<span class="lineNum">     187 </span><span class="lineCov">          1 :     static void EnableVirtualConsole() {</span>
+<span class="lineNum">     188 </span>            :         #ifdef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
+<span class="lineNum">     189 </span>            :             // Set-up Windows terminal
+<span class="lineNum">     190 </span>            :             int error = 0;
+<span class="lineNum">     191 </span>            :             do {
+<span class="lineNum">     192 </span>            :                 HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+<span class="lineNum">     193 </span>            :                 if (hOut == INVALID_HANDLE_VALUE) {
+<span class="lineNum">     194 </span>            :                     error = int(GetLastError());
+<span class="lineNum">     195 </span>            :                     break;
+<span class="lineNum">     196 </span>            :                 }
+<span class="lineNum">     197 </span>            : 
+<span class="lineNum">     198 </span>            :                 DWORD dwMode = 0;
+<span class="lineNum">     199 </span>            :                 if (!GetConsoleMode(hOut, &amp;dwMode)) {
+<span class="lineNum">     200 </span>            :                     error = int(GetLastError());
+<span class="lineNum">     201 </span>            :                     break;
+<span class="lineNum">     202 </span>            :                 }
+<span class="lineNum">     203 </span>            : 
+<span class="lineNum">     204 </span>            :                 dwMode |= UTILS_OS_ENABLE_VIRTUAL_TERMINAL;
+<span class="lineNum">     205 </span>            :                 if (!SetConsoleMode(hOut, dwMode)) {
+<span class="lineNum">     206 </span>            :                     error = int(GetLastError());
+<span class="lineNum">     207 </span>            :                     break;
+<span class="lineNum">     208 </span>            :                 }
+<span class="lineNum">     209 </span>            :             } while(false);
+<span class="lineNum">     210 </span>            : 
+<span class="lineNum">     211 </span>            :             if (error) {
+<span class="lineNum">     212 </span>            :                 std::cerr &lt;&lt; &quot;[utils::os::EnableVirtualConsole] Windows console error: &quot; &lt;&lt; error &lt;&lt; std::endl;
+<span class="lineNum">     213 </span>            :             }
+<span class="lineNum">     214 </span>            :         #else
+<span class="lineNum">     215 </span>            :             // Unix is already good.
+<span class="lineNum">     216 </span>            :         #endif
+<span class="lineNum">     217 </span><span class="lineCov">          1 :     }</span>
+<span class="lineNum">     218 </span>            : }
+<span class="lineNum">     219 </span>            : 
+<span class="lineNum">     220 </span>            : #undef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
+<span class="lineNum">     221 </span>            : #endif // UTILS_OS_HPP
 </pre>
       </td>
     </tr>

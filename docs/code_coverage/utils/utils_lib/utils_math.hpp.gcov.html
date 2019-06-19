@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">75</td>
@@ -186,7 +186,7 @@
 <span class="lineNum">     124 </span>            :         if constexpr (std::is_integral_v&lt;C&gt;) {
 <span class="lineNum">     125 </span><span class="lineCov">         20 :             return std::gcd(static_cast&lt;C&gt;(x), static_cast&lt;C&gt;(y));</span>
 <span class="lineNum">     126 </span>            :         } else {
-<span class="lineNum">     127 </span><span class="lineCov">          2 :             return std::gcd(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y));</span>
+<span class="lineNum">     127 </span><span class="lineCov">          2 :             return static_cast&lt;C&gt;(std::gcd(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y)));</span>
 <span class="lineNum">     128 </span>            :         }
 <span class="lineNum">     129 </span>            :     }
 <span class="lineNum">     130 </span>            : 
@@ -211,7 +211,7 @@
 <span class="lineNum">     149 </span>            :         if constexpr (std::is_integral_v&lt;C&gt;) {
 <span class="lineNum">     150 </span><span class="lineCov">         30 :             return std::lcm(static_cast&lt;C&gt;(x), static_cast&lt;C&gt;(y));</span>
 <span class="lineNum">     151 </span>            :         } else {
-<span class="lineNum">     152 </span><span class="lineCov">          2 :             return std::lcm(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y));</span>
+<span class="lineNum">     152 </span><span class="lineCov">          2 :             return static_cast&lt;C&gt;(std::lcm(static_cast&lt;int64_t&gt;(x), static_cast&lt;int64_t&gt;(y)));</span>
 <span class="lineNum">     153 </span>            :         }
 <span class="lineNum">     154 </span>            :     }
 <span class="lineNum">     155 </span>            : 

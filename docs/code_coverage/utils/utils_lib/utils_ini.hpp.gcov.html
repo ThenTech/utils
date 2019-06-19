@@ -37,12 +37,12 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">36</td>
-            <td class="headerCovTableEntry">64</td>
-            <td class="headerCovTableEntryLo">56.2 %</td>
+            <td class="headerCovTableEntry">28</td>
+            <td class="headerCovTableEntry">28</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -76,11 +76,11 @@
 <span class="lineNum">      14 </span>            : 
 <span class="lineNum">      15 </span>            : 
 <span class="lineNum">      16 </span>            : namespace utils::ini {
-<span class="lineNum">      17 </span>            :     struct Delimiters {
+<span class="lineNum">      17 </span>            :     struct delimiters {
 <span class="lineNum">      18 </span>            :         static inline constexpr utils::print::delimiters_values&lt;char&gt; values = { &quot;[&quot;, &quot; = &quot;, &quot;]&quot; };
 <span class="lineNum">      19 </span>            :     };
 <span class="lineNum">      20 </span>            : 
-<span class="lineNum">      21 </span>            :     template&lt;typename TDelimiters = utils::ini::Delimiters&gt;
+<span class="lineNum">      21 </span>            :     template&lt;typename TDelimiters = utils::ini::delimiters&gt;
 <span class="lineNum">      22 </span>            :     class ConfigReader {
 <span class="lineNum">      23 </span>            :         public:
 <span class="lineNum">      24 </span>            :             using Value    = std::variant&lt;int, size_t, float, double, std::string, bool&gt;;
@@ -314,20 +314,20 @@
 <span class="lineNum">     252 </span><span class="lineCov">         28 :                         if (std::holds_alternative&lt;T&gt;(val)) {</span>
 <span class="lineNum">     253 </span>            :                             // T is available
 <span class="lineNum">     254 </span><span class="lineCov">         24 :                             return std::get&lt;T&gt;(val);</span>
-<a name="255"><span class="lineNum">     255 </span>            :                         } else {</a>
+<span class="lineNum">     255 </span>            :                         } else {
 <span class="lineNum">     256 </span><span class="lineCov">         17 :                             std::stringstream ss;</span>
-<span class="lineNum">     257 </span><span class="lineCov">         32 :                             std::visit([&amp;](auto&amp;&amp; arg){ ss &lt;&lt; arg; }, val);</span>
+<span class="lineNum">     257 </span><span class="lineCov">         16 :                             ss &lt;&lt; val;</span>
 <span class="lineNum">     258 </span>            : 
 <span class="lineNum">     259 </span>            :                             // Print to string or cast to value
 <span class="lineNum">     260 </span>            :                             if constexpr (std::is_same_v&lt;T, std::string&gt;) {
 <span class="lineNum">     261 </span><span class="lineCov">          1 :                                 return ss.str();</span>
 <span class="lineNum">     262 </span>            :                             } else if constexpr (std::is_same_v&lt;T, bool&gt;) {
-<span class="lineNum">     263 </span><span class="lineCov">         13 :                                 std::string_view str = utils::string::to_lowercase(ss.str());</span>
+<span class="lineNum">     263 </span><span class="lineCov">         13 :                                 std::string str = utils::string::to_lowercase(ss.str());</span>
 <span class="lineNum">     264 </span>            : 
 <span class="lineNum">     265 </span><span class="lineCov">         24 :                                 if (str == &quot;true&quot; || str == &quot;yes&quot;</span>
 <span class="lineNum">     266 </span><span class="lineCov">         24 :                                  || str == &quot;on&quot;   || str == &quot;1&quot;)</span>
 <span class="lineNum">     267 </span>            :                                 {
-<span class="lineNum">     268 </span><span class="lineCov">         12 :                                     return true;</span>
+<span class="lineNum">     268 </span><span class="lineCov">          6 :                                     return true;</span>
 <span class="lineNum">     269 </span>            :                                 }
 <span class="lineNum">     270 </span><span class="lineCov">         12 :                                 if (str == &quot;false&quot; || str == &quot;no&quot;</span>
 <span class="lineNum">     271 </span><span class="lineCov">         12 :                                  || str == &quot;off&quot;   || str == &quot;0&quot;)</span>
@@ -335,7 +335,7 @@
 <span class="lineNum">     273 </span><span class="lineCov">          6 :                                     return false;</span>
 <span class="lineNum">     274 </span>            :                                 }
 <span class="lineNum">     275 </span>            :                             } else {
-<span class="lineNum">     276 </span><span class="lineCov">          2 :                                 return utils::misc::lexical_cast&lt;T&gt;(ss.str().c_str());</span>
+<span class="lineNum">     276 </span><span class="lineCov">          2 :                                 return utils::misc::try_lexical_cast&lt;T&gt;(ss.str().c_str()).value_or(default_value);</span>
 <span class="lineNum">     277 </span>            :                             }
 <span class="lineNum">     278 </span>            :                         }
 <span class="lineNum">     279 </span>            :                     } else {
@@ -364,10 +364,10 @@
 <span class="lineNum">     302 </span><span class="lineCov">         18 :                                &lt;&lt; std::endl;</span>
 <span class="lineNum">     303 </span>            : 
 <span class="lineNum">     304 </span><span class="lineCov">         54 :                         for (auto [key, value] : mapped_values) {</span>
-<a name="305"><span class="lineNum">     305 </span>            :                             stream &lt;&lt; key</a>
-<span class="lineNum">     306 </span><span class="lineCov">         36 :                                    &lt;&lt; TDelimiters_::values.delimiter;</span>
-<span class="lineNum">     307 </span><span class="lineCov">         72 :                             std::visit([&amp;](auto&amp;&amp; arg){ stream &lt;&lt; std::boolalpha &lt;&lt; arg; }, value);</span>
-<span class="lineNum">     308 </span><span class="lineCov">         36 :                             stream &lt;&lt; std::endl;</span>
+<span class="lineNum">     305 </span>            :                             stream &lt;&lt; key
+<span class="lineNum">     306 </span><span class="lineCov">         36 :                                    &lt;&lt; TDelimiters_::values.delimiter</span>
+<span class="lineNum">     307 </span><span class="lineCov">         36 :                                    &lt;&lt; std::boolalpha &lt;&lt; value</span>
+<span class="lineNum">     308 </span><span class="lineCov">         36 :                                    &lt;&lt; std::endl;</span>
 <span class="lineNum">     309 </span>            :                         }
 <span class="lineNum">     310 </span>            : 
 <span class="lineNum">     311 </span><span class="lineCov">         18 :                         stream &lt;&lt; std::endl;</span>

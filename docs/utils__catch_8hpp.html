@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.40.0-beta</span>
+   &#160;<span id="projectnumber">0.42.0-beta</span>
    </div>
   </td>
  </tr>
@@ -84,24 +84,25 @@ Include dependency graph for utils_catch.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__catch_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__catch_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__catch_8hpp" id="utils__lib_2utils__catch_8hpp">
-<area shape="rect"  title=" " alt="" coords="515,5,674,32"/>
-<area shape="rect"  title=" " alt="" coords="241,80,354,121"/>
-<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="379,87,485,114"/>
-<area shape="rect"  title=" " alt="" coords="509,87,581,114"/>
-<area shape="rect"  title=" " alt="" coords="605,87,683,114"/>
-<area shape="rect"  title=" " alt="" coords="707,87,775,114"/>
-<area shape="rect"  title=" " alt="" coords="799,87,862,114"/>
+<area shape="rect"  title=" " alt="" coords="594,5,753,32"/>
+<area shape="rect"  title=" " alt="" coords="319,80,433,121"/>
+<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="457,87,564,114"/>
+<area shape="rect"  title=" " alt="" coords="588,87,660,114"/>
+<area shape="rect"  title=" " alt="" coords="684,87,761,114"/>
+<area shape="rect"  title=" " alt="" coords="786,87,854,114"/>
+<area shape="rect"  title=" " alt="" coords="878,87,941,114"/>
 <area shape="rect"  title=" " alt="" coords="5,169,88,196"/>
 <area shape="rect"  title=" " alt="" coords="113,169,175,196"/>
 <area shape="rect"  title=" " alt="" coords="200,169,256,196"/>
 <area shape="rect"  title=" " alt="" coords="281,169,319,196"/>
 <area shape="rect"  title=" " alt="" coords="344,169,384,196"/>
-<area shape="rect"  title=" " alt="" coords="409,169,455,196"/>
-<area shape="rect"  title=" " alt="" coords="479,169,590,196"/>
-<area shape="rect"  title=" " alt="" coords="615,169,665,196"/>
-<area shape="rect"  title=" " alt="" coords="689,169,748,196"/>
-<area shape="rect"  title=" " alt="" coords="772,169,823,196"/>
-<area shape="rect"  title=" " alt="" coords="847,169,913,196"/>
+<area shape="rect"  title=" " alt="" coords="408,169,512,196"/>
+<area shape="rect"  title=" " alt="" coords="537,169,583,196"/>
+<area shape="rect"  title=" " alt="" coords="607,169,718,196"/>
+<area shape="rect"  title=" " alt="" coords="743,169,793,196"/>
+<area shape="rect"  title=" " alt="" coords="817,169,876,196"/>
+<area shape="rect"  title=" " alt="" coords="900,169,951,196"/>
+<area shape="rect"  title=" " alt="" coords="975,169,1041,196"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -190,10 +191,10 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {                                                                     \</div><div class="line">            if (!(condition)) {                                                  \</div><div class="line">                std::cerr &lt;&lt; <span class="stringliteral">&quot;\033[31;1m&quot;</span>                                        \</div><div class="line">                          &lt;&lt; <span class="stringliteral">&quot;Assertion &#39;&quot;</span> #condition <span class="stringliteral">&quot;&#39; failed&quot;</span>                 \</div><div class="line">                             <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot; in&quot;</span> <span class="stringliteral">&quot;\033[36;1m\n    &quot;</span>                  \</div><div class="line">                          &lt;&lt; __FILE__                                            \</div><div class="line">                          &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;:&quot;</span> <span class="stringliteral">&quot;\033[36;1m&quot;</span>                          \</div><div class="line">                          &lt;&lt; __LINE__ &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;\n    inside: &quot;</span> <span class="stringliteral">&quot;\033[35;1m&quot;</span> \</div><div class="line">                          &lt;&lt; <a class="code" href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a>                           \</div><div class="line">                          &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> &lt;&lt; std::endl;                             \</div><div class="line">                std::abort();                                                    \</div><div class="line">            }                                                                    \</div><div class="line">        } <span class="keywordflow">while</span> (<span class="keyword">false</span>)</div><div class="ttc" id="utils__catch_8hpp_html_a8ebebb434a3ec1b776a239cd6417b338"><div class="ttname"><a href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a></div><div class="ttdeci">#define UTILS_CATCH_FUNCTION_NAME</div><div class="ttdef"><b>Definition:</b> <a href="utils__catch_8hpp_source.html#l00042">utils_catch.hpp:42</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {                                                                     \</div><div class="line">            if (!(condition)) {                                                  \</div><div class="line">                std::cerr &lt;&lt; <span class="stringliteral">&quot;\n\033[31;1m&quot;</span>                                      \</div><div class="line">                          &lt;&lt; <span class="stringliteral">&quot;Assertion &#39;&quot;</span> #condition <span class="stringliteral">&quot;&#39; failed&quot;</span>                 \</div><div class="line">                             <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot; in&quot;</span> <span class="stringliteral">&quot;\033[36;1m\n    &quot;</span>                  \</div><div class="line">                          &lt;&lt; __FILE__                                            \</div><div class="line">                          &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;:&quot;</span> <span class="stringliteral">&quot;\033[36;1m&quot;</span>                          \</div><div class="line">                          &lt;&lt; __LINE__ &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;\n    inside: &quot;</span> <span class="stringliteral">&quot;\033[35;1m&quot;</span> \</div><div class="line">                          &lt;&lt; <a class="code" href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a>                           \</div><div class="line">                          &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> &lt;&lt; std::endl;                             \</div><div class="line">                std::abort();                                                    \</div><div class="line">            }                                                                    \</div><div class="line">        } <span class="keywordflow">while</span> (<span class="keyword">false</span>)</div><div class="ttc" id="utils__catch_8hpp_html_a8ebebb434a3ec1b776a239cd6417b338"><div class="ttname"><a href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a></div><div class="ttdeci">#define UTILS_CATCH_FUNCTION_NAME</div><div class="ttdef"><b>Definition:</b> <a href="utils__catch_8hpp_source.html#l00044">utils_catch.hpp:44</a></div></div>
 </div><!-- fragment --><p>Assertion macro. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00090">90</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00092">92</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -214,7 +215,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {                                      \</div><div class="line">            LOG_ERROR_TRACE(e);                                                \</div><div class="line">            __VA_ARGS__                                                        \</div><div class="line">        }</div></div><!-- fragment --><p>Macro to catch an exception, print an error trace and execute other code afterwards. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00077">77</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00079">79</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -244,7 +245,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00026">26</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00028">28</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -274,7 +275,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00027">27</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00029">29</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -293,10 +294,10 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {                                                                     \</div><div class="line">        std::cerr &lt;&lt; <span class="stringliteral">&quot;\033[31;1m&quot;</span> <span class="stringliteral">&quot;[ERROR] Exception thrown:\n&quot;</span> <span class="stringliteral">&quot;\033[33m  &quot;</span> \</div><div class="line">                  &lt;&lt; E.what()                                                \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;\n    in &quot;</span> <span class="stringliteral">&quot;\033[36;1m&quot;</span>                      \</div><div class="line">                  &lt;&lt; __FILE__                                                \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;:&quot;</span> <span class="stringliteral">&quot;\033[36;1m&quot;</span>                              \</div><div class="line">                  &lt;&lt; __LINE__                                                \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;\n    inside: &quot;</span> <span class="stringliteral">&quot;\033[35;1m&quot;</span>                 \</div><div class="line">                  &lt;&lt; <a class="code" href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a>                               \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> &lt;&lt; std::endl;                                 \</div><div class="line">    } <span class="keywordflow">while</span> (<span class="keyword">false</span>)</div><div class="ttc" id="utils__catch_8hpp_html_a8ebebb434a3ec1b776a239cd6417b338"><div class="ttname"><a href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a></div><div class="ttdeci">#define UTILS_CATCH_FUNCTION_NAME</div><div class="ttdef"><b>Definition:</b> <a href="utils__catch_8hpp_source.html#l00042">utils_catch.hpp:42</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {                                                                     \</div><div class="line">        std::cerr &lt;&lt; <span class="stringliteral">&quot;\033[31;1m&quot;</span> <span class="stringliteral">&quot;[ERROR] Exception thrown:\n&quot;</span> <span class="stringliteral">&quot;\033[33m  &quot;</span> \</div><div class="line">                  &lt;&lt; E.what()                                                \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;\n    at &quot;</span> <span class="stringliteral">&quot;\033[36;1m&quot;</span>                      \</div><div class="line">                  &lt;&lt; __FILE__                                                \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;:&quot;</span> <span class="stringliteral">&quot;\033[36;1m&quot;</span>                              \</div><div class="line">                  &lt;&lt; __LINE__                                                \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> <span class="stringliteral">&quot;\n    inside: &quot;</span> <span class="stringliteral">&quot;\033[35;1m&quot;</span>                 \</div><div class="line">                  &lt;&lt; <a class="code" href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a>                               \</div><div class="line">                  &lt;&lt; <span class="stringliteral">&quot;\033[0m&quot;</span> &lt;&lt; std::endl;                                 \</div><div class="line">    } <span class="keywordflow">while</span> (<span class="keyword">false</span>)</div><div class="ttc" id="utils__catch_8hpp_html_a8ebebb434a3ec1b776a239cd6417b338"><div class="ttname"><a href="utils__catch_8hpp.html#a8ebebb434a3ec1b776a239cd6417b338">UTILS_CATCH_FUNCTION_NAME</a></div><div class="ttdeci">#define UTILS_CATCH_FUNCTION_NAME</div><div class="ttdef"><b>Definition:</b> <a href="utils__catch_8hpp_source.html#l00044">utils_catch.hpp:44</a></div></div>
 </div><!-- fragment --><p>Macro to print an error trace. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00053">53</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00055">55</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -326,7 +327,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00024">24</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00026">26</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +357,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00025">25</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00027">27</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -373,7 +374,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Macro to insert demangled function signature at compile time. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00042">42</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00044">44</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -390,7 +391,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Whether to print noticication to std::cerr if signal was handled. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00033">33</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00035">35</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>
@@ -407,7 +408,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Macro to insert current file, line and function at compile time. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00048">48</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__catch_8hpp_source.html#l00050">50</a> of file <a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>.</p>
 
 </div>
 </div>

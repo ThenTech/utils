@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-13</td>
+            <td class="headerValue">2019-06-19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">7</td>
@@ -82,15 +82,15 @@
 <span class="lineNum">      20 </span>            :         private:
 <a name="21"><span class="lineNum">      21 </span>            :             std::string _msg;</a>
 <span class="lineNum">      22 </span>            :         public:
-<span class="lineNum">      23 </span><span class="lineCov">         16 :             explicit Exception(const std::string&amp; name, const std::string&amp; msg)</span>
-<span class="lineNum">      24 </span><span class="lineCov">         16 :                 : _msg(name + &quot;: &quot; + msg) {}</span>
+<span class="lineNum">      23 </span><span class="lineCov">         19 :             explicit Exception(const std::string&amp; name, const std::string&amp; msg)</span>
+<span class="lineNum">      24 </span><span class="lineCov">         19 :                 : _msg(name + &quot;: &quot; + msg) {}</span>
 <span class="lineNum">      25 </span>            : 
 <span class="lineNum">      26 </span>            :             explicit Exception(const std::string&amp; msg)
 <a name="27"><span class="lineNum">      27 </span>            :                 : Exception(&quot;Exception&quot;, msg) {}</a>
 <span class="lineNum">      28 </span>            : 
-<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         16 :             virtual ~Exception() {}</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineCov">         19 :             virtual ~Exception() {}</span></a>
 <span class="lineNum">      30 </span>            : 
-<span class="lineNum">      31 </span><span class="lineNoCov">          0 :             virtual const char *what() const _GLIBCXX_TXN_SAFE_DYN _GLIBCXX_USE_NOEXCEPT {</span>
+<span class="lineNum">      31 </span><span class="lineNoCov">          0 :             virtual const char *what() const noexcept {</span>
 <span class="lineNum">      32 </span><span class="lineNoCov">          0 :                 return this-&gt;getMessage().c_str();</span>
 <a name="33"><span class="lineNum">      33 </span>            :             }</a>
 <span class="lineNum">      34 </span>            : 
@@ -151,11 +151,11 @@
 <span class="lineNum">      89 </span>            :      */
 <a name="90"><span class="lineNum">      90 </span>            :     class CastingException : public Exception  {</a>
 <span class="lineNum">      91 </span>            :         public:
-<span class="lineNum">      92 </span><span class="lineCov">          3 :             CastingException(const std::string&amp; src, const std::string&amp; dest)</span>
-<span class="lineNum">      93 </span><span class="lineCov">          3 :                 : Exception(&quot;CastingException&quot;,</span>
-<span class="lineNum">      94 </span><span class="lineCov">          6 :                             &quot;Cannot cast \&quot;&quot; + src + &quot;\&quot; to object of type \&quot;&quot;</span>
-<span class="lineNum">      95 </span><span class="lineCov">          6 :                             + dest + &quot;\&quot;!&quot;)</span>
-<span class="lineNum">      96 </span><span class="lineCov">          3 :             {}</span>
+<span class="lineNum">      92 </span><span class="lineCov">          6 :             CastingException(const std::string&amp; src, const std::string&amp; dest)</span>
+<span class="lineNum">      93 </span><span class="lineCov">          6 :                 : Exception(&quot;CastingException&quot;,</span>
+<span class="lineNum">      94 </span><span class="lineCov">         12 :                             &quot;Cannot cast \&quot;&quot; + src + &quot;\&quot; to object of type \&quot;&quot;</span>
+<span class="lineNum">      95 </span><span class="lineCov">         12 :                             + dest + &quot;\&quot;!&quot;)</span>
+<span class="lineNum">      96 </span><span class="lineCov">          6 :             {}</span>
 <span class="lineNum">      97 </span>            :     };
 <span class="lineNum">      98 </span>            : 
 <span class="lineNum">      99 </span>            :     /**

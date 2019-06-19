@@ -56,8 +56,9 @@ var classutils_1_1_logger =
     [ "WriteLn", "classutils_1_1_logger.html#af6f90ebeb89f251b7e0c7dc54fc3f7a6", null ],
     [ "WriteProgress", "classutils_1_1_logger.html#ac5ffde0e07b01fb62be7c72c4aa8f440", null ],
     [ "operator<<", "classutils_1_1_logger.html#a10bbe1ef6a22740968ed3a3f5f9ccbb3", null ],
+    [ "CONSOLE_WIDTH", "classutils_1_1_logger.html#a78ee317d06547e516c222470df1c0db8", null ],
     [ "CRLF", "classutils_1_1_logger.html#a4c75b9e8e1d1fc36e5a9b8d0fd0b1c32", null ],
     [ "EMPTY", "classutils_1_1_logger.html#a6202bc19ee41029066e82f28d6427b37", null ],
     [ "FILL", "classutils_1_1_logger.html#a1d2ad0638797c8f3ed6ddde9450ac7ee", null ],
-    [ "LINE", "classutils_1_1_logger.html#a59f13bd26b62894706fc1361226c70f2", null ]
+    [ "LINE", "classutils_1_1_logger.html#afc4c2fef6377058be4a356f2ed12b3b9", null ]
 ];

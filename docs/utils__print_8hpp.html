@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.40.0-beta</span>
+   &#160;<span id="projectnumber">0.42.0-beta</span>
    </div>
   </td>
  </tr>
@@ -68,7 +68,8 @@ $(document).ready(function(){initNavTree('utils__print_8hpp.html','');});
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">utils_print.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -80,6 +81,7 @@ $(document).ready(function(){initNavTree('utils__print_8hpp.html','');});
 <code>#include &lt;iterator&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;variant&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cxxabi.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -87,38 +89,39 @@ Include dependency graph for utils_print.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__print_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__print_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__print_8hpp" id="utils__lib_2utils__print_8hpp">
-<area shape="rect"  title=" " alt="" coords="433,5,584,32"/>
-<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="886,244,993,271"/>
-<area shape="rect"  title=" " alt="" coords="163,319,246,345"/>
-<area shape="rect"  title=" " alt="" coords="469,319,532,345"/>
-<area shape="rect"  title=" " alt="" coords="17,319,73,345"/>
-<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="1145,80,1256,107"/>
-<area shape="rect"  title=" " alt="" coords="1054,162,1126,189"/>
-<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="453,80,564,107"/>
-<area shape="rect"  title=" " alt="" coords="66,244,141,271"/>
-<area shape="rect"  title=" " alt="" coords="1280,80,1351,107"/>
-<area shape="rect"  title=" " alt="" coords="821,319,860,345"/>
-<area shape="rect"  title=" " alt="" coords="885,319,925,345"/>
-<area shape="rect"  title=" " alt="" coords="949,319,996,345"/>
-<area shape="rect"  title=" " alt="" coords="1020,319,1131,345"/>
-<area shape="rect"  title=" " alt="" coords="1155,319,1206,345"/>
-<area shape="rect"  title=" " alt="" coords="1230,319,1289,345"/>
-<area shape="rect"  title=" " alt="" coords="655,319,706,345"/>
-<area shape="rect"  title=" " alt="" coords="730,319,797,345"/>
-<area shape="rect"  title=" " alt="" coords="1481,155,1595,196"/>
-<area shape="rect"  title=" " alt="" coords="1201,162,1278,189"/>
-<area shape="rect"  title=" " alt="" coords="1303,162,1371,189"/>
-<area shape="rect"  title=" " alt="" coords="1395,162,1457,189"/>
-<area shape="rect"  href="utils__exceptions_8hpp.html" title=" " alt="" coords="737,162,878,189"/>
-<area shape="rect"  title=" " alt="" coords="807,244,861,271"/>
-<area shape="rect"  href="utils__memory_8hpp.html" title=" " alt="" coords="129,162,254,189"/>
-<area shape="rect"  title=" " alt="" coords="371,162,457,189"/>
-<area shape="rect"  title=" " alt="" coords="481,162,537,189"/>
-<area shape="rect"  title=" " alt="" coords="561,162,627,189"/>
-<area shape="rect"  title=" " alt="" coords="651,162,713,189"/>
-<area shape="rect"  title=" " alt="" coords="278,162,347,189"/>
-<area shape="rect"  title=" " alt="" coords="704,244,783,271"/>
-<area shape="rect"  title=" " alt="" coords="215,244,285,271"/>
+<area shape="rect"  title=" " alt="" coords="565,5,715,32"/>
+<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="644,244,751,271"/>
+<area shape="rect"  title=" " alt="" coords="5,319,88,345"/>
+<area shape="rect"  title=" " alt="" coords="121,319,183,345"/>
+<area shape="rect"  title=" " alt="" coords="999,319,1055,345"/>
+<area shape="rect"  title=" " alt="" coords="212,319,271,345"/>
+<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="475,80,586,107"/>
+<area shape="rect"  title=" " alt="" coords="171,162,243,189"/>
+<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="1115,80,1226,107"/>
+<area shape="rect"  title=" " alt="" coords="1740,244,1815,271"/>
+<area shape="rect"  title=" " alt="" coords="1866,80,1937,107"/>
+<area shape="rect"  title=" " alt="" coords="387,319,426,345"/>
+<area shape="rect"  title=" " alt="" coords="451,319,491,345"/>
+<area shape="rect"  title=" " alt="" coords="515,319,619,345"/>
+<area shape="rect"  title=" " alt="" coords="643,319,690,345"/>
+<area shape="rect"  title=" " alt="" coords="714,319,825,345"/>
+<area shape="rect"  title=" " alt="" coords="849,319,900,345"/>
+<area shape="rect"  title=" " alt="" coords="924,319,975,345"/>
+<area shape="rect"  title=" " alt="" coords="296,319,363,345"/>
+<area shape="rect"  title=" " alt="" coords="354,155,467,196"/>
+<area shape="rect"  title=" " alt="" coords="492,162,569,189"/>
+<area shape="rect"  title=" " alt="" coords="594,162,662,189"/>
+<area shape="rect"  title=" " alt="" coords="267,162,330,189"/>
+<area shape="rect"  href="utils__exceptions_8hpp.html" title=" " alt="" coords="1449,162,1591,189"/>
+<area shape="rect"  title=" " alt="" coords="1171,244,1226,271"/>
+<area shape="rect"  href="utils__memory_8hpp.html" title=" " alt="" coords="1615,162,1740,189"/>
+<area shape="rect"  title=" " alt="" coords="991,162,1076,189"/>
+<area shape="rect"  title=" " alt="" coords="1100,162,1156,189"/>
+<area shape="rect"  title=" " alt="" coords="1180,162,1247,189"/>
+<area shape="rect"  title=" " alt="" coords="1271,162,1332,189"/>
+<area shape="rect"  title=" " alt="" coords="1356,162,1425,189"/>
+<area shape="rect"  title=" " alt="" coords="1481,244,1559,271"/>
+<area shape="rect"  title=" " alt="" coords="1643,244,1712,271"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -146,35 +149,6 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delimiters.  <a href="structutils_1_1print_1_1delimiters__values.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters.html">utils::print::delimiters&lt; T, TChar &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01_t_00_01char_01_4.html">utils::print::delimiters&lt; T, char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01_t_00_01wchar__t_01_4.html">utils::print::delimiters&lt; T, wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01char_01_4.html">utils::print::delimiters&lt; std::vector&lt; std::string &gt;, char &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">vector&lt;string&gt; newline  <a href="structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01char_01_4.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string_01_4_00_01wchar__t_01_4.html">utils::print::delimiters&lt; std::vector&lt; std::string &gt;, wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string__view_01_4_00_01char_01_4.html">utils::print::delimiters&lt; std::vector&lt; std::string_view &gt;, char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1vector_3_01std_1_1string__view_01_4_00_01wchar__t_01_4.html">utils::print::delimiters&lt; std::vector&lt; std::string_view &gt;, wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1set_3_01_t_00_01_t_traits_00_01_t_allocator_01_4_00_01char_01_4.html">utils::print::delimiters&lt; std::set&lt; T, TTraits, TAllocator &gt;, char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1set_3_01_t_00_01_t_traits_00_01_t_allocator_01_4_00_01wchar__t_01_4.html">utils::print::delimiters&lt; std::set&lt; T, TTraits, TAllocator &gt;, wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_00_01char_01_4.html">utils::print::delimiters&lt; std::pair&lt; T1, T2 &gt;, char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1pair_3_01_t1_00_01_t2_01_4_00_01wchar__t_01_4.html">utils::print::delimiters&lt; std::pair&lt; T1, T2 &gt;, wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1tuple_3_01_args_8_8_8_01_4_00_01char_01_4.html">utils::print::delimiters&lt; std::tuple&lt; Args... &gt;, char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1tuple_3_01_args_8_8_8_01_4_00_01wchar__t_01_4.html">utils::print::delimiters&lt; std::tuple&lt; Args... &gt;, wchar_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1optional_3_01_t_01_4_00_01char_01_4.html">utils::print::delimiters&lt; std::optional&lt; T &gt;, char &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1delimiters_3_01std_1_1optional_3_01_t_01_4_00_01wchar__t_01_4.html">utils::print::delimiters&lt; std::optional&lt; T &gt;, wchar_t &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1print_1_1print__container__helper.html">utils::print::print_container_helper&lt; T, TChar, TCharTraits, TDelimiters &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,86 +180,509 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a6bc0774f56bf7da8b2ed201c34a5763c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a6bc0774f56bf7da8b2ed201c34a5763c">UTILS_PRINT_VECTOR_STRINGS_QUOTED</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:a6bc0774f56bf7da8b2ed201c34a5763c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a423c5ced45822b40d47c40eaf9c5c81c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a423c5ced45822b40d47c40eaf9c5c81c">UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:a423c5ced45822b40d47c40eaf9c5c81c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a988a7f55062afecf507c13c3f72a94e3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a988a7f55062afecf507c13c3f72a94e3">UTILS_PRINT_QUOTE_STRINGS</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a988a7f55062afecf507c13c3f72a94e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8f986b8ddbf33bb2c9c5a08d16f039b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#ac8f986b8ddbf33bb2c9c5a08d16f039b">UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:ac8f986b8ddbf33bb2c9c5a08d16f039b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2f49001be13949a16a57e6c99ab00ad"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a>&#160;&#160;&#160;,</td></tr>
+<tr class="separator:aa2f49001be13949a16a57e6c99ab00ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34eed61e8ed85500c9037bf8751ea55f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a34eed61e8ed85500c9037bf8751ea55f">DELIM_CHAR_CONT</a>&#160;&#160;&#160;&quot;[ &quot;, &quot;, &quot;, &quot; ]&quot;</td></tr>
+<tr class="separator:a34eed61e8ed85500c9037bf8751ea55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9757457c3029110949f46ce5ba8f65a9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a9757457c3029110949f46ce5ba8f65a9">DELIM_WCHAR_CONT</a>&#160;&#160;&#160;L&quot;[ &quot;, L&quot;, &quot;, L&quot; ]&quot;</td></tr>
+<tr class="separator:a9757457c3029110949f46ce5ba8f65a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af95c3913b885ad204efd35716e3c9e62"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#af95c3913b885ad204efd35716e3c9e62">DELIM_CHAR_CONT_NL</a>&#160;&#160;&#160;&quot;[\n    &quot;, &quot;,\n    &quot;, &quot;\n]&quot;</td></tr>
+<tr class="separator:af95c3913b885ad204efd35716e3c9e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1eeba0582fe40a2ca156f5138d4c7e8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#ab1eeba0582fe40a2ca156f5138d4c7e8">DELIM_WCHAR_CONT_NL</a>&#160;&#160;&#160;L&quot;[\n    &quot;, L&quot;,\n    &quot;, L&quot;\n]&quot;</td></tr>
+<tr class="separator:ab1eeba0582fe40a2ca156f5138d4c7e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27592f5353e0a44e69729b763e1c071b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a27592f5353e0a44e69729b763e1c071b">DELIM_CHAR_SET</a>&#160;&#160;&#160;&quot;{ &quot;, &quot;, &quot;, &quot; }&quot;</td></tr>
+<tr class="separator:a27592f5353e0a44e69729b763e1c071b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49bd930f14f46573fad8f95303160049"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a49bd930f14f46573fad8f95303160049">DELIM_WCHAR_SET</a>&#160;&#160;&#160;L&quot;{ &quot;, L&quot;, &quot;, L&quot; }&quot;</td></tr>
+<tr class="separator:a49bd930f14f46573fad8f95303160049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac40361b904d429fedb4a8adf63f790c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#ac40361b904d429fedb4a8adf63f790c0">DELIM_CHAR_SET_NL</a>&#160;&#160;&#160;&quot;{\n    &quot;, &quot;,\n    &quot;, &quot;\n}&quot;</td></tr>
+<tr class="separator:ac40361b904d429fedb4a8adf63f790c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90f9ea69240ba9f9ba9f2d3918d78807"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a90f9ea69240ba9f9ba9f2d3918d78807">DELIM_WCHAR_SET_NL</a>&#160;&#160;&#160;L&quot;{\n    &quot;, L&quot;,\n    &quot;, L&quot;\n}&quot;</td></tr>
+<tr class="separator:a90f9ea69240ba9f9ba9f2d3918d78807"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a052ea8fd5a425c5ee0f5467b6f235bdc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a052ea8fd5a425c5ee0f5467b6f235bdc">DELIM_CHAR_PAIR</a>&#160;&#160;&#160;&quot;&lt;&quot;, &quot;, &quot;, &quot;&gt;&quot;</td></tr>
+<tr class="separator:a052ea8fd5a425c5ee0f5467b6f235bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c0c13e61d96f888dba5d4e9ff8b2542"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a7c0c13e61d96f888dba5d4e9ff8b2542">DELIM_WCHAR_PAIR</a>&#160;&#160;&#160;L&quot;&lt;&quot;, L&quot;, &quot;, L&quot;&gt;&quot;</td></tr>
+<tr class="separator:a7c0c13e61d96f888dba5d4e9ff8b2542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e6ca27e73fbe3cefa6a37cc7449b4e7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a3e6ca27e73fbe3cefa6a37cc7449b4e7">DELIM_CHAR_TUPLE</a>&#160;&#160;&#160;&quot;(&quot;, &quot;, &quot;, &quot;)&quot;</td></tr>
+<tr class="separator:a3e6ca27e73fbe3cefa6a37cc7449b4e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42392eef958121b1fbae82484b69b4b1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a42392eef958121b1fbae82484b69b4b1">DELIM_WCHAR_TUPLE</a>&#160;&#160;&#160;L&quot;(&quot;, L&quot;, &quot;, L&quot;)&quot;</td></tr>
+<tr class="separator:a42392eef958121b1fbae82484b69b4b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c9ddf42e75cadbbad537422c78289c8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a4c9ddf42e75cadbbad537422c78289c8">DELIM_CHAR_OPTIONAL</a>&#160;&#160;&#160;NULL, &quot;nullopt&quot;, NULL</td></tr>
+<tr class="separator:a4c9ddf42e75cadbbad537422c78289c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac1593ca1afd1e5057f5229cc076f217"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#aac1593ca1afd1e5057f5229cc076f217">DELIM_WCHAR_OPTIONAL</a>&#160;&#160;&#160;NULL, L&quot;nullopt&quot;, NULL</td></tr>
+<tr class="separator:aac1593ca1afd1e5057f5229cc076f217"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2e6c81b841fabb34b401d625ad8dbf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#acb2e6c81b841fabb34b401d625ad8dbf">DELIM_CHAR_VARIANT</a>&#160;&#160;&#160;NULL, NULL, NULL</td></tr>
+<tr class="separator:acb2e6c81b841fabb34b401d625ad8dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5175d254ed2955464272a915c79b2f2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#ac5175d254ed2955464272a915c79b2f2">DELIM_WCHAR_VARIANT</a>&#160;&#160;&#160;NULL, NULL, NULL</td></tr>
+<tr class="separator:ac5175d254ed2955464272a915c79b2f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8221e6201a0667434a698fe718bad49a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a8221e6201a0667434a698fe718bad49a">MAKE_CONTAINER</a>(DELIM,  TEMPL,  TYPE)</td></tr>
+<tr class="separator:a8221e6201a0667434a698fe718bad49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cdfa04bbd955c0573db08f2195b9cb5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__print_8hpp.html#a8cdfa04bbd955c0573db08f2195b9cb5">MAKE_CONTAINER_NL</a>(DELIM,  TEMPL,  CONT, ...)</td></tr>
+<tr class="separator:a8cdfa04bbd955c0573db08f2195b9cb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a155a0444fd5be6c50d02acfd9bf2a71d"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
-<tr class="memitem:a155a0444fd5be6c50d02acfd9bf2a71d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#a155a0444fd5be6c50d02acfd9bf2a71d">utils::utils::utils::print::print_array_helper</a> (const T(&amp;a)[N])</td></tr>
-<tr class="separator:a155a0444fd5be6c50d02acfd9bf2a71d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a921bc8adb304d6725b594611c86d819b"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N = 0&gt; </td></tr>
-<tr class="memitem:a921bc8adb304d6725b594611c86d819b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#a921bc8adb304d6725b594611c86d819b">utils::utils::utils::print::print_array_helper</a> (const T *a)</td></tr>
-<tr class="separator:a921bc8adb304d6725b594611c86d819b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a415fb4a6c2a502a8fbe870f3b21c70fe"><td class="memTemplParams" colspan="2">template&lt;class T , typename ... Strings, std::enable_if_t&lt;(std::is_convertible_v&lt; Strings const &amp;, std::string_view &gt; &amp;&amp;...), int &gt;  = 0&gt; </td></tr>
-<tr class="memitem:a415fb4a6c2a502a8fbe870f3b21c70fe"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#a415fb4a6c2a502a8fbe870f3b21c70fe">utils::utils::utils::print::type2name</a> (T const &amp;o, const Strings &amp;...filter)</td></tr>
-<tr class="memdesc:a415fb4a6c2a502a8fbe870f3b21c70fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the internal actual class name of the given object o.  <a href="namespaceutils_1_1utils_1_1utils_1_1print.html#a415fb4a6c2a502a8fbe870f3b21c70fe">More...</a><br /></td></tr>
-<tr class="separator:a415fb4a6c2a502a8fbe870f3b21c70fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3708655607016edcf7b72275adbbf829"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:a3708655607016edcf7b72275adbbf829"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a3708655607016edcf7b72275adbbf829">utils::print::print_quoted_helper</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const T &amp;value)</td></tr>
+<tr class="separator:a3708655607016edcf7b72275adbbf829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae01fa7e12f9386adc3578e53b3c53993"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#ae01fa7e12f9386adc3578e53b3c53993">utils::print::MAKE_CONTAINER</a> (SET, typename T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TAllocator, std::set&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;) MAKE_CONTAINER(SET</td></tr>
+<tr class="separator:ae01fa7e12f9386adc3578e53b3c53993"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf6e8a9ecb4a3a6ae5652764e3d522de"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#aaf6e8a9ecb4a3a6ae5652764e3d522de">utils::print::MAKE_CONTAINER</a> (SET, typename T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TAllocator, std::unordered_set&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;) MAKE_CONTAINER(SET</td></tr>
+<tr class="separator:aaf6e8a9ecb4a3a6ae5652764e3d522de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f3be63a0aafc30480ba12d2482ef0f1"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a7f3be63a0aafc30480ba12d2482ef0f1">utils::print::MAKE_CONTAINER_NL</a> (SET, typename TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TAllocator, set,, TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator) MAKE_CONTAINER_NL(SET</td></tr>
+<tr class="separator:a7f3be63a0aafc30480ba12d2482ef0f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa7f96ffd1576270e4a93be718e8bbbf"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#aaa7f96ffd1576270e4a93be718e8bbbf">utils::print::MAKE_CONTAINER_NL</a> (SET, typename THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TAllocator, unordered_set,, THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator) MAKE_CONTAINER_NL(SET</td></tr>
+<tr class="separator:aaa7f96ffd1576270e4a93be718e8bbbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1bb31d907283f09e8c4299c83a6e7d0"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#aa1bb31d907283f09e8c4299c83a6e7d0">utils::print::MAKE_CONTAINER</a> (SET_NL, typename TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename TAllocator, std::map&lt; TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;) MAKE_CONTAINER(SET_NL</td></tr>
+<tr class="separator:aa1bb31d907283f09e8c4299c83a6e7d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1043517c1cebd381bdeb733399eef352"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_map&lt; TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a1043517c1cebd381bdeb733399eef352">utils::print::MAKE_CONTAINER</a> (PAIR, typename T1 <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> typename T2, std::pair&lt; T1 <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> T2 &gt;) MAKE_CONTAINER(TUPLE</td></tr>
+<tr class="separator:a1043517c1cebd381bdeb733399eef352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46cb684550fc142d67f9d08d55d7fc8b"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_map&lt; TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; std::tuple&lt; Args... &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a46cb684550fc142d67f9d08d55d7fc8b">utils::print::MAKE_CONTAINER</a> (OPTIONAL, typename T, std::optional&lt; T &gt;) MAKE_CONTAINER(VARIANT</td></tr>
+<tr class="separator:a46cb684550fc142d67f9d08d55d7fc8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d887be4d5a1586fc0bf88af68ec2cc2"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
+<tr class="memitem:a5d887be4d5a1586fc0bf88af68ec2cc2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#a5d887be4d5a1586fc0bf88af68ec2cc2">utils::utils::utils::print::print_array_helper</a> (const T(&amp;a)[N])</td></tr>
+<tr class="separator:a5d887be4d5a1586fc0bf88af68ec2cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89731614d5bad8b0415be53b9a10dd92"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N = 0&gt; </td></tr>
+<tr class="memitem:a89731614d5bad8b0415be53b9a10dd92"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#a89731614d5bad8b0415be53b9a10dd92">utils::utils::utils::print::print_array_helper</a> (const T *a)</td></tr>
+<tr class="separator:a89731614d5bad8b0415be53b9a10dd92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57d7e3df586b7253dd3b3704c35e38b8"><td class="memTemplParams" colspan="2">template&lt;class T , typename ... Strings, typename  = typename std::enable_if_t&lt;(std::is_convertible_v&lt;Strings const&amp;, std::string_view&gt; &amp;&amp; ...)&gt;&gt; </td></tr>
+<tr class="memitem:a57d7e3df586b7253dd3b3704c35e38b8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> const std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#a57d7e3df586b7253dd3b3704c35e38b8">utils::utils::utils::print::type2name</a> (T const &amp;o, const Strings &amp;...filter)</td></tr>
+<tr class="memdesc:a57d7e3df586b7253dd3b3704c35e38b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the internal actual class name of the given object o.  <a href="namespaceutils_1_1utils_1_1utils_1_1print.html#a57d7e3df586b7253dd3b3704c35e38b8">More...</a><br /></td></tr>
+<tr class="separator:a57d7e3df586b7253dd3b3704c35e38b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa473b7c767c0e8a192dba6062bcd0780"><td class="memTemplParams" colspan="2">template&lt;typename TChar , typename TCharTraits &gt; </td></tr>
 <tr class="memitem:aa473b7c767c0e8a192dba6062bcd0780"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1print.html#aa473b7c767c0e8a192dba6062bcd0780">utils::utils::utils::print::hexdump</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const void *data, size_t length, size_t width=16)</td></tr>
 <tr class="memdesc:aa473b7c767c0e8a192dba6062bcd0780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dump the given data to ascii output and hex view.  <a href="namespaceutils_1_1utils_1_1utils_1_1print.html#aa473b7c767c0e8a192dba6062bcd0780">More...</a><br /></td></tr>
 <tr class="separator:aa473b7c767c0e8a192dba6062bcd0780"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab942361235f2bd4947e37d389068abf7"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
-<tr class="memitem:ab942361235f2bd4947e37d389068abf7"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab942361235f2bd4947e37d389068abf7">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1print__container__helper.html">utils::print::print_container_helper</a>&lt; T, TChar, TCharTraits, TDelimiters &gt; &amp;helper)</td></tr>
-<tr class="memdesc:ab942361235f2bd4947e37d389068abf7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab942361235f2bd4947e37d389068abf7" title="operator&lt;&lt;() overloads">operator&lt;&lt;()</a> overloads  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab942361235f2bd4947e37d389068abf7">More...</a><br /></td></tr>
-<tr class="separator:ab942361235f2bd4947e37d389068abf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
-<tr class="memitem:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ae5e1bac5b049baf0dbcf0d93405e2562">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt; &amp;helper)</td></tr>
-<tr class="separator:ae5e1bac5b049baf0dbcf0d93405e2562"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , typename TChar , typename TCharTraits &gt; </td></tr>
-<tr class="memitem:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a9d78f72cc82efa26f9a40b0dcf9eef3c">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::pair&lt; T1, T2 &gt; &amp;value)</td></tr>
-<tr class="memdesc:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a9d78f72cc82efa26f9a40b0dcf9eef3c">More...</a><br /></td></tr>
-<tr class="separator:a9d78f72cc82efa26f9a40b0dcf9eef3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66af45ee3d5a5cad7385940ef47bf91d"><td class="memTemplParams" colspan="2">template&lt;typename ... Args, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
-<tr class="memitem:a66af45ee3d5a5cad7385940ef47bf91d"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a66af45ee3d5a5cad7385940ef47bf91d">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1print__tuple__helper.html">utils::print::print_tuple_helper</a>&lt; std::tuple&lt; Args... &gt;, sizeof...(Args), TChar, TDelimiters &gt; &amp;helper)</td></tr>
-<tr class="separator:a66af45ee3d5a5cad7385940ef47bf91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0721bcbaf77efafc2c6b166627e17a62"><td class="memTemplParams" colspan="2">template&lt;typename ... Args, typename TChar , typename TCharTraits &gt; </td></tr>
-<tr class="memitem:a0721bcbaf77efafc2c6b166627e17a62"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a0721bcbaf77efafc2c6b166627e17a62">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::tuple&lt; Args... &gt; &amp;value)</td></tr>
-<tr class="memdesc:a0721bcbaf77efafc2c6b166627e17a62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a tuple to the stream using delimiters from delimiters&lt;std::tuple&lt;Args...&gt;&gt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a0721bcbaf77efafc2c6b166627e17a62">More...</a><br /></td></tr>
-<tr class="separator:a0721bcbaf77efafc2c6b166627e17a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
-<tr class="memitem:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a6946f64c85de9ba8b8cbb027a6b383a2">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::optional&lt; T &gt; &amp;optional)</td></tr>
-<tr class="memdesc:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an optional to the stream using delimiters from delimiters&lt;std::optional&lt;T&gt;&gt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a6946f64c85de9ba8b8cbb027a6b383a2">More...</a><br /></td></tr>
-<tr class="separator:a6946f64c85de9ba8b8cbb027a6b383a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78fa1981c01c6c87377564b4b5082f71"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
-<tr class="memitem:a78fa1981c01c6c87377564b4b5082f71"><td class="memTemplItemLeft" align="right" valign="top">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a78fa1981c01c6c87377564b4b5082f71">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const T &amp;it_value)</td></tr>
-<tr class="memdesc:a78fa1981c01c6c87377564b4b5082f71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic operator &lt;&lt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a78fa1981c01c6c87377564b4b5082f71">More...</a><br /></td></tr>
-<tr class="separator:a78fa1981c01c6c87377564b4b5082f71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dd675a79f1e825022a37bb7d82bb67c"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
+<tr class="memitem:a7dd675a79f1e825022a37bb7d82bb67c"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a7dd675a79f1e825022a37bb7d82bb67c">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1print__container__helper.html">utils::print::print_container_helper</a>&lt; T, TChar, TCharTraits, TDelimiters &gt; &amp;helper)</td></tr>
+<tr class="memdesc:a7dd675a79f1e825022a37bb7d82bb67c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a7dd675a79f1e825022a37bb7d82bb67c" title="operator&lt;&lt;() overloads">operator&lt;&lt;()</a> overloads  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a7dd675a79f1e825022a37bb7d82bb67c">More...</a><br /></td></tr>
+<tr class="separator:a7dd675a79f1e825022a37bb7d82bb67c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab60cea62cd2d59b185998ccbeb5dcdd3"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
+<tr class="memitem:ab60cea62cd2d59b185998ccbeb5dcdd3"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ab60cea62cd2d59b185998ccbeb5dcdd3">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1array__wrapper.html">utils::print::array_wrapper</a>&lt; T, N &gt; &amp;helper)</td></tr>
+<tr class="separator:ab60cea62cd2d59b185998ccbeb5dcdd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc9fd045f961bbde0373ce09143d6b77"><td class="memTemplParams" colspan="2">template&lt;typename T1 , typename T2 , typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:abc9fd045f961bbde0373ce09143d6b77"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#abc9fd045f961bbde0373ce09143d6b77">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::pair&lt; T1, T2 &gt; &amp;value)</td></tr>
+<tr class="memdesc:abc9fd045f961bbde0373ce09143d6b77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#abc9fd045f961bbde0373ce09143d6b77">More...</a><br /></td></tr>
+<tr class="separator:abc9fd045f961bbde0373ce09143d6b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedfec1f51f0e2b021d82cbed33a49e83"><td class="memTemplParams" colspan="2">template&lt;typename ... Args, typename TChar , typename TCharTraits , typename TDelimiters &gt; </td></tr>
+<tr class="memitem:aedfec1f51f0e2b021d82cbed33a49e83"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#aedfec1f51f0e2b021d82cbed33a49e83">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const <a class="el" href="structutils_1_1print_1_1print__tuple__helper.html">utils::print::print_tuple_helper</a>&lt; std::tuple&lt; Args... &gt;, sizeof...(Args), TChar, TDelimiters &gt; &amp;helper)</td></tr>
+<tr class="separator:aedfec1f51f0e2b021d82cbed33a49e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac68cca94832bee5ff2848f63dbf171d6"><td class="memTemplParams" colspan="2">template&lt;typename ... Args, typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:ac68cca94832bee5ff2848f63dbf171d6"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#ac68cca94832bee5ff2848f63dbf171d6">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::tuple&lt; Args... &gt; &amp;value)</td></tr>
+<tr class="memdesc:ac68cca94832bee5ff2848f63dbf171d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a tuple to the stream using delimiters from delimiters&lt;std::tuple&lt;Args...&gt;&gt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#ac68cca94832bee5ff2848f63dbf171d6">More...</a><br /></td></tr>
+<tr class="separator:ac68cca94832bee5ff2848f63dbf171d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05aa846a9fdb0e7d1ca0144adfe1a2a1"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:a05aa846a9fdb0e7d1ca0144adfe1a2a1"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a05aa846a9fdb0e7d1ca0144adfe1a2a1">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::optional&lt; T &gt; &amp;optional)</td></tr>
+<tr class="memdesc:a05aa846a9fdb0e7d1ca0144adfe1a2a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an optional to the stream using delimiters from delimiters&lt;std::optional&lt;T&gt;&gt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a05aa846a9fdb0e7d1ca0144adfe1a2a1">More...</a><br /></td></tr>
+<tr class="separator:a05aa846a9fdb0e7d1ca0144adfe1a2a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c26f9e6f0828e5e95f05db770032aae"><td class="memTemplParams" colspan="2">template&lt;typename Arg , typename ... Args, typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:a4c26f9e6f0828e5e95f05db770032aae"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a4c26f9e6f0828e5e95f05db770032aae">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const std::variant&lt; Arg, Args... &gt; &amp;var)</td></tr>
+<tr class="memdesc:a4c26f9e6f0828e5e95f05db770032aae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints a variant to the stream.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a4c26f9e6f0828e5e95f05db770032aae">More...</a><br /></td></tr>
+<tr class="separator:a4c26f9e6f0828e5e95f05db770032aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17f9d3913c48ea84404712e643a65866"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:a17f9d3913c48ea84404712e643a65866"><td class="memTemplItemLeft" align="right" valign="top">auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1utils_1_1std.html#a17f9d3913c48ea84404712e643a65866">utils::utils::utils::std::operator&lt;&lt;</a> (std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;stream, const T &amp;value)</td></tr>
+<tr class="memdesc:a17f9d3913c48ea84404712e643a65866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic operator &lt;&lt;.  <a href="namespaceutils_1_1utils_1_1utils_1_1std.html#a17f9d3913c48ea84404712e643a65866">More...</a><br /></td></tr>
+<tr class="separator:a17f9d3913c48ea84404712e643a65866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a545a72bd3930fe6c71abee230e3271d9"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a545a72bd3930fe6c71abee230e3271d9">utils::print::TAllocator</a></td></tr>
+<tr class="separator:a545a72bd3930fe6c71abee230e3271d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ca43f86ee2cae4b8294a86217a24e7"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a11ca43f86ee2cae4b8294a86217a24e7">utils::print::multiset</a></td></tr>
+<tr class="separator:a11ca43f86ee2cae4b8294a86217a24e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01b83e0d8dbe4e06c9351db00a4ae3fd"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#a01b83e0d8dbe4e06c9351db00a4ae3fd">utils::print::unordered_multiset</a></td></tr>
+<tr class="separator:a01b83e0d8dbe4e06c9351db00a4ae3fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae728900a3268aa9d6595b6492c368cc2"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_map&lt; TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#ae728900a3268aa9d6595b6492c368cc2">utils::print::Args</a></td></tr>
+<tr class="separator:ae728900a3268aa9d6595b6492c368cc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac18b7bd5f78960a6f9741ad706f2851e"><td class="memItemLeft" align="right" valign="top">T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_multiset&lt; T <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> THash <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TPred <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> std::unordered_map&lt; TKey <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TVal <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TCompare <a class="el" href="utils__print_8hpp.html#aa2f49001be13949a16a57e6c99ab00ad">COMMA</a> TAllocator &gt; std::tuple&lt; Args... &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1print.html#ac18b7bd5f78960a6f9741ad706f2851e">utils::print::T</a></td></tr>
+<tr class="separator:ac18b7bd5f78960a6f9741ad706f2851e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a6bc0774f56bf7da8b2ed201c34a5763c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6bc0774f56bf7da8b2ed201c34a5763c">&#9670;&nbsp;</a></span>UTILS_PRINT_VECTOR_STRINGS_QUOTED</h2>
+<a id="aa2f49001be13949a16a57e6c99ab00ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2f49001be13949a16a57e6c99ab00ad">&#9670;&nbsp;</a></span>COMMA</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define UTILS_PRINT_VECTOR_STRINGS_QUOTED&#160;&#160;&#160;1</td>
+          <td class="memname">#define COMMA&#160;&#160;&#160;,</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Generic printing to an outputstream. Reference: <a href="https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers">https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers</a></p>
-<p>TODO Also look at <a href="https://github.com/p-ranav/pprint">https://github.com/p-ranav/pprint</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00028">28</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00123">123</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a423c5ced45822b40d47c40eaf9c5c81c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a423c5ced45822b40d47c40eaf9c5c81c">&#9670;&nbsp;</a></span>UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES</h2>
+<a id="a34eed61e8ed85500c9037bf8751ea55f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34eed61e8ed85500c9037bf8751ea55f">&#9670;&nbsp;</a></span>DELIM_CHAR_CONT</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define UTILS_PRINT_VECTOR_STRINGS_QUOTED_ON_NEW_LINES&#160;&#160;&#160;1</td>
+          <td class="memname">#define DELIM_CHAR_CONT&#160;&#160;&#160;&quot;[ &quot;, &quot;, &quot;, &quot; ]&quot;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00029">29</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00124">124</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af95c3913b885ad204efd35716e3c9e62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af95c3913b885ad204efd35716e3c9e62">&#9670;&nbsp;</a></span>DELIM_CHAR_CONT_NL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_CONT_NL&#160;&#160;&#160;&quot;[\n    &quot;, &quot;,\n    &quot;, &quot;\n]&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00126">126</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4c9ddf42e75cadbbad537422c78289c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c9ddf42e75cadbbad537422c78289c8">&#9670;&nbsp;</a></span>DELIM_CHAR_OPTIONAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_OPTIONAL&#160;&#160;&#160;NULL, &quot;nullopt&quot;, NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00140">140</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a052ea8fd5a425c5ee0f5467b6f235bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a052ea8fd5a425c5ee0f5467b6f235bdc">&#9670;&nbsp;</a></span>DELIM_CHAR_PAIR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_PAIR&#160;&#160;&#160;&quot;&lt;&quot;, &quot;, &quot;, &quot;&gt;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00134">134</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a27592f5353e0a44e69729b763e1c071b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27592f5353e0a44e69729b763e1c071b">&#9670;&nbsp;</a></span>DELIM_CHAR_SET</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_SET&#160;&#160;&#160;&quot;{ &quot;, &quot;, &quot;, &quot; }&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00129">129</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac40361b904d429fedb4a8adf63f790c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac40361b904d429fedb4a8adf63f790c0">&#9670;&nbsp;</a></span>DELIM_CHAR_SET_NL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_SET_NL&#160;&#160;&#160;&quot;{\n    &quot;, &quot;,\n    &quot;, &quot;\n}&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00131">131</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3e6ca27e73fbe3cefa6a37cc7449b4e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e6ca27e73fbe3cefa6a37cc7449b4e7">&#9670;&nbsp;</a></span>DELIM_CHAR_TUPLE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_TUPLE&#160;&#160;&#160;&quot;(&quot;, &quot;, &quot;, &quot;)&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00137">137</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acb2e6c81b841fabb34b401d625ad8dbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb2e6c81b841fabb34b401d625ad8dbf">&#9670;&nbsp;</a></span>DELIM_CHAR_VARIANT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_CHAR_VARIANT&#160;&#160;&#160;NULL, NULL, NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00143">143</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9757457c3029110949f46ce5ba8f65a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9757457c3029110949f46ce5ba8f65a9">&#9670;&nbsp;</a></span>DELIM_WCHAR_CONT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_CONT&#160;&#160;&#160;L&quot;[ &quot;, L&quot;, &quot;, L&quot; ]&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00125">125</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab1eeba0582fe40a2ca156f5138d4c7e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1eeba0582fe40a2ca156f5138d4c7e8">&#9670;&nbsp;</a></span>DELIM_WCHAR_CONT_NL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_CONT_NL&#160;&#160;&#160;L&quot;[\n    &quot;, L&quot;,\n    &quot;, L&quot;\n]&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00127">127</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aac1593ca1afd1e5057f5229cc076f217"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac1593ca1afd1e5057f5229cc076f217">&#9670;&nbsp;</a></span>DELIM_WCHAR_OPTIONAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_OPTIONAL&#160;&#160;&#160;NULL, L&quot;nullopt&quot;, NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00141">141</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7c0c13e61d96f888dba5d4e9ff8b2542"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c0c13e61d96f888dba5d4e9ff8b2542">&#9670;&nbsp;</a></span>DELIM_WCHAR_PAIR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_PAIR&#160;&#160;&#160;L&quot;&lt;&quot;, L&quot;, &quot;, L&quot;&gt;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00135">135</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a49bd930f14f46573fad8f95303160049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49bd930f14f46573fad8f95303160049">&#9670;&nbsp;</a></span>DELIM_WCHAR_SET</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_SET&#160;&#160;&#160;L&quot;{ &quot;, L&quot;, &quot;, L&quot; }&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00130">130</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a90f9ea69240ba9f9ba9f2d3918d78807"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90f9ea69240ba9f9ba9f2d3918d78807">&#9670;&nbsp;</a></span>DELIM_WCHAR_SET_NL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_SET_NL&#160;&#160;&#160;L&quot;{\n    &quot;, L&quot;,\n    &quot;, L&quot;\n}&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00132">132</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a42392eef958121b1fbae82484b69b4b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42392eef958121b1fbae82484b69b4b1">&#9670;&nbsp;</a></span>DELIM_WCHAR_TUPLE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_TUPLE&#160;&#160;&#160;L&quot;(&quot;, L&quot;, &quot;, L&quot;)&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00138">138</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac5175d254ed2955464272a915c79b2f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5175d254ed2955464272a915c79b2f2">&#9670;&nbsp;</a></span>DELIM_WCHAR_VARIANT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DELIM_WCHAR_VARIANT&#160;&#160;&#160;NULL, NULL, NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00144">144</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8221e6201a0667434a698fe718bad49a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8221e6201a0667434a698fe718bad49a">&#9670;&nbsp;</a></span>MAKE_CONTAINER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAKE_CONTAINER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">DELIM, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TEMPL, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TYPE&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span>&lt;TEMPL&gt; \</div><div class="line">        struct delimiters&lt;TYPE, char&gt; { \</div><div class="line">            static <span class="keyword">inline</span> constexpr delimiters_values&lt;char&gt; values = { DELIM_CHAR_ ## DELIM }; \</div><div class="line">        }; \</div><div class="line">        template&lt;TEMPL&gt; \</div><div class="line">        struct delimiters&lt;TYPE, wchar_t&gt; { \</div><div class="line">            static <span class="keyword">inline</span> constexpr delimiters_values&lt;wchar_t&gt; values = { DELIM_WCHAR_ ## DELIM }; \</div><div class="line">        };</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00146">146</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8cdfa04bbd955c0573db08f2195b9cb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cdfa04bbd955c0573db08f2195b9cb5">&#9670;&nbsp;</a></span>MAKE_CONTAINER_NL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAKE_CONTAINER_NL</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">DELIM, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TEMPL, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CONT, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span>&lt;TEMPL&gt; \</div><div class="line">        struct delimiters&lt;std::CONT&lt;std::string __VA_ARGS__&gt;, <span class="keywordtype">char</span>&gt; { \</div><div class="line">            static <span class="keyword">inline</span> constexpr delimiters_values&lt;char&gt; values = { DELIM_CHAR_ ## DELIM ## _NL }; \</div><div class="line">        }; \</div><div class="line">        template&lt;TEMPL&gt; \</div><div class="line">        struct delimiters&lt;std::CONT&lt;std::wstring __VA_ARGS__&gt;, <span class="keywordtype">wchar_t</span>&gt; { \</div><div class="line">            static <span class="keyword">inline</span> constexpr delimiters_values&lt;wchar_t&gt; values = { DELIM_WCHAR_ ## DELIM ## _NL }; \</div><div class="line">        }; \</div><div class="line">        template&lt;TEMPL&gt; \</div><div class="line">        struct delimiters&lt;std::CONT&lt;std::string_view __VA_ARGS__&gt;, <span class="keywordtype">char</span>&gt; { \</div><div class="line">            static <span class="keyword">inline</span> constexpr delimiters_values&lt;char&gt; values = { DELIM_CHAR_ ## DELIM ## _NL }; \</div><div class="line">        }; \</div><div class="line">        template&lt;TEMPL&gt; \</div><div class="line">        struct delimiters&lt;std::CONT&lt;std::wstring_view __VA_ARGS__&gt;, <span class="keywordtype">wchar_t</span>&gt; { \</div><div class="line">            static <span class="keyword">inline</span> constexpr delimiters_values&lt;wchar_t&gt; values = { DELIM_WCHAR_ ## DELIM ## _NL }; \</div><div class="line">        };</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00161">161</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a988a7f55062afecf507c13c3f72a94e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a988a7f55062afecf507c13c3f72a94e3">&#9670;&nbsp;</a></span>UTILS_PRINT_QUOTE_STRINGS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define UTILS_PRINT_QUOTE_STRINGS&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Generic printing to an outputstream. Reference: <a href="https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers">https://stackoverflow.com/questions/4850473/pretty-print-c-stl-containers</a> Also similar to: <a href="https://github.com/louisdx/cxx-prettyprint">https://github.com/louisdx/cxx-prettyprint</a></p>
+<p>Also look at <a href="https://github.com/p-ranav/pprint">https://github.com/p-ranav/pprint</a></p>
+<p>TODO Add queue, prio_queue and stack </p>
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00031">31</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac8f986b8ddbf33bb2c9c5a08d16f039b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8f986b8ddbf33bb2c9c5a08d16f039b">&#9670;&nbsp;</a></span>UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__print_8hpp_source.html#l00032">32</a> of file <a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>.</p>
 
 </div>
 </div>
