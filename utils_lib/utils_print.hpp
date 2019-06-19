@@ -36,10 +36,8 @@ namespace utils::print {
     template <typename T, typename TChar, typename TCharTraits> ATTR_MAYBE_UNUSED
     static inline auto& print_quoted_helper(std::basic_ostream<TChar, TCharTraits>& stream, const T& value) {
         #if UTILS_PRINT_QUOTE_STRINGS
-            if constexpr (std::is_convertible_v<T, TChar>) {
-                stream << "\'";
-                stream.write(value.data(), value.size());
-                stream << "\'";
+            if constexpr (utils::traits::is_byte_v<T>) {
+                stream << "\'" << value << "\'";
             } else
             if constexpr (std::is_convertible_v<T, std::string_view>) {
                 stream << "\"";
