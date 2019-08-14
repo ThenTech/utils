@@ -2,6 +2,7 @@
 #define UTILS_ALGORITHM_HPP
 
 #include "external/cppitertools/itertools.hpp"
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
 
 #include <algorithm>
@@ -13,7 +14,7 @@
 namespace utils::algorithm {
     /**
      *  Wrap CPPItertools as ::iter
-     *  Reference: https://github.com/ryanhaining/cppitertools (08/06/2019)
+     *  Reference: https://github.com/ryanhaining/cppitertools (04/08/2019)
      */
     namespace iter = ::iter;
 
@@ -117,7 +118,7 @@ namespace utils::algorithm {
         if constexpr (sizeof...(Ts) == 0) {
             return true;
         } else {
-            if (max < min) // Allow range from higher to lower
+            if (HEDLEY_UNLIKELY(max < min)) // Allow range from higher to lower
                 std::swap(min, max);
             return ((min <= ts && ts <= max) && ...);
         }
@@ -136,7 +137,7 @@ namespace utils::algorithm {
         typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr bool within(T min, T max, Iterator start, Iterator end) {
-        if (max < min) // Allow range from higher to lower
+        if (HEDLEY_UNLIKELY(max < min)) // Allow range from higher to lower
             std::swap(min, max);
 
         return std::all_of(start, end, [min, max](const T& x){
@@ -185,8 +186,8 @@ namespace utils::algorithm {
      */
     template <typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr auto sum(const Container& cont) {
-        static_assert (utils::traits::is_iterable_v<Container>,
-                       "utils::algorithm::sum: Container must have iterator support.");
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::sum: Container must have iterator support.");
         return utils::algorithm::sum(std::begin(cont), std::end(cont));
     }
 
@@ -219,8 +220,8 @@ namespace utils::algorithm {
      */
     template <typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr auto product(const Container& cont) {
-        static_assert (utils::traits::is_iterable_v<Container>,
-                       "utils::algorithm::product: Container must have iterator support.");
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::product: Container must have iterator support.");
         return utils::algorithm::product(std::begin(cont), std::end(cont));
     }
 
@@ -243,6 +244,43 @@ namespace utils::algorithm {
         for (size_t i = 0; i < times; i++) {
             std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
         }
+    }
+
+    /**
+     *  \brief  Wrapper to call std::for_each with a Container instead of iterators.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn
+     *      The action to call. Must be invocable with Container::value_type.
+     */
+    template <
+        typename Iterator,
+        typename F,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED
+    static inline constexpr auto for_each(Iterator start, Iterator end, F&& fn) {
+        static_assert(std::is_invocable_v<F, T>,
+                      "utils::algorithm::for_each: Callable function required.");
+        std::for_each(start, end, fn);
+    }
+
+    /**
+     *  \brief  Wrapper to call std::for_each with a Container instead of iterators.
+     *
+     *  \param cont
+     *      The container to apply for_each to.
+     *  \param  fn
+     *      The action to call. Must be invocable with Container::value_type.
+     */
+    template <typename Container, typename F> ATTR_MAYBE_UNUSED
+    static inline constexpr auto for_each(const Container& cont, F&& fn) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::for_each: Container must have iterator support.");
+        return utils::algorithm::for_each(std::begin(cont), std::end(cont), std::forward<F>(fn));
     }
 
     /**

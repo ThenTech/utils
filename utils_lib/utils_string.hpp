@@ -2,7 +2,7 @@
 #define UTILS_STRING_HPP
 
 #include "utils_exceptions.hpp"
-#include "utils_memory.hpp"
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
 
 #include <string>
@@ -33,7 +33,7 @@ namespace utils::string {
      *          and act as a string_view in all other cases.
      */
     template<typename _CharT, typename _Traits = std::char_traits<_CharT>>
-    struct basic_string_view : public std::basic_string_view<_CharT> {
+    struct basic_string_view : public std::basic_string_view<_CharT, _Traits> {
         public:
             using traits_type = _Traits;
             using value_type = _CharT;
@@ -335,7 +335,7 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void replace_all(std::string& str, const utils::string::string_view& from, const utils::string::string_view& to = "") {
-        if (from.size() == 0) return;
+        if (HEDLEY_UNLIKELY(from.size() == 0)) return;
 
         utils::traits::found_t found = 0ull;
         while ((found = utils::string::contains(str, from, *found))) {
@@ -353,7 +353,7 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void erase_all(std::string& str, const utils::string::string_view& erase) {
-        if (erase.size() == 0) return;
+        if (HEDLEY_UNLIKELY(erase.size() == 0)) return;
 
         utils::traits::found_t found = 0ull;
         while ((found = utils::string::contains(str, erase, *found))) {
@@ -398,7 +398,9 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void quote(std::string& str, const utils::string::string_view& quote='\"') {
-        if (utils::string::starts_with(str, quote) && utils::string::ends_with(str, quote)) {
+        if (HEDLEY_UNLIKELY(utils::string::starts_with(str, quote)
+                         && utils::string::ends_with(str, quote)))
+        {
             return;
         }
 
@@ -445,7 +447,7 @@ namespace utils::string {
         const size_t len = s.length();
         v.clear();
 
-        if (len < quote.size() * 2) return;
+        if (HEDLEY_UNLIKELY(len < quote.size() * 2)) return;
 
         utils::traits::found_t found_start = 0, found_end = 0;
 
@@ -645,12 +647,12 @@ namespace utils::string {
     template<typename ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string format(const std::string_view& format, Type&& ...args) {
         if constexpr (sizeof...(Type) != 0) {
-            const size_t size = std::snprintf(nullptr, 0, format.data(), args...) + 1; // Extra space for '\0'
-            auto buf = utils::memory::new_unique_array<char>(size);
+            const size_t size = std::snprintf(nullptr, 0, format.data(), args...); // Extra space for '\0'
+            std::string out; out.resize(size);
 
-            std::snprintf(buf.get(), size, format.data(), args...);
+            std::snprintf(out.data(), size + 1, format.data(), args...);
 
-            return std::string(buf.get(), buf.get() + size - 1 ); // Strip '\0'
+            return out;
         } else {
             return std::string(format);
         }
@@ -689,11 +691,11 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static bool is_base64(const uint8_t *buffer, size_t length) {
-        if (length % 4) return false;
+        if (HEDLEY_UNLIKELY(length % 4)) return false;
         const uint8_t *end = --buffer + length + 1;
 
         while (++buffer != end) {
-            if (*buffer == '=') {
+            if (HEDLEY_UNLIKELY(*buffer == '=')) {
                 break;
             } else if (!utils::string::is_base64(*buffer)) {
                 return false;
@@ -797,14 +799,14 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string from_base64(const uint8_t *buffer, size_t length) {
-        if (length % 4) {
+        if (HEDLEY_UNLIKELY(length % 4)) {
             throw utils::exceptions::ConversionException("utils::string::base64_decode (invalid size)");
         }
 
         const uint8_t *const buffer_end = buffer + length;
         size_t decoded_length = (length / 4) * 3;
 
-        if (length) {
+        if (HEDLEY_LIKELY(length)) {
             decoded_length -= (*(buffer_end - 2) == '=') + (*(buffer_end - 1) == '=');
         }
 

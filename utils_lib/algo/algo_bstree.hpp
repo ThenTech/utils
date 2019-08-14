@@ -17,7 +17,7 @@ namespace utils::algo {
 
     template <typename T>
     class BSTreeNodeBase {
-            template <typename U> friend class BSTree;
+        friend class BSTree<T>;
 
         private:
             T *mLeft{nullptr};
@@ -111,7 +111,7 @@ namespace utils::algo {
     template <typename T>
     class BSTree {
         public:
-            using Callback = std::function<void(T&)>;
+            using Callback = std::function<void(const T&)>;
 
         private:
             T *mRoot{nullptr};

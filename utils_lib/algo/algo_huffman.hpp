@@ -2,6 +2,7 @@
 #define HUFFMAN_HPP
 
 #include "../utils_memory.hpp"
+#include "../utils_bits.hpp"
 #include "../utils_logger.hpp"
 #include "../utils_io.hpp"
 
@@ -134,10 +135,14 @@ namespace utils::algo {
              */
             static void add_huffman_dict_header(uint32_t length, uint32_t bit_length, utils::io::BitStreamWriter& writer) {
                 if (length > 0) {
-                    writer.put(algo::Huffman<T>::DICT_HDR_HAS_ITEMS_BITS + algo::Huffman<T>::DICT_HDR_SEQ_LENGTH_BITS,
-                               0x80 | (length & 0x7F)); // MSB is HAS_ITEMS setting + 7 bits length
+                    // MSB is HAS_ITEMS setting + 7 bits length
+                    writer.put(algo::Huffman<T>::DICT_HDR_HAS_ITEMS_BITS, 1);
+                    writer.put(algo::Huffman<T>::DICT_HDR_SEQ_LENGTH_BITS,
+                               utils::bits::select_lsb<uint32_t>(length, algo::Huffman<T>::DICT_HDR_SEQ_LENGTH_BITS));
+
+                    // 4 bits for bit length of every dict item
                     writer.put(algo::Huffman<T>::DICT_HDR_ITEM_BITS,
-                               bit_length & 0xF);       // 4 bits for bit length of every dict item
+                               utils::bits::select_lsb<uint32_t>(bit_length, algo::Huffman<T>::DICT_HDR_ITEM_BITS));
                 } else {
                     writer.put_bit(0);
                 }
@@ -245,7 +250,7 @@ namespace utils::algo {
              *      ending withe a Node that has the data T.
              */
             void treeAddLeaf(const KeyPair& pair) {
-                const size_t mask = (1 << (pair.second.len - 1));  // Mask the pair.second.len'th bit
+                const size_t mask = utils::bits::mask_one(pair.second.len);  // Mask the pair.second.len'th bit
                       size_t dirs = pair.second.word;              // The directions to follow in the tree
 
                 algo::Node<T> *current = this->tree_root;

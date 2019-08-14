@@ -1,6 +1,8 @@
 #ifndef UTILS_TRAITS_HPP
 #define UTILS_TRAITS_HPP
 
+#include "utils_compiler.hpp"
+
 #include <type_traits>
 #include <iterator>
 
@@ -16,109 +18,12 @@
 #include <optional>
 
 
-////////////////////////////////////////////////////////////////////////////
-/// Macro helpers
-////////////////////////////////////////////////////////////////////////////
-#if defined(__unix__) || defined(__unix) || defined(__linux__) || defined(__CYGWIN__)
-    #define UTILS_TRAITS_OS_LINUX 1
-#elif defined(WIN32) || defined(_WIN32) || defined(_WIN64)
-    #define UTILS_TRAITS_OS_WIN 1
-
-    #ifndef NOMINMAX
-        #define NOMINMAX
-    #endif
-
-    #if defined(_MSVC_LANG)
-        #define UTILS_TRAITS_MSVC 1
-    #endif
-#elif defined(__APPLE__) || defined(__MACH__)
-    #define UTILS_TRAITS_OS_MAC 1
-#else
-    #error Unknown Platform
-#endif
-
-#if ( defined(UTILS_TRAITS_MSVC) && (_MSVC_LANG  < 201703L)) \
- || (!defined(UTILS_TRAITS_MSVC) && (__cplusplus < 201703L))
-    #error A C++17 compiler is required!
-#endif
-
-#define VALUE_TO_STRING(x) #x
-#define VALUE(x) VALUE_TO_STRING(x)
-#define VAR_NAME_VALUE(var) #var " = "  VALUE(var)
-
-//#pragma message(VAR_NAME_VALUE(__GNUC__))
-//#pragma message(VAR_NAME_VALUE(__cplusplus))
-//#pragma message(VAR_NAME_VALUE(__TIME__))
-
-/**
- *  Add padding to class or struct members.
- *  TYPE should be the type of the last member variable, while
- *  SIZE should be its size.
- *
- *  This will add a char[] with a size to pad the struct/class to the next byte boundary.
- */
-#define UTILS_TRAITS_ADD_PADDING(TYPE, SIZE) char __utils_padding[alignof(TYPE) * SIZE - 1];
-
-
-////////////////////////////////////////////////////////////////////////////
-/// Attributes
-////////////////////////////////////////////////////////////////////////////
-/**
- *  Indicates that the function does not return.
- */
-#define ATTR_NORETURN [[noreturn]]
-
-/**
- *  ATTR_DEPRECATED indicates that the use of the name or entity declared
- *  with this attribute is allowed, but discouraged for some reason.
- */
-#define ATTR_DEPRECATED          [[deprecated]]
-#define ATTR_DEPRECATED_MSG(MSG) [[deprecated(MSG)]]
-
-/**
- *  ATTR_FALLTHROUGH indicates that the fall through from the previous
- *  case label is intentional and should not be diagnosed by a compiler that
- *  warns on fall-through.
- */
-#define ATTR_FALLTHROUGH [[fallthrough]];
-
-/**
- * ATTR_NODISCARD encourages the compiler to issue a warning
- * if the return value is discarded.
- */
-#define ATTR_NODISCARD [[nodiscard]]
-
-/**
- * ATTR_MAYBE_UNUSED suppresses compiler warnings on unused entities, if any.
- */
-#define ATTR_MAYBE_UNUSED [[maybe_unused]]
-
-
 namespace utils::traits {
     /**
-     *  Found type
+     *  Found type, if has value, contains found index.
      */
     using found_t = std::optional<size_t>;
 
-    ////////////////////////////////////////////////////////////////////////////
-    /// Function with varying number of arguments to avoid "unused variable" warnings.
-    /// Use as UNUSED(var list) or add ATTR_MAYBE_UNUSED to args
-    ////////////////////////////////////////////////////////////////////////////
-    template <typename... A>
-    #if defined(__cpp_constexpr) && __cpp_constexpr >= 201304L
-        constexpr
-    #else
-        inline
-    #endif
-    void unused_variable(const A& ...) noexcept {}
-
-    #if defined(UTILS_TRAITS_MSVC)
-        // Macro with varying number of arguments to avoid "unused variable" warnings.
-        #define UNUSED(...) ((void)(__VA_ARGS__));
-    #else
-        // Macro with varying number of arguments to avoid "unused variable" warnings.
-        #define UNUSED(...) (decltype(utils::traits::unused_variable(__VA_ARGS__))());
-    #endif
 
     ////////////////////////////////////////////////////////////////////////////
     /// True if type T is plain byte
@@ -261,7 +166,16 @@ namespace utils::traits {
     template<template<class...>class Z, class...Ts>
     using can_apply = internal::can_apply<Z, void, Ts...>;
 
-    #define CREATE_HAS_FUNCTION(F) \
+    /**
+     *  Creates a `has_<F>_v` function that returns a boolean ::value
+     *  to indicate if the given object has the function F.
+     *
+     *  e.g. CREATE_HAS_FUNCTION(find) creates:
+     *      dot_find_r<T, U> that calls T.F()
+     *      has_find that checks if dot_find can be applied on T
+     *      has_find_t that returns has_find::value
+     */
+    #define UTILS_TRAITS_CREATE_HAS_FUNCTION(F) \
         template<class T, class U> \
         using dot_ ## F ## _r = decltype(std::declval<T>().F(U())); \
         template<class T, class U> \
@@ -269,7 +183,7 @@ namespace utils::traits {
         template<typename T, class U> \
         inline constexpr bool has_ ## F ## _v = has_ ## F<T, U>::value;
 
-    CREATE_HAS_FUNCTION(find)
+    UTILS_TRAITS_CREATE_HAS_FUNCTION(find)
 
     ////////////////////////////////////////////////////////////////////////////
     /**

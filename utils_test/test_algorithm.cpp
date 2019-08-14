@@ -200,10 +200,24 @@ TEST_CASE("Test utils::algorithm::repeat", "[utils][utils::algorithm]") {
     utils::algorithm::repeat<2>(__test_func, test);
     REQUIRE(test == 2);
 
-    utils::algorithm::repeat<1>([](){ CHECK(true); });
-
+    utils::algorithm::repeat<1>([&](){ test--; CHECK(true); });
     utils::algorithm::repeat<0>([&](){ test--; });
-    REQUIRE(test == 2);
+    REQUIRE(test == 1);
+}
+
+TEST_CASE("Test utils::algorithm::for_each", "[utils][utils::algorithm]") {
+    std::vector<int> test(10);
+    std::iota(test.begin(), test.end(), 0);
+    int cnt = 0;
+
+    utils::algorithm::for_each(test.begin(), test.end(), [&](int val) {
+        CHECK(val == cnt++);
+    });
+
+    cnt = 0;
+    utils::algorithm::for_each(test, [&](int val) {
+        CHECK(val == cnt++);
+    });
 }
 
 TEST_CASE("Test utils::algorithm::enumerate", "[utils][utils::algorithm]") {

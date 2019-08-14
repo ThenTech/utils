@@ -1,6 +1,7 @@
 #ifndef UTILS_INI_HPP
 #define UTILS_INI_HPP
 
+#include "utils_compiler.hpp"
 #include "utils_memory.hpp"
 #include "utils_io.hpp"
 #include "utils_string.hpp"

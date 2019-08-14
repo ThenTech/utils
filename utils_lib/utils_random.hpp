@@ -2,6 +2,7 @@
 #define UTILS_RANDOM_HPP
 
 #include "external/random.hpp"
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
 #include "utils_catch.hpp"
 #include "utils_string.hpp"
@@ -51,7 +52,7 @@ namespace utils::random {
         picked.reserve(amount);
 
         const auto size = std::distance(std::begin(container), std::end(container));
-        if( 0 == size ) return picked;
+        if(HEDLEY_UNLIKELY(0 == size)) return picked;
 
         using diff_t = typename std::iterator_traits<decltype(std::begin(container))>::difference_type;
 
@@ -101,7 +102,7 @@ namespace utils::random {
         Container picked;
         picked.reserve(amount);
 
-        if (to < from)  // Allow range from higher to lower
+        if (HEDLEY_UNLIKELY(to < from))  // Allow range from higher to lower
             std::swap(from, to);
 
         if constexpr (effolkronium::details::is_uniform_real<T>::value) {
@@ -201,7 +202,7 @@ namespace utils::random {
     };
 
     /**
-     *  \brief  Generate Universal Unique IDentifier v4
+     *  \brief  Generate Universal Unique IDentifier v4 (UUID)
      *
      *  \return Returns a formatted string (groups with `-`) with a randon UUID.
      */

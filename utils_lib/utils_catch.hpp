@@ -1,8 +1,12 @@
 #ifndef CATCH_ABORT_HPP
 #define CATCH_ABORT_HPP
 
-#include "../utils_test/test_settings.hpp"
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
+
+#if UTILS_HAS_INCLUDE("../utils_test/test_settings.hpp")
+    #include "../utils_test/test_settings.hpp"
+#endif
 
 #include <iostream>
 #include <functional>
@@ -38,7 +42,7 @@
 /**
  *  Macro to insert demangled function signature at compile time.
  */
-#if defined(UTILS_TRAITS_MSVC)
+#if defined(UTILS_COMPILER_MSVC)
     #define UTILS_CATCH_FUNCTION_NAME __FUNCDNAME__  // or __FUNCSIG__?
 #else
     #define UTILS_CATCH_FUNCTION_NAME __PRETTY_FUNCTION__
@@ -62,7 +66,7 @@
                   << __LINE__                                                \
                   << "\033[0m" "\n    inside: " "\033[35;1m"                 \
                   << UTILS_CATCH_FUNCTION_NAME                               \
-                  << "\033[0m" << std::endl;                                 \
+                  << "\033[0m" << std::flush << std::endl;                   \
     } while (false)
 
 /**
@@ -157,7 +161,7 @@ namespace utils::Catch {
 
         auto previous_handler = std::signal(SIGABRT, utils::Catch::internal::_function_abort_signal_handler);
 
-        if (previous_handler == SIG_ERR) {
+        if (HEDLEY_UNLIKELY(previous_handler == SIG_ERR)) {
             return true;
         }
 

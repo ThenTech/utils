@@ -1,11 +1,12 @@
 #ifndef UTILS_OS_HPP
 #define UTILS_OS_HPP
 
+#include "utils_compiler.hpp"
 #include "utils_bits.hpp"
 #include "utils_string.hpp"
 #include "utils_traits.hpp"
 
-#if defined(UTILS_TRAITS_OS_WIN)
+#if defined(UTILS_OS_WIN)
     #include <windows.h>
     #define UTILS_OS_ENABLE_VIRTUAL_TERMINAL 0x0004
 #endif
@@ -15,28 +16,31 @@
 
 namespace utils::os {
     namespace internal {
+        static volatile bool _virtual_console_enabled = false;
+
         enum _Console_commands {
             _CC_CLS       = 1L << 0,
-            _CC_CURSOR    = 1L << 1,
-            _CC_RESET     = 1L << 2,
+            _CC_CLLINE    = 1L << 1,
+            _CC_CURSOR    = 1L << 2,
+            _CC_RESET     = 1L << 3,
 
-            _CC_FG        = 1L << 3,
-            _CC_BG        = 1L << 4,
-            _CC_BRIGHT    = 1L << 5,
-            _CC_UNDERLINE = 1L << 6,
-            _CC_BOLD      = 1L << 7,
-            _CC_ITALIC    = 1L << 8,
-            _CC_REVERSED  = 1L << 9,
+            _CC_FG        = 1L << 4,
+            _CC_BG        = 1L << 5,
+            _CC_BRIGHT    = 1L << 6,
+            _CC_UNDERLINE = 1L << 7,
+            _CC_BOLD      = 1L << 8,
+            _CC_ITALIC    = 1L << 9,
+            _CC_REVERSED  = 1L << 10,
 
-            _CC_BLACK     = 1L << 10,
-            _CC_RED       = 1L << 11,
-            _CC_GREEN     = 1L << 12,
-            _CC_YELLOW    = 1L << 13,
-            _CC_BLUE      = 1L << 14,
-            _CC_MAGENTA   = 1L << 15,
-            _CC_CYAN      = 1L << 16,
-            _CC_WHITE     = 1L << 17,
-        };
+            _CC_BLACK     = 1L << 11,
+            _CC_RED       = 1L << 12,
+            _CC_GREEN     = 1L << 13,
+            _CC_YELLOW    = 1L << 14,
+            _CC_BLUE      = 1L << 15,
+            _CC_MAGENTA   = 1L << 16,
+            _CC_CYAN      = 1L << 17,
+            _CC_WHITE     = 1L << 18,
+        } HEDLEY_FLAGS;
 
         inline constexpr _Console_commands
         operator&(const _Console_commands __a, const _Console_commands __b) {
@@ -85,6 +89,7 @@ namespace utils::os {
      */
     namespace Console {
         static constexpr command_t CLS       = utils::os::internal::_CC_CLS;       ///< Clear entire screen
+        static constexpr command_t CLLINE    = utils::os::internal::_CC_CLLINE;    ///< Clear the current line
         static constexpr command_t CURSOR    = utils::os::internal::_CC_CURSOR;    ///< Set cursor to start
         static constexpr command_t RESET     = utils::os::internal::_CC_RESET;     ///< Reset formatting to black bg with gray fg
 
@@ -117,17 +122,22 @@ namespace utils::os {
      *  \param out
      *      The stream to write the virtual codes to. (default: std::cout)
      */
-    ATTR_MAYBE_UNUSED
-    static void Command(const command_t cmd, std::ostream& out = std::cout) {
+    template<typename TChar, typename TCharTraits> ATTR_MAYBE_UNUSED
+    static void Command(const command_t cmd, std::basic_ostream<TChar, TCharTraits>& out = std::cout) {
+        if (HEDLEY_UNLIKELY(!utils::os::internal::_virtual_console_enabled))
+            return;
+
         #define BASE_ "\033["
         out.flush();
 
-        if (cmd & Console::CLS) {
-            out << BASE_ "2J";
-        }
-
         if (cmd & Console::RESET) {
             out << BASE_ "0m";
+        }
+
+        if (cmd & Console::CLS) {
+            out << BASE_ "2J";
+        } else if (cmd & Console::CLLINE) {
+            out << BASE_ "2K";
         }
 
         if (cmd & Console::CURSOR) {
@@ -174,9 +184,15 @@ namespace utils::os {
      *  \param  out
      *      The stream to write the virtual codes to. (default: std::cout)
      */
-    ATTR_MAYBE_UNUSED
-    static void SetScreenTitle(const std::string_view& title, std::ostream& out = std::cout) {
-        out << "\033]2;" << title << "\007";
+    template<typename TChar, typename TCharTraits> ATTR_MAYBE_UNUSED
+    static void SetScreenTitle(const std::string_view& title, std::basic_ostream<TChar, TCharTraits>& out = std::cout) {
+        if (HEDLEY_LIKELY(utils::os::internal::_virtual_console_enabled)) {
+            out << "\033]2;" << title << "\007";
+        } else {
+            #if defined(UTILS_OS_WIN)
+                SetConsoleTitleA(LPCSTR(title.data()));
+            #endif
+        }
     }
 
     /**
@@ -185,9 +201,10 @@ namespace utils::os {
      */
     ATTR_MAYBE_UNUSED
     static void EnableVirtualConsole() {
+        int error = 0;
+
         #ifdef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
             // Set-up Windows terminal
-            int error = 0;
             do {
                 HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
                 if (hOut == INVALID_HANDLE_VALUE) {
@@ -207,13 +224,23 @@ namespace utils::os {
                     break;
                 }
             } while(false);
-
-            if (error) {
-                std::cerr << "[utils::os::EnableVirtualConsole] Windows console error: " << error << std::endl;
-            }
         #else
             // Unix is already good.
         #endif
+
+        if (error) {
+            std::cerr << "[utils::os::EnableVirtualConsole] Error: " << error << std::endl;
+        } else {
+            utils::os::internal::_virtual_console_enabled = true;
+        }
+    }
+}
+
+namespace std {
+    template<typename TChar, typename TCharTraits>
+    auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream, const utils::os::command_t& cmd) {
+        utils::os::Command(cmd, stream);
+        return stream;
     }
 }
 

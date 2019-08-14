@@ -1,6 +1,7 @@
 #ifndef UTILS_MISC_HPP
 #define UTILS_MISC_HPP
 
+#include "utils_compiler.hpp"
 #include "utils_exceptions.hpp"
 #include "utils_print.hpp"
 
@@ -25,7 +26,7 @@ namespace utils::misc {
     static T lexical_cast(const std::string_view& buffer) {
         T out;
 
-        if (buffer.size() == 0)
+        if (HEDLEY_UNLIKELY(buffer.size() == 0))
             throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));
 
         std::stringstream cast;

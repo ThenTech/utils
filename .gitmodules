@@ -1,3 +1,12 @@
 [submodule "utils_lib/external/cppitertools"]
 	path = utils_lib/external/cppitertools
 	url = https://github.com/ryanhaining/cppitertools.git
+[submodule "utils_lib/external/csv"]
+	path = utils_lib/external/csv
+	url = https://github.com/p-ranav/csv.git
+[submodule "utils_lib/external/hedley"]
+	path = utils_lib/external/hedley
+	url = https://github.com/nemequ/hedley.git
+[submodule "utils_lib/external/crc"]
+	path = utils_lib/external/crc
+	url = https://github.com/d-bahr/CRCpp

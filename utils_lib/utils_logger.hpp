@@ -7,6 +7,7 @@
 #include "utils_time.hpp"
 #include "utils_catch.hpp"
 #include "utils_threading.hpp"
+#include "utils_algorithm.hpp"
 
 #include <iostream>
 #include <ostream>
@@ -81,7 +82,7 @@ namespace utils {
             inline void write_to_screen(const std::string_view& text) {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
-                if (this->canLogScreen()) {
+                if (HEDLEY_LIKELY(this->canLogScreen())) {
                     this->screen_output << text;
                 }
             }
@@ -89,9 +90,9 @@ namespace utils {
             inline void write_to_file(const std::string_view& text) {
                 LOCK_BLOCK(utils::Logger::get().file_mutex);
 
-                if (this->canLogFile()) {
+                if (HEDLEY_LIKELY(this->canLogFile())) {
                     try {
-                        if (this->GetFileTimestamp()) {
+                        if (HEDLEY_LIKELY(this->GetFileTimestamp())) {
                             this->log_file << utils::time::Timestamp("[%Y-%m-%d %H:%M:%S] ");
                         }
 
@@ -112,7 +113,7 @@ namespace utils {
             {
                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
-                if (this->canLog(level)) {
+                if (HEDLEY_LIKELY(this->canLog(level))) {
                     const bool stamp = this->GetFileTimestamp();
                     this->Command(  utils::os::Console::FG
                                   | utils::os::Console::BOLD
@@ -141,7 +142,7 @@ namespace utils {
             {
                 utils::os::EnableVirtualConsole();
 
-                if (this->screen_output.bad()) {
+                if (HEDLEY_UNLIKELY(this->screen_output.bad())) {
                     this->screen_enabled = false;
                     std::cerr << "[Logger][ERROR] Bad screen output stream!" << std::endl;
                 }
@@ -179,7 +180,7 @@ namespace utils {
                 LOCK_BLOCK(utils::Logger::get().file_mutex);
                 bool enable_file = false;
 
-                if (fileName.length() > 0) {
+                if (HEDLEY_LIKELY(fileName.length() > 0)) {
                     try {
                         utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
                         enable_file = true;
@@ -199,7 +200,7 @@ namespace utils {
                 utils::Logger::SetScreenLogLevel(level);
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
-                if (console_stream.bad()) {
+                if (HEDLEY_UNLIKELY(console_stream.bad())) {
                     utils::Logger::get().screen_output.tie(&std::cerr);
                     utils::Logger::get().screen_output << "[Logger][ERROR] Bad screen output stream!" << std::endl;
                 } else {
@@ -291,7 +292,7 @@ namespace utils {
              *      The text to write.
              */
             static void Write(const std::string_view& text, const bool timestamp = false) {
-                if (utils::Logger::get().canLog()) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
                     const bool stamp = utils::Logger::GetFileTimestamp();
                     utils::Logger::SetFileTimestamp(timestamp);
 
@@ -393,10 +394,11 @@ namespace utils {
                 );
             }
 
+            HEDLEY_NON_NULL(1,3)
             static void ErrorTrace(const char* file, const int line, const char* function, const std::exception& e) {
                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
-                if (utils::Logger::get().canLog()) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
                     utils::Logger::Command(  utils::os::Console::BG
                                            | utils::os::Console::BRIGHT
                                            | utils::os::Console::RED);
@@ -452,45 +454,51 @@ namespace utils {
                     utils::Logger::Command(  utils::os::Console::RESET);
                     utils::Logger::Write(utils::Logger::CRLF);
                 } else {
-                    std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  "
+                    std::cerr << ( utils::os::Console::RESET
+                                 | utils::os::Console::FG | utils::os::Console::BRIGHT
+                                 | utils::os::Console::RED)
+                              << "[ERROR] Exception thrown:\n  "
+                              << ( utils::os::Console::FG
+                                 | utils::os::Console::YELLOW)
                               << e.what()
-                              << "\033[0m" "\n    at " "\033[36;1m"
+                              << utils::os::Console::RESET
+                              << "\n    at "
+                              << ( utils::os::Console::FG | utils::os::Console::BRIGHT
+                                 | utils::os::Console::CYAN)
                               << file
-                              << "\033[0m" ":" "\033[36;1m"
+                              << utils::os::Console::RESET
+                              << ":"
+                              << ( utils::os::Console::FG | utils::os::Console::BRIGHT
+                                 | utils::os::Console::CYAN)
                               << line
-                              << "\033[0m" "\n    inside: " "\033[35;1m"
+                              << utils::os::Console::RESET
+                              << "\n    inside: "
+                              << ( utils::os::Console::FG | utils::os::Console::BRIGHT
+                                 | utils::os::Console::MAGENTA)
                               << function
-                              << "\033[0m" << std::endl;
+                              << utils::os::Console::RESET << std::flush << std::endl;
                 }
             }
 
-            static void WriteProgress(const size_t& iteration, const size_t& total, const std::string_view& prefix = "Progress ") {
-                static constexpr size_t LEN = 55u;
-                static size_t stepu = 0u;
+            template <typename Iterator, typename F>
+            static void WriteProgress(Iterator start, Iterator end, F&& f) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLogScreen())) {
+                    utils::print::with_progressbar(start, end,
+                                                   utils::Logger::GetConsoleStream(),
+                                                   std::forward<F>(f));
+                } else {
+                    utils::algorithm::for_each(start, end, std::forward<F>(f));
+                }
+            }
 
-                if (!utils::Logger::get().canLogScreen()) return;
-
-                const bool done = (iteration == total);
-
-                if (iteration == 0) {
-                    stepu = size_t(float(total) / std::min(LEN, total));
-                } else if (done || iteration % stepu == 0) {
-                    const float progress = float(iteration) / total;
-
-                    const size_t filled_len = std::min(LEN, size_t(LEN * progress));
-                    LOCK_BLOCK(utils::Logger::get().screen_mutex);
-
-                    utils::Logger::GetConsoleStream()
-                        << "\r" << prefix << "|"
-                        << std::string(filled_len, utils::Logger::FILL[0])
-                        << std::string(LEN - filled_len, '-')
-                        << "| "
-                        << utils::string::format("%6.2f%%", progress * 100.0f)
-                        << std::flush;
-
-                    if (done) {
-                        utils::Logger::GetConsoleStream() << std::endl;
-                    }
+            template <typename Container, typename F>
+            static void WriteProgress(const Container& cont, F&& f) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLogScreen())) {
+                    utils::print::with_progressbar(cont,
+                                                   utils::Logger::GetConsoleStream(),
+                                                   std::forward<F>(f));
+                } else {
+                    utils::algorithm::for_each(cont, std::forward<F>(f));
                 }
             }
 
@@ -500,7 +508,7 @@ namespace utils {
 
             template<typename T>
             static void Stream(const T& arg) {
-                if (utils::Logger::get().canLog()) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
                     std::stringstream ss;
                     ss << arg;
                     utils::Logger::Write(ss.str());
@@ -509,7 +517,7 @@ namespace utils {
 
             template<typename T, typename ...Type>
             static void Stream(const T& arg, const Type& ...args) {
-                if (utils::Logger::get().canLog()) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
                     std::stringstream ss;
                     ss << arg;
                     ((ss << args), ...);
@@ -530,7 +538,7 @@ namespace utils {
             static inline void Command(const utils::os::command_t cmd) {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
-                if (utils::Logger::get().canLogScreen()) {
+                if (HEDLEY_LIKELY(utils::Logger::get().canLogScreen())) {
                     utils::os::Command(cmd, utils::Logger::GetConsoleStream());
                 }
             }

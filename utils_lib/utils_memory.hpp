@@ -3,6 +3,7 @@
 
 #define UTILS_MEMORY_ALLOC_LOG 0
 
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
 
 #include <algorithm>
@@ -30,7 +31,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_MALLOC
     static inline T* new_var(Type &&... args) {
         return new T(std::forward<Type>(args)...);
     }
@@ -84,7 +85,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_MALLOC
     static inline T* new_array(size_t x) {
         return new T[x]();
     }
@@ -99,7 +100,7 @@ namespace utils::memory {
      *  \return
      *      A pointer to the newly allocated object.
      */
-    template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    template <class T, typename ... size_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_MALLOC
     static inline T* new_flat_array(size_t... dims) {
         return new_array<T>((dims * ... * 1));
     }
@@ -141,7 +142,7 @@ namespace utils::memory {
 
         T* new_array = utils::memory::new_array<T>(new_size);
 
-        if (a != nullptr) {
+        if (HEDLEY_LIKELY(a != nullptr)) {
             std::copy_n(a, std::min(old_size, new_size), new_array);
             utils::memory::delete_array(a);
         }
@@ -193,7 +194,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_MALLOC
     static T** new_array(size_t x, size_t y) {
         T **arr = new T*[x];
         for(size_t i = 0; i < x; i++) arr[i] = utils::memory::new_array<T>(y);
@@ -231,7 +232,7 @@ namespace utils::memory {
      *	\return
      *		A pointer to the newly allocated object.
      */
-    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_MALLOC
     static T*** new_array(size_t x, size_t y, size_t z) {
         T ***arr = new T**[x];
         for(size_t i = 0; i < x; i++) arr[i] = utils::memory::new_array<T>(y, z);
@@ -339,7 +340,7 @@ namespace utils::memory {
     }
 }
 
-#if UTILS_MEMORY_ALLOC_LOG
+#ifdef UTILS_MEMORY_ALLOC_LOG
     #undef UTILS_MEMORY_ALLOC_LOG
 #endif
 #endif // UTILS_MEMORY_HPP

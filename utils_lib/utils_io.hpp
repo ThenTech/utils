@@ -2,6 +2,7 @@
 #define UTILS_IO_HPP
 
 #include "external/mio.hpp"
+#include "utils_compiler.hpp"
 #include "utils_exceptions.hpp"
 #include "utils_bits.hpp"
 #include "utils_string.hpp"
@@ -247,7 +248,7 @@ namespace utils::io {
     static auto file_to_bytes(const std::string& filename) {
         std::ifstream file(filename, std::ifstream::binary | std::ifstream::ate);
 
-        if (!file.good()) {
+        if (HEDLEY_UNLIKELY(!file.good())) {
             file.close();
             throw utils::exceptions::FileReadException(filename);
         }
@@ -307,7 +308,7 @@ namespace utils::io {
 
             static constexpr inline uint8_t bitmasks[] = { 255, 128, 192, 224, 240, 248, 252, 254 };
 
-            UTILS_TRAITS_ADD_PADDING(uint8_t, 8)
+            UTILS_ADD_PADDING(uint8_t, 8)
 
         public:
             BitStream(uint8_t *b = nullptr, size_t s = 0, size_t p = 0, bool m = false)
@@ -439,17 +440,17 @@ namespace utils::io {
             uint8_t get_bit(void) {
                 const size_t current_start_byte = this->position / 8u;
 
-                if (current_start_byte >= this->get_size()) {
+                if (HEDLEY_UNLIKELY(current_start_byte >= this->get_size())) {
                     // Prevent reading byte outside of array (-> Valgrind flagged)
                     return 0u;
                 }
 
-                const size_t  bits_taken = this->position % 8;
-                const uint8_t value      = this->buffer[current_start_byte];
+                const uint_fast32_t bits_taken = this->position % 8;
+                const uint8_t value = this->buffer[current_start_byte];
 
                 this->position++;
 
-                return (value & (1 << (7 - bits_taken))) != 0;
+                return utils::bits::select_one<uint8_t>(value, 8 - bits_taken);
             }
 
             /**
@@ -461,12 +462,12 @@ namespace utils::io {
              * buffer: 0101 1100, position==0
              * get(4) returns value 5, position==4
              */
-            uint32_t get(size_t l) {
+            uint32_t get(uint_fast32_t l) {
                 uint32_t value = 0;
 
-                for (size_t i = 0; i < l; i++) {
-                    const uint32_t v = this->get_bit();
-                    value |= v << (l - i - 1);
+                while (l--) {
+                    value <<= 1;
+                    value |= this->get_bit() & 1;
                 }
 
                 return value;
@@ -526,16 +527,13 @@ namespace utils::io {
              * Write one bit into the bitstream.
              * @param [in] value The value to put into the bitstream.
              */
-            void put_bit(int8_t value) {
+            void put_bit(uint8_t value) {
                 const size_t current_start_byte = this->position / 8u;
-                const size_t bits_taken = this->position % 8;
+                const uint_fast32_t bits_taken  = this->position % 8;
 
-                if (value) {
-                    this->buffer[current_start_byte] |= 1 << (7 - bits_taken);
-                } else {
-                    this->buffer[current_start_byte] &= ~(1 << (7 - bits_taken));
-                }
-
+                utils::bits::set_one(this->buffer[current_start_byte],
+                                     value,
+                                     8 - bits_taken);
                 this->position++;
             }
 
@@ -549,9 +547,9 @@ namespace utils::io {
              * put(4, 5)
              * buffer: 1010 xxxx, position==4
              */
-            void put(size_t length, uint32_t value) {
-                for (size_t p = 0; p < length; p++) {
-                    put_bit(1 & (value >> (length - 1 - p)));
+            void put(uint_fast32_t length, uint_fast32_t value) {
+                while (length) {
+                    this->put_bit(uint8_t(utils::bits::select_one(value, length--)));
                 }
             }
 

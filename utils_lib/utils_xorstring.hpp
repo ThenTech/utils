@@ -1,7 +1,9 @@
 #ifndef UTILS_XORSTRING_HPP
 #define UTILS_XORSTRING_HPP
 
+#include "utils_compiler.hpp"
 #define XORSTR_USE 2
+
 
 #if XORSTR_USE == 1
     /**
@@ -30,11 +32,7 @@
 
     #define xorstr(str) xorstr_(str).crypt_get()
 
-    #ifdef _MSC_VER
-        #define XORSTR_FORCEINLINE __forceinline
-    #else
-        #define XORSTR_FORCEINLINE __attribute__((always_inline))
-    #endif
+    #define XORSTR_FORCEINLINE HEDLEY_ALWAYS_INLINE
 
     // you can define this macro to get possibly faster code on gcc/clang
     // at the expense of constants being put into data section.
@@ -238,11 +236,7 @@
     #include <array>
     #include <utility>
 
-    #ifdef _MSC_VER
-        #define XORSTR_INLINE __forceinline
-    #else
-        #define XORSTR_INLINE inline
-    #endif
+    #define XORSTR_INLINE HEDLEY_ALWAYS_INLINE
 
     namespace utils::xostring {
         constexpr auto time = __TIME__;
@@ -322,7 +316,7 @@
          *  Obfuscate strings at compile time
          */
         #define xorstr(s) (utils::xostring::string<sizeof(s) - 1, \
-                            __COUNTER__>(s, std::make_index_sequence<sizeof(s) - 1>()).decrypt())
+                           __COUNTER__>(s, std::make_index_sequence<sizeof(s) - 1>()).decrypt())
 
     }
 

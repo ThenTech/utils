@@ -1,6 +1,7 @@
 #ifndef UTILS_MATH_HPP
 #define UTILS_MATH_HPP
 
+#include "utils_compiler.hpp"
 #include "utils_catch.hpp"
 #include "utils_traits.hpp"
 #include "utils_algorithm.hpp"
@@ -203,6 +204,76 @@ namespace utils::math {
             // TODO Use std::numeric_limits<T>::epsilon() ?
             return std::abs(x - y) < epsilon;
         }
+    }
+
+    /**
+     *  \brief  Linearly mix \p x and \p y with a \p factor.
+     *
+     *  \param  x
+     *      The first value (* (1 - factor)).
+     *  \param  y
+     *      The second value (* factor).
+     *  \param  factor
+     *      A floating point value to act as factor.
+     *  \return Returns the linear mix of the two arguments.
+     */
+    template<typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr double mix(const T x, const T y, const double factor) {
+        return double(x) * (1.0 - factor) + double(y) * factor;
+    }
+
+    /**
+     *  \brief  Returns a smooth interpolation in [\p min_new, \p max_new]
+     *          depending on value \p x_old in the given range of [\p min_old, \p max_old].
+     *          Uses linear interpolation.
+     *
+     *  \param  min_old
+     *      The lower value of the old interval.
+     *  \param  max_old
+     *      The upper value of the old interval.
+     *  \param  min_new
+     *      The lower value of the new interval.
+     *  \param  max_new
+     *      The upper value of the new interval.
+     *  \param  x_old
+     *      A value in [\p min_old, \p max_old] to interpolate to
+     *      a value in [\p min_new, \p max_new].
+     *  \return Returns the value of x within the new interval.
+     */
+    template<typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T interpolate_linear(const T min_old, const T max_old,
+                                                 const T min_new, const T max_new,
+                                                 const T x_old)
+    {
+        const auto old_x_ratio = std::clamp(double(x_old - min_old) / (max_old - min_old), 0.0, 1.0);
+        return min_new + old_x_ratio * double(max_new - min_new);
+    }
+
+    /**
+     *  \brief  Returns a smooth interpolation in [\p min_new, \p max_new]
+     *          depending on value \p x_old in the given range of [\p min_old, \p max_old].
+     *          Uses hermite interpolation.
+     *
+     *  \param  min_old
+     *      The lower value of the old interval.
+     *  \param  max_old
+     *      The upper value of the old interval.
+     *  \param  min_new
+     *      The lower value of the new interval.
+     *  \param  max_new
+     *      The upper value of the new interval.
+     *  \param  x_old
+     *      A value in [\p min_old, \p max_old] to interpolate to
+     *      a value in [\p min_new, \p max_new].
+     *  \return Returns the value of x within the new interval.
+     */
+    template<typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T interpolate_hermite(const T min_old, const T max_old,
+                                                  const T min_new, const T max_new,
+                                                  const T x_old)
+    {
+        const auto old_x_ratio = std::clamp(double(x_old - min_old) / (max_old - min_old), 0.0, 1.0);
+        return min_new + (old_x_ratio * old_x_ratio * (3.0 - 2.0 * old_x_ratio)) * double(max_new - min_new);
     }
 
     namespace stats {

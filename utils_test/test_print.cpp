@@ -320,4 +320,30 @@ TEST_CASE("Test utils::print::hexDump", "[utils][utils::print]") {
              "0010 : 5...6...7...8... 35 00 00 00 36 00 00 00 37 00 00 00 38 00 00 00\n");
 }
 
+TEST_CASE("Test utils::print::with_progressbar", "[utils][utils::print]") {
+    std::ostringstream test_op;
+    std::vector<int> test(10);
+    constexpr size_t size =  70 * 10;
+    int cnt = 0;
+
+    utils::print::with_progressbar(test.begin(), test.end(), test_op, [&](int){
+        cnt++;
+    });
+    CHECK(cnt == 10);
+    CHECK(test_op.str().size() >= size);
+
+
+    utils::print::Progressbar bar(test.size(), "", true, true, true, true, true, true);
+    for (auto val : test) {
+        UNUSED(val);
+        cnt++;
+        test_op << bar++;
+    }
+    --bar; bar--; bar -= 1; bar += 3;
+    test_op << bar.done();
+
+    CHECK(cnt == 20);
+    CHECK(test_op.str().size() >= size*2);
+}
+
 #endif

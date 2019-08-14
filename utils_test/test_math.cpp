@@ -184,6 +184,39 @@ TEST_CASE("Test utils::math::epsilon_equals", "[utils][utils::math]" ) {
     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));
 }
 
+TEST_CASE("Test utils::math::mix", "[utils][utils::math]" ) {
+    CHECK(utils::math::mix(5, 5, 0.00) == Approx(5));
+    CHECK(utils::math::mix(5, 5, 0.33) == Approx(5));
+    CHECK(utils::math::mix(5, 5, 0.50) == Approx(5));
+    CHECK(utils::math::mix(5, 5, 0.75) == Approx(5));
+    CHECK(utils::math::mix(5, 5, 1.00) == Approx(5));
+
+    CHECK(utils::math::mix( 0, 10, 0.6) == Approx(6));
+    CHECK(utils::math::mix(10,  0, 0.6) == Approx(4));
+
+    CHECK(utils::math::mix( 5, 10, 0.5) == Approx(7.5));
+}
+
+TEST_CASE("Test utils::math::interpolate_linear", "[utils][utils::math]" ) {
+    CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 0) == 0);
+    CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 5) == 500);
+
+    CHECK(utils::math::interpolate_linear(0.0, 10.0, 0.0, 1000.0, 7.32)
+            == Approx(732));
+    CHECK(utils::math::interpolate_linear(0.0, 10.0, 233.4, 1234.12, 7.32)
+            == Approx(965.92704));
+}
+
+TEST_CASE("Test utils::math::interpolate_hermite", "[utils][utils::math]" ) {
+    CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 0) == 0);
+    CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 5) == 500);
+
+    CHECK(utils::math::interpolate_hermite(0.0, 10.0, 0.0, 1000.0, 7.32)
+            == Approx(823.026));
+    CHECK(utils::math::interpolate_hermite(0.0, 10.0, 233.4, 1234.12, 7.32)
+            == Approx(1057.018242));
+}
+
 TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" ) {
     constexpr size_t len = 9;
 

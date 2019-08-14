@@ -10,9 +10,13 @@
  *  TODO Add queue, prio_queue and stack
  */
 
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
 #include "utils_catch.hpp"
 #include "utils_string.hpp"
+#include "utils_time.hpp"
+#include "utils_os.hpp"
+#include "utils_math.hpp"
 
 #include <iostream>
 #include <iterator>
@@ -21,15 +25,16 @@
 #include <variant>
 #include <algorithm>
 
-#if defined(UTILS_TRAITS_MSVC)
+#if defined(UTILS_COMPILER_MSVC)
     #include <intrin.h>
     #include <typeinfo>
-#else
+#elif UTILS_HAS_INCLUDE(<cxxabi.h>)
     #include <cxxabi.h>
 #endif
 
 #define UTILS_PRINT_QUOTE_STRINGS                  1
 #define UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES 1
+#define UTILS_PRINT_EXPORT_CONTAINER_FACTORIES     1
 
 
 namespace utils::print {
@@ -41,7 +46,8 @@ namespace utils::print {
             } else
             if constexpr (std::is_convertible_v<T, std::string_view>) {
                 stream << "\"";
-                stream.write(value.data(), value.size());
+                const std::string_view val{value};
+                stream.write(val.data(), val.size());
                 stream << "\"";
             } else
         #endif
@@ -71,7 +77,7 @@ namespace utils::print {
             }
 
             pretty_ostream_iterator<T, TChar, TCharTraits>& operator=(const T& value) {
-                if (_delim != NULL) {
+                if (HEDLEY_LIKELY(_delim != NULL)) {
                     // Don't insert a delimiter if this is the first time the function is called
                     if (_insertDelim)
                         (*_stream) << _delim;
@@ -125,115 +131,131 @@ namespace utils::print {
     };
 
     // Default delimiters
-    #define COMMA ,
-    #define DELIM_CHAR_CONT         "[ ", ", ", " ]"
-    #define DELIM_WCHAR_CONT        L"[ ", L", ", L" ]"
-    #define DELIM_CHAR_CONT_NL      "[\n    ", ",\n    ", "\n]"
-    #define DELIM_WCHAR_CONT_NL     L"[\n    ", L",\n    ", L"\n]"
+    #define UTILS_PRINT_DELIM_CHAR_CONT         "[ ", ", ", " ]"
+    #define UTILS_PRINT_DELIM_WCHAR_CONT        L"[ ", L", ", L" ]"
+    #define UTILS_PRINT_DELIM_CHAR_CONT_NL      "[\n    ", ",\n    ", "\n]"
+    #define UTILS_PRINT_DELIM_WCHAR_CONT_NL     L"[\n    ", L",\n    ", L"\n]"
 
-    #define DELIM_CHAR_SET          "{ ", ", ", " }"
-    #define DELIM_WCHAR_SET         L"{ ", L", ", L" }"
-    #define DELIM_CHAR_SET_NL       "{\n    ", ",\n    ", "\n}"
-    #define DELIM_WCHAR_SET_NL      L"{\n    ", L",\n    ", L"\n}"
+    #define UTILS_PRINT_DELIM_CHAR_SET          "{ ", ", ", " }"
+    #define UTILS_PRINT_DELIM_WCHAR_SET         L"{ ", L", ", L" }"
+    #define UTILS_PRINT_DELIM_CHAR_SET_NL       "{\n    ", ",\n    ", "\n}"
+    #define UTILS_PRINT_DELIM_WCHAR_SET_NL      L"{\n    ", L",\n    ", L"\n}"
 
-    #define DELIM_CHAR_PAIR         "<", ", ", ">"
-    #define DELIM_WCHAR_PAIR        L"<", L", ", L">"
+    #define UTILS_PRINT_DELIM_CHAR_PAIR         "<", ", ", ">"
+    #define UTILS_PRINT_DELIM_WCHAR_PAIR        L"<", L", ", L">"
 
-    #define DELIM_CHAR_TUPLE        "(", ", ", ")"
-    #define DELIM_WCHAR_TUPLE       L"(", L", ", L")"
+    #define UTILS_PRINT_DELIM_CHAR_TUPLE        "(", ", ", ")"
+    #define UTILS_PRINT_DELIM_WCHAR_TUPLE       L"(", L", ", L")"
 
-    #define DELIM_CHAR_OPTIONAL     NULL, "nullopt", NULL
-    #define DELIM_WCHAR_OPTIONAL    NULL, L"nullopt", NULL
+    #define UTILS_PRINT_DELIM_CHAR_OPTIONAL     NULL, "nullopt", NULL
+    #define UTILS_PRINT_DELIM_WCHAR_OPTIONAL    NULL, L"nullopt", NULL
 
-    #define DELIM_CHAR_VARIANT      NULL, NULL, NULL
-    #define DELIM_WCHAR_VARIANT     NULL, NULL, NULL
+    #define UTILS_PRINT_DELIM_CHAR_VARIANT      NULL, NULL, NULL
+    #define UTILS_PRINT_DELIM_WCHAR_VARIANT     NULL, NULL, NULL
 
-    #define MAKE_CONTAINER(DELIM, TEMPL, TYPE) \
+    #define UTILS_PRINT_DELIM_CHAR_KEYVAL       NULL, ": ", NULL
+    #define UTILS_PRINT_DELIM_WCHAR_KEYVAL      NULL, L": ", NULL
+
+    #define UTILS_PRINT_MAKE_CONTAINER(DELIM, TEMPL, TYPE) \
         template<TEMPL> \
         struct delimiters<TYPE, char> { \
-            static inline constexpr delimiters_values<char> values = { DELIM_CHAR_ ## DELIM }; \
+            static inline constexpr delimiters_values<char> values = { UTILS_PRINT_DELIM_CHAR_ ## DELIM }; \
         }; \
         template<TEMPL> \
         struct delimiters<TYPE, wchar_t> { \
-            static inline constexpr delimiters_values<wchar_t> values = { DELIM_WCHAR_ ## DELIM }; \
+            static inline constexpr delimiters_values<wchar_t> values = { UTILS_PRINT_DELIM_WCHAR_ ## DELIM }; \
         };
 
-    MAKE_CONTAINER(CONT, typename T, T)
+    UTILS_PRINT_MAKE_CONTAINER(CONT, typename T, T)
 
     ////////////////////////////////////////////////////////////////////////////
 
-    // container<string> newline
-    #define MAKE_CONTAINER_NL(DELIM, TEMPL, CONT, ...) \
+    // container<T> newline
+    #define UTILS_PRINT_MAKE_CONTAINER_NL(DELIM, TEMPL, CONT, ...) \
         template<TEMPL> \
         struct delimiters<std::CONT<std::string __VA_ARGS__>, char> { \
-            static inline constexpr delimiters_values<char> values = { DELIM_CHAR_ ## DELIM ## _NL }; \
+            static inline constexpr delimiters_values<char> values = { UTILS_PRINT_DELIM_CHAR_ ## DELIM ## _NL }; \
         }; \
         template<TEMPL> \
         struct delimiters<std::CONT<std::wstring __VA_ARGS__>, wchar_t> { \
-            static inline constexpr delimiters_values<wchar_t> values = { DELIM_WCHAR_ ## DELIM ## _NL }; \
+            static inline constexpr delimiters_values<wchar_t> values = { UTILS_PRINT_DELIM_WCHAR_ ## DELIM ## _NL }; \
         }; \
         template<TEMPL> \
         struct delimiters<std::CONT<std::string_view __VA_ARGS__>, char> { \
-            static inline constexpr delimiters_values<char> values = { DELIM_CHAR_ ## DELIM ## _NL }; \
+            static inline constexpr delimiters_values<char> values = { UTILS_PRINT_DELIM_CHAR_ ## DELIM ## _NL }; \
         }; \
         template<TEMPL> \
         struct delimiters<std::CONT<std::wstring_view __VA_ARGS__>, wchar_t> { \
-            static inline constexpr delimiters_values<wchar_t> values = { DELIM_WCHAR_ ## DELIM ## _NL }; \
+            static inline constexpr delimiters_values<wchar_t> values = { UTILS_PRINT_DELIM_WCHAR_ ## DELIM ## _NL }; \
         };
 
 #if UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES
-    MAKE_CONTAINER_NL(CONT, typename TAllocator, vector,, TAllocator)
-    MAKE_CONTAINER_NL(CONT, typename TAllocator, list,, TAllocator)
-    MAKE_CONTAINER_NL(CONT, size_t N, array,, N)
-    MAKE_CONTAINER_NL(CONT,, initializer_list)
+    UTILS_PRINT_MAKE_CONTAINER_NL(CONT, typename TAllocator, vector,, TAllocator)
+    UTILS_PRINT_MAKE_CONTAINER_NL(CONT, typename TAllocator, list,, TAllocator)
+    UTILS_PRINT_MAKE_CONTAINER_NL(CONT, size_t N, array,, N)
+    UTILS_PRINT_MAKE_CONTAINER_NL(CONT,, initializer_list)
 #endif
 
     ////////////////////////////////////////////////////////////////////////////
 
     // Delimiters for set
-    MAKE_CONTAINER(SET, typename T COMMA typename TCompare COMMA typename TAllocator,
-                   std::set<T COMMA TCompare COMMA TAllocator>)
-    MAKE_CONTAINER(SET, typename T COMMA typename TCompare COMMA typename TAllocator,
-                   std::multiset<T COMMA TCompare COMMA TAllocator>)
+    UTILS_PRINT_MAKE_CONTAINER(SET,
+        UTILS_ARGS(typename T, typename TCompare, typename TAllocator),
+        std::set<UTILS_ARGS(T, TCompare, TAllocator)>)
+    UTILS_PRINT_MAKE_CONTAINER(SET,
+        UTILS_ARGS(typename T, typename TCompare, typename TAllocator),
+        std::multiset<UTILS_ARGS(T, TCompare, TAllocator)>)
 
-    MAKE_CONTAINER(SET, typename T COMMA typename THash COMMA typename TPred COMMA typename TAllocator,
-                   std::unordered_set<T COMMA THash COMMA TPred COMMA TAllocator>)
-    MAKE_CONTAINER(SET, typename T COMMA typename THash COMMA typename TPred COMMA typename TAllocator,
-                   std::unordered_multiset<T COMMA THash COMMA TPred COMMA TAllocator>)
+    UTILS_PRINT_MAKE_CONTAINER(SET,
+        UTILS_ARGS(typename T, typename THash, typename TPred, typename TAllocator),
+        std::unordered_set<UTILS_ARGS(T, THash, TPred, TAllocator)>)
+    UTILS_PRINT_MAKE_CONTAINER(SET,
+        UTILS_ARGS(typename T, typename THash, typename TPred, typename TAllocator),
+        std::unordered_multiset<UTILS_ARGS(T, THash, TPred, TAllocator)>)
 
 #if UTILS_PRINT_STRINGS_CONTAINER_ON_NEW_LINES
-    MAKE_CONTAINER_NL(SET, typename TCompare COMMA typename TAllocator,
-                      set,, TCompare COMMA TAllocator)
-    MAKE_CONTAINER_NL(SET, typename TCompare COMMA typename TAllocator,
-                      multiset,, TCompare COMMA TAllocator)
+    UTILS_PRINT_MAKE_CONTAINER_NL(SET,
+        UTILS_ARGS(typename TCompare, typename TAllocator),
+        set, UTILS_ARGS(, TCompare, TAllocator))
+    UTILS_PRINT_MAKE_CONTAINER_NL(SET,
+        UTILS_ARGS(typename TCompare, typename TAllocator),
+        multiset, UTILS_ARGS(, TCompare, TAllocator))
 
-    MAKE_CONTAINER_NL(SET, typename THash COMMA typename TPred COMMA typename TAllocator,
-                      unordered_set,, THash COMMA TPred COMMA TAllocator)
-    MAKE_CONTAINER_NL(SET, typename THash COMMA typename TPred COMMA typename TAllocator,
-                      unordered_multiset,, THash COMMA TPred COMMA TAllocator)
+    UTILS_PRINT_MAKE_CONTAINER_NL(SET,
+        UTILS_ARGS(typename THash, typename TPred, typename TAllocator),
+        unordered_set, UTILS_ARGS(, THash, TPred, TAllocator))
+    UTILS_PRINT_MAKE_CONTAINER_NL(SET,
+        UTILS_ARGS(typename THash, typename TPred, typename TAllocator),
+        unordered_multiset, UTILS_ARGS(, THash, TPred, TAllocator))
 #endif
 
     // Delimiters for map
-    MAKE_CONTAINER(SET_NL, typename TKey COMMA typename TVal COMMA typename TCompare COMMA typename TAllocator,
-                   std::map<TKey COMMA TVal COMMA TCompare COMMA TAllocator>)
-    MAKE_CONTAINER(SET_NL, typename TKey COMMA typename TVal COMMA typename TCompare COMMA typename TAllocator,
-                   std::unordered_map<TKey COMMA TVal COMMA TCompare COMMA TAllocator>)
+    UTILS_PRINT_MAKE_CONTAINER(SET_NL,
+        UTILS_ARGS(typename TKey, typename TVal, typename TCompare, typename TAllocator),
+        std::map<UTILS_ARGS(TKey, TVal, TCompare, TAllocator)>)
+    UTILS_PRINT_MAKE_CONTAINER(SET_NL,
+        UTILS_ARGS(typename TKey, typename TVal, typename TCompare, typename TAllocator),
+        std::unordered_map<UTILS_ARGS(TKey, TVal, TCompare, TAllocator)>)
 
     // Delimiters for pair
-    MAKE_CONTAINER(PAIR, typename T1 COMMA typename T2,
-                   std::pair<T1 COMMA T2>)
+    UTILS_PRINT_MAKE_CONTAINER(PAIR,
+        UTILS_ARGS(typename T1, typename T2),
+        std::pair<UTILS_ARGS(T1, T2)>)
 
     // Delimiters for tuple
-    MAKE_CONTAINER(TUPLE, typename ...Args,
-                   std::tuple<Args...>)
+    UTILS_PRINT_MAKE_CONTAINER(TUPLE,
+        typename ...Args,
+        std::tuple<Args...>)
 
     // Delimiters for optional
-    MAKE_CONTAINER(OPTIONAL, typename T,
-                   std::optional<T>)
+    UTILS_PRINT_MAKE_CONTAINER(OPTIONAL,
+        typename T,
+        std::optional<T>)
 
     // Delimiters for variant
-    MAKE_CONTAINER(VARIANT, typename ...T,
-                   std::variant<T...>)
+    UTILS_PRINT_MAKE_CONTAINER(VARIANT,
+        typename ...T,
+        std::variant<T...>)
 
     ////////////////////////////////////////////////////////////////////////////
     /// Functor to print containers. You can use this directly if you
@@ -257,7 +279,7 @@ namespace utils::print {
             }
 
             void operator()(ostream_type& stream) const {
-                if (delimiters_type::values.prefix != NULL)
+                if (HEDLEY_LIKELY(delimiters_type::values.prefix != NULL))
                     stream << delimiters_type::values.prefix;
 
                 std::copy(_container->begin(),
@@ -266,7 +288,7 @@ namespace utils::print {
                               stream, delimiters_type::values.delimiter)
                 );
 
-                if (delimiters_type::values.postfix != NULL)
+                if (HEDLEY_LIKELY(delimiters_type::values.postfix != NULL))
                     stream << delimiters_type::values.postfix;
             }
     };
@@ -300,7 +322,7 @@ namespace utils::print {
                 } else {
                     (print_tuple_helper<Tuple, N - 1, TChar, TCharTraits>(_tuple))(stream);
 
-                    if (delimiters_type::values.delimiter != NULL)
+                    if (HEDLEY_LIKELY(delimiters_type::values.delimiter != NULL))
                         stream << delimiters_type::values.delimiter;
 
                     utils::print::print_quoted_helper(stream, std::get<N - 1>(_tuple));
@@ -366,11 +388,9 @@ namespace utils::print {
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static const std::string type2name(T const& o, const Strings& ...filter) {
         #ifdef _CXXABI_H
-            // Valgrind warning: abi::__cxa_demangle uses malloc so needs free
-            utils::memory::unique_t<char, decltype (&std::free)>
-                    demang(abi::__cxa_demangle(typeid(o).name(), nullptr, nullptr, nullptr),
-                           &std::free);
-            std::string s(demang.get());
+            char * const demang = abi::__cxa_demangle(typeid(o).name(), nullptr, nullptr, nullptr);
+            std::string s(demang);
+            std::free(demang);
         #else
             std::string s(typeid(o).name());
         #endif
@@ -400,8 +420,9 @@ namespace utils::print {
                         const void* data, size_t length,
                         size_t width = 16)
     {
-        if (data == nullptr)
+        if (HEDLEY_UNLIKELY(data == nullptr)) {
             return;
+        }
 
         const char* const start = static_cast<const char*>(data);
         const char* const end   = start + length;
@@ -426,6 +447,261 @@ namespace utils::print {
             stream << std::endl;
             line += lineLength;
         }
+    }
+
+    /**
+     *  \brief  A class representing a Progressbar.
+     *          Use this to indicate progress being made in a process or loop.
+     *
+     *          Printing the progressbar is not threadsafe.
+     *
+     *      e.g.
+     *
+     *      utils::print::Progressbar bar(list.size());
+     *      for (auto val : list) {
+     *          process(val);
+     *          utils::Logger::GetConsoleStream() << ++bar;
+     *      }   utils::Logger::GetConsoleStream() << bar.done();
+     *
+     *      or
+     *
+     *      utils::print::with_progressbar(list,
+     *                                     utils::Logger::GetConsoleStream(),
+     *                                     process);
+     */
+    template<char FILL_CHAR = '#', char EMPTY_CHAR = '-'>
+    class Progressbar {
+        private:
+            static constexpr size_t MAX_WIDTH = 80ull;
+
+            size_t iteration;
+            const size_t max_iteration;
+            const std::string prefix;
+            const bool with_bar;
+            const bool with_percentage;
+            const bool with_elapsed;
+            const bool with_remaining;
+            const bool with_per_second;
+            const bool update_on_step_only;
+            const utils::time::timepoint_t start;
+            const size_t width;
+            bool finished;
+
+            double progress    = 0.0;
+            size_t step        = 0ull;
+            bool should_redraw = true;
+
+            inline void update_step() {
+                this->iteration     = std::min(this->iteration, this->max_iteration);
+                this->progress      = double(this->iteration) / this->max_iteration;
+                const size_t step   = progress * this->width;
+                this->should_redraw = this->step != step;
+                this->step = step;
+            }
+
+            template<typename TChar, typename TCharTraits>
+            void print(std::basic_ostream<TChar, TCharTraits>& stream = std::cout) const {
+                if (HEDLEY_UNLIKELY(this->finished)) {
+                    return;
+                }
+
+                if (HEDLEY_LIKELY(this->update_on_step_only && !this->should_redraw)) {
+                    return;
+                }
+
+                stream << utils::os::Console::CLLINE << '\r'
+                       << this->prefix;
+
+                if (HEDLEY_LIKELY(this->with_bar)) {
+                    size_t filled = 0;
+                    stream << "[";
+                    while (++filled < this->step)   stream << FILL_CHAR;
+                    while (filled++ < this->width)  stream << EMPTY_CHAR;
+                    stream << "]";
+                }
+
+                if (HEDLEY_LIKELY(this->with_percentage)) {
+                    stream << utils::string::format(" %5.1f%%", this->progress * 100.0f);
+                }
+
+                if (HEDLEY_LIKELY(this->with_elapsed || this->with_remaining || this->with_per_second)) {
+                    const auto elapsed_ms          = utils::time::Timer::time_ms::duration(this->start);
+                    const double ticks_per_second  = double(this->iteration) / elapsed_ms * 1e3;
+
+                    if (HEDLEY_LIKELY(this->with_elapsed)) {
+                        stream << utils::time::Timestamp(std::time_t(elapsed_ms / 1000.0), " %M:%S")
+                               << utils::string::format(".%1d", (int(elapsed_ms) % 1000) / 100);
+                    }
+
+                    if (HEDLEY_UNLIKELY(this->with_remaining)) {
+                        const double remaining_ticks   = this->max_iteration - this->iteration;
+                        const double total_remaining_s = remaining_ticks / ticks_per_second;
+                        stream << utils::string::format(" %3.1fs left", total_remaining_s);
+                    }
+
+                    if (HEDLEY_UNLIKELY(this->with_per_second)) {
+                        stream << utils::string::format(" (%1.0f/s)", ticks_per_second);
+                    }
+                }
+
+                if (HEDLEY_UNLIKELY(this->finished || (this->iteration >= this->max_iteration))) {
+                    stream << "\r\n";
+                }
+
+                stream << std::flush;
+            }
+
+        public:
+            Progressbar(const size_t max_iteration,
+                        const std::string_view& prefix,
+                        const bool with_bar,
+                        const bool with_percentage,
+                        const bool with_elapsed,
+                        const bool with_remaining,
+                        const bool with_per_second,
+                        const bool update_on_step_only)
+                : iteration{0}
+                , max_iteration{max_iteration}
+                , prefix{prefix}
+                , with_bar{with_bar}
+                , with_percentage{with_percentage}
+                , with_elapsed{with_elapsed}
+                , with_remaining{with_remaining}
+                , with_per_second{with_per_second}
+                , update_on_step_only{update_on_step_only}
+                , start{utils::time::Timer::Start()}
+                , width{MAX_WIDTH - 2                   /* max width - border chars */
+                        - (prefix.size())               /* - prefix */
+                        - (with_percentage  ?  7 : 0)   /* - percentage */
+                        - (with_elapsed     ?  8 : 0)   /* - elapsed */
+                        - (with_remaining   ? 10 : 0)   /* - remaining */
+                        - (with_per_second  ?  8 : 0)   /* - per_second */
+                }
+                , finished{false}
+            {
+                // Empty
+            }
+
+            Progressbar(const size_t max_iteration,
+                        const bool with_bar,
+                        const bool with_percentage,
+                        const bool with_elapsed,
+                        const bool with_remaining,
+                        const bool with_per_second,
+                        const bool update_on_step_only)
+                : Progressbar(max_iteration, "", with_bar,
+                              with_percentage, with_elapsed, with_remaining, with_per_second,
+                              update_on_step_only)
+            {
+                // Empty
+            }
+
+            Progressbar(const size_t max_iteration)
+                : Progressbar(max_iteration, "", true, true, true, false, false, true)
+            {
+                // Empty
+            }
+
+            inline Progressbar& operator++()
+                { ++this->iteration; this->update_step(); return *this; }
+            inline Progressbar  operator++(int)
+                { Progressbar p = *this;  ++(*this); return p; }
+            inline Progressbar& operator+=(size_t increase)
+                { this->iteration += increase; this->update_step(); return *this; }
+
+            inline Progressbar& operator--()
+                { --this->iteration; this->update_step(); return *this; }
+            inline Progressbar  operator--(int)
+                { Progressbar p = *this; --(*this); return p;  }
+            inline Progressbar& operator-=(size_t decrease)
+                { this->iteration -= decrease; this->update_step(); return *this; }
+
+            /**
+             *  \brief  Indicate that the process is done and the bar
+             *          should not update anymore.
+             *  \return Return a reference to itself for inline printing.
+             */
+            inline const Progressbar& done() {
+                if (this->iteration >= this->max_iteration) {
+                    this->iteration = this->max_iteration;
+                    this->finished = true;
+                }
+                return *this;
+            }
+
+            template<typename TChar, typename TCharTraits>
+            friend inline auto& operator<<(
+                    std::basic_ostream<TChar, TCharTraits>& stream,
+                    const utils::print::Progressbar<FILL_CHAR, EMPTY_CHAR>& bar)
+            {
+                bar.print(stream);
+                return stream;
+            }
+    };
+
+    /**
+     *  \brief  A decorator to process the given iterator range, call \p f
+     *          on each element and print a progressbar to \p stream.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  stream
+     *      The ostream to print the progressbar to.
+     *  \param  f
+     *      The function to call on each element.
+     *      Must take exactly one argument of the type Iterator::value_type.
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename TChar, typename TCharTraits,
+        typename F,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED
+    static void with_progressbar(Iterator start, Iterator end,
+                                 std::basic_ostream<TChar, TCharTraits>& stream,
+                                 F&& f)
+    {
+        static_assert(std::is_invocable_v<F, T>,
+                      "utils::print::with_progressbar: Callable function required.");
+        utils::print::Progressbar bar(std::distance(start, end));
+
+        stream << bar;
+        for (; start != end; start++) {
+            std::invoke(std::forward<F>(f), *start);
+            stream << ++bar;
+        }
+
+        stream << bar.done();
+    }
+
+    /**
+     *  \brief  A decorator to process the given container, call \p f
+     *          on each element and print a progressbar to \p stream.
+     *
+     *  \param cont
+     *      The container to process.
+     *  \param  stream
+     *      The ostream to print the progressbar to.
+     *  \param  f
+     *      The function to call on each element.
+     *      Must take exactly one argument of the type Container::value_type.
+     */
+    template <
+        typename Container,
+        typename TChar, typename TCharTraits,
+        typename F
+    > ATTR_MAYBE_UNUSED
+    static inline auto with_progressbar(const Container& cont,
+                                        std::basic_ostream<TChar, TCharTraits>& stream,
+                                        F&& f)
+    {
+        static_assert (utils::traits::is_iterable_v<Container>,
+                       "utils::print::with_progressbar: Container must have iterator support.");
+        return utils::print::with_progressbar(std::begin(cont), std::end(cont),
+                                              stream, std::forward<F>(f));
     }
 }
 
@@ -461,15 +737,19 @@ namespace std {
             const std::pair<T1, T2>& value)
     {
         const auto delims = utils::print::delimiters<std::pair<T1, T2>, TChar>::values;
-        if (delims.prefix != NULL) stream << delims.prefix;
+        if (HEDLEY_LIKELY(delims.prefix != NULL))
+            stream << delims.prefix;
 
         utils::print::print_quoted_helper(stream, value.first);
 
-        if (delims.delimiter != NULL)  stream << delims.delimiter;
+        if (HEDLEY_LIKELY(delims.delimiter != NULL))
+            stream << delims.delimiter;
 
         utils::print::print_quoted_helper(stream, value.second);
 
-        if (delims.postfix != NULL) stream << delims.postfix;
+        if (HEDLEY_LIKELY(delims.postfix != NULL))
+            stream << delims.postfix;
+
         return stream;
     }
 
@@ -489,11 +769,14 @@ namespace std {
             const std::tuple<Args...>& value)
     {
         const auto delims = utils::print::delimiters<std::tuple<Args...>, TChar>::values;
-        if (delims.prefix != NULL) stream << delims.prefix;
+        if (HEDLEY_LIKELY(delims.prefix != NULL))
+            stream << delims.prefix;
 
         stream << utils::print::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TCharTraits>(value);
 
-        if (delims.postfix != NULL) stream << delims.postfix;
+        if (HEDLEY_LIKELY(delims.postfix != NULL))
+            stream << delims.postfix;
+
         return stream;
     }
 
@@ -504,12 +787,17 @@ namespace std {
             const std::optional<T>& optional)
     {
         const auto delims = utils::print::delimiters<std::optional<T>, TChar>::values;
-        if (delims.prefix != NULL)          stream << delims.prefix;
+        if (HEDLEY_UNLIKELY(delims.prefix != NULL))
+            stream << delims.prefix;
 
-        if (optional.has_value())           stream << optional.value();
-        else if (delims.delimiter != NULL)  stream << delims.delimiter;
+        if (HEDLEY_LIKELY(optional.has_value()))
+            stream << optional.value();
+        else if (HEDLEY_LIKELY(delims.delimiter != NULL))
+            stream << delims.delimiter;
 
-        if (delims.postfix != NULL)         stream << delims.postfix;
+        if (HEDLEY_UNLIKELY(delims.postfix != NULL))
+            stream << delims.postfix;
+
         return stream;
     }
 
@@ -520,11 +808,16 @@ namespace std {
             const std::variant<Arg, Args...>& var)
     {
         const auto delims = utils::print::delimiters<std::variant<Arg, Args...>, TChar>::values;
-        if (delims.prefix != NULL)          stream << delims.prefix;
+        if (HEDLEY_UNLIKELY(delims.prefix != NULL))
+            stream << delims.prefix;
 
-        std::visit([&](const auto& value) { stream << value; }, var);
+        std::visit([&](const auto& value) {
+            stream << value;
+        }, var);
 
-        if (delims.postfix != NULL)         stream << delims.postfix;
+        if (HEDLEY_UNLIKELY(delims.postfix != NULL))
+            stream << delims.postfix;
+
         return stream;
     }
 
@@ -576,21 +869,27 @@ namespace std {
     }
 }
 
-#undef COMMA
-#undef MAKE_CONTAINER
-#undef MAKE_CONTAINER_NL
-#undef DELIM_CHAR_CONT
-#undef DELIM_WCHAR_CONT
-#undef DELIM_CHAR_CONT_NL
-#undef DELIM_WCHAR_CONT_NL
-#undef DELIM_CHAR_SET
-#undef DELIM_WCHAR_SET
-#undef DELIM_CHAR_SET_NL
-#undef DELIM_WCHAR_SET_NL
-#undef DELIM_CHAR_PAIR
-#undef DELIM_WCHAR_PAIR
-#undef DELIM_CHAR_TUPLE
-#undef DELIM_WCHAR_TUPLE
-#undef DELIM_CHAR_OPTIONAL
-#undef DELIM_WCHAR_OPTIONAL
+#if UTILS_PRINT_EXPORT_CONTAINER_FACTORIES == 0
+    #undef UTILS_PRINT_MAKE_CONTAINER
+    #undef UTILS_PRINT_MAKE_CONTAINER_NL
+    #define UTILS_PRINT_MAKE_CONTAINER(...)
+    #define UTILS_PRINT_MAKE_CONTAINER_NL(...)
+
+    #undef UTILS_PRINT_DELIM_CHAR_CONT
+    #undef UTILS_PRINT_DELIM_WCHAR_CONT
+    #undef UTILS_PRINT_DELIM_CHAR_CONT_NL
+    #undef UTILS_PRINT_DELIM_WCHAR_CONT_NL
+    #undef UTILS_PRINT_DELIM_CHAR_SET
+    #undef UTILS_PRINT_DELIM_WCHAR_SET
+    #undef UTILS_PRINT_DELIM_CHAR_SET_NL
+    #undef UTILS_PRINT_DELIM_WCHAR_SET_NL
+    #undef UTILS_PRINT_DELIM_CHAR_PAIR
+    #undef UTILS_PRINT_DELIM_WCHAR_PAIR
+    #undef UTILS_PRINT_DELIM_CHAR_TUPLE
+    #undef UTILS_PRINT_DELIM_WCHAR_TUPLE
+    #undef UTILS_PRINT_DELIM_CHAR_OPTIONAL
+    #undef UTILS_PRINT_DELIM_WCHAR_OPTIONAL
+    #undef UTILS_PRINT_DELIM_CHAR_KEYVAL
+    #undef UTILS_PRINT_DELIM_WCHAR_KEYVAL
+#endif
 #endif // UTILS_PRINT_HPP

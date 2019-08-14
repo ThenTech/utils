@@ -1,18 +1,21 @@
 #ifndef UTILS_TIME_HPP
 #define UTILS_TIME_HPP
 
+#include "utils_compiler.hpp"
 #include "utils_traits.hpp"
 
 #include <chrono>
 #include <iomanip>
 #include <ctime>
 #include <functional>
+#include <thread>
 
 namespace utils::time {
     /**
      *  Chrono time ranges aliases
      */
     using nanoseconds  = std::chrono::duration<double, std::nano>;
+    using microseconds = std::chrono::duration<double, std::micro>;
     using milliseconds = std::chrono::duration<double, std::milli>;
     using seconds      = std::chrono::duration<double>;
     using minutes      = std::chrono::duration<double, std::ratio<60>>;
@@ -43,7 +46,7 @@ namespace utils::time {
         }
 
         /**
-         *  \brief  Return the time in ns that elepsed from start.
+         *  \brief  Return the time in ns that elapsed from start.
          */
         struct time_ns {
             static inline int64_t duration(const timepoint_t& start) {
@@ -53,7 +56,7 @@ namespace utils::time {
         };
 
         /**
-         *  \brief  Return the time in ms that elepsed from start.
+         *  \brief  Return the time in ms that elapsed from start.
          */
         struct time_ms {
             static inline double duration(const timepoint_t& start) {
@@ -62,7 +65,7 @@ namespace utils::time {
         };
 
         /**
-         *  \brief  Return the time in s that elepsed from start.
+         *  \brief  Return the time in s that elapsed from start.
          */
         struct time_s {
             static inline double duration(const timepoint_t& start) {
@@ -77,7 +80,7 @@ namespace utils::time {
          *      A struct with a `::duration(timepoint_t)` method specifying the
          *      resolution of the measurement.
          *  \param  f
-         *      The function to exucute and time.
+         *      The function to execute and time.
          *  \param  args
          *      The arguments to pass to \p f.
          *  \return Returns the `duration_struct::duration()` from the start and
@@ -106,7 +109,7 @@ namespace utils::time {
          *      A struct with a `::duration(timepoint_t)` method specifying the
          *      resolution of the measurement.
          *  \param  f
-         *      The function to exucute and time.
+         *      The function to execute and time.
          *  \param  args
          *      The arguments to pass to \p f.
          *  \return Returns the average `duration_struct::duration()` from the
@@ -134,6 +137,17 @@ namespace utils::time {
     }
 
     /**
+     *  \brief  Sleep the current thread with the given time period.
+     *
+     *  \param  period
+     *      The period to sleep from utils::time:: ranges aliases.
+     */
+    template<typename _Rep, typename _Period> ATTR_MAYBE_UNUSED
+    static inline void sleep(const std::chrono::duration<_Rep, _Period>& period) {
+        std::this_thread::sleep_for(period);
+    }
+
+    /**
      *  \brief  Return a formatted timestamp with the given time since epoch,
      *          or the current time if nullptr.
      *
@@ -156,13 +170,13 @@ namespace utils::time {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string Timestamp(const char* frmt = utils::time::TIMESTAMP_FORMAT.data(),
-                                 const std::time_t *epoch_time = nullptr)
+                                        const std::time_t *epoch_time = nullptr)
     {
         const std::time_t stamp = (epoch_time == nullptr
                                   ? std::time(nullptr)
                                   : *epoch_time);
 
-        #ifdef UTILS_TRAITS_MSVC
+        #ifdef UTILS_COMPILER_MSVC
             tm tm_l;
             localtime_s(&tm_l, &stamp);
             tm *tm = &tm_l;
@@ -178,7 +192,7 @@ namespace utils::time {
 
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string Timestamp(const std::time_t stamp,
-                                 const char* frmt = utils::time::TIMESTAMP_FORMAT.data())
+                                        const char* frmt = utils::time::TIMESTAMP_FORMAT.data())
     {
         return utils::time::Timestamp(frmt, &stamp);
     }

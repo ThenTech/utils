@@ -4,7 +4,10 @@
 #include "external/semver.hpp"
 
 namespace utils {
-    using Version = semver::Version;
+    namespace version {
+        using prerelease = semver::prerelease;
+    }
+    using Version = semver::version;
 }
 
 #endif // UTILS_VERSION_HPP

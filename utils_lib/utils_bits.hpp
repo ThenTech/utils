@@ -1,6 +1,7 @@
 #ifndef UTILS_BITS_HPP
 #define UTILS_BITS_HPP
 
+#include "utils_compiler.hpp"
 #include "utils_catch.hpp"
 #include "utils_traits.hpp"
 
@@ -12,7 +13,7 @@
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
  */
-#ifdef UTILS_TRAITS_MSVC
+#ifdef UTILS_COMPILER_MSVC
     #define UTILS_BITS_CLZ_ULL  utils::bits::internal::_clz_template
     #define UTILS_BITS_FFS_LL   utils::bits::internal::_ffs_template
     #define UTILS_BITS_CNT_LL   utils::bits::internal::_cnt_template
@@ -27,28 +28,28 @@
 
 namespace utils::bits {
     namespace internal {
-        #ifdef UTILS_TRAITS_MSVC
-            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+        #ifdef UTILS_COMPILER_MSVC
+            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_PRIVATE
                 static inline constexpr uint_fast32_t _clz_template(T x) {
-                if (x == 0) return 0u;
+                if (HEDLEY_UNLIKELY(x == 0)) return 0u;
                 uint_fast32_t r = 0;
                 while (x)
                     x >>= 1, ++r;
                 return 64 - r;
             }
 
-            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_PRIVATE
             static inline constexpr uint_fast32_t _ffs_template(T x) {
-                if (x == 0) return 0u;
+                if (HEDLEY_UNLIKELY(x == 0)) return 0u;
                 uint_fast32_t r = 1;
                 while ((x & 1) == 0)
                     x >>= 1, ++r;
                 return r;
             }
 
-            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+            template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_PRIVATE
             static inline constexpr uint_fast32_t _cnt_template(T x) {
-                if (x == 0) return 0u;
+                if (HEDLEY_UNLIKELY(x == 0)) return 0u;
                 uint_fast32_t r = 0;
                 while (x)
                     r += (x & 1) == 1, x >>= 1;
@@ -65,6 +66,144 @@ namespace utils::bits {
     template<class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     inline constexpr size_t size_of(void) {
         return sizeof(T) * std::numeric_limits<uint8_t>::digits;
+    }
+
+    /**
+     *  \brief  Create a mask matching the bit at the 1-based \p pos.
+     *
+     *  \param  pos
+     *      The position (1-based) to mask.
+     *  \return Returns a \p T with the pos' bit active.
+     */
+    template<class T = uint64_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T mask_one(uint_fast32_t pos) {
+        return !pos || pos > utils::bits::size_of<T>()
+             ? 0 : (1ull << (pos - 1));
+    }
+
+    /**
+     *  \brief  Create a mask matching \p n MSBs.
+     *
+     *  \param  n
+     *      The amount of MSBs to mask.
+     *  \return Returns a mask with \p n bits active on the left.
+     */
+    template<class T = uint64_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T mask_msb(uint_fast32_t n) {
+        using uT = typename std::make_unsigned<T>::type;
+        return n >= utils::bits::size_of<T>()
+             ? ~uT(0ull) : !n ? 0 : (~uT(0ull) << (utils::bits::size_of<T>() - n));
+    }
+
+    /**
+     *  \brief  Create a mask matching \p n LSBs.
+     *
+     *  \param  n
+     *      The amount of LSBs to mask.
+     *  \return Returns a mask with \p n bits active on the right.
+     */
+    template<class T = uint64_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T mask_lsb(uint_fast32_t n) {
+        using uT = typename std::make_unsigned<T>::type;
+        return n >= utils::bits::size_of<T>()
+             ? ~uT(0ull) : ~(~uT(0ull) << n);
+    }
+
+    /**
+     *  \brief  Select a single bit at \p pos.
+     *
+     *  \param  value
+     *      The value to select in.
+     *  \param  pos
+     *      The position to select at (1-based).
+     *  \return Returns 1 or 0 depending if the bit was active or not.
+     */
+    template<class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T select_one(const T value, uint_fast32_t pos) {
+        return !!(value & utils::bits::mask_one<T>(pos));
+    }
+
+    /**
+     *  \brief  Select \p n MSBs and return them as LSB value.
+     *
+     *  \param  value
+     *      The value to select in.
+     *  \param  n
+     *      The amount of MSBs to select.
+     *  \return Returs the \p n bit value from the left, as \p n LSBs.
+     */
+    template<class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T select_msb(const T value, uint_fast32_t n) {
+        return (value >> (utils::bits::size_of<T>() - n))
+             & utils::bits::mask_lsb<T>(n);
+    }
+
+    /**
+     *  \brief  Select \p n LSBs and return them as LSB value.
+     *
+     *  \param  value
+     *      The value to select in.
+     *  \param  n
+     *      The amount of LSBs to select.
+     *  \return Returs the \p n bit value from the right, as \p n LSBs.
+     */
+    template<class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr T select_lsb(const T value, uint_fast32_t n) {
+        return value & utils::bits::mask_lsb<T>(n);
+    }
+
+    /**
+     *  \brief  Set the bit at \p pos to the value of \p set.
+     *
+     *  \param  value
+     *      The value to change a bit in.
+     *  \param  set
+     *      The value to set the bit to.
+     *  \param  pos
+     *      The position to set the bit at.
+     *  \return Returns \p value with the bit at \p pos set to \p set.
+     */
+    template<class T> ATTR_MAYBE_UNUSED
+    static inline constexpr T& set_one(T& value, const T set, uint_fast32_t pos) {
+        value &= ~utils::bits::mask_one<T>(pos);
+        value |= (set & 1) << (pos - 1);
+        return value;
+    }
+
+    /**
+     *  \brief  Set the \p n MSBs to the value of \p set.
+     *
+     *  \param  value
+     *      The value to change MSBs in.
+     *  \param  set
+     *      The value to set the bits to.
+     *  \param  n
+     *      The amount of bits to set.
+     *  \return Returns \p value with \p n MSBs set to \p set.
+     */
+    template<class T> ATTR_MAYBE_UNUSED
+    static inline constexpr T& set_msb(T& value, const T set, uint_fast32_t n) {
+        value &= ~utils::bits::mask_msb<T>(n);
+        value |= utils::bits::select_lsb<T>(set, n) << (utils::bits::size_of<T>() - n);
+        return value;
+    }
+
+    /**
+     *  \brief  Set the \p n LSBs to the value of \p set.
+     *
+     *  \param  value
+     *      The value to change LSBs in.
+     *  \param  set
+     *      The value to set the bits to.
+     *  \param  n
+     *      The amount of bits to set.
+     *  \return Returns \p value with \p n LSBs set to \p set.
+     */
+    template<class T> ATTR_MAYBE_UNUSED
+    static inline constexpr T& set_lsb(T& value, const T set, uint_fast32_t n) {
+        value &= ~utils::bits::mask_lsb<T>(n);
+        value |= utils::bits::select_lsb<T>(set, n);
+        return value;
     }
 
     /**
@@ -175,11 +314,11 @@ namespace utils::bits {
         class T,
         size_t bit_length = utils::bits::size_of<T>()
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr T rotl(const T value, const int_fast32_t n = 1) {
+    static inline constexpr T rotl(const T value, const uint_fast32_t n = 1) {
         static_assert(std::is_integral_v<T>, "utils::bits::rotl: Integral required.");
 
-        constexpr T mask_size = bit_length == 64 ? uint64_t(~0ull) : ~(uint64_t(~0) << bit_length);
-        const     T mask_data = ~(uint64_t(~0) << n);
+        constexpr T mask_size = utils::bits::mask_lsb(bit_length);
+        const     T mask_data = utils::bits::mask_lsb(n);
         return ((value << n) & mask_size) | ((value >> (bit_length - n)) & mask_data);
     }
 
@@ -199,11 +338,11 @@ namespace utils::bits {
         class T,
         size_t bit_length = utils::bits::size_of<T>()
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr T rotr(const T value, const int_fast32_t n = 1) {
+    static inline constexpr T rotr(const T value, const uint_fast32_t n = 1) {
         static_assert(std::is_integral_v<T>, "utils::bits::rotr: Integral required.");
 
-        const     T mask_right = ~(uint64_t(~0) << (bit_length - n));
-        const     T mask_data  = ~(uint64_t(~0) << n);
+        const     T mask_right = utils::bits::mask_lsb(bit_length - n);
+        const     T mask_data  = utils::bits::mask_lsb(n);
         return ((value >> n) & mask_right) | ((value & mask_data) << (bit_length - n));
     }
 

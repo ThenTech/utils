@@ -5,13 +5,13 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)](https://github.com/Wosser1sProductions/utils/commits/master)
 ![License](https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue)
 
-[![version](https://img.shields.io/badge/version-0.42.0--beta-brightgreen.svg)](http://semver.org/)
+[![version](https://img.shields.io/badge/version-0.43.0--beta-brightgreen.svg)](http://semver.org/)
 ![c++-version](https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg)
 [![tested-unix](https://img.shields.io/badge/tested%20with-g%2B%2B--9.1-orange.svg)](https://gcc.gnu.org/gcc-9/)
 ![tested-win](https://img.shields.io/badge/tested%20with-MinGW--7.3-orange.svg)
 
 Compile with: `-std=c++17`
-And link with `-lstdc++fs` to enable `std::experimental::filesystem`
+Link with `-lstdc++fs` to enable `std::experimental::filesystem`, and with `-pthread` to use threading with CSV files.
 
 [Doxygen documentation can be found here.](https://wosser1sproductions.github.io/utils/docs/)
 
@@ -25,6 +25,8 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [utils_bits.hpp](utils_lib/utils_bits.hpp)                | Bit related extensions                                       |
 | [utils_catch.hpp](utils_lib/utils_catch.hpp)              | Extra's for Catch2 like custom ASSERT and std::abort() recoverable test |
 | [utils_colour.hpp](utils_lib/utils_colour.hpp)            | Colour class and LUTs for colour mappings from [tinycolormap](https://github.com/yuki-koyama/tinycolormap) |
+| [utils_crc.hpp](utils_lib/utils_crc.hpp)                  | Namespace wrapper for CRC calculations from [CRCpp](https://github.com/d-bahr/CRCpp) |
+| [utils_csv.hpp](utils_lib/utils_csv.hpp)                  | Namespace wrapper for CSV file IO from [p-ranav/csv](http://github.com/p-ranav/csv) |
 | [utils_exceptions.hpp](utils_lib/utils_exceptions.hpp)    | Extra Exceptions                                             |
 | [utils_ini.hpp](utils_lib/utils_ini.hpp)                  | ConfigReader class commonly for `.ini` files                 |
 | [utils_io.hpp](utils_lib/utils_io.hpp)                    | File/Stream IO (BitStream...) and `::mio` with [memory mapped file io](https://github.com/mandreyel/mio) |
@@ -46,7 +48,9 @@ And link with `-lstdc++fs` to enable `std::experimental::filesystem`
 | [algo/algo_bstree.hpp](utils_lib/algo/algo_bstree.hpp)    | Binary Search Tree implementation                            |
 | [algo/algo_huffman.hpp](utils_lib/algo/algo_huffman.hpp)  | Huffman compress/decompress                                  |
 | [external/cppitertools](utils_lib/external/cppitertools/) | [CPPItertools](https://github.com/ryanhaining/cppitertools) by Ryan Haining |
+| [external/csv](utils_lib/external/csv/)                   | [csv](http://github.com/p-ranav/csv) library by p-ranav      |
 | [external/catch.hpp](utils_lib/external/catch.hpp)        | [Catch2](https://github.com/catchorg/Catch2) C++ test framework |
+| [external/CRC.hpp](utils_lib/external/CRC.hpp)            | CRC calculations from [CRCpp](https://github.com/d-bahr/CRCpp) |
 | [external/json.hpp](utils_lib/external/json.hpp)          | [JSON](https://github.com/nlohmann/json) library by Niels Lohmann |
 | [external/mio.hpp](utils_lib/external/mio.hpp)            | [mio](https://github.com/mandreyel/mio) by Mabdreyel         |
 | [external/random.hpp](utils_lib/external/random.hpp)      | Modern random utilities from [effolkronium/random](https://github.com/effolkronium/random) |

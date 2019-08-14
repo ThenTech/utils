@@ -6,6 +6,63 @@
 #include "../utils_lib/utils_bits.hpp"
 
 
+TEST_CASE("Test utils::bits::size_of", "[utils][utils::bits]") {
+    REQUIRE(utils::bits::size_of< int8_t>()  == 8);
+    REQUIRE(utils::bits::size_of<uint8_t>()  == 8);
+    REQUIRE(utils::bits::size_of< int16_t>() == 16);
+    REQUIRE(utils::bits::size_of<uint16_t>() == 16);
+    REQUIRE(utils::bits::size_of< int32_t>() == 32);
+    REQUIRE(utils::bits::size_of<uint32_t>() == 32);
+    REQUIRE(utils::bits::size_of< int64_t>() == 64);
+    REQUIRE(utils::bits::size_of<uint64_t>() == 64);
+}
+
+TEST_CASE("Test utils::bits::mask", "[utils][utils::bits]") {
+    REQUIRE(utils::bits::mask_one(0) == 0);
+    REQUIRE(utils::bits::mask_msb(0) == 0);
+    REQUIRE(utils::bits::mask_lsb(0) == 0);
+    REQUIRE(utils::bits::mask_one(64) == (1ull << 63));
+    REQUIRE(utils::bits::mask_msb(64) == ~0ull);
+    REQUIRE(utils::bits::mask_lsb(64) == ~0ull);
+    REQUIRE(utils::bits::mask_one(65) == 0);
+    REQUIRE(utils::bits::mask_msb(65) == ~0ull);
+    REQUIRE(utils::bits::mask_lsb(65) == ~0ull);
+
+    int64_t msb = int64_t(1ull << 63), lsb = 1ull;
+
+    for (uint32_t i = 1; i < 65; i++, msb >>= 1, lsb = (lsb << 1) | 1) {
+        CHECK(utils::bits::mask_one(i) == (1ull << (i-1)));
+        CHECK(utils::bits::mask_msb(i) == uint64_t(msb));
+        CHECK(utils::bits::mask_lsb(i) == uint64_t(lsb));
+    }
+}
+
+TEST_CASE("Test utils::bits::select", "[utils][utils::bits]") {
+    REQUIRE(utils::bits::select_one(0, 1) == 0);
+    REQUIRE(utils::bits::select_msb(0, 1) == 0);
+    REQUIRE(utils::bits::select_lsb(0, 1) == 0);
+    REQUIRE(utils::bits::select_one(1, 1) == 1);
+    REQUIRE(utils::bits::select_msb(1, 1) == 0);
+    REQUIRE(utils::bits::select_lsb(1, 1) == 1);
+    REQUIRE(utils::bits::select_one((1ull << 63), 1) == 0);
+    REQUIRE(utils::bits::select_msb((1ull << 63), 1) == 1);
+    REQUIRE(utils::bits::select_lsb((1ull << 63), 1) == 0);
+}
+
+TEST_CASE("Test utils::bits::set", "[utils][utils::bits]") {
+    int x = 0;
+    REQUIRE(utils::bits::set_one(x, 1,  1)   == 0x00000001);
+    REQUIRE(utils::bits::set_one(x, 1, 32)   == 0x80000001);
+    REQUIRE(utils::bits::set_one(x, 0,  1)   == 0x80000000);
+    REQUIRE(utils::bits::set_msb(x, 0x07, 4) == 0x70000000);
+    REQUIRE(utils::bits::set_msb(x, 0x0F, 5) == 0x78000000);
+    REQUIRE(utils::bits::set_lsb(x, 0x01, 1) == 0x78000001);
+    REQUIRE(utils::bits::set_lsb(x, 0x55, 8) == 0x78000055);
+    REQUIRE(utils::bits::set_lsb(x, 0x00, 8) == 0x78000000);
+    REQUIRE(utils::bits::set_lsb(x, 0x30, 6) == 0x78000030);
+    REQUIRE(utils::bits::set_lsb(x, 0x11, 5) == 0x78000031);
+}
+
 TEST_CASE("Test utils::bits::and_all", "[utils][utils::bits]") {
     REQUIRE(utils::bits::and_all( 0) ==  0);
     REQUIRE(utils::bits::and_all( 1) ==  1);

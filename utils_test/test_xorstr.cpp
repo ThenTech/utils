@@ -6,7 +6,7 @@
 #include "../utils_lib/utils_xorstring.hpp"
 #include "../utils_lib/utils_traits.hpp"
 
-#ifdef UTILS_TRAITS_MSVC
+#ifdef UTILS_COMPILER_MSVC
     #define ori_str \
         "e|f@,b#b4?[a:()~6a8b?<~)e'bb5,ce'<.8.^]#970:]?=1]=66!)d<:*6:2?2';d}{&&!@" \
         "}.$2|c&)%d:c:(4[/:c,6#)1)_]:%;da_>{&#~^>>6?5+]++3#>3?:/*{]]a4/[=(|[52)>4"

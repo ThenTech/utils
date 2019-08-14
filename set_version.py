@@ -6,7 +6,7 @@ import os
 
 LF = "\n" if os.name == "nt" else "\r\n"
     
-OFFSET = 35
+OFFSET = 37
 
 MAIN         = "./main.cpp"
 MAIN_MATCH   = "VERSION("
@@ -46,6 +46,8 @@ def version_string(delim='.', edelim='-', simple=True):
                 extra = "alpha"
             elif "beta" in extra:
                 extra = "beta"
+            elif "rc" in extra:
+                extra = "rc"
             newVersion = (newVersion[0], newVersion[1], newVersion[2], extra)
 
         return "{2}{0}{3}{0}{4}{1}{5}".format(delim, edelim, *newVersion)

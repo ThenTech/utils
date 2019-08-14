@@ -36,32 +36,32 @@ TEST_CASE("Test utils::json::to_ubjson", "[utils][utils::json]" ) {
     REQUIRE(start.size() > 0);
     #ifdef TEST_JSON_LOG_STEPS
         utils::Logger::Stream(std::setw(4), start, utils::Logger::CRLF,
-                              std::string(79, '-'), utils::Logger::CRLF);
+                              utils::Logger::LINE<>);
     #endif
 
     std::vector<std::uint8_t> bson = utils::json::to_ubjson(start);
     std::string bson_str = utils::string::join(bson);
     REQUIRE(bson.size() > 0);
     #ifdef TEST_JSON_LOG_STEPS
-        utils::Logger::Stream(bson_str, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
+        utils::Logger::Stream(bson_str, utils::Logger::CRLF, utils::Logger::LINE<>);
     #endif
 
     std::string encoded = utils::string::to_base64(bson.data(), bson.size());
     CHECK(utils::string::is_base64(encoded));
     #ifdef TEST_JSON_LOG_STEPS
-        utils::Logger::Stream(encoded, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
+        utils::Logger::Stream(encoded, utils::Logger::CRLF, utils::Logger::LINE<>);
     #endif
 
     std::string decoded = utils::string::from_base64(encoded);
     CHECK(decoded == bson_str);
     #ifdef TEST_JSON_LOG_STEPS
-        utils::Logger::Stream(decoded, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
+        utils::Logger::Stream(decoded, utils::Logger::CRLF, utils::Logger::LINE<>);
     #endif
 
     auto jsbson = utils::json::from_ubjson(decoded);
     CHECK(jsbson == start);
     #ifdef TEST_JSON_LOG_STEPS
-        utils::Logger::Stream(std::setw(4), jsbson, utils::Logger::CRLF, std::string(79, '-'), utils::Logger::CRLF);
+        utils::Logger::Stream(std::setw(4), jsbson, utils::Logger::CRLF, utils::Logger::LINE<>);
     #endif
 }
 

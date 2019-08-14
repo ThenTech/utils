@@ -1,11 +1,12 @@
 #include "utils_test/test_settings.hpp"
+#include "utils_lib/utils_compiler.hpp"
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 42, 0, utils::Version::PreReleaseType::kBeta);
+static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::beta);
 
 #ifdef ENABLE_TESTS
-    #pragma message("Warning: TESTS ENABLED")
+    HEDLEY_WARNING("Warning: TESTS ENABLED")
 
     #define CATCH_CONFIG_RUNNER
     #define CATCH_CONFIG_CONSOLE_WIDTH 100
@@ -14,13 +15,15 @@ static constexpr utils::Version VERSION(0, 42, 0, utils::Version::PreReleaseType
     #include "utils_lib/utils_logger.hpp"
     #include "utils_lib/utils_time.hpp"
 #else
-    #pragma message("Warning: TESTS DISABLED")
+    HEDLEY_WARNING("Warning: TESTS DISABLED")
 
     #include "utils_lib/utils_exceptions.hpp"
     #include "utils_lib/utils_algorithm.hpp"
     #include "utils_lib/utils_bits.hpp"
     #include "utils_lib/utils_catch.hpp"
     #include "utils_lib/utils_colour.hpp"
+    #include "utils_lib/utils_crc.hpp"
+    #include "utils_lib/utils_csv.hpp"
     #include "utils_lib/utils_ini.hpp"
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
@@ -44,22 +47,23 @@ static constexpr utils::Version VERSION(0, 42, 0, utils::Version::PreReleaseType
 
 /*
  *  Possible others:
- *      - csv lib
  *      - Floating/Signed-Bitset
  *      - Other threading/future features
  *      - utils::os other commands (cursor movement etc)
  *      - Rename functions
- *      - utils::bits:  Set/reset/mask
- *      - utils::os:    Overload operator<< with os::Console type to call os::Command?
  *
  *      - Catch 2 with BENCHMARK or Hayai
+ *          => Move to doctest for faster compilation...
  *
  *  https://github.com/Martchus/cpp-utilities
  *  https://github.com/tlx/tlx
  *
  *  https://github.com/palacaze/sigslot
  *  https://github.com/fgoujeon/signal
+ *  https://github.com/NoAvailableAlias/nano-signal-slot ?
+ *
  *  https://github.com/hosseinmoein/Matrix
+ *  https://github.com/fengwang/matrix
  *  Eigen
  *
  *  Args:
@@ -69,6 +73,16 @@ static constexpr utils::Version VERSION(0, 42, 0, utils::Version::PreReleaseType
  *
  *  Extra:
  *      https://github.com/jan-moeller/perlin
+ *      https://github.com/Reputeless/PerlinNoise
+ *
+ *      https://github.com/r-lyeh-archived/statvs
+ *      https://github.com/nemequ/portable-snippets
+ *      https://github.com/chronoxor/CppCommon/blob/master/source/system/stack_trace.cpp
+ *
+ *      https://github.com/k06a/boolinq
+ *      https://github.com/pfultz2/Linq
+ *
+ *      https://github.com/elnormous/HTTPRequest
  *
  *  GCC >= 9:
  *      https://github.com/Neargye/magic_enum
@@ -79,12 +93,12 @@ static constexpr utils::Version VERSION(0, 42, 0, utils::Version::PreReleaseType
 int main(int argc, char *argv[]) {
 
 #ifdef ENABLE_TESTS
-#ifdef UTILS_TRAITS_MSVC
+#ifdef UTILS_COMPILER_MSVC
     // Disable breaking on std::abort(), CATCH must handle this instead.
     _set_abort_behavior(0, _WRITE_ABORT_MSG);
 #endif
 
-    utils::Logger::SetScreenTitle("Testing C++ Utility library " + VERSION.ToString());
+    utils::Logger::SetScreenTitle("Testing C++ Utility library " + VERSION.to_string());
     utils::Logger::WriteLn("Running tests...");
 
     int status = 0;
@@ -98,7 +112,7 @@ int main(int argc, char *argv[]) {
 #else
     UNUSED(argc, argv);
     utils::Logger::Create("test.log", utils::Logger::Level::LOG_DEBUG);
-    utils::Logger::SetScreenTitle("C++ Utility library " + VERSION.ToString());
+    utils::Logger::SetScreenTitle("C++ Utility library " + VERSION.to_string());
 
     utils::Logger::WriteLn("Start");
 
@@ -153,13 +167,15 @@ int main(int argc, char *argv[]) {
     utils::Logger::Writef("UUID: %s\n", utils::random::generate_uuid().c_str());
 
 //    const double timed_ns = utils::time::Timer::time_n<1>([](){
-//        using namespace std::chrono_literals;
-//        std::this_thread::sleep_for(1s);
+//        utils::time::sleep(utils::time::seconds(1));
 //    });
 //    utils::Logger::Writef("Took %0.6f ns\n", timed_ns);
 
 //    utils::Logger::Stream(utils::colour::GetHotColor(0.5));
 //    utils::Logger::Stream(utils::colour::Colour::from_hex("#ABCDEF").to_hex());
+
+    utils::Logger::WriteProgress(utils::algorithm::iter::range<size_t>(0, 400),
+                                 [](size_t){ utils::time::sleep(utils::time::milliseconds(1)); });
 
     return 0;
 #endif  // ENABLE_TESTS
