@@ -5,6 +5,9 @@ var dir_ffc023cc0a1f906930dedc5d64054ec4 =
     [ "utils_bits.hpp", "utils__bits_8hpp.html", "utils__bits_8hpp" ],
     [ "utils_catch.hpp", "utils__catch_8hpp.html", "utils__catch_8hpp" ],
     [ "utils_colour.hpp", "utils__colour_8hpp.html", "utils__colour_8hpp" ],
+    [ "utils_compiler.hpp", "utils__compiler_8hpp.html", "utils__compiler_8hpp" ],
+    [ "utils_crc.hpp", "utils__crc_8hpp.html", "utils__crc_8hpp" ],
+    [ "utils_csv.hpp", "utils__csv_8hpp.html", "utils__csv_8hpp" ],
     [ "utils_exceptions.hpp", "utils__exceptions_8hpp.html", [
       [ "Exception", "classutils_1_1exceptions_1_1_exception.html", "classutils_1_1exceptions_1_1_exception" ],
       [ "OutOfBoundsException", "classutils_1_1exceptions_1_1_out_of_bounds_exception.html", "classutils_1_1exceptions_1_1_out_of_bounds_exception" ],

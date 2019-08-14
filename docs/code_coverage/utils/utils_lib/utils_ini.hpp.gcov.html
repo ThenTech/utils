@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-19</td>
+            <td class="headerValue">2019-08-14</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">28</td>
@@ -63,323 +63,324 @@
 <a name="1"><span class="lineNum">       1 </span>            : #ifndef UTILS_INI_HPP</a>
 <span class="lineNum">       2 </span>            : #define UTILS_INI_HPP
 <span class="lineNum">       3 </span>            : 
-<span class="lineNum">       4 </span>            : #include &quot;utils_memory.hpp&quot;
-<span class="lineNum">       5 </span>            : #include &quot;utils_io.hpp&quot;
-<span class="lineNum">       6 </span>            : #include &quot;utils_string.hpp&quot;
-<span class="lineNum">       7 </span>            : #include &quot;utils_print.hpp&quot;
-<span class="lineNum">       8 </span>            : #include &quot;utils_misc.hpp&quot;
-<span class="lineNum">       9 </span>            : #include &quot;utils_traits.hpp&quot;
-<span class="lineNum">      10 </span>            : 
-<span class="lineNum">      11 </span>            : #include &lt;map&gt;
-<span class="lineNum">      12 </span>            : #include &lt;variant&gt;
-<span class="lineNum">      13 </span>            : #include &lt;sstream&gt;
-<span class="lineNum">      14 </span>            : 
+<span class="lineNum">       4 </span>            : #include &quot;utils_compiler.hpp&quot;
+<span class="lineNum">       5 </span>            : #include &quot;utils_memory.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;utils_io.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;utils_string.hpp&quot;
+<span class="lineNum">       8 </span>            : #include &quot;utils_print.hpp&quot;
+<span class="lineNum">       9 </span>            : #include &quot;utils_misc.hpp&quot;
+<span class="lineNum">      10 </span>            : #include &quot;utils_traits.hpp&quot;
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #include &lt;map&gt;
+<span class="lineNum">      13 </span>            : #include &lt;variant&gt;
+<span class="lineNum">      14 </span>            : #include &lt;sstream&gt;
 <span class="lineNum">      15 </span>            : 
-<span class="lineNum">      16 </span>            : namespace utils::ini {
-<span class="lineNum">      17 </span>            :     struct delimiters {
-<span class="lineNum">      18 </span>            :         static inline constexpr utils::print::delimiters_values&lt;char&gt; values = { &quot;[&quot;, &quot; = &quot;, &quot;]&quot; };
-<span class="lineNum">      19 </span>            :     };
-<span class="lineNum">      20 </span>            : 
-<span class="lineNum">      21 </span>            :     template&lt;typename TDelimiters = utils::ini::delimiters&gt;
-<span class="lineNum">      22 </span>            :     class ConfigReader {
-<span class="lineNum">      23 </span>            :         public:
-<span class="lineNum">      24 </span>            :             using Value    = std::variant&lt;int, size_t, float, double, std::string, bool&gt;;
-<span class="lineNum">      25 </span>            :             using Contents = std::map&lt;std::string, Value&gt;;
-<span class="lineNum">      26 </span>            : 
-<span class="lineNum">      27 </span>            :         private:
-<span class="lineNum">      28 </span>            :             bool read_from_file;
-<span class="lineNum">      29 </span>            :             const std::string filename;
-<span class="lineNum">      30 </span>            :             std::stringstream inifile;
-<span class="lineNum">      31 </span>            : 
-<a name="32"><span class="lineNum">      32 </span>            :             std::map&lt;std::string, Contents&gt; settings_map;</a>
-<span class="lineNum">      33 </span>            : 
-<span class="lineNum">      34 </span><span class="lineCov">          2 :             void parse() {</span>
-<span class="lineNum">      35 </span><span class="lineCov">          2 :                 const size_t val_delim_size = std::strlen(TDelimiters::values.delimiter);</span>
-<span class="lineNum">      36 </span><span class="lineCov">          4 :                 std::string current_section = &quot;&quot;;</span>
-<span class="lineNum">      37 </span>            : 
-<span class="lineNum">      38 </span><span class="lineCov">         26 :                 for (std::string line; std::getline(this-&gt;inifile, line); ) {</span>
-<span class="lineNum">      39 </span><span class="lineCov">         24 :                     utils::string::ltrim(line);</span>
-<span class="lineNum">      40 </span>            : 
-<span class="lineNum">      41 </span>            :                     // Continue if too small or comment
-<span class="lineNum">      42 </span><span class="lineCov">         24 :                     if (line.size() &lt; 2 || line[0] == '#' || line[0] == ';') continue;</span>
-<span class="lineNum">      43 </span>            : 
-<span class="lineNum">      44 </span><span class="lineCov">         18 :                     if (const auto left_delim = utils::string::contains(line, TDelimiters::values.prefix);</span>
-<span class="lineNum">      45 </span><span class="lineCov">         18 :                         left_delim &amp;&amp; *left_delim == 0)</span>
-<span class="lineNum">      46 </span>            :                     {
-<span class="lineNum">      47 </span><span class="lineCov">          6 :                         if (const auto right_delim = utils::string::contains(line, TDelimiters::values.postfix, *left_delim + 1);</span>
-<span class="lineNum">      48 </span>            :                             right_delim)
-<span class="lineNum">      49 </span>            :                         {
-<span class="lineNum">      50 </span>            :                             // Found both delimiters, add section
-<span class="lineNum">      51 </span><span class="lineCov">          6 :                             current_section = line.substr(*left_delim + 1, *right_delim - 1);</span>
-<span class="lineNum">      52 </span><span class="lineCov">          6 :                             utils::string::trim(current_section);</span>
-<span class="lineNum">      53 </span><span class="lineCov">          6 :                             this-&gt;settings_map.emplace(current_section, Contents());</span>
-<span class="lineNum">      54 </span>            :                         }
-<span class="lineNum">      55 </span><span class="lineCov">         12 :                     } else if (current_section.size() &gt; 0) {</span>
-<span class="lineNum">      56 </span>            :                         // Entered mapped settings
-<span class="lineNum">      57 </span><span class="lineCov">         12 :                         if (const auto val_delim = utils::string::contains(line, TDelimiters::values.delimiter);</span>
-<span class="lineNum">      58 </span>            :                             val_delim)
-<span class="lineNum">      59 </span>            :                         {
-<span class="lineNum">      60 </span><span class="lineCov">         12 :                             std::string val = line.substr(*val_delim + val_delim_size);</span>
-<span class="lineNum">      61 </span><span class="lineCov">         12 :                             utils::string::rtrim(val);</span>
-<span class="lineNum">      62 </span><span class="lineCov">         12 :                             this-&gt;settings_map[current_section]</span>
-<span class="lineNum">      63 </span><span class="lineCov">         12 :                                     .emplace(line.substr(0, *val_delim), val);</span>
-<span class="lineNum">      64 </span>            :                         }
-<span class="lineNum">      65 </span>            :                     }
-<span class="lineNum">      66 </span>            :                 }
-<span class="lineNum">      67 </span><span class="lineCov">          2 :             }</span>
-<a name="68"><span class="lineNum">      68 </span>            : </a>
-<span class="lineNum">      69 </span>            :         public:
-<span class="lineNum">      70 </span><span class="lineCov">         10 :             ConfigReader()</span>
-<span class="lineNum">      71 </span>            :                 : read_from_file(false)
-<span class="lineNum">      72 </span><span class="lineCov">         10 :                 , filename(&quot;&quot;)</span>
-<span class="lineNum">      73 </span>            :             {
-<span class="lineNum">      74 </span>            :                 // Empty
-<a name="75"><span class="lineNum">      75 </span><span class="lineCov">         10 :             }</span></a>
-<span class="lineNum">      76 </span>            : 
-<span class="lineNum">      77 </span><span class="lineCov">          2 :             ConfigReader(const std::string_view&amp; filename)</span>
-<span class="lineNum">      78 </span>            :                 : read_from_file(true)
-<span class="lineNum">      79 </span><span class="lineCov">          5 :                 , filename(filename)</span>
-<span class="lineNum">      80 </span>            :             {
-<span class="lineNum">      81 </span>            :                 try {
-<span class="lineNum">      82 </span><span class="lineCov">          3 :                     auto contents = utils::io::file_to_string(this-&gt;filename);</span>
-<span class="lineNum">      83 </span><span class="lineCov">          1 :                     this-&gt;inifile &lt;&lt; *contents;</span>
-<span class="lineNum">      84 </span><span class="lineCov">          1 :                     this-&gt;parse();</span>
-<span class="lineNum">      85 </span><span class="lineCov">          1 :                 } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false;);</span>
-<a name="86"><span class="lineNum">      86 </span><span class="lineCov">          1 :             }</span></a>
-<span class="lineNum">      87 </span>            : 
-<span class="lineNum">      88 </span><span class="lineCov">          1 :             ConfigReader(const std::istream&amp; input)</span>
-<span class="lineNum">      89 </span>            :                 : read_from_file(false)
-<span class="lineNum">      90 </span><span class="lineCov">          1 :                 , filename(&quot;&quot;)</span>
-<span class="lineNum">      91 </span>            :             {
-<span class="lineNum">      92 </span><span class="lineCov">          1 :                 this-&gt;inifile &lt;&lt; input.rdbuf();</span>
-<span class="lineNum">      93 </span><span class="lineCov">          1 :                 this-&gt;parse();</span>
-<span class="lineNum">      94 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">      95 </span>            : 
-<a name="96"><span class="lineNum">      96 </span>            :             ConfigReader(ConfigReader&amp;&amp;) = delete;</a>
-<span class="lineNum">      97 </span>            : 
-<span class="lineNum">      98 </span><span class="lineCov">          4 :             void save(std::string name = &quot;&quot;) {</span>
-<span class="lineNum">      99 </span><span class="lineCov">          4 :                 if (name == &quot;&quot;) {</span>
-<span class="lineNum">     100 </span><span class="lineCov">          2 :                     if (this-&gt;read_from_file) {</span>
-<span class="lineNum">     101 </span><span class="lineCov">          1 :                         name = this-&gt;filename;</span>
-<span class="lineNum">     102 </span>            :                     } else {
-<span class="lineNum">     103 </span><span class="lineCov">          1 :                         throw utils::exceptions::FileWriteException(name);</span>
-<span class="lineNum">     104 </span>            :                     }
-<span class="lineNum">     105 </span>            :                 }
-<span class="lineNum">     106 </span>            : 
-<span class="lineNum">     107 </span>            :                 // MAP TO STRING
-<span class="lineNum">     108 </span><span class="lineCov">          3 :                 std::stringstream().swap(this-&gt;inifile);</span>
-<span class="lineNum">     109 </span><span class="lineCov">          3 :                 this-&gt;inifile &lt;&lt; *this;</span>
-<span class="lineNum">     110 </span>            : 
-<span class="lineNum">     111 </span>            :                 try {
-<span class="lineNum">     112 </span><span class="lineCov">          3 :                     utils::io::string_to_file(name, this-&gt;inifile.str());</span>
-<span class="lineNum">     113 </span><span class="lineNoCov">          0 :                 } CATCH_AND_LOG_ERROR_TRACE();</span>
-<span class="lineNum">     114 </span><span class="lineCov">          3 :             }</span>
-<a name="115"><span class="lineNum">     115 </span>            : </a>
-<span class="lineNum">     116 </span>            :             template&lt;class F&gt;
-<span class="lineNum">     117 </span><span class="lineCov">          1 :             void ForEachSection(F&amp;&amp; callback) {</span>
-<span class="lineNum">     118 </span>            :                 static_assert(std::is_invocable_v&lt;F, const std::string&amp;&gt;, &quot;ForEachSection: Callable function required.&quot;);
-<span class="lineNum">     119 </span>            : 
-<span class="lineNum">     120 </span><span class="lineCov">          4 :                 for (const auto&amp; [section, mapped_values] : this-&gt;settings_map) {</span>
-<span class="lineNum">     121 </span>            :                     UNUSED(mapped_values);
-<span class="lineNum">     122 </span><span class="lineCov">          3 :                     std::invoke(std::forward&lt;F&gt;(callback), section);</span>
-<span class="lineNum">     123 </span>            :                 }
-<span class="lineNum">     124 </span><span class="lineCov">          1 :             }</span>
-<a name="125"><span class="lineNum">     125 </span>            : </a>
-<span class="lineNum">     126 </span>            :             template&lt;class F&gt;
-<span class="lineNum">     127 </span><span class="lineCov">          1 :             void ForEachSectionKey(const std::string&amp; section, F&amp;&amp; callback) {</span>
-<span class="lineNum">     128 </span>            :                 static_assert(std::is_invocable_v&lt;F, const std::string&amp;, const Value&amp;&gt;, &quot;ForEachSectionKey: Callable function required.&quot;);
-<span class="lineNum">     129 </span>            : 
-<span class="lineNum">     130 </span><span class="lineCov">          1 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     131 </span><span class="lineCov">          1 :                     it != this-&gt;settings_map.end())</span>
-<span class="lineNum">     132 </span>            :                 {
-<span class="lineNum">     133 </span><span class="lineCov">          3 :                     for (const auto&amp; [key, value] : it-&gt;second) {</span>
-<span class="lineNum">     134 </span><span class="lineCov">          2 :                         std::invoke(std::forward&lt;F&gt;(callback), key, value);</span>
-<span class="lineNum">     135 </span>            :                     }
-<span class="lineNum">     136 </span>            :                 }
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          1 :             }</span></a>
-<span class="lineNum">     138 </span>            : 
-<span class="lineNum">     139 </span><span class="lineCov">          1 :             inline size_t SectionSize() const {</span>
-<span class="lineNum">     140 </span><span class="lineCov">          1 :                 return this-&gt;settings_map.size();</span>
-<a name="141"><span class="lineNum">     141 </span>            :             }</a>
-<span class="lineNum">     142 </span>            : 
-<span class="lineNum">     143 </span><span class="lineCov">          5 :             inline size_t SectionKeySize(const std::string&amp; section) const {</span>
-<span class="lineNum">     144 </span>            :                 return this-&gt;hasSection(section)
-<span class="lineNum">     145 </span><span class="lineCov">          5 :                      ? this-&gt;settings_map.at(section).size()</span>
-<span class="lineNum">     146 </span><span class="lineCov">          5 :                      : 0;</span>
-<a name="147"><span class="lineNum">     147 </span>            :             }</a>
-<span class="lineNum">     148 </span>            : 
-<span class="lineNum">     149 </span><span class="lineCov">         46 :             inline bool hasSection(const std::string&amp; section) const {</span>
-<span class="lineNum">     150 </span><span class="lineCov">         46 :                 return this-&gt;settings_map.count(section) == 1;</span>
-<a name="151"><span class="lineNum">     151 </span>            :             }</a>
-<span class="lineNum">     152 </span>            : 
-<span class="lineNum">     153 </span><span class="lineCov">          1 :             inline bool operator[](const std::string&amp; section) const {</span>
-<span class="lineNum">     154 </span><span class="lineCov">          1 :                 return this-&gt;hasSection(section);</span>
-<a name="155"><span class="lineNum">     155 </span>            :             }</a>
-<span class="lineNum">     156 </span>            : 
-<span class="lineNum">     157 </span><span class="lineCov">         24 :             inline bool hasSectionKey(const std::string&amp; section, const std::string&amp; key) const {</span>
-<span class="lineNum">     158 </span>            :                 return this-&gt;hasSection(section)
-<span class="lineNum">     159 </span><span class="lineCov">         24 :                     &amp;&amp; this-&gt;settings_map.at(section).count(key) == 1;</span>
-<a name="160"><span class="lineNum">     160 </span>            :             }</a>
-<span class="lineNum">     161 </span>            : 
-<span class="lineNum">     162 </span><span class="lineCov">          1 :             inline bool operator()(const std::string&amp; section, const std::string&amp; key) const {</span>
-<span class="lineNum">     163 </span><span class="lineCov">          1 :                 return this-&gt;hasSectionKey(section, key);</span>
-<a name="164"><span class="lineNum">     164 </span>            :             }</a>
-<span class="lineNum">     165 </span>            : 
-<span class="lineNum">     166 </span><span class="lineCov">          1 :             void CreateSection(std::string section) {</span>
-<span class="lineNum">     167 </span><span class="lineCov">          1 :                 utils::string::trim(section);</span>
-<span class="lineNum">     168 </span>            : 
-<span class="lineNum">     169 </span><span class="lineCov">          1 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     170 </span><span class="lineCov">          1 :                     it == this-&gt;settings_map.end())</span>
-<span class="lineNum">     171 </span>            :                 {
-<span class="lineNum">     172 </span>            :                     // Does not exist yet
-<span class="lineNum">     173 </span><span class="lineCov">          1 :                     this-&gt;settings_map.emplace(section, Contents());</span>
-<span class="lineNum">     174 </span>            :                 }
-<a name="175"><span class="lineNum">     175 </span><span class="lineCov">          1 :             }</span></a>
-<span class="lineNum">     176 </span>            : 
-<span class="lineNum">     177 </span><span class="lineCov">          2 :             void RemoveSection(const std::string&amp; section) {</span>
-<span class="lineNum">     178 </span><span class="lineCov">          2 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     179 </span><span class="lineCov">          2 :                     it != this-&gt;settings_map.end())</span>
-<span class="lineNum">     180 </span>            :                 {
-<span class="lineNum">     181 </span>            :                     // Exists
-<span class="lineNum">     182 </span><span class="lineCov">          2 :                     this-&gt;settings_map.erase(it);</span>
-<span class="lineNum">     183 </span>            :                 }
-<a name="184"><span class="lineNum">     184 </span><span class="lineCov">          2 :             }</span></a>
-<span class="lineNum">     185 </span>            : 
-<span class="lineNum">     186 </span><span class="lineCov">          3 :             void CreateSectionKey(std::string section, std::string key) {</span>
-<span class="lineNum">     187 </span><span class="lineCov">          3 :                 utils::string::trim(section);</span>
-<span class="lineNum">     188 </span><span class="lineCov">          3 :                 utils::string::trim(key);</span>
-<span class="lineNum">     189 </span>            : 
-<span class="lineNum">     190 </span><span class="lineCov">          3 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     191 </span><span class="lineCov">          3 :                     it == this-&gt;settings_map.end())</span>
-<span class="lineNum">     192 </span>            :                 {
-<span class="lineNum">     193 </span>            :                     // Does not exist yet
-<span class="lineNum">     194 </span><span class="lineCov">          1 :                     this-&gt;settings_map.emplace(section, Contents());</span>
-<span class="lineNum">     195 </span>            :                 }
-<span class="lineNum">     196 </span>            : 
-<span class="lineNum">     197 </span><span class="lineCov">          3 :                 this-&gt;settings_map.at(section).emplace(key, Value());</span>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">          3 :             }</span></a>
-<span class="lineNum">     199 </span>            : 
-<span class="lineNum">     200 </span><span class="lineCov">          3 :             void RemoveSectionKey(const std::string&amp; section, const std::string&amp; key, bool delete_section_if_empty = false) {</span>
-<span class="lineNum">     201 </span><span class="lineCov">          3 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     202 </span><span class="lineCov">          3 :                     it != this-&gt;settings_map.end())</span>
-<span class="lineNum">     203 </span>            :                 {
-<span class="lineNum">     204 </span>            :                     // Exists
-<span class="lineNum">     205 </span><span class="lineCov">          3 :                     it-&gt;second.erase(key);</span>
-<span class="lineNum">     206 </span>            :                 }
-<span class="lineNum">     207 </span>            : 
-<span class="lineNum">     208 </span><span class="lineCov">          3 :                 if (delete_section_if_empty &amp;&amp; this-&gt;SectionKeySize(section) == 0) {</span>
-<span class="lineNum">     209 </span><span class="lineCov">          1 :                     this-&gt;RemoveSection(section);</span>
-<span class="lineNum">     210 </span>            :                 }
-<span class="lineNum">     211 </span><span class="lineCov">          3 :             }</span>
-<span class="lineNum">     212 </span>            : 
-<span class="lineNum">     213 </span>            :             template&lt;
-<span class="lineNum">     214 </span>            :                 typename T,
-<a name="215"><span class="lineNum">     215 </span>            :                 typename std::enable_if&lt;utils::traits::is_variant_member_v&lt;T, Value&gt;, int&gt;::type = 0</a>
-<span class="lineNum">     216 </span>            :             &gt;
-<span class="lineNum">     217 </span><span class="lineCov">         79 :             void SetValue(std::string section, std::string key, T&amp;&amp; val) {</span>
-<span class="lineNum">     218 </span><span class="lineCov">         79 :                 utils::string::trim(section);</span>
-<span class="lineNum">     219 </span><span class="lineCov">         79 :                 utils::string::trim(key);</span>
-<span class="lineNum">     220 </span>            : 
-<span class="lineNum">     221 </span><span class="lineCov">         79 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     222 </span><span class="lineCov">         79 :                     it == this-&gt;settings_map.end())</span>
-<span class="lineNum">     223 </span>            :                 {
-<span class="lineNum">     224 </span>            :                     // Does not exist yet
-<span class="lineNum">     225 </span><span class="lineCov">         33 :                     this-&gt;settings_map.emplace(section, Contents());</span>
-<span class="lineNum">     226 </span>            :                 }
-<span class="lineNum">     227 </span>            : 
-<span class="lineNum">     228 </span><span class="lineCov">         79 :                 if (const auto it = this-&gt;settings_map.at(section).find(key);</span>
-<span class="lineNum">     229 </span><span class="lineCov">         79 :                     it == this-&gt;settings_map.at(section).end())</span>
-<span class="lineNum">     230 </span>            :                 {
-<span class="lineNum">     231 </span>            :                     // Does not exist yet
-<span class="lineNum">     232 </span><span class="lineCov">         77 :                     this-&gt;settings_map.at(section).emplace(key, Value(val));</span>
-<span class="lineNum">     233 </span>            :                 } else {
-<span class="lineNum">     234 </span><span class="lineCov">          2 :                     this-&gt;settings_map.at(section).at(key) = Value(val);</span>
-<span class="lineNum">     235 </span>            :                 }
-<span class="lineNum">     236 </span><span class="lineCov">         79 :             }</span>
-<span class="lineNum">     237 </span>            : 
-<span class="lineNum">     238 </span>            :             template&lt;
-<span class="lineNum">     239 </span>            :                 typename T,
-<a name="240"><span class="lineNum">     240 </span>            :                 typename std::enable_if&lt;utils::traits::is_variant_member_v&lt;T, Value&gt;, int&gt;::type = 0</a>
-<span class="lineNum">     241 </span>            :             &gt;
-<span class="lineNum">     242 </span><span class="lineCov">         30 :             T GetValue(const std::string&amp; section, const std::string&amp; key, const T default_value = T()) const {</span>
-<span class="lineNum">     243 </span><span class="lineCov">         30 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
-<span class="lineNum">     244 </span><span class="lineCov">         30 :                     it != this-&gt;settings_map.end())</span>
-<span class="lineNum">     245 </span>            :                 {
-<span class="lineNum">     246 </span><span class="lineCov">         29 :                     if (const auto sett_it = it-&gt;second.find(key);</span>
-<span class="lineNum">     247 </span><span class="lineCov">         29 :                         sett_it != it-&gt;second.end())</span>
-<span class="lineNum">     248 </span>            :                     {
-<span class="lineNum">     249 </span>            :                         // map[section][key] exists
-<span class="lineNum">     250 </span><span class="lineCov">         28 :                         const auto&amp; val = this-&gt;settings_map.at(section).at(key);</span>
-<span class="lineNum">     251 </span>            : 
-<span class="lineNum">     252 </span><span class="lineCov">         28 :                         if (std::holds_alternative&lt;T&gt;(val)) {</span>
-<span class="lineNum">     253 </span>            :                             // T is available
-<span class="lineNum">     254 </span><span class="lineCov">         24 :                             return std::get&lt;T&gt;(val);</span>
-<span class="lineNum">     255 </span>            :                         } else {
-<span class="lineNum">     256 </span><span class="lineCov">         17 :                             std::stringstream ss;</span>
-<span class="lineNum">     257 </span><span class="lineCov">         16 :                             ss &lt;&lt; val;</span>
-<span class="lineNum">     258 </span>            : 
-<span class="lineNum">     259 </span>            :                             // Print to string or cast to value
-<span class="lineNum">     260 </span>            :                             if constexpr (std::is_same_v&lt;T, std::string&gt;) {
-<span class="lineNum">     261 </span><span class="lineCov">          1 :                                 return ss.str();</span>
-<span class="lineNum">     262 </span>            :                             } else if constexpr (std::is_same_v&lt;T, bool&gt;) {
-<span class="lineNum">     263 </span><span class="lineCov">         13 :                                 std::string str = utils::string::to_lowercase(ss.str());</span>
-<span class="lineNum">     264 </span>            : 
-<span class="lineNum">     265 </span><span class="lineCov">         24 :                                 if (str == &quot;true&quot; || str == &quot;yes&quot;</span>
-<span class="lineNum">     266 </span><span class="lineCov">         24 :                                  || str == &quot;on&quot;   || str == &quot;1&quot;)</span>
-<span class="lineNum">     267 </span>            :                                 {
-<span class="lineNum">     268 </span><span class="lineCov">          6 :                                     return true;</span>
-<span class="lineNum">     269 </span>            :                                 }
-<span class="lineNum">     270 </span><span class="lineCov">         12 :                                 if (str == &quot;false&quot; || str == &quot;no&quot;</span>
-<span class="lineNum">     271 </span><span class="lineCov">         12 :                                  || str == &quot;off&quot;   || str == &quot;0&quot;)</span>
-<span class="lineNum">     272 </span>            :                                 {
-<span class="lineNum">     273 </span><span class="lineCov">          6 :                                     return false;</span>
-<span class="lineNum">     274 </span>            :                                 }
-<span class="lineNum">     275 </span>            :                             } else {
-<span class="lineNum">     276 </span><span class="lineCov">          2 :                                 return utils::misc::try_lexical_cast&lt;T&gt;(ss.str().c_str()).value_or(default_value);</span>
-<span class="lineNum">     277 </span>            :                             }
-<span class="lineNum">     278 </span>            :                         }
-<span class="lineNum">     279 </span>            :                     } else {
-<span class="lineNum">     280 </span>            :                         // Possibly return default_value instead?
-<span class="lineNum">     281 </span><span class="lineCov">          1 :                         throw utils::exceptions::KeyDoesNotExistException(&quot;ConfigReader[&quot; + section + &quot;]&quot;, key);</span>
-<span class="lineNum">     282 </span>            :                     }
-<span class="lineNum">     283 </span>            :                 } else {
-<span class="lineNum">     284 </span>            :                     // Possibly return default_value instead?
-<span class="lineNum">     285 </span><span class="lineCov">          1 :                     throw utils::exceptions::KeyDoesNotExistException(&quot;ConfigReader&quot;, section);</span>
-<span class="lineNum">     286 </span>            :                 }
-<span class="lineNum">     287 </span>            : 
-<span class="lineNum">     288 </span><span class="lineCov">          1 :                 return default_value;</span>
-<span class="lineNum">     289 </span>            :             }
-<span class="lineNum">     290 </span>            : 
-<a name="291"><span class="lineNum">     291 </span>            :             template&lt;typename TChar, typename TCharTraits, typename TDelimiters_ = TDelimiters&gt;</a>
-<span class="lineNum">     292 </span>            :             friend std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
-<span class="lineNum">     293 </span><span class="lineCov">          6 :             operator&lt;&lt;(</span>
-<span class="lineNum">     294 </span>            :                 std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     295 </span>            :                 const utils::ini::ConfigReader&lt;TDelimiters_&gt;&amp; cfgreader)
-<span class="lineNum">     296 </span>            :             {
-<span class="lineNum">     297 </span><span class="lineCov">         24 :                 for (auto [section, mapped_values] : cfgreader.settings_map) {</span>
-<span class="lineNum">     298 </span><span class="lineCov">         18 :                     if (mapped_values.size() &gt; 0) {</span>
-<span class="lineNum">     299 </span><span class="lineCov">         18 :                         stream &lt;&lt; TDelimiters_::values.prefix</span>
-<span class="lineNum">     300 </span>            :                                &lt;&lt; section
-<span class="lineNum">     301 </span><span class="lineCov">         18 :                                &lt;&lt; TDelimiters_::values.postfix</span>
-<span class="lineNum">     302 </span><span class="lineCov">         18 :                                &lt;&lt; std::endl;</span>
-<span class="lineNum">     303 </span>            : 
-<span class="lineNum">     304 </span><span class="lineCov">         54 :                         for (auto [key, value] : mapped_values) {</span>
-<span class="lineNum">     305 </span>            :                             stream &lt;&lt; key
-<span class="lineNum">     306 </span><span class="lineCov">         36 :                                    &lt;&lt; TDelimiters_::values.delimiter</span>
-<span class="lineNum">     307 </span><span class="lineCov">         36 :                                    &lt;&lt; std::boolalpha &lt;&lt; value</span>
-<span class="lineNum">     308 </span><span class="lineCov">         36 :                                    &lt;&lt; std::endl;</span>
-<span class="lineNum">     309 </span>            :                         }
-<span class="lineNum">     310 </span>            : 
-<span class="lineNum">     311 </span><span class="lineCov">         18 :                         stream &lt;&lt; std::endl;</span>
-<span class="lineNum">     312 </span>            :                     }
-<span class="lineNum">     313 </span>            :                 }
-<span class="lineNum">     314 </span>            : 
-<span class="lineNum">     315 </span><span class="lineCov">          6 :                 return stream;</span>
-<span class="lineNum">     316 </span>            :             }
-<span class="lineNum">     317 </span>            :     };
-<span class="lineNum">     318 </span>            : }
-<span class="lineNum">     319 </span>            : 
-<span class="lineNum">     320 </span>            : #endif // UTILS_INI_HPP
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            : namespace utils::ini {
+<span class="lineNum">      18 </span>            :     struct delimiters {
+<span class="lineNum">      19 </span>            :         static inline constexpr utils::print::delimiters_values&lt;char&gt; values = { &quot;[&quot;, &quot; = &quot;, &quot;]&quot; };
+<span class="lineNum">      20 </span>            :     };
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            :     template&lt;typename TDelimiters = utils::ini::delimiters&gt;
+<span class="lineNum">      23 </span>            :     class ConfigReader {
+<span class="lineNum">      24 </span>            :         public:
+<span class="lineNum">      25 </span>            :             using Value    = std::variant&lt;int, size_t, float, double, std::string, bool&gt;;
+<span class="lineNum">      26 </span>            :             using Contents = std::map&lt;std::string, Value&gt;;
+<span class="lineNum">      27 </span>            : 
+<span class="lineNum">      28 </span>            :         private:
+<span class="lineNum">      29 </span>            :             bool read_from_file;
+<span class="lineNum">      30 </span>            :             const std::string filename;
+<span class="lineNum">      31 </span>            :             std::stringstream inifile;
+<span class="lineNum">      32 </span>            : 
+<a name="33"><span class="lineNum">      33 </span>            :             std::map&lt;std::string, Contents&gt; settings_map;</a>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span><span class="lineCov">          2 :             void parse() {</span>
+<span class="lineNum">      36 </span><span class="lineCov">          2 :                 const size_t val_delim_size = std::strlen(TDelimiters::values.delimiter);</span>
+<span class="lineNum">      37 </span><span class="lineCov">          4 :                 std::string current_section = &quot;&quot;;</span>
+<span class="lineNum">      38 </span>            : 
+<span class="lineNum">      39 </span><span class="lineCov">         26 :                 for (std::string line; std::getline(this-&gt;inifile, line); ) {</span>
+<span class="lineNum">      40 </span><span class="lineCov">         24 :                     utils::string::ltrim(line);</span>
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            :                     // Continue if too small or comment
+<span class="lineNum">      43 </span><span class="lineCov">         24 :                     if (line.size() &lt; 2 || line[0] == '#' || line[0] == ';') continue;</span>
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span><span class="lineCov">         18 :                     if (const auto left_delim = utils::string::contains(line, TDelimiters::values.prefix);</span>
+<span class="lineNum">      46 </span><span class="lineCov">         18 :                         left_delim &amp;&amp; *left_delim == 0)</span>
+<span class="lineNum">      47 </span>            :                     {
+<span class="lineNum">      48 </span><span class="lineCov">          6 :                         if (const auto right_delim = utils::string::contains(line, TDelimiters::values.postfix, *left_delim + 1);</span>
+<span class="lineNum">      49 </span>            :                             right_delim)
+<span class="lineNum">      50 </span>            :                         {
+<span class="lineNum">      51 </span>            :                             // Found both delimiters, add section
+<span class="lineNum">      52 </span><span class="lineCov">          6 :                             current_section = line.substr(*left_delim + 1, *right_delim - 1);</span>
+<span class="lineNum">      53 </span><span class="lineCov">          6 :                             utils::string::trim(current_section);</span>
+<span class="lineNum">      54 </span><span class="lineCov">          6 :                             this-&gt;settings_map.emplace(current_section, Contents());</span>
+<span class="lineNum">      55 </span>            :                         }
+<span class="lineNum">      56 </span><span class="lineCov">         12 :                     } else if (current_section.size() &gt; 0) {</span>
+<span class="lineNum">      57 </span>            :                         // Entered mapped settings
+<span class="lineNum">      58 </span><span class="lineCov">         12 :                         if (const auto val_delim = utils::string::contains(line, TDelimiters::values.delimiter);</span>
+<span class="lineNum">      59 </span>            :                             val_delim)
+<span class="lineNum">      60 </span>            :                         {
+<span class="lineNum">      61 </span><span class="lineCov">         12 :                             std::string val = line.substr(*val_delim + val_delim_size);</span>
+<span class="lineNum">      62 </span><span class="lineCov">         12 :                             utils::string::rtrim(val);</span>
+<span class="lineNum">      63 </span><span class="lineCov">         12 :                             this-&gt;settings_map[current_section]</span>
+<span class="lineNum">      64 </span><span class="lineCov">         12 :                                     .emplace(line.substr(0, *val_delim), val);</span>
+<span class="lineNum">      65 </span>            :                         }
+<span class="lineNum">      66 </span>            :                     }
+<span class="lineNum">      67 </span>            :                 }
+<span class="lineNum">      68 </span><span class="lineCov">          2 :             }</span>
+<a name="69"><span class="lineNum">      69 </span>            : </a>
+<span class="lineNum">      70 </span>            :         public:
+<span class="lineNum">      71 </span><span class="lineCov">         10 :             ConfigReader()</span>
+<span class="lineNum">      72 </span>            :                 : read_from_file(false)
+<span class="lineNum">      73 </span><span class="lineCov">         10 :                 , filename(&quot;&quot;)</span>
+<span class="lineNum">      74 </span>            :             {
+<span class="lineNum">      75 </span>            :                 // Empty
+<a name="76"><span class="lineNum">      76 </span><span class="lineCov">         10 :             }</span></a>
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span><span class="lineCov">          2 :             ConfigReader(const std::string_view&amp; filename)</span>
+<span class="lineNum">      79 </span>            :                 : read_from_file(true)
+<span class="lineNum">      80 </span><span class="lineCov">          5 :                 , filename(filename)</span>
+<span class="lineNum">      81 </span>            :             {
+<span class="lineNum">      82 </span>            :                 try {
+<span class="lineNum">      83 </span><span class="lineCov">          3 :                     auto contents = utils::io::file_to_string(this-&gt;filename);</span>
+<span class="lineNum">      84 </span><span class="lineCov">          1 :                     this-&gt;inifile &lt;&lt; *contents;</span>
+<span class="lineNum">      85 </span><span class="lineCov">          1 :                     this-&gt;parse();</span>
+<span class="lineNum">      86 </span><span class="lineCov">          1 :                 } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false;);</span>
+<a name="87"><span class="lineNum">      87 </span><span class="lineCov">          1 :             }</span></a>
+<span class="lineNum">      88 </span>            : 
+<span class="lineNum">      89 </span><span class="lineCov">          1 :             ConfigReader(const std::istream&amp; input)</span>
+<span class="lineNum">      90 </span>            :                 : read_from_file(false)
+<span class="lineNum">      91 </span><span class="lineCov">          1 :                 , filename(&quot;&quot;)</span>
+<span class="lineNum">      92 </span>            :             {
+<span class="lineNum">      93 </span><span class="lineCov">          1 :                 this-&gt;inifile &lt;&lt; input.rdbuf();</span>
+<span class="lineNum">      94 </span><span class="lineCov">          1 :                 this-&gt;parse();</span>
+<span class="lineNum">      95 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">      96 </span>            : 
+<a name="97"><span class="lineNum">      97 </span>            :             ConfigReader(ConfigReader&amp;&amp;) = delete;</a>
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineCov">          4 :             void save(std::string name = &quot;&quot;) {</span>
+<span class="lineNum">     100 </span><span class="lineCov">          4 :                 if (name == &quot;&quot;) {</span>
+<span class="lineNum">     101 </span><span class="lineCov">          2 :                     if (this-&gt;read_from_file) {</span>
+<span class="lineNum">     102 </span><span class="lineCov">          1 :                         name = this-&gt;filename;</span>
+<span class="lineNum">     103 </span>            :                     } else {
+<span class="lineNum">     104 </span><span class="lineCov">          1 :                         throw utils::exceptions::FileWriteException(name);</span>
+<span class="lineNum">     105 </span>            :                     }
+<span class="lineNum">     106 </span>            :                 }
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span>            :                 // MAP TO STRING
+<span class="lineNum">     109 </span><span class="lineCov">          3 :                 std::stringstream().swap(this-&gt;inifile);</span>
+<span class="lineNum">     110 </span><span class="lineCov">          3 :                 this-&gt;inifile &lt;&lt; *this;</span>
+<span class="lineNum">     111 </span>            : 
+<span class="lineNum">     112 </span>            :                 try {
+<span class="lineNum">     113 </span><span class="lineCov">          3 :                     utils::io::string_to_file(name, this-&gt;inifile.str());</span>
+<span class="lineNum">     114 </span><span class="lineNoCov">          0 :                 } CATCH_AND_LOG_ERROR_TRACE();</span>
+<span class="lineNum">     115 </span><span class="lineCov">          3 :             }</span>
+<a name="116"><span class="lineNum">     116 </span>            : </a>
+<span class="lineNum">     117 </span>            :             template&lt;class F&gt;
+<span class="lineNum">     118 </span><span class="lineCov">          1 :             void ForEachSection(F&amp;&amp; callback) {</span>
+<span class="lineNum">     119 </span>            :                 static_assert(std::is_invocable_v&lt;F, const std::string&amp;&gt;, &quot;ForEachSection: Callable function required.&quot;);
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span><span class="lineCov">          4 :                 for (const auto&amp; [section, mapped_values] : this-&gt;settings_map) {</span>
+<span class="lineNum">     122 </span>            :                     UNUSED(mapped_values);
+<span class="lineNum">     123 </span><span class="lineCov">          3 :                     std::invoke(std::forward&lt;F&gt;(callback), section);</span>
+<span class="lineNum">     124 </span>            :                 }
+<span class="lineNum">     125 </span><span class="lineCov">          1 :             }</span>
+<a name="126"><span class="lineNum">     126 </span>            : </a>
+<span class="lineNum">     127 </span>            :             template&lt;class F&gt;
+<span class="lineNum">     128 </span><span class="lineCov">          1 :             void ForEachSectionKey(const std::string&amp; section, F&amp;&amp; callback) {</span>
+<span class="lineNum">     129 </span>            :                 static_assert(std::is_invocable_v&lt;F, const std::string&amp;, const Value&amp;&gt;, &quot;ForEachSectionKey: Callable function required.&quot;);
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span><span class="lineCov">          1 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     132 </span><span class="lineCov">          1 :                     it != this-&gt;settings_map.end())</span>
+<span class="lineNum">     133 </span>            :                 {
+<span class="lineNum">     134 </span><span class="lineCov">          3 :                     for (const auto&amp; [key, value] : it-&gt;second) {</span>
+<span class="lineNum">     135 </span><span class="lineCov">          2 :                         std::invoke(std::forward&lt;F&gt;(callback), key, value);</span>
+<span class="lineNum">     136 </span>            :                     }
+<span class="lineNum">     137 </span>            :                 }
+<a name="138"><span class="lineNum">     138 </span><span class="lineCov">          1 :             }</span></a>
+<span class="lineNum">     139 </span>            : 
+<span class="lineNum">     140 </span><span class="lineCov">          1 :             inline size_t SectionSize() const {</span>
+<span class="lineNum">     141 </span><span class="lineCov">          1 :                 return this-&gt;settings_map.size();</span>
+<a name="142"><span class="lineNum">     142 </span>            :             }</a>
+<span class="lineNum">     143 </span>            : 
+<span class="lineNum">     144 </span><span class="lineCov">          5 :             inline size_t SectionKeySize(const std::string&amp; section) const {</span>
+<span class="lineNum">     145 </span>            :                 return this-&gt;hasSection(section)
+<span class="lineNum">     146 </span><span class="lineCov">          5 :                      ? this-&gt;settings_map.at(section).size()</span>
+<span class="lineNum">     147 </span><span class="lineCov">          5 :                      : 0;</span>
+<a name="148"><span class="lineNum">     148 </span>            :             }</a>
+<span class="lineNum">     149 </span>            : 
+<span class="lineNum">     150 </span><span class="lineCov">         46 :             inline bool hasSection(const std::string&amp; section) const {</span>
+<span class="lineNum">     151 </span><span class="lineCov">         46 :                 return this-&gt;settings_map.count(section) == 1;</span>
+<a name="152"><span class="lineNum">     152 </span>            :             }</a>
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineCov">          1 :             inline bool operator[](const std::string&amp; section) const {</span>
+<span class="lineNum">     155 </span><span class="lineCov">          1 :                 return this-&gt;hasSection(section);</span>
+<a name="156"><span class="lineNum">     156 </span>            :             }</a>
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span><span class="lineCov">         24 :             inline bool hasSectionKey(const std::string&amp; section, const std::string&amp; key) const {</span>
+<span class="lineNum">     159 </span>            :                 return this-&gt;hasSection(section)
+<span class="lineNum">     160 </span><span class="lineCov">         24 :                     &amp;&amp; this-&gt;settings_map.at(section).count(key) == 1;</span>
+<a name="161"><span class="lineNum">     161 </span>            :             }</a>
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span><span class="lineCov">          1 :             inline bool operator()(const std::string&amp; section, const std::string&amp; key) const {</span>
+<span class="lineNum">     164 </span><span class="lineCov">          1 :                 return this-&gt;hasSectionKey(section, key);</span>
+<a name="165"><span class="lineNum">     165 </span>            :             }</a>
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span><span class="lineCov">          1 :             void CreateSection(std::string section) {</span>
+<span class="lineNum">     168 </span><span class="lineCov">          1 :                 utils::string::trim(section);</span>
+<span class="lineNum">     169 </span>            : 
+<span class="lineNum">     170 </span><span class="lineCov">          1 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     171 </span><span class="lineCov">          1 :                     it == this-&gt;settings_map.end())</span>
+<span class="lineNum">     172 </span>            :                 {
+<span class="lineNum">     173 </span>            :                     // Does not exist yet
+<span class="lineNum">     174 </span><span class="lineCov">          1 :                     this-&gt;settings_map.emplace(section, Contents());</span>
+<span class="lineNum">     175 </span>            :                 }
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">          1 :             }</span></a>
+<span class="lineNum">     177 </span>            : 
+<span class="lineNum">     178 </span><span class="lineCov">          2 :             void RemoveSection(const std::string&amp; section) {</span>
+<span class="lineNum">     179 </span><span class="lineCov">          2 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     180 </span><span class="lineCov">          2 :                     it != this-&gt;settings_map.end())</span>
+<span class="lineNum">     181 </span>            :                 {
+<span class="lineNum">     182 </span>            :                     // Exists
+<span class="lineNum">     183 </span><span class="lineCov">          2 :                     this-&gt;settings_map.erase(it);</span>
+<span class="lineNum">     184 </span>            :                 }
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">          2 :             }</span></a>
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span><span class="lineCov">          3 :             void CreateSectionKey(std::string section, std::string key) {</span>
+<span class="lineNum">     188 </span><span class="lineCov">          3 :                 utils::string::trim(section);</span>
+<span class="lineNum">     189 </span><span class="lineCov">          3 :                 utils::string::trim(key);</span>
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span><span class="lineCov">          3 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     192 </span><span class="lineCov">          3 :                     it == this-&gt;settings_map.end())</span>
+<span class="lineNum">     193 </span>            :                 {
+<span class="lineNum">     194 </span>            :                     // Does not exist yet
+<span class="lineNum">     195 </span><span class="lineCov">          1 :                     this-&gt;settings_map.emplace(section, Contents());</span>
+<span class="lineNum">     196 </span>            :                 }
+<span class="lineNum">     197 </span>            : 
+<span class="lineNum">     198 </span><span class="lineCov">          3 :                 this-&gt;settings_map.at(section).emplace(key, Value());</span>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          3 :             }</span></a>
+<span class="lineNum">     200 </span>            : 
+<span class="lineNum">     201 </span><span class="lineCov">          3 :             void RemoveSectionKey(const std::string&amp; section, const std::string&amp; key, bool delete_section_if_empty = false) {</span>
+<span class="lineNum">     202 </span><span class="lineCov">          3 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     203 </span><span class="lineCov">          3 :                     it != this-&gt;settings_map.end())</span>
+<span class="lineNum">     204 </span>            :                 {
+<span class="lineNum">     205 </span>            :                     // Exists
+<span class="lineNum">     206 </span><span class="lineCov">          3 :                     it-&gt;second.erase(key);</span>
+<span class="lineNum">     207 </span>            :                 }
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span><span class="lineCov">          3 :                 if (delete_section_if_empty &amp;&amp; this-&gt;SectionKeySize(section) == 0) {</span>
+<span class="lineNum">     210 </span><span class="lineCov">          1 :                     this-&gt;RemoveSection(section);</span>
+<span class="lineNum">     211 </span>            :                 }
+<span class="lineNum">     212 </span><span class="lineCov">          3 :             }</span>
+<span class="lineNum">     213 </span>            : 
+<span class="lineNum">     214 </span>            :             template&lt;
+<span class="lineNum">     215 </span>            :                 typename T,
+<a name="216"><span class="lineNum">     216 </span>            :                 typename std::enable_if&lt;utils::traits::is_variant_member_v&lt;T, Value&gt;, int&gt;::type = 0</a>
+<span class="lineNum">     217 </span>            :             &gt;
+<span class="lineNum">     218 </span><span class="lineCov">         79 :             void SetValue(std::string section, std::string key, T&amp;&amp; val) {</span>
+<span class="lineNum">     219 </span><span class="lineCov">         79 :                 utils::string::trim(section);</span>
+<span class="lineNum">     220 </span><span class="lineCov">         79 :                 utils::string::trim(key);</span>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span><span class="lineCov">         79 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     223 </span><span class="lineCov">         79 :                     it == this-&gt;settings_map.end())</span>
+<span class="lineNum">     224 </span>            :                 {
+<span class="lineNum">     225 </span>            :                     // Does not exist yet
+<span class="lineNum">     226 </span><span class="lineCov">         33 :                     this-&gt;settings_map.emplace(section, Contents());</span>
+<span class="lineNum">     227 </span>            :                 }
+<span class="lineNum">     228 </span>            : 
+<span class="lineNum">     229 </span><span class="lineCov">         79 :                 if (const auto it = this-&gt;settings_map.at(section).find(key);</span>
+<span class="lineNum">     230 </span><span class="lineCov">         79 :                     it == this-&gt;settings_map.at(section).end())</span>
+<span class="lineNum">     231 </span>            :                 {
+<span class="lineNum">     232 </span>            :                     // Does not exist yet
+<span class="lineNum">     233 </span><span class="lineCov">         77 :                     this-&gt;settings_map.at(section).emplace(key, Value(val));</span>
+<span class="lineNum">     234 </span>            :                 } else {
+<span class="lineNum">     235 </span><span class="lineCov">          2 :                     this-&gt;settings_map.at(section).at(key) = Value(val);</span>
+<span class="lineNum">     236 </span>            :                 }
+<span class="lineNum">     237 </span><span class="lineCov">         79 :             }</span>
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span>            :             template&lt;
+<span class="lineNum">     240 </span>            :                 typename T,
+<a name="241"><span class="lineNum">     241 </span>            :                 typename std::enable_if&lt;utils::traits::is_variant_member_v&lt;T, Value&gt;, int&gt;::type = 0</a>
+<span class="lineNum">     242 </span>            :             &gt;
+<span class="lineNum">     243 </span><span class="lineCov">         30 :             T GetValue(const std::string&amp; section, const std::string&amp; key, const T default_value = T()) const {</span>
+<span class="lineNum">     244 </span><span class="lineCov">         30 :                 if (const auto it = this-&gt;settings_map.find(section);</span>
+<span class="lineNum">     245 </span><span class="lineCov">         30 :                     it != this-&gt;settings_map.end())</span>
+<span class="lineNum">     246 </span>            :                 {
+<span class="lineNum">     247 </span><span class="lineCov">         29 :                     if (const auto sett_it = it-&gt;second.find(key);</span>
+<span class="lineNum">     248 </span><span class="lineCov">         29 :                         sett_it != it-&gt;second.end())</span>
+<span class="lineNum">     249 </span>            :                     {
+<span class="lineNum">     250 </span>            :                         // map[section][key] exists
+<span class="lineNum">     251 </span><span class="lineCov">         28 :                         const auto&amp; val = this-&gt;settings_map.at(section).at(key);</span>
+<span class="lineNum">     252 </span>            : 
+<span class="lineNum">     253 </span><span class="lineCov">         28 :                         if (std::holds_alternative&lt;T&gt;(val)) {</span>
+<span class="lineNum">     254 </span>            :                             // T is available
+<span class="lineNum">     255 </span><span class="lineCov">         24 :                             return std::get&lt;T&gt;(val);</span>
+<span class="lineNum">     256 </span>            :                         } else {
+<span class="lineNum">     257 </span><span class="lineCov">         17 :                             std::stringstream ss;</span>
+<span class="lineNum">     258 </span><span class="lineCov">         16 :                             ss &lt;&lt; val;</span>
+<span class="lineNum">     259 </span>            : 
+<span class="lineNum">     260 </span>            :                             // Print to string or cast to value
+<span class="lineNum">     261 </span>            :                             if constexpr (std::is_same_v&lt;T, std::string&gt;) {
+<span class="lineNum">     262 </span><span class="lineCov">          1 :                                 return ss.str();</span>
+<span class="lineNum">     263 </span>            :                             } else if constexpr (std::is_same_v&lt;T, bool&gt;) {
+<span class="lineNum">     264 </span><span class="lineCov">         13 :                                 std::string str = utils::string::to_lowercase(ss.str());</span>
+<span class="lineNum">     265 </span>            : 
+<span class="lineNum">     266 </span><span class="lineCov">         24 :                                 if (str == &quot;true&quot; || str == &quot;yes&quot;</span>
+<span class="lineNum">     267 </span><span class="lineCov">         24 :                                  || str == &quot;on&quot;   || str == &quot;1&quot;)</span>
+<span class="lineNum">     268 </span>            :                                 {
+<span class="lineNum">     269 </span><span class="lineCov">          6 :                                     return true;</span>
+<span class="lineNum">     270 </span>            :                                 }
+<span class="lineNum">     271 </span><span class="lineCov">         12 :                                 if (str == &quot;false&quot; || str == &quot;no&quot;</span>
+<span class="lineNum">     272 </span><span class="lineCov">         12 :                                  || str == &quot;off&quot;   || str == &quot;0&quot;)</span>
+<span class="lineNum">     273 </span>            :                                 {
+<span class="lineNum">     274 </span><span class="lineCov">          6 :                                     return false;</span>
+<span class="lineNum">     275 </span>            :                                 }
+<span class="lineNum">     276 </span>            :                             } else {
+<span class="lineNum">     277 </span><span class="lineCov">          2 :                                 return utils::misc::try_lexical_cast&lt;T&gt;(ss.str().c_str()).value_or(default_value);</span>
+<span class="lineNum">     278 </span>            :                             }
+<span class="lineNum">     279 </span>            :                         }
+<span class="lineNum">     280 </span>            :                     } else {
+<span class="lineNum">     281 </span>            :                         // Possibly return default_value instead?
+<span class="lineNum">     282 </span><span class="lineCov">          1 :                         throw utils::exceptions::KeyDoesNotExistException(&quot;ConfigReader[&quot; + section + &quot;]&quot;, key);</span>
+<span class="lineNum">     283 </span>            :                     }
+<span class="lineNum">     284 </span>            :                 } else {
+<span class="lineNum">     285 </span>            :                     // Possibly return default_value instead?
+<span class="lineNum">     286 </span><span class="lineCov">          1 :                     throw utils::exceptions::KeyDoesNotExistException(&quot;ConfigReader&quot;, section);</span>
+<span class="lineNum">     287 </span>            :                 }
+<span class="lineNum">     288 </span>            : 
+<span class="lineNum">     289 </span><span class="lineCov">          1 :                 return default_value;</span>
+<span class="lineNum">     290 </span>            :             }
+<span class="lineNum">     291 </span>            : 
+<a name="292"><span class="lineNum">     292 </span>            :             template&lt;typename TChar, typename TCharTraits, typename TDelimiters_ = TDelimiters&gt;</a>
+<span class="lineNum">     293 </span>            :             friend std::basic_ostream&lt;TChar, TCharTraits&gt;&amp;
+<span class="lineNum">     294 </span><span class="lineCov">          6 :             operator&lt;&lt;(</span>
+<span class="lineNum">     295 </span>            :                 std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     296 </span>            :                 const utils::ini::ConfigReader&lt;TDelimiters_&gt;&amp; cfgreader)
+<span class="lineNum">     297 </span>            :             {
+<span class="lineNum">     298 </span><span class="lineCov">         24 :                 for (auto [section, mapped_values] : cfgreader.settings_map) {</span>
+<span class="lineNum">     299 </span><span class="lineCov">         18 :                     if (mapped_values.size() &gt; 0) {</span>
+<span class="lineNum">     300 </span><span class="lineCov">         18 :                         stream &lt;&lt; TDelimiters_::values.prefix</span>
+<span class="lineNum">     301 </span>            :                                &lt;&lt; section
+<span class="lineNum">     302 </span><span class="lineCov">         18 :                                &lt;&lt; TDelimiters_::values.postfix</span>
+<span class="lineNum">     303 </span><span class="lineCov">         18 :                                &lt;&lt; std::endl;</span>
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span><span class="lineCov">         54 :                         for (auto [key, value] : mapped_values) {</span>
+<span class="lineNum">     306 </span>            :                             stream &lt;&lt; key
+<span class="lineNum">     307 </span><span class="lineCov">         36 :                                    &lt;&lt; TDelimiters_::values.delimiter</span>
+<span class="lineNum">     308 </span><span class="lineCov">         36 :                                    &lt;&lt; std::boolalpha &lt;&lt; value</span>
+<span class="lineNum">     309 </span><span class="lineCov">         36 :                                    &lt;&lt; std::endl;</span>
+<span class="lineNum">     310 </span>            :                         }
+<span class="lineNum">     311 </span>            : 
+<span class="lineNum">     312 </span><span class="lineCov">         18 :                         stream &lt;&lt; std::endl;</span>
+<span class="lineNum">     313 </span>            :                     }
+<span class="lineNum">     314 </span>            :                 }
+<span class="lineNum">     315 </span>            : 
+<span class="lineNum">     316 </span><span class="lineCov">          6 :                 return stream;</span>
+<span class="lineNum">     317 </span>            :             }
+<span class="lineNum">     318 </span>            :     };
+<span class="lineNum">     319 </span>            : }
+<span class="lineNum">     320 </span>            : 
+<span class="lineNum">     321 </span>            : #endif // UTILS_INI_HPP
 </pre>
       </td>
     </tr>

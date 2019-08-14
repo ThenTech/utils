@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-19</td>
+            <td class="headerValue">2019-08-14</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">18</td>
@@ -69,613 +69,621 @@
 <span class="lineNum">       7 </span>            : #include &quot;utils_time.hpp&quot;
 <span class="lineNum">       8 </span>            : #include &quot;utils_catch.hpp&quot;
 <span class="lineNum">       9 </span>            : #include &quot;utils_threading.hpp&quot;
-<span class="lineNum">      10 </span>            : 
-<span class="lineNum">      11 </span>            : #include &lt;iostream&gt;
-<span class="lineNum">      12 </span>            : #include &lt;ostream&gt;
-<span class="lineNum">      13 </span>            : #include &lt;fstream&gt;
-<span class="lineNum">      14 </span>            : #include &lt;mutex&gt;
-<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      10 </span>            : #include &quot;utils_algorithm.hpp&quot;
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : #include &lt;iostream&gt;
+<span class="lineNum">      13 </span>            : #include &lt;ostream&gt;
+<span class="lineNum">      14 </span>            : #include &lt;fstream&gt;
+<span class="lineNum">      15 </span>            : #include &lt;mutex&gt;
 <span class="lineNum">      16 </span>            : 
-<span class="lineNum">      17 </span>            : #ifdef LOG_ERROR_TRACE
-<span class="lineNum">      18 </span>            :     #undef LOG_ERROR_TRACE
-<span class="lineNum">      19 </span>            : #endif
-<span class="lineNum">      20 </span>            : 
-<span class="lineNum">      21 </span>            : /**
-<span class="lineNum">      22 </span>            :  *  Macro to print an error trace to Logger.
-<span class="lineNum">      23 </span>            :  */
-<span class="lineNum">      24 </span>            : #define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(UTILS_TRACE_LOCATION, E);
-<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      17 </span>            : 
+<span class="lineNum">      18 </span>            : #ifdef LOG_ERROR_TRACE
+<span class="lineNum">      19 </span>            :     #undef LOG_ERROR_TRACE
+<span class="lineNum">      20 </span>            : #endif
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : /**
+<span class="lineNum">      23 </span>            :  *  Macro to print an error trace to Logger.
+<span class="lineNum">      24 </span>            :  */
+<span class="lineNum">      25 </span>            : #define LOG_ERROR_TRACE(E) utils::Logger::ErrorTrace(UTILS_TRACE_LOCATION, E);
 <span class="lineNum">      26 </span>            : 
-<span class="lineNum">      27 </span>            : namespace utils {
-<span class="lineNum">      28 </span>            :     /**
-<span class="lineNum">      29 </span>            :      *  \brief  A class with static methods for logging to std::cout and a log file.
-<span class="lineNum">      30 </span>            :      *          Create the Loging instance with Logger::Create(),
-<span class="lineNum">      31 </span>            :      *          and destroy it by calling Logger::Destroy()
-<span class="lineNum">      32 </span>            :      *
-<span class="lineNum">      33 </span>            :      *      Use https://github.com/gabime/spdlog for a more extensive logger.
-<span class="lineNum">      34 </span>            :      */
-<span class="lineNum">      35 </span>            :     class Logger {
-<span class="lineNum">      36 </span>            :         public:
-<span class="lineNum">      37 </span>            :             enum class Level {
-<span class="lineNum">      38 </span>            :                 LOG_EMERGENCY = 0, // Emergency     - A &quot;panic&quot; condition usually affecting multiple apps/servers/sites. At this level it would usually notify all tech staff on call.
-<span class="lineNum">      39 </span>            :                 LOG_ALERT     = 1, // Alert         - Should be corrected immediately, therefore notify staff who can fix the problem. An example would be the loss of a primary ISP connection.
-<span class="lineNum">      40 </span>            :                 LOG_CRITICAL  = 2, // Critical      - Should be corrected immediately, but indicates failure in a secondary system, an example is a loss of a backup ISP connection.
-<span class="lineNum">      41 </span>            :                 LOG_ERROR     = 3, // Error         - Non-urgent failures, these should be relayed to developers or admins; each item must be resolved within a given time.
-<span class="lineNum">      42 </span>            :                 LOG_WARNING   = 4, // Warning       - Warning messages, not an error, but indication that an error will occur if action is not taken, e.g. file system 85% full - each item must be resolved within a given time.
-<span class="lineNum">      43 </span>            :                 LOG_NOTICE    = 5, // Notice        - Events that are unusual but not error conditions - might be summarized in an email to developers or admins to spot potential problems - no immediate action required.
-<span class="lineNum">      44 </span>            :                 LOG_INFO      = 6, // Informational - Normal operational messages - may be harvested for reporting, measuring throughput, etc. - no action required.
-<span class="lineNum">      45 </span>            :                 LOG_DEBUG     = 7  // Debug         - Info useful to developers for debugging the application, not useful during operations.
-<span class="lineNum">      46 </span>            :             };
-<span class="lineNum">      47 </span>            : 
-<span class="lineNum">      48 </span>            :         private:
-<span class="lineNum">      49 </span>            :             bool screen_enabled;
-<span class="lineNum">      50 </span>            :             bool screen_paused;
-<span class="lineNum">      51 </span>            :             bool file_enabled;
-<span class="lineNum">      52 </span>            :             bool file_paused;
-<span class="lineNum">      53 </span>            :             bool file_timestamp;
-<span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span>            :             std::ostream&amp;  screen_output;
-<span class="lineNum">      56 </span>            :             std::ofstream  log_file;
-<span class="lineNum">      57 </span>            :             Logger::Level  level_screen;
-<span class="lineNum">      58 </span>            :             Logger::Level  level_file;
-<span class="lineNum">      59 </span>            : 
-<span class="lineNum">      60 </span>            :             std::mutex logger_mutex;
-<span class="lineNum">      61 </span>            :             std::mutex file_mutex;
-<a name="62"><span class="lineNum">      62 </span>            :             std::mutex screen_mutex;</a>
-<span class="lineNum">      63 </span>            : 
-<span class="lineNum">      64 </span><span class="lineCov">         50 :             static /*inline*/ Logger&amp; get() {</span>
-<span class="lineNum">      65 </span><span class="lineCov">         50 :                 static Logger instance;</span>
-<span class="lineNum">      66 </span><span class="lineCov">         50 :                 return instance;</span>
-<a name="67"><span class="lineNum">      67 </span>            :             }</a>
-<span class="lineNum">      68 </span>            : 
-<span class="lineNum">      69 </span><span class="lineCov">         11 :             inline bool canLogScreen(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {</span>
-<span class="lineNum">      70 </span><span class="lineCov">         11 :                 return this-&gt;screen_enabled &amp;&amp; !this-&gt;screen_paused</span>
-<a name="71"><span class="lineNum">      71 </span><span class="lineCov">         22 :                     &amp;&amp; level &lt;= this-&gt;level_screen;</span></a>
-<span class="lineNum">      72 </span>            :             }
-<span class="lineNum">      73 </span><span class="lineCov">          3 :             inline bool canLogFile(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {</span>
-<span class="lineNum">      74 </span><span class="lineNoCov">          0 :                 return this-&gt;file_enabled &amp;&amp; !this-&gt;file_paused</span>
-<a name="75"><span class="lineNum">      75 </span><span class="lineCov">          3 :                     &amp;&amp; level &lt;= this-&gt;level_file;</span></a>
-<span class="lineNum">      76 </span>            :             }
-<span class="lineNum">      77 </span><span class="lineCov">          4 :             inline bool canLog(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {</span>
-<span class="lineNum">      78 </span><span class="lineCov">          4 :                 return this-&gt;canLogScreen(level) || this-&gt;canLogFile(level);</span>
-<a name="79"><span class="lineNum">      79 </span>            :             }</a>
-<span class="lineNum">      80 </span>            : 
-<span class="lineNum">      81 </span><span class="lineCov">          4 :             inline void write_to_screen(const std::string_view&amp; text) {</span>
-<span class="lineNum">      82 </span><span class="lineCov">          8 :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);</span>
-<span class="lineNum">      83 </span>            : 
-<span class="lineNum">      84 </span><span class="lineCov">          4 :                 if (this-&gt;canLogScreen()) {</span>
-<span class="lineNum">      85 </span><span class="lineCov">          4 :                     this-&gt;screen_output &lt;&lt; text;</span>
-<span class="lineNum">      86 </span>            :                 }
-<a name="87"><span class="lineNum">      87 </span><span class="lineCov">          4 :             }</span></a>
-<span class="lineNum">      88 </span>            : 
-<span class="lineNum">      89 </span><span class="lineCov">          3 :             inline void write_to_file(const std::string_view&amp; text) {</span>
-<span class="lineNum">      90 </span><span class="lineCov">          6 :                 LOCK_BLOCK(utils::Logger::get().file_mutex);</span>
-<span class="lineNum">      91 </span>            : 
-<span class="lineNum">      92 </span><span class="lineCov">          3 :                 if (this-&gt;canLogFile()) {</span>
-<span class="lineNum">      93 </span>            :                     try {
-<span class="lineNum">      94 </span><span class="lineNoCov">          0 :                         if (this-&gt;GetFileTimestamp()) {</span>
-<span class="lineNum">      95 </span><span class="lineNoCov">          0 :                             this-&gt;log_file &lt;&lt; utils::time::Timestamp(&quot;[%Y-%m-%d %H:%M:%S] &quot;);</span>
-<span class="lineNum">      96 </span>            :                         }
-<span class="lineNum">      97 </span>            : 
-<span class="lineNum">      98 </span><span class="lineNoCov">          0 :                         this-&gt;log_file &lt;&lt; text;</span>
-<span class="lineNum">      99 </span><span class="lineNoCov">          0 :                     } catch (std::exception const&amp; e) {</span>
-<span class="lineNum">     100 </span><span class="lineNoCov">          0 :                         std::cerr &lt;&lt; &quot;[Logger][ERROR] &quot; &lt;&lt; e.what() &lt;&lt; std::endl;</span>
-<span class="lineNum">     101 </span><span class="lineNoCov">          0 :                         utils::Logger::DestroyFile();</span>
-<span class="lineNum">     102 </span>            :                     }
-<span class="lineNum">     103 </span>            :                 }
-<span class="lineNum">     104 </span><span class="lineCov">          3 :             }</span>
-<a name="105"><span class="lineNum">     105 </span>            : </a>
-<span class="lineNum">     106 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     107 </span><span class="lineCov">          1 :             void hdr_colour_format(const Logger::Level level,</span>
-<span class="lineNum">     108 </span>            :                                    const utils::os::command_t hdr_colour,
-<span class="lineNum">     109 </span>            :                                    const std::string_view&amp; hdr_str,
-<span class="lineNum">     110 </span>            :                                    const std::string_view&amp; format,
-<span class="lineNum">     111 </span>            :                                    const Type&amp; ...args)
-<span class="lineNum">     112 </span>            :             {
-<span class="lineNum">     113 </span><span class="lineCov">          2 :                 LOCK_BLOCK(utils::Logger::get().logger_mutex);</span>
-<span class="lineNum">     114 </span>            : 
-<span class="lineNum">     115 </span><span class="lineCov">          1 :                 if (this-&gt;canLog(level)) {</span>
-<span class="lineNum">     116 </span><span class="lineCov">          1 :                     const bool stamp = this-&gt;GetFileTimestamp();</span>
-<span class="lineNum">     117 </span><span class="lineCov">          1 :                     this-&gt;Command(  utils::os::Console::FG</span>
-<span class="lineNum">     118 </span>            :                                   | utils::os::Console::BOLD
-<span class="lineNum">     119 </span>            :                                   | hdr_colour);
-<span class="lineNum">     120 </span><span class="lineCov">          1 :                     this-&gt;Write(&quot;[&quot; + std::string(hdr_str) + &quot;]&quot;, true);</span>
-<span class="lineNum">     121 </span>            : 
-<span class="lineNum">     122 </span><span class="lineCov">          1 :                     this-&gt;Command(utils::os::Console::RESET</span>
-<span class="lineNum">     123 </span>            :                                 | utils::os::Console::WHITE);
-<span class="lineNum">     124 </span><span class="lineCov">          1 :                     this-&gt;SetFileTimestamp(false);</span>
-<span class="lineNum">     125 </span><span class="lineCov">          1 :                     this-&gt;Writef(&quot; &quot; + std::string(format) + utils::Logger::CRLF, args...);</span>
-<span class="lineNum">     126 </span><span class="lineCov">          1 :                     this-&gt;SetFileTimestamp(stamp);</span>
-<span class="lineNum">     127 </span><span class="lineCov">          1 :                     this-&gt;Command(utils::os::Console::RESET);</span>
-<span class="lineNum">     128 </span>            :                 }
-<span class="lineNum">     129 </span><span class="lineCov">          1 :             }</span>
-<a name="130"><span class="lineNum">     130 </span>            : </a>
-<span class="lineNum">     131 </span>            :         public:
-<span class="lineNum">     132 </span><span class="lineCov">          1 :             Logger()</span>
-<span class="lineNum">     133 </span><span class="lineCov">          1 :                 : screen_enabled(true)</span>
-<span class="lineNum">     134 </span>            :                 , screen_paused(false)
-<span class="lineNum">     135 </span>            :                 , file_enabled(false)
-<span class="lineNum">     136 </span>            :                 , file_paused(false)
-<span class="lineNum">     137 </span>            :                 , file_timestamp(true)
-<span class="lineNum">     138 </span>            :                 , screen_output(std::cout)
-<span class="lineNum">     139 </span>            :                 , level_screen(Level::LOG_INFO)
-<span class="lineNum">     140 </span><span class="lineCov">          1 :                 , level_file(Level::LOG_INFO)</span>
-<span class="lineNum">     141 </span>            :             {
-<span class="lineNum">     142 </span><span class="lineCov">          1 :                 utils::os::EnableVirtualConsole();</span>
-<span class="lineNum">     143 </span>            : 
-<span class="lineNum">     144 </span><span class="lineCov">          1 :                 if (this-&gt;screen_output.bad()) {</span>
-<span class="lineNum">     145 </span><span class="lineNoCov">          0 :                     this-&gt;screen_enabled = false;</span>
-<span class="lineNum">     146 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;[Logger][ERROR] Bad screen output stream!&quot; &lt;&lt; std::endl;</span>
-<span class="lineNum">     147 </span>            :                 }
-<span class="lineNum">     148 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">     149 </span>            : 
-<span class="lineNum">     150 </span>            :             Logger(Logger const&amp;)         = delete;
-<span class="lineNum">     151 </span>            :             Logger(Logger&amp;&amp;)              = delete;
-<span class="lineNum">     152 </span>            :             void operator=(Logger const&amp;) = delete;
-<span class="lineNum">     153 </span>            :             Logger&amp; operator=(Logger&amp;&amp;)   = delete;
-<span class="lineNum">     154 </span>            : 
-<span class="lineNum">     155 </span>            :             /**
-<a name="156"><span class="lineNum">     156 </span>            :              *  Dtor: write line to outputs and close streams.</a>
-<span class="lineNum">     157 </span>            :              */
-<span class="lineNum">     158 </span><span class="lineCov">          1 :             ~Logger() {</span>
-<span class="lineNum">     159 </span>            :                 const std::string end_line =
-<span class="lineNum">     160 </span>            :                         utils::Logger::CRLF
-<span class="lineNum">     161 </span><span class="lineCov">          1 :                       + utils::Logger::LINE&lt;&gt;</span>
-<span class="lineNum">     162 </span><span class="lineCov">          1 :                       + utils::Logger::CRLF;</span>
-<span class="lineNum">     163 </span>            : 
-<span class="lineNum">     164 </span><span class="lineCov">          1 :                 if (this-&gt;file_enabled) {</span>
-<span class="lineNum">     165 </span><span class="lineNoCov">          0 :                     this-&gt;SetFileTimestamp(false);</span>
-<span class="lineNum">     166 </span><span class="lineNoCov">          0 :                     this-&gt;write_to_file(end_line);</span>
-<span class="lineNum">     167 </span><span class="lineNoCov">          0 :                     this-&gt;log_file.close();</span>
-<span class="lineNum">     168 </span><span class="lineNoCov">          0 :                     this-&gt;file_enabled = false;</span>
-<span class="lineNum">     169 </span>            :                 }
-<span class="lineNum">     170 </span>            : 
-<span class="lineNum">     171 </span><span class="lineCov">          1 :                 this-&gt;write_to_screen(end_line);</span>
-<span class="lineNum">     172 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">     173 </span>            : 
-<span class="lineNum">     174 </span>            :             static void InitFile(const std::string&amp; fileName = &quot;&quot;,
-<span class="lineNum">     175 </span>            :                                  const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
-<span class="lineNum">     176 </span>            :             {
-<span class="lineNum">     177 </span>            :                 utils::Logger::DestroyFile();
-<span class="lineNum">     178 </span>            :                 utils::Logger::SetFileLogLevel(level);
-<span class="lineNum">     179 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
-<span class="lineNum">     180 </span>            :                 bool enable_file = false;
-<span class="lineNum">     181 </span>            : 
-<span class="lineNum">     182 </span>            :                 if (fileName.length() &gt; 0) {
-<span class="lineNum">     183 </span>            :                     try {
-<span class="lineNum">     184 </span>            :                         utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
-<span class="lineNum">     185 </span>            :                         enable_file = true;
-<span class="lineNum">     186 </span>            :                     } catch (std::exception const&amp; e) {
-<span class="lineNum">     187 </span>            :                         std::cerr &lt;&lt; &quot;[Logger][ERROR] &quot; &lt;&lt; e.what() &lt;&lt; std::endl;
-<span class="lineNum">     188 </span>            :                         enable_file = false;
-<span class="lineNum">     189 </span>            :                     }
-<span class="lineNum">     190 </span>            :                 }
-<span class="lineNum">     191 </span>            : 
-<span class="lineNum">     192 </span>            :                 utils::Logger::get().file_enabled = enable_file;
-<span class="lineNum">     193 </span>            :             }
-<span class="lineNum">     194 </span>            : 
-<span class="lineNum">     195 </span>            :             static void InitScreen(std::ostream&amp; console_stream = std::cout,
-<span class="lineNum">     196 </span>            :                                    const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
-<span class="lineNum">     197 </span>            :             {
-<span class="lineNum">     198 </span>            :                 utils::Logger::DestroyScreen();
-<span class="lineNum">     199 </span>            :                 utils::Logger::SetScreenLogLevel(level);
-<span class="lineNum">     200 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
-<span class="lineNum">     201 </span>            : 
-<span class="lineNum">     202 </span>            :                 if (console_stream.bad()) {
-<span class="lineNum">     203 </span>            :                     utils::Logger::get().screen_output.tie(&amp;std::cerr);
-<span class="lineNum">     204 </span>            :                     utils::Logger::get().screen_output &lt;&lt; &quot;[Logger][ERROR] Bad screen output stream!&quot; &lt;&lt; std::endl;
-<span class="lineNum">     205 </span>            :                 } else {
-<span class="lineNum">     206 </span>            :                     utils::Logger::get().screen_output.tie(&amp;console_stream);
-<span class="lineNum">     207 </span>            :                 }
-<span class="lineNum">     208 </span>            : 
-<span class="lineNum">     209 </span>            :                 utils::Logger::get().screen_enabled = true;
-<span class="lineNum">     210 </span>            :             }
-<span class="lineNum">     211 </span>            : 
-<span class="lineNum">     212 </span>            :             /**
-<span class="lineNum">     213 </span>            :              *  @brief  Create the Logger instance from a filename.
-<span class="lineNum">     214 </span>            :              *          If the file does not exist, it will be created, text will be appended otherwise.
-<span class="lineNum">     215 </span>            :              *
-<span class="lineNum">     216 </span>            :              *          Disable logging if fileName is an empty string or on error.
-<span class="lineNum">     217 </span>            :              *
-<span class="lineNum">     218 </span>            :              *          Writes version and author info to the log on start.
-<span class="lineNum">     219 </span>            :              *
-<span class="lineNum">     220 </span>            :              *  @param  fileName
-<span class="lineNum">     221 </span>            :              *      The log file to use.
-<span class="lineNum">     222 </span>            :              */
-<span class="lineNum">     223 </span>            :             static void Create(const std::string&amp; fileName = &quot;&quot;,
-<span class="lineNum">     224 </span>            :                                const utils::Logger::Level level = utils::Logger::Level::LOG_INFO,
-<span class="lineNum">     225 </span>            :                                std::ostream&amp; console_stream = std::cout)
-<span class="lineNum">     226 </span>            :             {
-<span class="lineNum">     227 </span>            :                 utils::Logger::InitScreen(console_stream, level);
-<span class="lineNum">     228 </span>            :                 utils::Logger::InitFile(fileName, level);
-<span class="lineNum">     229 </span>            :             }
-<span class="lineNum">     230 </span>            : 
-<span class="lineNum">     231 </span>            :             /**
-<a name="232"><span class="lineNum">     232 </span>            :              *  \brief  Destroy the file Logging instance by closing the output file.</a>
-<span class="lineNum">     233 </span>            :              */
-<span class="lineNum">     234 </span><span class="lineNoCov">          0 :             static void DestroyFile() {</span>
-<span class="lineNum">     235 </span><span class="lineNoCov">          0 :                 LOCK_BLOCK(utils::Logger::get().file_mutex);</span>
-<span class="lineNum">     236 </span>            : 
-<span class="lineNum">     237 </span><span class="lineNoCov">          0 :                 if (utils::Logger::get().file_enabled) {</span>
-<span class="lineNum">     238 </span><span class="lineNoCov">          0 :                     utils::Logger::get().log_file.close();</span>
-<span class="lineNum">     239 </span><span class="lineNoCov">          0 :                     utils::Logger::get().file_enabled = false;</span>
-<span class="lineNum">     240 </span>            :                 }
-<span class="lineNum">     241 </span><span class="lineNoCov">          0 :             }</span>
-<span class="lineNum">     242 </span>            : 
-<span class="lineNum">     243 </span>            :             /**
-<span class="lineNum">     244 </span>            :              *  \brief  Destroy the screen Logging instance.
-<span class="lineNum">     245 </span>            :              */
-<span class="lineNum">     246 </span>            :             static void DestroyScreen() {
-<span class="lineNum">     247 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
-<span class="lineNum">     248 </span>            : 
-<span class="lineNum">     249 </span>            :                 if (utils::Logger::get().screen_enabled) {
-<span class="lineNum">     250 </span>            :                     utils::os::Command(utils::os::Console::RESET, utils::Logger::get().screen_output);
-<span class="lineNum">     251 </span>            :                     utils::Logger::get().screen_output.flush();
-<span class="lineNum">     252 </span>            :                     utils::Logger::get().screen_enabled = false;
-<span class="lineNum">     253 </span>            :                 }
-<a name="254"><span class="lineNum">     254 </span>            :             }</a>
-<span class="lineNum">     255 </span>            : 
-<span class="lineNum">     256 </span><span class="lineCov">          4 :             static inline std::ostream&amp; GetConsoleStream() {</span>
-<span class="lineNum">     257 </span><span class="lineCov">          4 :                 return utils::Logger::get().screen_output;</span>
-<span class="lineNum">     258 </span>            :             }
-<span class="lineNum">     259 </span>            : 
-<span class="lineNum">     260 </span>            :             static inline std::ofstream&amp; GetFileStream() {
-<span class="lineNum">     261 </span>            :                 return utils::Logger::get().log_file;
-<span class="lineNum">     262 </span>            :             }
-<span class="lineNum">     263 </span>            : 
-<span class="lineNum">     264 </span>            :             /**
-<span class="lineNum">     265 </span>            :              *  \brief  Write a seperator (line) to the stream.
-<span class="lineNum">     266 </span>            :              */
-<span class="lineNum">     267 </span>            :             static void Separator(void) {
-<span class="lineNum">     268 </span>            :                 utils::Logger::Write(utils::Logger::LINE&lt;&gt;);
-<span class="lineNum">     269 </span>            :             }
-<span class="lineNum">     270 </span>            : 
-<span class="lineNum">     271 </span>            :             /**
-<span class="lineNum">     272 </span>            :              *  @brief  Format the given args and write to the streams.
-<span class="lineNum">     273 </span>            :              *
-<span class="lineNum">     274 </span>            :              *  @param  format
-<span class="lineNum">     275 </span>            :              *      The text to format in and write.
-<span class="lineNum">     276 </span>            :              *  @param  args
-<a name="277"><span class="lineNum">     277 </span>            :              */</a>
-<span class="lineNum">     278 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     279 </span><span class="lineCov">          1 :             static void Writef(const std::string&amp; format, const Type&amp; ...args) {</span>
-<span class="lineNum">     280 </span>            :                 if constexpr (sizeof...(args) &gt; 0) {
-<span class="lineNum">     281 </span><span class="lineCov">          1 :                     utils::Logger::Write(utils::string::format(format, args...), utils::Logger::GetFileTimestamp());</span>
-<span class="lineNum">     282 </span>            :                 } else {
-<span class="lineNum">     283 </span>            :                     utils::Logger::Write(format, utils::Logger::GetFileTimestamp());
-<span class="lineNum">     284 </span>            :                 }
-<span class="lineNum">     285 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">     286 </span>            : 
-<span class="lineNum">     287 </span>            :             /**
-<span class="lineNum">     288 </span>            :              *  @brief  Write the text &lt;text&gt; to the console and the log file.
-<span class="lineNum">     289 </span>            :              *
-<span class="lineNum">     290 </span>            :              *  @param  text
-<a name="291"><span class="lineNum">     291 </span>            :              *      The text to write.</a>
-<span class="lineNum">     292 </span>            :              */
-<span class="lineNum">     293 </span><span class="lineCov">          3 :             static void Write(const std::string_view&amp; text, const bool timestamp = false) {</span>
-<span class="lineNum">     294 </span><span class="lineCov">          3 :                 if (utils::Logger::get().canLog()) {</span>
-<span class="lineNum">     295 </span><span class="lineCov">          3 :                     const bool stamp = utils::Logger::GetFileTimestamp();</span>
-<span class="lineNum">     296 </span><span class="lineCov">          3 :                     utils::Logger::SetFileTimestamp(timestamp);</span>
-<span class="lineNum">     297 </span>            : 
-<span class="lineNum">     298 </span><span class="lineCov">          3 :                     utils::Logger::get().write_to_screen(text);</span>
-<span class="lineNum">     299 </span><span class="lineCov">          3 :                     utils::Logger::get().write_to_file(text);</span>
-<span class="lineNum">     300 </span>            : 
-<span class="lineNum">     301 </span><span class="lineCov">          3 :                     utils::Logger::SetFileTimestamp(stamp);</span>
-<span class="lineNum">     302 </span>            :                 }
-<a name="303"><span class="lineNum">     303 </span><span class="lineCov">          3 :             }</span></a>
-<span class="lineNum">     304 </span>            : 
-<span class="lineNum">     305 </span><span class="lineCov">          1 :             static inline void WriteLn(const std::string&amp; text, const bool timestamp = false) {</span>
-<span class="lineNum">     306 </span><span class="lineCov">          1 :                 utils::Logger::Write(text + utils::Logger::CRLF, timestamp);</span>
-<span class="lineNum">     307 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">     308 </span>            : 
-<span class="lineNum">     309 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     310 </span>            :             static void Debug(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     311 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     312 </span>            :                     utils::Logger::Level::LOG_DEBUG,
-<span class="lineNum">     313 </span>            :                     utils::os::Console::BG | utils::os::Console::BLUE, &quot;DEBUG&quot;,
-<span class="lineNum">     314 </span>            :                     format, args...
-<span class="lineNum">     315 </span>            :                 );
-<span class="lineNum">     316 </span>            :             }
-<span class="lineNum">     317 </span>            : 
-<span class="lineNum">     318 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     319 </span>            :             static void Success(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     320 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     321 </span>            :                     utils::Logger::Level::LOG_INFO,
-<span class="lineNum">     322 </span>            :                     utils::os::Console::GREEN, &quot;Success&quot;,
-<span class="lineNum">     323 </span>            :                     format, args...
-<span class="lineNum">     324 </span>            :                 );
-<span class="lineNum">     325 </span>            :             }
-<span class="lineNum">     326 </span>            : 
-<span class="lineNum">     327 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     328 </span>            :             static void Info(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     329 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     330 </span>            :                     utils::Logger::Level::LOG_INFO,
-<span class="lineNum">     331 </span>            :                     utils::os::Console::CYAN, &quot;Info&quot;,
-<span class="lineNum">     332 </span>            :                     format, args...
-<span class="lineNum">     333 </span>            :                 );
-<span class="lineNum">     334 </span>            :             }
-<a name="335"><span class="lineNum">     335 </span>            : </a>
-<span class="lineNum">     336 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     337 </span><span class="lineCov">          1 :             static void Notice(const std::string_view&amp; format, const Type&amp; ...args) {</span>
-<span class="lineNum">     338 </span><span class="lineCov">          1 :                 utils::Logger::get().hdr_colour_format(</span>
-<span class="lineNum">     339 </span>            :                     utils::Logger::Level::LOG_NOTICE,
-<span class="lineNum">     340 </span>            :                     utils::os::Console::BG |
-<span class="lineNum">     341 </span>            :                     utils::os::Console::BRIGHT |
-<span class="lineNum">     342 </span>            :                     utils::os::Console::CYAN,
-<span class="lineNum">     343 </span>            :                     &quot;Notice&quot;,
-<span class="lineNum">     344 </span>            :                     format, args...
-<span class="lineNum">     345 </span>            :                 );
-<span class="lineNum">     346 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">     347 </span>            : 
-<span class="lineNum">     348 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     349 </span>            :             static void Warn(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     350 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     351 </span>            :                     utils::Logger::Level::LOG_WARNING,
-<span class="lineNum">     352 </span>            :                     utils::os::Console::YELLOW, &quot;Warning&quot;,
-<span class="lineNum">     353 </span>            :                     format, args...
-<span class="lineNum">     354 </span>            :                 );
-<span class="lineNum">     355 </span>            :             }
-<span class="lineNum">     356 </span>            : 
-<span class="lineNum">     357 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     358 </span>            :             static void Error(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     359 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     360 </span>            :                     utils::Logger::Level::LOG_ERROR,
-<span class="lineNum">     361 </span>            :                     utils::os::Console::RED, &quot;Error&quot;,
-<span class="lineNum">     362 </span>            :                     format, args...
-<span class="lineNum">     363 </span>            :                 );
-<span class="lineNum">     364 </span>            :             }
-<span class="lineNum">     365 </span>            : 
-<span class="lineNum">     366 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     367 </span>            :             static void Critical(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     368 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     369 </span>            :                     utils::Logger::Level::LOG_CRITICAL,
-<span class="lineNum">     370 </span>            :                     utils::os::Console::BG | utils::os::Console::RED, &quot;Critical&quot;,
-<span class="lineNum">     371 </span>            :                     format, args...
-<span class="lineNum">     372 </span>            :                 );
-<span class="lineNum">     373 </span>            :             }
-<span class="lineNum">     374 </span>            : 
-<span class="lineNum">     375 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     376 </span>            :             static void Alert(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     377 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     378 </span>            :                     utils::Logger::Level::LOG_ALERT,
-<span class="lineNum">     379 </span>            :                     utils::os::Console::MAGENTA, &quot;Alert&quot;,
-<span class="lineNum">     380 </span>            :                     format, args...
-<span class="lineNum">     381 </span>            :                 );
-<span class="lineNum">     382 </span>            :             }
-<span class="lineNum">     383 </span>            : 
-<span class="lineNum">     384 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     385 </span>            :             static void Emergency(const std::string_view&amp; format, const Type&amp; ...args) {
-<span class="lineNum">     386 </span>            :                 utils::Logger::get().hdr_colour_format(
-<span class="lineNum">     387 </span>            :                     utils::Logger::Level::LOG_EMERGENCY,
-<span class="lineNum">     388 </span>            :                     utils::os::Console::BG |
-<span class="lineNum">     389 </span>            :                     utils::os::Console::BRIGHT |
-<span class="lineNum">     390 </span>            :                     utils::os::Console::MAGENTA,
-<span class="lineNum">     391 </span>            :                     &quot;Emergency&quot;,
-<span class="lineNum">     392 </span>            :                     format, args...
-<span class="lineNum">     393 </span>            :                 );
-<span class="lineNum">     394 </span>            :             }
-<span class="lineNum">     395 </span>            : 
-<span class="lineNum">     396 </span>            :             static void ErrorTrace(const char* file, const int line, const char* function, const std::exception&amp; e) {
-<span class="lineNum">     397 </span>            :                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
-<span class="lineNum">     398 </span>            : 
-<span class="lineNum">     399 </span>            :                 if (utils::Logger::get().canLog()) {
-<span class="lineNum">     400 </span>            :                     utils::Logger::Command(  utils::os::Console::BG
-<span class="lineNum">     401 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     402 </span>            :                                            | utils::os::Console::RED);
-<span class="lineNum">     403 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
-<span class="lineNum">     404 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     405 </span>            :                                            | utils::os::Console::WHITE);
-<span class="lineNum">     406 </span>            :                     utils::Logger::Write(utils::Logger::CRLF
-<span class="lineNum">     407 </span>            :                                        + utils::Logger::LINE&lt;'-'&gt;, false);
-<span class="lineNum">     408 </span>            : 
-<span class="lineNum">     409 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET
-<span class="lineNum">     410 </span>            :                                            | utils::os::Console::FG
-<span class="lineNum">     411 </span>            :                                            | utils::os::Console::BOLD
-<span class="lineNum">     412 </span>            :                                            | utils::os::Console::RED);
-<span class="lineNum">     413 </span>            :                     utils::Logger::Write(&quot;[ERROR] Exception thrown:\n  &quot;, true);
-<span class="lineNum">     414 </span>            : 
-<span class="lineNum">     415 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
-<span class="lineNum">     416 </span>            :                                            | utils::os::Console::YELLOW);
-<span class="lineNum">     417 </span>            :                     utils::Logger::Write(e.what());
-<span class="lineNum">     418 </span>            : 
-<span class="lineNum">     419 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
-<span class="lineNum">     420 </span>            :                     utils::Logger::Write(&quot;\n    at &quot;);
-<span class="lineNum">     421 </span>            : 
-<span class="lineNum">     422 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
-<span class="lineNum">     423 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     424 </span>            :                                            | utils::os::Console::CYAN);
-<span class="lineNum">     425 </span>            :                     utils::Logger::Write(file);
-<span class="lineNum">     426 </span>            : 
-<span class="lineNum">     427 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
-<span class="lineNum">     428 </span>            :                     utils::Logger::Write(&quot;:&quot;);
-<span class="lineNum">     429 </span>            : 
-<span class="lineNum">     430 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
-<span class="lineNum">     431 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     432 </span>            :                                            | utils::os::Console::CYAN);
-<span class="lineNum">     433 </span>            :                     utils::Logger::Write(std::to_string(line));
-<span class="lineNum">     434 </span>            : 
-<span class="lineNum">     435 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
-<span class="lineNum">     436 </span>            :                     utils::Logger::Write(&quot;\n    inside: &quot;);
-<span class="lineNum">     437 </span>            : 
-<span class="lineNum">     438 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
-<span class="lineNum">     439 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     440 </span>            :                                            | utils::os::Console::MAGENTA);
-<span class="lineNum">     441 </span>            :                     utils::Logger::Write(function);
-<span class="lineNum">     442 </span>            : 
-<span class="lineNum">     443 </span>            :                     utils::Logger::Command(  utils::os::Console::BG
-<span class="lineNum">     444 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     445 </span>            :                                            | utils::os::Console::RED);
-<span class="lineNum">     446 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
-<span class="lineNum">     447 </span>            :                                            | utils::os::Console::BRIGHT
-<span class="lineNum">     448 </span>            :                                            | utils::os::Console::WHITE);
-<span class="lineNum">     449 </span>            :                     utils::Logger::Write(utils::Logger::CRLF
-<span class="lineNum">     450 </span>            :                                        + utils::Logger::LINE&lt;'-'&gt;, false);
-<span class="lineNum">     451 </span>            : 
-<span class="lineNum">     452 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
-<span class="lineNum">     453 </span>            :                     utils::Logger::Write(utils::Logger::CRLF);
-<span class="lineNum">     454 </span>            :                 } else {
-<span class="lineNum">     455 </span>            :                     std::cerr &lt;&lt; &quot;\033[31;1m&quot; &quot;[ERROR] Exception thrown:\n&quot; &quot;\033[33m  &quot;
-<span class="lineNum">     456 </span>            :                               &lt;&lt; e.what()
-<span class="lineNum">     457 </span>            :                               &lt;&lt; &quot;\033[0m&quot; &quot;\n    at &quot; &quot;\033[36;1m&quot;
-<span class="lineNum">     458 </span>            :                               &lt;&lt; file
-<span class="lineNum">     459 </span>            :                               &lt;&lt; &quot;\033[0m&quot; &quot;:&quot; &quot;\033[36;1m&quot;
-<span class="lineNum">     460 </span>            :                               &lt;&lt; line
-<span class="lineNum">     461 </span>            :                               &lt;&lt; &quot;\033[0m&quot; &quot;\n    inside: &quot; &quot;\033[35;1m&quot;
-<span class="lineNum">     462 </span>            :                               &lt;&lt; function
-<span class="lineNum">     463 </span>            :                               &lt;&lt; &quot;\033[0m&quot; &lt;&lt; std::endl;
-<span class="lineNum">     464 </span>            :                 }
-<span class="lineNum">     465 </span>            :             }
-<span class="lineNum">     466 </span>            : 
-<span class="lineNum">     467 </span>            :             static void WriteProgress(const size_t&amp; iteration, const size_t&amp; total, const std::string_view&amp; prefix = &quot;Progress &quot;) {
-<span class="lineNum">     468 </span>            :                 static constexpr size_t LEN = 55u;
-<span class="lineNum">     469 </span>            :                 static size_t stepu = 0u;
-<span class="lineNum">     470 </span>            : 
-<span class="lineNum">     471 </span>            :                 if (!utils::Logger::get().canLogScreen()) return;
-<span class="lineNum">     472 </span>            : 
-<span class="lineNum">     473 </span>            :                 const bool done = (iteration == total);
-<span class="lineNum">     474 </span>            : 
-<span class="lineNum">     475 </span>            :                 if (iteration == 0) {
-<span class="lineNum">     476 </span>            :                     stepu = size_t(float(total) / std::min(LEN, total));
-<span class="lineNum">     477 </span>            :                 } else if (done || iteration % stepu == 0) {
-<span class="lineNum">     478 </span>            :                     const float progress = float(iteration) / total;
-<span class="lineNum">     479 </span>            : 
-<span class="lineNum">     480 </span>            :                     const size_t filled_len = std::min(LEN, size_t(LEN * progress));
-<span class="lineNum">     481 </span>            :                     LOCK_BLOCK(utils::Logger::get().screen_mutex);
+<span class="lineNum">      27 </span>            : 
+<span class="lineNum">      28 </span>            : namespace utils {
+<span class="lineNum">      29 </span>            :     /**
+<span class="lineNum">      30 </span>            :      *  \brief  A class with static methods for logging to std::cout and a log file.
+<span class="lineNum">      31 </span>            :      *          Create the Loging instance with Logger::Create(),
+<span class="lineNum">      32 </span>            :      *          and destroy it by calling Logger::Destroy()
+<span class="lineNum">      33 </span>            :      *
+<span class="lineNum">      34 </span>            :      *      Use https://github.com/gabime/spdlog for a more extensive logger.
+<span class="lineNum">      35 </span>            :      */
+<span class="lineNum">      36 </span>            :     class Logger {
+<span class="lineNum">      37 </span>            :         public:
+<span class="lineNum">      38 </span>            :             enum class Level {
+<span class="lineNum">      39 </span>            :                 LOG_EMERGENCY = 0, // Emergency     - A &quot;panic&quot; condition usually affecting multiple apps/servers/sites. At this level it would usually notify all tech staff on call.
+<span class="lineNum">      40 </span>            :                 LOG_ALERT     = 1, // Alert         - Should be corrected immediately, therefore notify staff who can fix the problem. An example would be the loss of a primary ISP connection.
+<span class="lineNum">      41 </span>            :                 LOG_CRITICAL  = 2, // Critical      - Should be corrected immediately, but indicates failure in a secondary system, an example is a loss of a backup ISP connection.
+<span class="lineNum">      42 </span>            :                 LOG_ERROR     = 3, // Error         - Non-urgent failures, these should be relayed to developers or admins; each item must be resolved within a given time.
+<span class="lineNum">      43 </span>            :                 LOG_WARNING   = 4, // Warning       - Warning messages, not an error, but indication that an error will occur if action is not taken, e.g. file system 85% full - each item must be resolved within a given time.
+<span class="lineNum">      44 </span>            :                 LOG_NOTICE    = 5, // Notice        - Events that are unusual but not error conditions - might be summarized in an email to developers or admins to spot potential problems - no immediate action required.
+<span class="lineNum">      45 </span>            :                 LOG_INFO      = 6, // Informational - Normal operational messages - may be harvested for reporting, measuring throughput, etc. - no action required.
+<span class="lineNum">      46 </span>            :                 LOG_DEBUG     = 7  // Debug         - Info useful to developers for debugging the application, not useful during operations.
+<span class="lineNum">      47 </span>            :             };
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            :         private:
+<span class="lineNum">      50 </span>            :             bool screen_enabled;
+<span class="lineNum">      51 </span>            :             bool screen_paused;
+<span class="lineNum">      52 </span>            :             bool file_enabled;
+<span class="lineNum">      53 </span>            :             bool file_paused;
+<span class="lineNum">      54 </span>            :             bool file_timestamp;
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            :             std::ostream&amp;  screen_output;
+<span class="lineNum">      57 </span>            :             std::ofstream  log_file;
+<span class="lineNum">      58 </span>            :             Logger::Level  level_screen;
+<span class="lineNum">      59 </span>            :             Logger::Level  level_file;
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            :             std::mutex logger_mutex;
+<span class="lineNum">      62 </span>            :             std::mutex file_mutex;
+<a name="63"><span class="lineNum">      63 </span>            :             std::mutex screen_mutex;</a>
+<span class="lineNum">      64 </span>            : 
+<span class="lineNum">      65 </span><span class="lineCov">         50 :             static /*inline*/ Logger&amp; get() {</span>
+<span class="lineNum">      66 </span><span class="lineCov">         50 :                 static Logger instance;</span>
+<span class="lineNum">      67 </span><span class="lineCov">         50 :                 return instance;</span>
+<a name="68"><span class="lineNum">      68 </span>            :             }</a>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span><span class="lineCov">         11 :             inline bool canLogScreen(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {</span>
+<span class="lineNum">      71 </span><span class="lineCov">         11 :                 return this-&gt;screen_enabled &amp;&amp; !this-&gt;screen_paused</span>
+<a name="72"><span class="lineNum">      72 </span><span class="lineCov">         22 :                     &amp;&amp; level &lt;= this-&gt;level_screen;</span></a>
+<span class="lineNum">      73 </span>            :             }
+<span class="lineNum">      74 </span><span class="lineCov">          3 :             inline bool canLogFile(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {</span>
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :                 return this-&gt;file_enabled &amp;&amp; !this-&gt;file_paused</span>
+<a name="76"><span class="lineNum">      76 </span><span class="lineCov">          3 :                     &amp;&amp; level &lt;= this-&gt;level_file;</span></a>
+<span class="lineNum">      77 </span>            :             }
+<span class="lineNum">      78 </span><span class="lineCov">          4 :             inline bool canLog(const Logger::Level level = Logger::Level::LOG_EMERGENCY) const {</span>
+<span class="lineNum">      79 </span><span class="lineCov">          4 :                 return this-&gt;canLogScreen(level) || this-&gt;canLogFile(level);</span>
+<a name="80"><span class="lineNum">      80 </span>            :             }</a>
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span><span class="lineCov">          4 :             inline void write_to_screen(const std::string_view&amp; text) {</span>
+<span class="lineNum">      83 </span><span class="lineCov">          8 :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);</span>
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span><span class="lineCov">          4 :                 if (HEDLEY_LIKELY(this-&gt;canLogScreen())) {</span>
+<span class="lineNum">      86 </span><span class="lineCov">          4 :                     this-&gt;screen_output &lt;&lt; text;</span>
+<span class="lineNum">      87 </span>            :                 }
+<a name="88"><span class="lineNum">      88 </span><span class="lineCov">          4 :             }</span></a>
+<span class="lineNum">      89 </span>            : 
+<span class="lineNum">      90 </span><span class="lineCov">          3 :             inline void write_to_file(const std::string_view&amp; text) {</span>
+<span class="lineNum">      91 </span><span class="lineCov">          6 :                 LOCK_BLOCK(utils::Logger::get().file_mutex);</span>
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span><span class="lineCov">          3 :                 if (HEDLEY_LIKELY(this-&gt;canLogFile())) {</span>
+<span class="lineNum">      94 </span>            :                     try {
+<span class="lineNum">      95 </span><span class="lineNoCov">          0 :                         if (HEDLEY_LIKELY(this-&gt;GetFileTimestamp())) {</span>
+<span class="lineNum">      96 </span><span class="lineNoCov">          0 :                             this-&gt;log_file &lt;&lt; utils::time::Timestamp(&quot;[%Y-%m-%d %H:%M:%S] &quot;);</span>
+<span class="lineNum">      97 </span>            :                         }
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span><span class="lineNoCov">          0 :                         this-&gt;log_file &lt;&lt; text;</span>
+<span class="lineNum">     100 </span><span class="lineNoCov">          0 :                     } catch (std::exception const&amp; e) {</span>
+<span class="lineNum">     101 </span><span class="lineNoCov">          0 :                         std::cerr &lt;&lt; &quot;[Logger][ERROR] &quot; &lt;&lt; e.what() &lt;&lt; std::endl;</span>
+<span class="lineNum">     102 </span><span class="lineNoCov">          0 :                         utils::Logger::DestroyFile();</span>
+<span class="lineNum">     103 </span>            :                     }
+<span class="lineNum">     104 </span>            :                 }
+<span class="lineNum">     105 </span><span class="lineCov">          3 :             }</span>
+<a name="106"><span class="lineNum">     106 </span>            : </a>
+<span class="lineNum">     107 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     108 </span><span class="lineCov">          1 :             void hdr_colour_format(const Logger::Level level,</span>
+<span class="lineNum">     109 </span>            :                                    const utils::os::command_t hdr_colour,
+<span class="lineNum">     110 </span>            :                                    const std::string_view&amp; hdr_str,
+<span class="lineNum">     111 </span>            :                                    const std::string_view&amp; format,
+<span class="lineNum">     112 </span>            :                                    const Type&amp; ...args)
+<span class="lineNum">     113 </span>            :             {
+<span class="lineNum">     114 </span><span class="lineCov">          2 :                 LOCK_BLOCK(utils::Logger::get().logger_mutex);</span>
+<span class="lineNum">     115 </span>            : 
+<span class="lineNum">     116 </span><span class="lineCov">          1 :                 if (HEDLEY_LIKELY(this-&gt;canLog(level))) {</span>
+<span class="lineNum">     117 </span><span class="lineCov">          1 :                     const bool stamp = this-&gt;GetFileTimestamp();</span>
+<span class="lineNum">     118 </span><span class="lineCov">          1 :                     this-&gt;Command(  utils::os::Console::FG</span>
+<span class="lineNum">     119 </span>            :                                   | utils::os::Console::BOLD
+<span class="lineNum">     120 </span>            :                                   | hdr_colour);
+<span class="lineNum">     121 </span><span class="lineCov">          1 :                     this-&gt;Write(&quot;[&quot; + std::string(hdr_str) + &quot;]&quot;, true);</span>
+<span class="lineNum">     122 </span>            : 
+<span class="lineNum">     123 </span><span class="lineCov">          1 :                     this-&gt;Command(utils::os::Console::RESET</span>
+<span class="lineNum">     124 </span>            :                                 | utils::os::Console::WHITE);
+<span class="lineNum">     125 </span><span class="lineCov">          1 :                     this-&gt;SetFileTimestamp(false);</span>
+<span class="lineNum">     126 </span><span class="lineCov">          1 :                     this-&gt;Writef(&quot; &quot; + std::string(format) + utils::Logger::CRLF, args...);</span>
+<span class="lineNum">     127 </span><span class="lineCov">          1 :                     this-&gt;SetFileTimestamp(stamp);</span>
+<span class="lineNum">     128 </span><span class="lineCov">          1 :                     this-&gt;Command(utils::os::Console::RESET);</span>
+<span class="lineNum">     129 </span>            :                 }
+<span class="lineNum">     130 </span><span class="lineCov">          1 :             }</span>
+<a name="131"><span class="lineNum">     131 </span>            : </a>
+<span class="lineNum">     132 </span>            :         public:
+<span class="lineNum">     133 </span><span class="lineCov">          1 :             Logger()</span>
+<span class="lineNum">     134 </span><span class="lineCov">          1 :                 : screen_enabled(true)</span>
+<span class="lineNum">     135 </span>            :                 , screen_paused(false)
+<span class="lineNum">     136 </span>            :                 , file_enabled(false)
+<span class="lineNum">     137 </span>            :                 , file_paused(false)
+<span class="lineNum">     138 </span>            :                 , file_timestamp(true)
+<span class="lineNum">     139 </span>            :                 , screen_output(std::cout)
+<span class="lineNum">     140 </span>            :                 , level_screen(Level::LOG_INFO)
+<span class="lineNum">     141 </span><span class="lineCov">          1 :                 , level_file(Level::LOG_INFO)</span>
+<span class="lineNum">     142 </span>            :             {
+<span class="lineNum">     143 </span><span class="lineCov">          1 :                 utils::os::EnableVirtualConsole();</span>
+<span class="lineNum">     144 </span>            : 
+<span class="lineNum">     145 </span><span class="lineCov">          1 :                 if (HEDLEY_UNLIKELY(this-&gt;screen_output.bad())) {</span>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :                     this-&gt;screen_enabled = false;</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :                     std::cerr &lt;&lt; &quot;[Logger][ERROR] Bad screen output stream!&quot; &lt;&lt; std::endl;</span>
+<span class="lineNum">     148 </span>            :                 }
+<span class="lineNum">     149 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span>            :             Logger(Logger const&amp;)         = delete;
+<span class="lineNum">     152 </span>            :             Logger(Logger&amp;&amp;)              = delete;
+<span class="lineNum">     153 </span>            :             void operator=(Logger const&amp;) = delete;
+<span class="lineNum">     154 </span>            :             Logger&amp; operator=(Logger&amp;&amp;)   = delete;
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span>            :             /**
+<a name="157"><span class="lineNum">     157 </span>            :              *  Dtor: write line to outputs and close streams.</a>
+<span class="lineNum">     158 </span>            :              */
+<span class="lineNum">     159 </span><span class="lineCov">          1 :             ~Logger() {</span>
+<span class="lineNum">     160 </span>            :                 const std::string end_line =
+<span class="lineNum">     161 </span>            :                         utils::Logger::CRLF
+<span class="lineNum">     162 </span><span class="lineCov">          1 :                       + utils::Logger::LINE&lt;&gt;</span>
+<span class="lineNum">     163 </span><span class="lineCov">          1 :                       + utils::Logger::CRLF;</span>
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span><span class="lineCov">          1 :                 if (this-&gt;file_enabled) {</span>
+<span class="lineNum">     166 </span><span class="lineNoCov">          0 :                     this-&gt;SetFileTimestamp(false);</span>
+<span class="lineNum">     167 </span><span class="lineNoCov">          0 :                     this-&gt;write_to_file(end_line);</span>
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :                     this-&gt;log_file.close();</span>
+<span class="lineNum">     169 </span><span class="lineNoCov">          0 :                     this-&gt;file_enabled = false;</span>
+<span class="lineNum">     170 </span>            :                 }
+<span class="lineNum">     171 </span>            : 
+<span class="lineNum">     172 </span><span class="lineCov">          1 :                 this-&gt;write_to_screen(end_line);</span>
+<span class="lineNum">     173 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            :             static void InitFile(const std::string&amp; fileName = &quot;&quot;,
+<span class="lineNum">     176 </span>            :                                  const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
+<span class="lineNum">     177 </span>            :             {
+<span class="lineNum">     178 </span>            :                 utils::Logger::DestroyFile();
+<span class="lineNum">     179 </span>            :                 utils::Logger::SetFileLogLevel(level);
+<span class="lineNum">     180 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
+<span class="lineNum">     181 </span>            :                 bool enable_file = false;
+<span class="lineNum">     182 </span>            : 
+<span class="lineNum">     183 </span>            :                 if (HEDLEY_LIKELY(fileName.length() &gt; 0)) {
+<span class="lineNum">     184 </span>            :                     try {
+<span class="lineNum">     185 </span>            :                         utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
+<span class="lineNum">     186 </span>            :                         enable_file = true;
+<span class="lineNum">     187 </span>            :                     } catch (std::exception const&amp; e) {
+<span class="lineNum">     188 </span>            :                         std::cerr &lt;&lt; &quot;[Logger][ERROR] &quot; &lt;&lt; e.what() &lt;&lt; std::endl;
+<span class="lineNum">     189 </span>            :                         enable_file = false;
+<span class="lineNum">     190 </span>            :                     }
+<span class="lineNum">     191 </span>            :                 }
+<span class="lineNum">     192 </span>            : 
+<span class="lineNum">     193 </span>            :                 utils::Logger::get().file_enabled = enable_file;
+<span class="lineNum">     194 </span>            :             }
+<span class="lineNum">     195 </span>            : 
+<span class="lineNum">     196 </span>            :             static void InitScreen(std::ostream&amp; console_stream = std::cout,
+<span class="lineNum">     197 </span>            :                                    const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
+<span class="lineNum">     198 </span>            :             {
+<span class="lineNum">     199 </span>            :                 utils::Logger::DestroyScreen();
+<span class="lineNum">     200 </span>            :                 utils::Logger::SetScreenLogLevel(level);
+<span class="lineNum">     201 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span>            :                 if (HEDLEY_UNLIKELY(console_stream.bad())) {
+<span class="lineNum">     204 </span>            :                     utils::Logger::get().screen_output.tie(&amp;std::cerr);
+<span class="lineNum">     205 </span>            :                     utils::Logger::get().screen_output &lt;&lt; &quot;[Logger][ERROR] Bad screen output stream!&quot; &lt;&lt; std::endl;
+<span class="lineNum">     206 </span>            :                 } else {
+<span class="lineNum">     207 </span>            :                     utils::Logger::get().screen_output.tie(&amp;console_stream);
+<span class="lineNum">     208 </span>            :                 }
+<span class="lineNum">     209 </span>            : 
+<span class="lineNum">     210 </span>            :                 utils::Logger::get().screen_enabled = true;
+<span class="lineNum">     211 </span>            :             }
+<span class="lineNum">     212 </span>            : 
+<span class="lineNum">     213 </span>            :             /**
+<span class="lineNum">     214 </span>            :              *  @brief  Create the Logger instance from a filename.
+<span class="lineNum">     215 </span>            :              *          If the file does not exist, it will be created, text will be appended otherwise.
+<span class="lineNum">     216 </span>            :              *
+<span class="lineNum">     217 </span>            :              *          Disable logging if fileName is an empty string or on error.
+<span class="lineNum">     218 </span>            :              *
+<span class="lineNum">     219 </span>            :              *          Writes version and author info to the log on start.
+<span class="lineNum">     220 </span>            :              *
+<span class="lineNum">     221 </span>            :              *  @param  fileName
+<span class="lineNum">     222 </span>            :              *      The log file to use.
+<span class="lineNum">     223 </span>            :              */
+<span class="lineNum">     224 </span>            :             static void Create(const std::string&amp; fileName = &quot;&quot;,
+<span class="lineNum">     225 </span>            :                                const utils::Logger::Level level = utils::Logger::Level::LOG_INFO,
+<span class="lineNum">     226 </span>            :                                std::ostream&amp; console_stream = std::cout)
+<span class="lineNum">     227 </span>            :             {
+<span class="lineNum">     228 </span>            :                 utils::Logger::InitScreen(console_stream, level);
+<span class="lineNum">     229 </span>            :                 utils::Logger::InitFile(fileName, level);
+<span class="lineNum">     230 </span>            :             }
+<span class="lineNum">     231 </span>            : 
+<span class="lineNum">     232 </span>            :             /**
+<a name="233"><span class="lineNum">     233 </span>            :              *  \brief  Destroy the file Logging instance by closing the output file.</a>
+<span class="lineNum">     234 </span>            :              */
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :             static void DestroyFile() {</span>
+<span class="lineNum">     236 </span><span class="lineNoCov">          0 :                 LOCK_BLOCK(utils::Logger::get().file_mutex);</span>
+<span class="lineNum">     237 </span>            : 
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 :                 if (utils::Logger::get().file_enabled) {</span>
+<span class="lineNum">     239 </span><span class="lineNoCov">          0 :                     utils::Logger::get().log_file.close();</span>
+<span class="lineNum">     240 </span><span class="lineNoCov">          0 :                     utils::Logger::get().file_enabled = false;</span>
+<span class="lineNum">     241 </span>            :                 }
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 :             }</span>
+<span class="lineNum">     243 </span>            : 
+<span class="lineNum">     244 </span>            :             /**
+<span class="lineNum">     245 </span>            :              *  \brief  Destroy the screen Logging instance.
+<span class="lineNum">     246 </span>            :              */
+<span class="lineNum">     247 </span>            :             static void DestroyScreen() {
+<span class="lineNum">     248 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
+<span class="lineNum">     249 </span>            : 
+<span class="lineNum">     250 </span>            :                 if (utils::Logger::get().screen_enabled) {
+<span class="lineNum">     251 </span>            :                     utils::os::Command(utils::os::Console::RESET, utils::Logger::get().screen_output);
+<span class="lineNum">     252 </span>            :                     utils::Logger::get().screen_output.flush();
+<span class="lineNum">     253 </span>            :                     utils::Logger::get().screen_enabled = false;
+<span class="lineNum">     254 </span>            :                 }
+<a name="255"><span class="lineNum">     255 </span>            :             }</a>
+<span class="lineNum">     256 </span>            : 
+<span class="lineNum">     257 </span><span class="lineCov">          4 :             static inline std::ostream&amp; GetConsoleStream() {</span>
+<span class="lineNum">     258 </span><span class="lineCov">          4 :                 return utils::Logger::get().screen_output;</span>
+<span class="lineNum">     259 </span>            :             }
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span>            :             static inline std::ofstream&amp; GetFileStream() {
+<span class="lineNum">     262 </span>            :                 return utils::Logger::get().log_file;
+<span class="lineNum">     263 </span>            :             }
+<span class="lineNum">     264 </span>            : 
+<span class="lineNum">     265 </span>            :             /**
+<span class="lineNum">     266 </span>            :              *  \brief  Write a seperator (line) to the stream.
+<span class="lineNum">     267 </span>            :              */
+<span class="lineNum">     268 </span>            :             static void Separator(void) {
+<span class="lineNum">     269 </span>            :                 utils::Logger::Write(utils::Logger::LINE&lt;&gt;);
+<span class="lineNum">     270 </span>            :             }
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :             /**
+<span class="lineNum">     273 </span>            :              *  @brief  Format the given args and write to the streams.
+<span class="lineNum">     274 </span>            :              *
+<span class="lineNum">     275 </span>            :              *  @param  format
+<span class="lineNum">     276 </span>            :              *      The text to format in and write.
+<span class="lineNum">     277 </span>            :              *  @param  args
+<a name="278"><span class="lineNum">     278 </span>            :              */</a>
+<span class="lineNum">     279 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     280 </span><span class="lineCov">          1 :             static void Writef(const std::string&amp; format, const Type&amp; ...args) {</span>
+<span class="lineNum">     281 </span>            :                 if constexpr (sizeof...(args) &gt; 0) {
+<span class="lineNum">     282 </span><span class="lineCov">          1 :                     utils::Logger::Write(utils::string::format(format, args...), utils::Logger::GetFileTimestamp());</span>
+<span class="lineNum">     283 </span>            :                 } else {
+<span class="lineNum">     284 </span>            :                     utils::Logger::Write(format, utils::Logger::GetFileTimestamp());
+<span class="lineNum">     285 </span>            :                 }
+<span class="lineNum">     286 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">     287 </span>            : 
+<span class="lineNum">     288 </span>            :             /**
+<span class="lineNum">     289 </span>            :              *  @brief  Write the text &lt;text&gt; to the console and the log file.
+<span class="lineNum">     290 </span>            :              *
+<span class="lineNum">     291 </span>            :              *  @param  text
+<a name="292"><span class="lineNum">     292 </span>            :              *      The text to write.</a>
+<span class="lineNum">     293 </span>            :              */
+<span class="lineNum">     294 </span><span class="lineCov">          3 :             static void Write(const std::string_view&amp; text, const bool timestamp = false) {</span>
+<span class="lineNum">     295 </span><span class="lineCov">          3 :                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {</span>
+<span class="lineNum">     296 </span><span class="lineCov">          3 :                     const bool stamp = utils::Logger::GetFileTimestamp();</span>
+<span class="lineNum">     297 </span><span class="lineCov">          3 :                     utils::Logger::SetFileTimestamp(timestamp);</span>
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span><span class="lineCov">          3 :                     utils::Logger::get().write_to_screen(text);</span>
+<span class="lineNum">     300 </span><span class="lineCov">          3 :                     utils::Logger::get().write_to_file(text);</span>
+<span class="lineNum">     301 </span>            : 
+<span class="lineNum">     302 </span><span class="lineCov">          3 :                     utils::Logger::SetFileTimestamp(stamp);</span>
+<span class="lineNum">     303 </span>            :                 }
+<a name="304"><span class="lineNum">     304 </span><span class="lineCov">          3 :             }</span></a>
+<span class="lineNum">     305 </span>            : 
+<span class="lineNum">     306 </span><span class="lineCov">          1 :             static inline void WriteLn(const std::string&amp; text, const bool timestamp = false) {</span>
+<span class="lineNum">     307 </span><span class="lineCov">          1 :                 utils::Logger::Write(text + utils::Logger::CRLF, timestamp);</span>
+<span class="lineNum">     308 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     311 </span>            :             static void Debug(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     312 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     313 </span>            :                     utils::Logger::Level::LOG_DEBUG,
+<span class="lineNum">     314 </span>            :                     utils::os::Console::BG | utils::os::Console::BLUE, &quot;DEBUG&quot;,
+<span class="lineNum">     315 </span>            :                     format, args...
+<span class="lineNum">     316 </span>            :                 );
+<span class="lineNum">     317 </span>            :             }
+<span class="lineNum">     318 </span>            : 
+<span class="lineNum">     319 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     320 </span>            :             static void Success(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     321 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     322 </span>            :                     utils::Logger::Level::LOG_INFO,
+<span class="lineNum">     323 </span>            :                     utils::os::Console::GREEN, &quot;Success&quot;,
+<span class="lineNum">     324 </span>            :                     format, args...
+<span class="lineNum">     325 </span>            :                 );
+<span class="lineNum">     326 </span>            :             }
+<span class="lineNum">     327 </span>            : 
+<span class="lineNum">     328 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     329 </span>            :             static void Info(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     330 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     331 </span>            :                     utils::Logger::Level::LOG_INFO,
+<span class="lineNum">     332 </span>            :                     utils::os::Console::CYAN, &quot;Info&quot;,
+<span class="lineNum">     333 </span>            :                     format, args...
+<span class="lineNum">     334 </span>            :                 );
+<span class="lineNum">     335 </span>            :             }
+<a name="336"><span class="lineNum">     336 </span>            : </a>
+<span class="lineNum">     337 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     338 </span><span class="lineCov">          1 :             static void Notice(const std::string_view&amp; format, const Type&amp; ...args) {</span>
+<span class="lineNum">     339 </span><span class="lineCov">          1 :                 utils::Logger::get().hdr_colour_format(</span>
+<span class="lineNum">     340 </span>            :                     utils::Logger::Level::LOG_NOTICE,
+<span class="lineNum">     341 </span>            :                     utils::os::Console::BG |
+<span class="lineNum">     342 </span>            :                     utils::os::Console::BRIGHT |
+<span class="lineNum">     343 </span>            :                     utils::os::Console::CYAN,
+<span class="lineNum">     344 </span>            :                     &quot;Notice&quot;,
+<span class="lineNum">     345 </span>            :                     format, args...
+<span class="lineNum">     346 </span>            :                 );
+<span class="lineNum">     347 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     350 </span>            :             static void Warn(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     351 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     352 </span>            :                     utils::Logger::Level::LOG_WARNING,
+<span class="lineNum">     353 </span>            :                     utils::os::Console::YELLOW, &quot;Warning&quot;,
+<span class="lineNum">     354 </span>            :                     format, args...
+<span class="lineNum">     355 </span>            :                 );
+<span class="lineNum">     356 </span>            :             }
+<span class="lineNum">     357 </span>            : 
+<span class="lineNum">     358 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     359 </span>            :             static void Error(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     360 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     361 </span>            :                     utils::Logger::Level::LOG_ERROR,
+<span class="lineNum">     362 </span>            :                     utils::os::Console::RED, &quot;Error&quot;,
+<span class="lineNum">     363 </span>            :                     format, args...
+<span class="lineNum">     364 </span>            :                 );
+<span class="lineNum">     365 </span>            :             }
+<span class="lineNum">     366 </span>            : 
+<span class="lineNum">     367 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     368 </span>            :             static void Critical(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     369 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     370 </span>            :                     utils::Logger::Level::LOG_CRITICAL,
+<span class="lineNum">     371 </span>            :                     utils::os::Console::BG | utils::os::Console::RED, &quot;Critical&quot;,
+<span class="lineNum">     372 </span>            :                     format, args...
+<span class="lineNum">     373 </span>            :                 );
+<span class="lineNum">     374 </span>            :             }
+<span class="lineNum">     375 </span>            : 
+<span class="lineNum">     376 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     377 </span>            :             static void Alert(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     378 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     379 </span>            :                     utils::Logger::Level::LOG_ALERT,
+<span class="lineNum">     380 </span>            :                     utils::os::Console::MAGENTA, &quot;Alert&quot;,
+<span class="lineNum">     381 </span>            :                     format, args...
+<span class="lineNum">     382 </span>            :                 );
+<span class="lineNum">     383 </span>            :             }
+<span class="lineNum">     384 </span>            : 
+<span class="lineNum">     385 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     386 </span>            :             static void Emergency(const std::string_view&amp; format, const Type&amp; ...args) {
+<span class="lineNum">     387 </span>            :                 utils::Logger::get().hdr_colour_format(
+<span class="lineNum">     388 </span>            :                     utils::Logger::Level::LOG_EMERGENCY,
+<span class="lineNum">     389 </span>            :                     utils::os::Console::BG |
+<span class="lineNum">     390 </span>            :                     utils::os::Console::BRIGHT |
+<span class="lineNum">     391 </span>            :                     utils::os::Console::MAGENTA,
+<span class="lineNum">     392 </span>            :                     &quot;Emergency&quot;,
+<span class="lineNum">     393 </span>            :                     format, args...
+<span class="lineNum">     394 </span>            :                 );
+<span class="lineNum">     395 </span>            :             }
+<span class="lineNum">     396 </span>            : 
+<span class="lineNum">     397 </span>            :             HEDLEY_NON_NULL(1,3)
+<span class="lineNum">     398 </span>            :             static void ErrorTrace(const char* file, const int line, const char* function, const std::exception&amp; e) {
+<span class="lineNum">     399 </span>            :                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
+<span class="lineNum">     400 </span>            : 
+<span class="lineNum">     401 </span>            :                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
+<span class="lineNum">     402 </span>            :                     utils::Logger::Command(  utils::os::Console::BG
+<span class="lineNum">     403 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     404 </span>            :                                            | utils::os::Console::RED);
+<span class="lineNum">     405 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
+<span class="lineNum">     406 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     407 </span>            :                                            | utils::os::Console::WHITE);
+<span class="lineNum">     408 </span>            :                     utils::Logger::Write(utils::Logger::CRLF
+<span class="lineNum">     409 </span>            :                                        + utils::Logger::LINE&lt;'-'&gt;, false);
+<span class="lineNum">     410 </span>            : 
+<span class="lineNum">     411 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET
+<span class="lineNum">     412 </span>            :                                            | utils::os::Console::FG
+<span class="lineNum">     413 </span>            :                                            | utils::os::Console::BOLD
+<span class="lineNum">     414 </span>            :                                            | utils::os::Console::RED);
+<span class="lineNum">     415 </span>            :                     utils::Logger::Write(&quot;[ERROR] Exception thrown:\n  &quot;, true);
+<span class="lineNum">     416 </span>            : 
+<span class="lineNum">     417 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
+<span class="lineNum">     418 </span>            :                                            | utils::os::Console::YELLOW);
+<span class="lineNum">     419 </span>            :                     utils::Logger::Write(e.what());
+<span class="lineNum">     420 </span>            : 
+<span class="lineNum">     421 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
+<span class="lineNum">     422 </span>            :                     utils::Logger::Write(&quot;\n    at &quot;);
+<span class="lineNum">     423 </span>            : 
+<span class="lineNum">     424 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
+<span class="lineNum">     425 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     426 </span>            :                                            | utils::os::Console::CYAN);
+<span class="lineNum">     427 </span>            :                     utils::Logger::Write(file);
+<span class="lineNum">     428 </span>            : 
+<span class="lineNum">     429 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
+<span class="lineNum">     430 </span>            :                     utils::Logger::Write(&quot;:&quot;);
+<span class="lineNum">     431 </span>            : 
+<span class="lineNum">     432 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
+<span class="lineNum">     433 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     434 </span>            :                                            | utils::os::Console::CYAN);
+<span class="lineNum">     435 </span>            :                     utils::Logger::Write(std::to_string(line));
+<span class="lineNum">     436 </span>            : 
+<span class="lineNum">     437 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
+<span class="lineNum">     438 </span>            :                     utils::Logger::Write(&quot;\n    inside: &quot;);
+<span class="lineNum">     439 </span>            : 
+<span class="lineNum">     440 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
+<span class="lineNum">     441 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     442 </span>            :                                            | utils::os::Console::MAGENTA);
+<span class="lineNum">     443 </span>            :                     utils::Logger::Write(function);
+<span class="lineNum">     444 </span>            : 
+<span class="lineNum">     445 </span>            :                     utils::Logger::Command(  utils::os::Console::BG
+<span class="lineNum">     446 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     447 </span>            :                                            | utils::os::Console::RED);
+<span class="lineNum">     448 </span>            :                     utils::Logger::Command(  utils::os::Console::FG
+<span class="lineNum">     449 </span>            :                                            | utils::os::Console::BRIGHT
+<span class="lineNum">     450 </span>            :                                            | utils::os::Console::WHITE);
+<span class="lineNum">     451 </span>            :                     utils::Logger::Write(utils::Logger::CRLF
+<span class="lineNum">     452 </span>            :                                        + utils::Logger::LINE&lt;'-'&gt;, false);
+<span class="lineNum">     453 </span>            : 
+<span class="lineNum">     454 </span>            :                     utils::Logger::Command(  utils::os::Console::RESET);
+<span class="lineNum">     455 </span>            :                     utils::Logger::Write(utils::Logger::CRLF);
+<span class="lineNum">     456 </span>            :                 } else {
+<span class="lineNum">     457 </span>            :                     std::cerr &lt;&lt; ( utils::os::Console::RESET
+<span class="lineNum">     458 </span>            :                                  | utils::os::Console::FG | utils::os::Console::BRIGHT
+<span class="lineNum">     459 </span>            :                                  | utils::os::Console::RED)
+<span class="lineNum">     460 </span>            :                               &lt;&lt; &quot;[ERROR] Exception thrown:\n  &quot;
+<span class="lineNum">     461 </span>            :                               &lt;&lt; ( utils::os::Console::FG
+<span class="lineNum">     462 </span>            :                                  | utils::os::Console::YELLOW)
+<span class="lineNum">     463 </span>            :                               &lt;&lt; e.what()
+<span class="lineNum">     464 </span>            :                               &lt;&lt; utils::os::Console::RESET
+<span class="lineNum">     465 </span>            :                               &lt;&lt; &quot;\n    at &quot;
+<span class="lineNum">     466 </span>            :                               &lt;&lt; ( utils::os::Console::FG | utils::os::Console::BRIGHT
+<span class="lineNum">     467 </span>            :                                  | utils::os::Console::CYAN)
+<span class="lineNum">     468 </span>            :                               &lt;&lt; file
+<span class="lineNum">     469 </span>            :                               &lt;&lt; utils::os::Console::RESET
+<span class="lineNum">     470 </span>            :                               &lt;&lt; &quot;:&quot;
+<span class="lineNum">     471 </span>            :                               &lt;&lt; ( utils::os::Console::FG | utils::os::Console::BRIGHT
+<span class="lineNum">     472 </span>            :                                  | utils::os::Console::CYAN)
+<span class="lineNum">     473 </span>            :                               &lt;&lt; line
+<span class="lineNum">     474 </span>            :                               &lt;&lt; utils::os::Console::RESET
+<span class="lineNum">     475 </span>            :                               &lt;&lt; &quot;\n    inside: &quot;
+<span class="lineNum">     476 </span>            :                               &lt;&lt; ( utils::os::Console::FG | utils::os::Console::BRIGHT
+<span class="lineNum">     477 </span>            :                                  | utils::os::Console::MAGENTA)
+<span class="lineNum">     478 </span>            :                               &lt;&lt; function
+<span class="lineNum">     479 </span>            :                               &lt;&lt; utils::os::Console::RESET &lt;&lt; std::flush &lt;&lt; std::endl;
+<span class="lineNum">     480 </span>            :                 }
+<span class="lineNum">     481 </span>            :             }
 <span class="lineNum">     482 </span>            : 
-<span class="lineNum">     483 </span>            :                     utils::Logger::GetConsoleStream()
-<span class="lineNum">     484 </span>            :                         &lt;&lt; &quot;\r&quot; &lt;&lt; prefix &lt;&lt; &quot;|&quot;
-<span class="lineNum">     485 </span>            :                         &lt;&lt; std::string(filled_len, utils::Logger::FILL[0])
-<span class="lineNum">     486 </span>            :                         &lt;&lt; std::string(LEN - filled_len, '-')
-<span class="lineNum">     487 </span>            :                         &lt;&lt; &quot;| &quot;
-<span class="lineNum">     488 </span>            :                         &lt;&lt; utils::string::format(&quot;%6.2f%%&quot;, progress * 100.0f)
-<span class="lineNum">     489 </span>            :                         &lt;&lt; std::flush;
-<span class="lineNum">     490 </span>            : 
-<span class="lineNum">     491 </span>            :                     if (done) {
-<span class="lineNum">     492 </span>            :                         utils::Logger::GetConsoleStream() &lt;&lt; std::endl;
-<span class="lineNum">     493 </span>            :                     }
-<span class="lineNum">     494 </span>            :                 }
-<span class="lineNum">     495 </span>            :             }
-<span class="lineNum">     496 </span>            : 
-<span class="lineNum">     497 </span>            :             static const utils::Logger&amp; Stream() {
-<span class="lineNum">     498 </span>            :                 return utils::Logger::get();
-<span class="lineNum">     499 </span>            :             }
-<span class="lineNum">     500 </span>            : 
-<span class="lineNum">     501 </span>            :             template&lt;typename T&gt;
-<span class="lineNum">     502 </span>            :             static void Stream(const T&amp; arg) {
-<span class="lineNum">     503 </span>            :                 if (utils::Logger::get().canLog()) {
-<span class="lineNum">     504 </span>            :                     std::stringstream ss;
-<span class="lineNum">     505 </span>            :                     ss &lt;&lt; arg;
-<span class="lineNum">     506 </span>            :                     utils::Logger::Write(ss.str());
-<span class="lineNum">     507 </span>            :                 }
-<span class="lineNum">     508 </span>            :             }
-<span class="lineNum">     509 </span>            : 
-<span class="lineNum">     510 </span>            :             template&lt;typename T, typename ...Type&gt;
-<span class="lineNum">     511 </span>            :             static void Stream(const T&amp; arg, const Type&amp; ...args) {
-<span class="lineNum">     512 </span>            :                 if (utils::Logger::get().canLog()) {
-<span class="lineNum">     513 </span>            :                     std::stringstream ss;
-<span class="lineNum">     514 </span>            :                     ss &lt;&lt; arg;
-<span class="lineNum">     515 </span>            :                     ((ss &lt;&lt; args), ...);
-<span class="lineNum">     516 </span>            :                     utils::Logger::Write(ss.str());
-<span class="lineNum">     517 </span>            :                 }
-<span class="lineNum">     518 </span>            :             }
-<span class="lineNum">     519 </span>            : 
-<span class="lineNum">     520 </span>            :             template&lt;typename ...Type&gt;
-<span class="lineNum">     521 </span>            :             friend const utils::Logger&amp; operator&lt;&lt;(const utils::Logger&amp;, const Type&amp; ...args)
-<span class="lineNum">     522 </span>            :             {
-<span class="lineNum">     523 </span>            :                 if constexpr (sizeof...(Type) &gt; 0) {
-<span class="lineNum">     524 </span>            :                     utils::Logger::Stream(args...);
+<span class="lineNum">     483 </span>            :             template &lt;typename Iterator, typename F&gt;
+<span class="lineNum">     484 </span>            :             static void WriteProgress(Iterator start, Iterator end, F&amp;&amp; f) {
+<span class="lineNum">     485 </span>            :                 if (HEDLEY_LIKELY(utils::Logger::get().canLogScreen())) {
+<span class="lineNum">     486 </span>            :                     utils::print::with_progressbar(start, end,
+<span class="lineNum">     487 </span>            :                                                    utils::Logger::GetConsoleStream(),
+<span class="lineNum">     488 </span>            :                                                    std::forward&lt;F&gt;(f));
+<span class="lineNum">     489 </span>            :                 } else {
+<span class="lineNum">     490 </span>            :                     utils::algorithm::for_each(start, end, std::forward&lt;F&gt;(f));
+<span class="lineNum">     491 </span>            :                 }
+<span class="lineNum">     492 </span>            :             }
+<span class="lineNum">     493 </span>            : 
+<span class="lineNum">     494 </span>            :             template &lt;typename Container, typename F&gt;
+<span class="lineNum">     495 </span>            :             static void WriteProgress(const Container&amp; cont, F&amp;&amp; f) {
+<span class="lineNum">     496 </span>            :                 if (HEDLEY_LIKELY(utils::Logger::get().canLogScreen())) {
+<span class="lineNum">     497 </span>            :                     utils::print::with_progressbar(cont,
+<span class="lineNum">     498 </span>            :                                                    utils::Logger::GetConsoleStream(),
+<span class="lineNum">     499 </span>            :                                                    std::forward&lt;F&gt;(f));
+<span class="lineNum">     500 </span>            :                 } else {
+<span class="lineNum">     501 </span>            :                     utils::algorithm::for_each(cont, std::forward&lt;F&gt;(f));
+<span class="lineNum">     502 </span>            :                 }
+<span class="lineNum">     503 </span>            :             }
+<span class="lineNum">     504 </span>            : 
+<span class="lineNum">     505 </span>            :             static const utils::Logger&amp; Stream() {
+<span class="lineNum">     506 </span>            :                 return utils::Logger::get();
+<span class="lineNum">     507 </span>            :             }
+<span class="lineNum">     508 </span>            : 
+<span class="lineNum">     509 </span>            :             template&lt;typename T&gt;
+<span class="lineNum">     510 </span>            :             static void Stream(const T&amp; arg) {
+<span class="lineNum">     511 </span>            :                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
+<span class="lineNum">     512 </span>            :                     std::stringstream ss;
+<span class="lineNum">     513 </span>            :                     ss &lt;&lt; arg;
+<span class="lineNum">     514 </span>            :                     utils::Logger::Write(ss.str());
+<span class="lineNum">     515 </span>            :                 }
+<span class="lineNum">     516 </span>            :             }
+<span class="lineNum">     517 </span>            : 
+<span class="lineNum">     518 </span>            :             template&lt;typename T, typename ...Type&gt;
+<span class="lineNum">     519 </span>            :             static void Stream(const T&amp; arg, const Type&amp; ...args) {
+<span class="lineNum">     520 </span>            :                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
+<span class="lineNum">     521 </span>            :                     std::stringstream ss;
+<span class="lineNum">     522 </span>            :                     ss &lt;&lt; arg;
+<span class="lineNum">     523 </span>            :                     ((ss &lt;&lt; args), ...);
+<span class="lineNum">     524 </span>            :                     utils::Logger::Write(ss.str());
 <span class="lineNum">     525 </span>            :                 }
-<span class="lineNum">     526 </span>            : 
-<span class="lineNum">     527 </span>            :                 return utils::Logger::Stream();
-<a name="528"><span class="lineNum">     528 </span>            :             }</a>
-<span class="lineNum">     529 </span>            : 
-<span class="lineNum">     530 </span><span class="lineCov">          3 :             static inline void Command(const utils::os::command_t cmd) {</span>
-<span class="lineNum">     531 </span><span class="lineCov">          6 :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);</span>
-<span class="lineNum">     532 </span>            : 
-<span class="lineNum">     533 </span><span class="lineCov">          3 :                 if (utils::Logger::get().canLogScreen()) {</span>
-<span class="lineNum">     534 </span><span class="lineCov">          3 :                     utils::os::Command(cmd, utils::Logger::GetConsoleStream());</span>
-<span class="lineNum">     535 </span>            :                 }
-<a name="536"><span class="lineNum">     536 </span><span class="lineCov">          3 :             }</span></a>
+<span class="lineNum">     526 </span>            :             }
+<span class="lineNum">     527 </span>            : 
+<span class="lineNum">     528 </span>            :             template&lt;typename ...Type&gt;
+<span class="lineNum">     529 </span>            :             friend const utils::Logger&amp; operator&lt;&lt;(const utils::Logger&amp;, const Type&amp; ...args)
+<span class="lineNum">     530 </span>            :             {
+<span class="lineNum">     531 </span>            :                 if constexpr (sizeof...(Type) &gt; 0) {
+<span class="lineNum">     532 </span>            :                     utils::Logger::Stream(args...);
+<span class="lineNum">     533 </span>            :                 }
+<span class="lineNum">     534 </span>            : 
+<span class="lineNum">     535 </span>            :                 return utils::Logger::Stream();
+<a name="536"><span class="lineNum">     536 </span>            :             }</a>
 <span class="lineNum">     537 </span>            : 
-<span class="lineNum">     538 </span><span class="lineCov">          1 :             static inline void SetScreenTitle(const std::string_view&amp; title) {</span>
-<span class="lineNum">     539 </span><span class="lineCov">          2 :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);</span>
-<span class="lineNum">     540 </span><span class="lineCov">          1 :                 utils::os::SetScreenTitle(title, utils::Logger::GetConsoleStream());</span>
-<span class="lineNum">     541 </span><span class="lineCov">          1 :             }</span>
-<span class="lineNum">     542 </span>            : 
-<span class="lineNum">     543 </span>            :             static inline void PauseScreen(void) {
-<span class="lineNum">     544 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
-<span class="lineNum">     545 </span>            :                 utils::Logger::get().screen_paused = true;
-<span class="lineNum">     546 </span>            :             }
-<span class="lineNum">     547 </span>            :             static inline void PauseFile(void) {
-<span class="lineNum">     548 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
-<span class="lineNum">     549 </span>            :                 utils::Logger::get().file_paused = true;
-<span class="lineNum">     550 </span>            :             }
-<span class="lineNum">     551 </span>            :             static inline void Pause(void) {
-<span class="lineNum">     552 </span>            :                 utils::Logger::get().PauseScreen();
-<span class="lineNum">     553 </span>            :                 utils::Logger::get().PauseFile();
+<span class="lineNum">     538 </span><span class="lineCov">          3 :             static inline void Command(const utils::os::command_t cmd) {</span>
+<span class="lineNum">     539 </span><span class="lineCov">          6 :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);</span>
+<span class="lineNum">     540 </span>            : 
+<span class="lineNum">     541 </span><span class="lineCov">          3 :                 if (HEDLEY_LIKELY(utils::Logger::get().canLogScreen())) {</span>
+<span class="lineNum">     542 </span><span class="lineCov">          3 :                     utils::os::Command(cmd, utils::Logger::GetConsoleStream());</span>
+<span class="lineNum">     543 </span>            :                 }
+<a name="544"><span class="lineNum">     544 </span><span class="lineCov">          3 :             }</span></a>
+<span class="lineNum">     545 </span>            : 
+<span class="lineNum">     546 </span><span class="lineCov">          1 :             static inline void SetScreenTitle(const std::string_view&amp; title) {</span>
+<span class="lineNum">     547 </span><span class="lineCov">          2 :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);</span>
+<span class="lineNum">     548 </span><span class="lineCov">          1 :                 utils::os::SetScreenTitle(title, utils::Logger::GetConsoleStream());</span>
+<span class="lineNum">     549 </span><span class="lineCov">          1 :             }</span>
+<span class="lineNum">     550 </span>            : 
+<span class="lineNum">     551 </span>            :             static inline void PauseScreen(void) {
+<span class="lineNum">     552 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
+<span class="lineNum">     553 </span>            :                 utils::Logger::get().screen_paused = true;
 <span class="lineNum">     554 </span>            :             }
-<span class="lineNum">     555 </span>            : 
-<span class="lineNum">     556 </span>            :             static inline void ResumeScreen(void) {
-<span class="lineNum">     557 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
-<span class="lineNum">     558 </span>            :                 utils::Logger::get().screen_paused = false;
-<span class="lineNum">     559 </span>            :             }
-<span class="lineNum">     560 </span>            :             static inline void ResumeFile(void) {
-<span class="lineNum">     561 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
-<span class="lineNum">     562 </span>            :                 utils::Logger::get().file_paused = false;
-<span class="lineNum">     563 </span>            :             }
-<span class="lineNum">     564 </span>            :             static inline void Resume(void) {
-<span class="lineNum">     565 </span>            :                 utils::Logger::get().ResumeScreen();
-<span class="lineNum">     566 </span>            :                 utils::Logger::get().ResumeFile();
-<a name="567"><span class="lineNum">     567 </span>            :             }</a>
-<span class="lineNum">     568 </span>            : 
-<span class="lineNum">     569 </span><span class="lineCov">          8 :             static inline void SetFileTimestamp(const bool stamp) {</span>
-<span class="lineNum">     570 </span><span class="lineCov">          8 :                 LOCK_BLOCK(utils::Logger::get().file_mutex);</span>
-<a name="571"><span class="lineNum">     571 </span><span class="lineCov">          8 :                 utils::Logger::get().file_timestamp = stamp;</span></a>
-<span class="lineNum">     572 </span><span class="lineCov">          8 :             }</span>
-<span class="lineNum">     573 </span><span class="lineCov">          5 :             static inline bool GetFileTimestamp(void) {</span>
-<span class="lineNum">     574 </span><span class="lineCov">          5 :                 return utils::Logger::get().file_timestamp;</span>
-<span class="lineNum">     575 </span>            :             }
+<span class="lineNum">     555 </span>            :             static inline void PauseFile(void) {
+<span class="lineNum">     556 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
+<span class="lineNum">     557 </span>            :                 utils::Logger::get().file_paused = true;
+<span class="lineNum">     558 </span>            :             }
+<span class="lineNum">     559 </span>            :             static inline void Pause(void) {
+<span class="lineNum">     560 </span>            :                 utils::Logger::get().PauseScreen();
+<span class="lineNum">     561 </span>            :                 utils::Logger::get().PauseFile();
+<span class="lineNum">     562 </span>            :             }
+<span class="lineNum">     563 </span>            : 
+<span class="lineNum">     564 </span>            :             static inline void ResumeScreen(void) {
+<span class="lineNum">     565 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
+<span class="lineNum">     566 </span>            :                 utils::Logger::get().screen_paused = false;
+<span class="lineNum">     567 </span>            :             }
+<span class="lineNum">     568 </span>            :             static inline void ResumeFile(void) {
+<span class="lineNum">     569 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
+<span class="lineNum">     570 </span>            :                 utils::Logger::get().file_paused = false;
+<span class="lineNum">     571 </span>            :             }
+<span class="lineNum">     572 </span>            :             static inline void Resume(void) {
+<span class="lineNum">     573 </span>            :                 utils::Logger::get().ResumeScreen();
+<span class="lineNum">     574 </span>            :                 utils::Logger::get().ResumeFile();
+<a name="575"><span class="lineNum">     575 </span>            :             }</a>
 <span class="lineNum">     576 </span>            : 
-<span class="lineNum">     577 </span>            :             static inline void SetScreenLogLevel(const utils::Logger::Level level) {
-<span class="lineNum">     578 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
-<span class="lineNum">     579 </span>            :                 utils::Logger::get().level_screen = level;
-<span class="lineNum">     580 </span>            :             }
-<span class="lineNum">     581 </span>            :             static inline utils::Logger::Level GetScreenLogLevel(void) {
-<span class="lineNum">     582 </span>            :                 return utils::Logger::get().level_screen;
+<span class="lineNum">     577 </span><span class="lineCov">          8 :             static inline void SetFileTimestamp(const bool stamp) {</span>
+<span class="lineNum">     578 </span><span class="lineCov">          8 :                 LOCK_BLOCK(utils::Logger::get().file_mutex);</span>
+<a name="579"><span class="lineNum">     579 </span><span class="lineCov">          8 :                 utils::Logger::get().file_timestamp = stamp;</span></a>
+<span class="lineNum">     580 </span><span class="lineCov">          8 :             }</span>
+<span class="lineNum">     581 </span><span class="lineCov">          5 :             static inline bool GetFileTimestamp(void) {</span>
+<span class="lineNum">     582 </span><span class="lineCov">          5 :                 return utils::Logger::get().file_timestamp;</span>
 <span class="lineNum">     583 </span>            :             }
-<span class="lineNum">     584 </span>            :             static inline void SetFileLogLevel(const utils::Logger::Level level) {
-<span class="lineNum">     585 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
-<span class="lineNum">     586 </span>            :                 utils::Logger::get().level_file = level;
-<span class="lineNum">     587 </span>            :             }
-<span class="lineNum">     588 </span>            :             static inline utils::Logger::Level GetFileLogLevel(void) {
-<span class="lineNum">     589 </span>            :                 return utils::Logger::get().level_file;
-<span class="lineNum">     590 </span>            :             }
-<span class="lineNum">     591 </span>            : 
-<span class="lineNum">     592 </span>            :             /**
-<span class="lineNum">     593 </span>            :              *  Symbols for printing an image to the console.
-<span class="lineNum">     594 </span>            :              *
-<span class="lineNum">     595 </span>            :              *  █
-<span class="lineNum">     596 </span>            :              *  std::string_format(&quot;%c&quot;, 219)
-<span class="lineNum">     597 </span>            :              *  219
-<span class="lineNum">     598 </span>            :              */
-<span class="lineNum">     599 </span>            :             static inline constexpr size_t  CONSOLE_WIDTH
-<span class="lineNum">     600 </span>            :                 #ifdef CATCH_CONFIG_CONSOLE_WIDTH
-<span class="lineNum">     601 </span>            :                     = (CATCH_CONFIG_CONSOLE_WIDTH - 1);
-<span class="lineNum">     602 </span>            :                 #else
-<span class="lineNum">     603 </span>            :                     = 79;
-<span class="lineNum">     604 </span>            :                 #endif
-<span class="lineNum">     605 </span>            :             static inline const std::string FILL  = &quot;#&quot;;
-<span class="lineNum">     606 </span>            :             static inline const std::string EMPTY = &quot; &quot;;
-<span class="lineNum">     607 </span>            :             static inline const std::string CRLF  = &quot;\r\n&quot;;
-<span class="lineNum">     608 </span>            :             template&lt;char line_char = '-'&gt;
-<span class="lineNum">     609 </span>            :             static inline const std::string LINE
-<span class="lineNum">     610 </span>            :                 = std::string(utils::Logger::CONSOLE_WIDTH,
-<span class="lineNum">     611 </span>            :                               line_char)
-<span class="lineNum">     612 </span>            :                     + utils::Logger::CRLF;
-<span class="lineNum">     613 </span>            :     };
-<span class="lineNum">     614 </span>            : }
-<span class="lineNum">     615 </span>            : 
-<span class="lineNum">     616 </span>            : #endif // UTILS_LOGGER_HPP
+<span class="lineNum">     584 </span>            : 
+<span class="lineNum">     585 </span>            :             static inline void SetScreenLogLevel(const utils::Logger::Level level) {
+<span class="lineNum">     586 </span>            :                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
+<span class="lineNum">     587 </span>            :                 utils::Logger::get().level_screen = level;
+<span class="lineNum">     588 </span>            :             }
+<span class="lineNum">     589 </span>            :             static inline utils::Logger::Level GetScreenLogLevel(void) {
+<span class="lineNum">     590 </span>            :                 return utils::Logger::get().level_screen;
+<span class="lineNum">     591 </span>            :             }
+<span class="lineNum">     592 </span>            :             static inline void SetFileLogLevel(const utils::Logger::Level level) {
+<span class="lineNum">     593 </span>            :                 LOCK_BLOCK(utils::Logger::get().file_mutex);
+<span class="lineNum">     594 </span>            :                 utils::Logger::get().level_file = level;
+<span class="lineNum">     595 </span>            :             }
+<span class="lineNum">     596 </span>            :             static inline utils::Logger::Level GetFileLogLevel(void) {
+<span class="lineNum">     597 </span>            :                 return utils::Logger::get().level_file;
+<span class="lineNum">     598 </span>            :             }
+<span class="lineNum">     599 </span>            : 
+<span class="lineNum">     600 </span>            :             /**
+<span class="lineNum">     601 </span>            :              *  Symbols for printing an image to the console.
+<span class="lineNum">     602 </span>            :              *
+<span class="lineNum">     603 </span>            :              *  █
+<span class="lineNum">     604 </span>            :              *  std::string_format(&quot;%c&quot;, 219)
+<span class="lineNum">     605 </span>            :              *  219
+<span class="lineNum">     606 </span>            :              */
+<span class="lineNum">     607 </span>            :             static inline constexpr size_t  CONSOLE_WIDTH
+<span class="lineNum">     608 </span>            :                 #ifdef CATCH_CONFIG_CONSOLE_WIDTH
+<span class="lineNum">     609 </span>            :                     = (CATCH_CONFIG_CONSOLE_WIDTH - 1);
+<span class="lineNum">     610 </span>            :                 #else
+<span class="lineNum">     611 </span>            :                     = 79;
+<span class="lineNum">     612 </span>            :                 #endif
+<span class="lineNum">     613 </span>            :             static inline const std::string FILL  = &quot;#&quot;;
+<span class="lineNum">     614 </span>            :             static inline const std::string EMPTY = &quot; &quot;;
+<span class="lineNum">     615 </span>            :             static inline const std::string CRLF  = &quot;\r\n&quot;;
+<span class="lineNum">     616 </span>            :             template&lt;char line_char = '-'&gt;
+<span class="lineNum">     617 </span>            :             static inline const std::string LINE
+<span class="lineNum">     618 </span>            :                 = std::string(utils::Logger::CONSOLE_WIDTH,
+<span class="lineNum">     619 </span>            :                               line_char)
+<span class="lineNum">     620 </span>            :                     + utils::Logger::CRLF;
+<span class="lineNum">     621 </span>            :     };
+<span class="lineNum">     622 </span>            : }
+<span class="lineNum">     623 </span>            : 
+<span class="lineNum">     624 </span>            : #endif // UTILS_LOGGER_HPP
 </pre>
       </td>
     </tr>

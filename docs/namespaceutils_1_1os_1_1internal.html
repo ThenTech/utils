@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -66,7 +66,8 @@ $(document).ready(function(){initNavTree('namespaceutils_1_1os_1_1internal.html'
 <div class="header">
   <div class="summary">
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">utils::os::internal Namespace Reference</div>  </div>
 </div><!--header-->
@@ -76,27 +77,28 @@ $(document).ready(function(){initNavTree('namespaceutils_1_1os_1_1internal.html'
 Enumerations</h2></td></tr>
 <tr class="memitem:a037fb5a369631dec8cf21fda9ce94fb2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">_Console_commands</a> { <br />
 &#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a768e23a081c9daf43dc81d34d6053e9c">_CC_CLS</a> = 1L &lt;&lt; 0, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a69b32ecf0c9f70830e9358080c308afe">_CC_CURSOR</a> = 1L &lt;&lt; 1, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a177eca0fb4bd00091ca7038b2a7ed2b5">_CC_RESET</a> = 1L &lt;&lt; 2, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2ad3bb5cc79bc15934c0ddb332c986df5d">_CC_FG</a> = 1L &lt;&lt; 3, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a0e1b2215da0a56624187c4df1b24d727">_CC_CLLINE</a> = 1L &lt;&lt; 1, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a69b32ecf0c9f70830e9358080c308afe">_CC_CURSOR</a> = 1L &lt;&lt; 2, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a177eca0fb4bd00091ca7038b2a7ed2b5">_CC_RESET</a> = 1L &lt;&lt; 3, 
 <br />
-&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a642c455f5285c3093769a15ac6f2513e">_CC_BG</a> = 1L &lt;&lt; 4, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a6a2a8db13ec7f85635f5af956da9078f">_CC_BRIGHT</a> = 1L &lt;&lt; 5, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2ae65827690d890ee1dfa4bbf0caad8bbe">_CC_UNDERLINE</a> = 1L &lt;&lt; 6, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a5e81dbfc4e188b759b1f5de8c613ee7e">_CC_BOLD</a> = 1L &lt;&lt; 7, 
+&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2ad3bb5cc79bc15934c0ddb332c986df5d">_CC_FG</a> = 1L &lt;&lt; 4, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a642c455f5285c3093769a15ac6f2513e">_CC_BG</a> = 1L &lt;&lt; 5, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a6a2a8db13ec7f85635f5af956da9078f">_CC_BRIGHT</a> = 1L &lt;&lt; 6, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2ae65827690d890ee1dfa4bbf0caad8bbe">_CC_UNDERLINE</a> = 1L &lt;&lt; 7, 
 <br />
-&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a84ccb33d1128f3c3add5142eafd75653">_CC_ITALIC</a> = 1L &lt;&lt; 8, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a665f97f4959545260effb2193fb10fa7">_CC_REVERSED</a> = 1L &lt;&lt; 9, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a7f64d7819c6b3295d6b6410377ea045f">_CC_BLACK</a> = 1L &lt;&lt; 10, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a40f820cffb65254262b289cefedbb55c">_CC_RED</a> = 1L &lt;&lt; 11, 
+&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a5e81dbfc4e188b759b1f5de8c613ee7e">_CC_BOLD</a> = 1L &lt;&lt; 8, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a84ccb33d1128f3c3add5142eafd75653">_CC_ITALIC</a> = 1L &lt;&lt; 9, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a665f97f4959545260effb2193fb10fa7">_CC_REVERSED</a> = 1L &lt;&lt; 10, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a7f64d7819c6b3295d6b6410377ea045f">_CC_BLACK</a> = 1L &lt;&lt; 11, 
 <br />
-&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a1638f670c000f1435823b0977c89c37b">_CC_GREEN</a> = 1L &lt;&lt; 12, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2acbd1d935d2b06458158d1690132f4e80">_CC_YELLOW</a> = 1L &lt;&lt; 13, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a52c34b9e7cf4c8db809e79908bff4561">_CC_BLUE</a> = 1L &lt;&lt; 14, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a991ef93a5c6eb21a34e922f2b27b0c0b">_CC_MAGENTA</a> = 1L &lt;&lt; 15, 
+&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a40f820cffb65254262b289cefedbb55c">_CC_RED</a> = 1L &lt;&lt; 12, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a1638f670c000f1435823b0977c89c37b">_CC_GREEN</a> = 1L &lt;&lt; 13, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2acbd1d935d2b06458158d1690132f4e80">_CC_YELLOW</a> = 1L &lt;&lt; 14, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a52c34b9e7cf4c8db809e79908bff4561">_CC_BLUE</a> = 1L &lt;&lt; 15, 
 <br />
-&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a12dd3855e44ea04e4e7a6fe0f116643e">_CC_CYAN</a> = 1L &lt;&lt; 16, 
-<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a979d4921b16be1aa5724ce8cb0a9683c">_CC_WHITE</a> = 1L &lt;&lt; 17
+&#160;&#160;<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a991ef93a5c6eb21a34e922f2b27b0c0b">_CC_MAGENTA</a> = 1L &lt;&lt; 16, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a12dd3855e44ea04e4e7a6fe0f116643e">_CC_CYAN</a> = 1L &lt;&lt; 17, 
+<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2a979d4921b16be1aa5724ce8cb0a9683c">_CC_WHITE</a> = 1L &lt;&lt; 18
 <br />
  }</td></tr>
 <tr class="separator:a037fb5a369631dec8cf21fda9ce94fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,6 +119,13 @@ Functions</h2></td></tr>
 <tr class="separator:a34a6932b9453b4ce077d7658b865e8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addc561e69d350e565b95fda4c9a8f611"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">_Console_commands</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os_1_1internal.html#addc561e69d350e565b95fda4c9a8f611">operator^=</a> (<a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">_Console_commands</a> &amp;__a, const <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">_Console_commands</a> __b)</td></tr>
 <tr class="separator:addc561e69d350e565b95fda4c9a8f611"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a65ad8032f13adf69bfbc7cc8c555ccda"><td class="memItemLeft" align="right" valign="top">static volatile bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os_1_1internal.html#a65ad8032f13adf69bfbc7cc8c555ccda">_virtual_console_enabled</a> = false</td></tr>
+<tr class="separator:a65ad8032f13adf69bfbc7cc8c555ccda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37a17ba09432e5eb0b202dd0e036b921"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">utils::os::internal::_Console_commands</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os_1_1internal.html#a37a17ba09432e5eb0b202dd0e036b921">HEDLEY_FLAGS</a></td></tr>
+<tr class="separator:a37a17ba09432e5eb0b202dd0e036b921"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a037fb5a369631dec8cf21fda9ce94fb2"></a>
@@ -132,6 +141,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a037fb5a369631dec8cf21fda9ce94fb2a768e23a081c9daf43dc81d34d6053e9c"></a>_CC_CLS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a037fb5a369631dec8cf21fda9ce94fb2a0e1b2215da0a56624187c4df1b24d727"></a>_CC_CLLINE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a037fb5a369631dec8cf21fda9ce94fb2a69b32ecf0c9f70830e9358080c308afe"></a>_CC_CURSOR&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a037fb5a369631dec8cf21fda9ce94fb2a177eca0fb4bd00091ca7038b2a7ed2b5"></a>_CC_RESET&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a037fb5a369631dec8cf21fda9ce94fb2ad3bb5cc79bc15934c0ddb332c986df5d"></a>_CC_FG&#160;</td><td class="fielddoc"></td></tr>
@@ -151,7 +161,7 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="a037fb5a369631dec8cf21fda9ce94fb2a979d4921b16be1aa5724ce8cb0a9683c"></a>_CC_WHITE&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00018">18</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00021">21</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -190,7 +200,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00042">42</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00046">46</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -228,7 +238,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00067">67</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00071">71</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -266,7 +276,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00052">52</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00056">56</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -304,7 +314,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00072">72</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00076">76</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -342,7 +352,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00047">47</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00051">51</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -380,7 +390,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00062">62</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00066">66</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -408,7 +418,46 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00057">57</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00061">61</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a65ad8032f13adf69bfbc7cc8c555ccda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65ad8032f13adf69bfbc7cc8c555ccda">&#9670;&nbsp;</a></span>_virtual_console_enabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">volatile bool utils::os::internal::_virtual_console_enabled = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00019">19</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a37a17ba09432e5eb0b202dd0e036b921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37a17ba09432e5eb0b202dd0e036b921">&#9670;&nbsp;</a></span>HEDLEY_FLAGS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">utils::os::internal::_Console_commands</a>  utils::os::internal::HEDLEY_FLAGS</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

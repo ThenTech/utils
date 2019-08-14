@@ -6,6 +6,8 @@ var utils__algorithm_8hpp =
     [ "any", "utils__algorithm_8hpp.html#aa073c880edb26da4fb408cf92fadc173", null ],
     [ "contains", "utils__algorithm_8hpp.html#a6ef543955ec3ce4237aa6727c0be1718", null ],
     [ "enumerate", "utils__algorithm_8hpp.html#a612d7566983df03618706741052e838e", null ],
+    [ "for_each", "utils__algorithm_8hpp.html#ac2f097e39359bc276af06b51b59ab0d0", null ],
+    [ "for_each", "utils__algorithm_8hpp.html#a84964e10536ff1f8b53f17ed00d7c224", null ],
     [ "none", "utils__algorithm_8hpp.html#a258cd8e11f5e27774ca583033cdcb192", null ],
     [ "product", "utils__algorithm_8hpp.html#a1e3e143fb25c615add85b658b81c8ba0", null ],
     [ "product", "utils__algorithm_8hpp.html#af1a8140132fbe5c63aae6372142be8bf", null ],

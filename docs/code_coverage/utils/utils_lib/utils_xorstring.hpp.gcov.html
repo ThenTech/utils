@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">11</td>
-            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntry">10</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-19</td>
+            <td class="headerValue">2019-08-14</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -63,338 +63,332 @@
 <a name="1"><span class="lineNum">       1 </span>            : #ifndef UTILS_XORSTRING_HPP</a>
 <span class="lineNum">       2 </span>            : #define UTILS_XORSTRING_HPP
 <span class="lineNum">       3 </span>            : 
-<span class="lineNum">       4 </span>            : #define XORSTR_USE 2
-<span class="lineNum">       5 </span>            : 
-<span class="lineNum">       6 </span>            : #if XORSTR_USE == 1
-<span class="lineNum">       7 </span>            :     /**
-<span class="lineNum">       8 </span>            :      *  Reference: https://github.com/JustasMasiulis/xorstr
-<span class="lineNum">       9 </span>            :      *
-<span class="lineNum">      10 </span>            :      *  Usage:
-<span class="lineNum">      11 </span>            :      *      const std::string str = xorstr_(&quot;xorstr_test_verify_error&quot;);
-<span class="lineNum">      12 </span>            :      */
-<span class="lineNum">      13 </span>            :     #include &lt;immintrin.h&gt;
-<span class="lineNum">      14 </span>            :     #include &lt;cstdint&gt;
-<span class="lineNum">      15 </span>            :     #include &lt;cstddef&gt;
-<span class="lineNum">      16 </span>            :     #include &lt;utility&gt;
-<span class="lineNum">      17 </span>            : 
-<span class="lineNum">      18 </span>            :     #define JM_XORSTR_DISABLE_AVX_INTRINSICS
+<span class="lineNum">       4 </span>            : #include &quot;utils_compiler.hpp&quot;
+<span class="lineNum">       5 </span>            : #define XORSTR_USE 2
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            : 
+<span class="lineNum">       8 </span>            : #if XORSTR_USE == 1
+<span class="lineNum">       9 </span>            :     /**
+<span class="lineNum">      10 </span>            :      *  Reference: https://github.com/JustasMasiulis/xorstr
+<span class="lineNum">      11 </span>            :      *
+<span class="lineNum">      12 </span>            :      *  Usage:
+<span class="lineNum">      13 </span>            :      *      const std::string str = xorstr_(&quot;xorstr_test_verify_error&quot;);
+<span class="lineNum">      14 </span>            :      */
+<span class="lineNum">      15 </span>            :     #include &lt;immintrin.h&gt;
+<span class="lineNum">      16 </span>            :     #include &lt;cstdint&gt;
+<span class="lineNum">      17 </span>            :     #include &lt;cstddef&gt;
+<span class="lineNum">      18 </span>            :     #include &lt;utility&gt;
 <span class="lineNum">      19 </span>            : 
-<span class="lineNum">      20 </span>            :     #define xorstr_(str)                                         \
-<span class="lineNum">      21 </span>            :         utils::xostring::make_xorstr(                            \
-<span class="lineNum">      22 </span>            :         []() {                                                   \
-<span class="lineNum">      23 </span>            :             struct {                                             \
-<span class="lineNum">      24 </span>            :                 const std::decay_t&lt;decltype(*str)&gt;* value = str; \
-<span class="lineNum">      25 </span>            :             } a;                                                 \
-<span class="lineNum">      26 </span>            :             return a;                                            \
-<span class="lineNum">      27 </span>            :         }(),                                                     \
-<span class="lineNum">      28 </span>            :         std::make_index_sequence&lt;sizeof(str) / sizeof(*str)&gt;{},  \
-<span class="lineNum">      29 </span>            :         std::make_index_sequence&lt;utils::xostring::detail::_buffer_size&lt;sizeof(str)&gt;()&gt;{})
-<span class="lineNum">      30 </span>            : 
-<span class="lineNum">      31 </span>            :     #define xorstr(str) xorstr_(str).crypt_get()
+<span class="lineNum">      20 </span>            :     #define JM_XORSTR_DISABLE_AVX_INTRINSICS
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            :     #define xorstr_(str)                                         \
+<span class="lineNum">      23 </span>            :         utils::xostring::make_xorstr(                            \
+<span class="lineNum">      24 </span>            :         []() {                                                   \
+<span class="lineNum">      25 </span>            :             struct {                                             \
+<span class="lineNum">      26 </span>            :                 const std::decay_t&lt;decltype(*str)&gt;* value = str; \
+<span class="lineNum">      27 </span>            :             } a;                                                 \
+<span class="lineNum">      28 </span>            :             return a;                                            \
+<span class="lineNum">      29 </span>            :         }(),                                                     \
+<span class="lineNum">      30 </span>            :         std::make_index_sequence&lt;sizeof(str) / sizeof(*str)&gt;{},  \
+<span class="lineNum">      31 </span>            :         std::make_index_sequence&lt;utils::xostring::detail::_buffer_size&lt;sizeof(str)&gt;()&gt;{})
 <span class="lineNum">      32 </span>            : 
-<span class="lineNum">      33 </span>            :     #ifdef _MSC_VER
-<span class="lineNum">      34 </span>            :         #define XORSTR_FORCEINLINE __forceinline
-<span class="lineNum">      35 </span>            :     #else
-<span class="lineNum">      36 </span>            :         #define XORSTR_FORCEINLINE __attribute__((always_inline))
-<span class="lineNum">      37 </span>            :     #endif
-<span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span>            :     // you can define this macro to get possibly faster code on gcc/clang
-<span class="lineNum">      40 </span>            :     // at the expense of constants being put into data section.
-<span class="lineNum">      41 </span>            :     #if !defined(XORSTR_ALLOW_DATA)
-<span class="lineNum">      42 </span>            :         // MSVC - no volatile
-<span class="lineNum">      43 </span>            :         // GCC and clang - volatile everywhere
-<span class="lineNum">      44 </span>            :         #if defined(__clang__) || defined(__GNUC__)
-<span class="lineNum">      45 </span>            :             #define XORSTR_VOLATILE volatile
-<span class="lineNum">      46 </span>            :         #endif
-<span class="lineNum">      47 </span>            :     #endif
-<span class="lineNum">      48 </span>            : 
-<span class="lineNum">      49 </span>            :     #ifndef XORSTR_VOLATILE
-<span class="lineNum">      50 </span>            :         #define XORSTR_VOLATILE
-<span class="lineNum">      51 </span>            :     #endif
-<span class="lineNum">      52 </span>            : 
-<span class="lineNum">      53 </span>            :     namespace utils::xostring {
-<span class="lineNum">      54 </span>            :         namespace detail {
-<span class="lineNum">      55 </span>            :             template&lt;std::size_t S&gt;
-<span class="lineNum">      56 </span>            :             struct unsigned_;
-<span class="lineNum">      57 </span>            : 
-<span class="lineNum">      58 </span>            :             template&lt;&gt;
-<span class="lineNum">      59 </span>            :             struct unsigned_&lt;1&gt; {
-<span class="lineNum">      60 </span>            :                 using type = std::uint8_t;
-<span class="lineNum">      61 </span>            :             };
-<span class="lineNum">      62 </span>            :             template&lt;&gt;
-<span class="lineNum">      63 </span>            :             struct unsigned_&lt;2&gt; {
-<span class="lineNum">      64 </span>            :                 using type = std::uint16_t;
-<span class="lineNum">      65 </span>            :             };
-<span class="lineNum">      66 </span>            :             template&lt;&gt;
-<span class="lineNum">      67 </span>            :             struct unsigned_&lt;4&gt; {
-<span class="lineNum">      68 </span>            :                 using type = std::uint32_t;
-<span class="lineNum">      69 </span>            :             };
-<span class="lineNum">      70 </span>            : 
-<span class="lineNum">      71 </span>            :             template&lt;auto C, auto...&gt;
-<span class="lineNum">      72 </span>            :             struct pack_value_type {
-<span class="lineNum">      73 </span>            :                 using type = decltype(C);
-<span class="lineNum">      74 </span>            :             };
-<span class="lineNum">      75 </span>            : 
-<span class="lineNum">      76 </span>            :             template&lt;std::size_t Size&gt;
-<span class="lineNum">      77 </span>            :             constexpr std::size_t _buffer_size() {
-<span class="lineNum">      78 </span>            :                 return ((Size / 16) + (Size % 16 != 0)) * 2;
-<span class="lineNum">      79 </span>            :             }
-<span class="lineNum">      80 </span>            : 
-<span class="lineNum">      81 </span>            :             template&lt;auto... Cs&gt;
-<span class="lineNum">      82 </span>            :             struct tstring_ {
-<span class="lineNum">      83 </span>            :                 using value_type                  = typename pack_value_type&lt;Cs...&gt;::type;
-<span class="lineNum">      84 </span>            :                 constexpr static std::size_t size = sizeof...(Cs);
-<span class="lineNum">      85 </span>            :                 constexpr static value_type  str[size] = { Cs... };
-<span class="lineNum">      86 </span>            : 
-<span class="lineNum">      87 </span>            :                 constexpr static std::size_t buffer_size = _buffer_size&lt;sizeof(str)&gt;();
-<span class="lineNum">      88 </span>            :                 constexpr static std::size_t buffer_align =
-<span class="lineNum">      89 </span>            :                     #ifndef JM_XORSTR_DISABLE_AVX_INTRINSICS
-<span class="lineNum">      90 </span>            :                         ((sizeof(str) &gt; 16) ? 32 : 16);
-<span class="lineNum">      91 </span>            :                     #else
-<span class="lineNum">      92 </span>            :                         16;
-<span class="lineNum">      93 </span>            :                     #endif
-<span class="lineNum">      94 </span>            :             };
-<span class="lineNum">      95 </span>            : 
-<span class="lineNum">      96 </span>            :             template&lt;std::uint32_t Seed&gt;
-<span class="lineNum">      97 </span>            :             constexpr std::uint32_t key4() noexcept {
-<span class="lineNum">      98 </span>            :                 std::uint32_t value = Seed;
-<span class="lineNum">      99 </span>            : 
-<span class="lineNum">     100 </span>            :                 for (char c : __TIME__)
-<span class="lineNum">     101 </span>            :                     value = static_cast&lt;std::uint32_t&gt;((value ^ c) * 16777619ull);
-<span class="lineNum">     102 </span>            : 
-<span class="lineNum">     103 </span>            :                 return value;
-<span class="lineNum">     104 </span>            :             }
-<span class="lineNum">     105 </span>            : 
-<span class="lineNum">     106 </span>            :             template&lt;std::size_t S&gt;
-<span class="lineNum">     107 </span>            :             constexpr std::uint64_t key8() {
-<span class="lineNum">     108 </span>            :                 constexpr auto first_part  = key4 &lt; 2166136261 + S &gt; ();
-<span class="lineNum">     109 </span>            :                 constexpr auto second_part = key4&lt;first_part&gt;();
-<span class="lineNum">     110 </span>            :                 return (static_cast&lt;std::uint64_t&gt;(first_part) &lt;&lt; 32) | second_part;
-<span class="lineNum">     111 </span>            :             }
-<span class="lineNum">     112 </span>            : 
-<span class="lineNum">     113 </span>            :             // clang and gcc try really hard to place the constants in data
-<span class="lineNum">     114 </span>            :             // sections. to counter that there was a need to create an intermediate
-<span class="lineNum">     115 </span>            :             // constexpr string and then copy it into a non constexpr container with
-<span class="lineNum">     116 </span>            :             // volatile storage so that the constants would be placed directly into
-<span class="lineNum">     117 </span>            :             // code.
-<span class="lineNum">     118 </span>            :             template&lt;class T, std::uint64_t... Keys&gt;
-<span class="lineNum">     119 </span>            :             struct string_storage {
-<span class="lineNum">     120 </span>            :                 std::uint64_t storage[T::buffer_size];
-<span class="lineNum">     121 </span>            : 
-<span class="lineNum">     122 </span>            :                 XORSTR_FORCEINLINE constexpr string_storage() noexcept : storage { Keys... }
-<span class="lineNum">     123 </span>            :                 {
-<span class="lineNum">     124 </span>            :                     using cast_type =
-<span class="lineNum">     125 </span>            :                         typename unsigned_&lt;sizeof(typename T::value_type)&gt;::type;
-<span class="lineNum">     126 </span>            :                     constexpr auto value_size = sizeof(typename T::value_type);
-<span class="lineNum">     127 </span>            : 
-<span class="lineNum">     128 </span>            :                     // puts the string into 64 bit integer blocks in a constexpr
-<span class="lineNum">     129 </span>            :                     // fashion
-<span class="lineNum">     130 </span>            :                     for (std::size_t i = 0; i &lt; T::size; ++i)
-<span class="lineNum">     131 </span>            :                         storage[i / (8 / value_size)] ^=
-<span class="lineNum">     132 </span>            :                             (std::uint64_t{ static_cast&lt;cast_type&gt;(T::str[i]) }
-<span class="lineNum">     133 </span>            :                              &lt;&lt; ((i % (8 / value_size)) * 8 * value_size));
-<span class="lineNum">     134 </span>            :                 }
-<span class="lineNum">     135 </span>            :             };
-<span class="lineNum">     136 </span>            :         }
-<span class="lineNum">     137 </span>            : 
-<span class="lineNum">     138 </span>            :         template&lt;class T, std::uint64_t... Keys&gt;
-<span class="lineNum">     139 </span>            :         class xor_string {
-<span class="lineNum">     140 </span>            :                 alignas(T::buffer_align) XORSTR_VOLATILE std::uint64_t _storage[T::buffer_size];
-<span class="lineNum">     141 </span>            : 
-<span class="lineNum">     142 </span>            :                 template&lt;std::size_t N&gt;
-<span class="lineNum">     143 </span>            :                 XORSTR_FORCEINLINE void _crypt(XORSTR_VOLATILE std::uint64_t *keys) noexcept {
-<span class="lineNum">     144 </span>            :                     if constexpr (T::buffer_size &gt; N) {
-<span class="lineNum">     145 </span>            :                         #ifndef JM_XORSTR_DISABLE_AVX_INTRINSICS
-<span class="lineNum">     146 </span>            :                             if constexpr ((T::buffer_size - N) &gt;= 4) {
-<span class="lineNum">     147 </span>            :                                 _mm256_store_si256(
-<span class="lineNum">     148 </span>            :                                     (__m256i *)(_storage + N),
-<span class="lineNum">     149 </span>            :                                     _mm256_xor_si256(
-<span class="lineNum">     150 </span>            :                                         _mm256_load_si256((const __m256i *)(_storage + N)),
-<span class="lineNum">     151 </span>            :                                         _mm256_load_si256((const __m256i *)(keys + N))));
-<span class="lineNum">     152 </span>            :                                 _crypt &lt; N + 4 &gt; (keys);
-<span class="lineNum">     153 </span>            :                             } else
-<span class="lineNum">     154 </span>            :                         #endif
-<span class="lineNum">     155 </span>            :                         {
-<span class="lineNum">     156 </span>            :                             _mm_store_si128(
-<span class="lineNum">     157 </span>            :                                 (__m128i *)(_storage + N),
-<span class="lineNum">     158 </span>            :                                 _mm_xor_si128(_mm_load_si128((const __m128i *)(_storage + N)),
-<span class="lineNum">     159 </span>            :                                               _mm_load_si128((const __m128i *)(keys + N))));
-<span class="lineNum">     160 </span>            :                             _crypt&lt;N + 2&gt;(keys);
-<span class="lineNum">     161 </span>            :                         }
-<span class="lineNum">     162 </span>            :                     }
-<span class="lineNum">     163 </span>            :                 }
-<span class="lineNum">     164 </span>            : 
-<span class="lineNum">     165 </span>            :                 XORSTR_FORCEINLINE constexpr void _copy_single(
-<span class="lineNum">     166 </span>            :                         XORSTR_VOLATILE std::uint64_t&amp; dst,
-<span class="lineNum">     167 </span>            :                         std::uint64_t val) noexcept
-<span class="lineNum">     168 </span>            :                 {
-<span class="lineNum">     169 </span>            :                     dst = val;
-<span class="lineNum">     170 </span>            :                 }
-<span class="lineNum">     171 </span>            : 
-<span class="lineNum">     172 </span>            :                 // loop generates vectorized code which places constants in data dir
-<span class="lineNum">     173 </span>            :                 template&lt;std::size_t... Indices&gt;
-<span class="lineNum">     174 </span>            :                 XORSTR_FORCEINLINE constexpr void _copy(std::index_sequence&lt;Indices...&gt;) noexcept {
-<span class="lineNum">     175 </span>            :                     constexpr detail::string_storage&lt;T, Keys...&gt; storage;
-<span class="lineNum">     176 </span>            :                     (_copy_single(_storage[Indices], storage.storage[Indices]), ...);
-<span class="lineNum">     177 </span>            :                 }
-<span class="lineNum">     178 </span>            : 
-<span class="lineNum">     179 </span>            :                 template&lt;std::size_t... Indices&gt;
-<span class="lineNum">     180 </span>            :                 XORSTR_FORCEINLINE constexpr void _copy_keys(
-<span class="lineNum">     181 </span>            :                     XORSTR_VOLATILE std::uint64_t *keys, std::index_sequence&lt;Indices...&gt;) noexcept {
-<span class="lineNum">     182 </span>            :                     (_copy_single(keys[Indices], Keys), ...);
-<span class="lineNum">     183 </span>            :                 }
-<span class="lineNum">     184 </span>            : 
-<span class="lineNum">     185 </span>            :             public:
-<span class="lineNum">     186 </span>            :                 using value_type    = typename T::value_type;
-<span class="lineNum">     187 </span>            :                 using size_type     = std::size_t;
-<span class="lineNum">     188 </span>            :                 using pointer       = value_type*;
-<span class="lineNum">     189 </span>            :                 using const_pointer = const pointer;
-<span class="lineNum">     190 </span>            : 
-<span class="lineNum">     191 </span>            :                 XORSTR_FORCEINLINE xor_string() noexcept {
-<span class="lineNum">     192 </span>            :                     _copy(std::make_index_sequence&lt;T::buffer_size&gt; {});
-<span class="lineNum">     193 </span>            :                 }
-<span class="lineNum">     194 </span>            : 
-<span class="lineNum">     195 </span>            :                 XORSTR_FORCEINLINE constexpr size_type size() const noexcept {
-<span class="lineNum">     196 </span>            :                     return T::size - 1;
-<span class="lineNum">     197 </span>            :                 }
-<span class="lineNum">     198 </span>            : 
-<span class="lineNum">     199 </span>            :                 XORSTR_FORCEINLINE void crypt() noexcept {
-<span class="lineNum">     200 </span>            :                     alignas(T::buffer_align) XORSTR_VOLATILE std::uint64_t keys[T::buffer_size];
-<span class="lineNum">     201 </span>            :                     _copy_keys(keys, std::make_index_sequence&lt;sizeof...(Keys)&gt;());
-<span class="lineNum">     202 </span>            :                     _crypt&lt;0&gt;(keys);
-<span class="lineNum">     203 </span>            :                 }
-<span class="lineNum">     204 </span>            : 
-<span class="lineNum">     205 </span>            :                 XORSTR_FORCEINLINE const_pointer get() const noexcept {
-<span class="lineNum">     206 </span>            :                     // C casts are used because buffer may or may not be volatile
-<span class="lineNum">     207 </span>            :                     return (const_pointer)(_storage);
-<span class="lineNum">     208 </span>            :                 }
-<span class="lineNum">     209 </span>            : 
-<span class="lineNum">     210 </span>            :                 XORSTR_FORCEINLINE const_pointer crypt_get() noexcept {
-<span class="lineNum">     211 </span>            :                     crypt();
-<span class="lineNum">     212 </span>            :                     // C casts are used because buffer may or may not be volatile
-<span class="lineNum">     213 </span>            :                     return (const_pointer)(_storage);
-<span class="lineNum">     214 </span>            :                 }
-<span class="lineNum">     215 </span>            :         };
-<span class="lineNum">     216 </span>            : 
-<span class="lineNum">     217 </span>            :         template&lt;class Tstr, std::size_t... StringIndices, std::size_t... KeyIndices&gt;
-<span class="lineNum">     218 </span>            :         XORSTR_FORCEINLINE constexpr auto
-<span class="lineNum">     219 </span>            :         make_xorstr(Tstr,
-<span class="lineNum">     220 </span>            :                     std::index_sequence&lt;StringIndices...&gt;,
-<span class="lineNum">     221 </span>            :                     std::index_sequence&lt;KeyIndices...&gt;) noexcept {
-<span class="lineNum">     222 </span>            :             return xor_string&lt;
-<span class="lineNum">     223 </span>            :                    detail::tstring_&lt;Tstr().value[StringIndices]...&gt;,
-<span class="lineNum">     224 </span>            :                    detail::key8&lt;KeyIndices&gt;()...&gt; {};
-<span class="lineNum">     225 </span>            :         }
-<span class="lineNum">     226 </span>            :     }
-<span class="lineNum">     227 </span>            : 
-<span class="lineNum">     228 </span>            :     #undef XORSTR_FORCEINLINE
-<span class="lineNum">     229 </span>            :     #undef XORSTR_VOLATILE
-<span class="lineNum">     230 </span>            :     #undef JM_XORSTR_DISABLE_AVX_INTRINSICS
-<span class="lineNum">     231 </span>            : #elif XORSTR_USE == 2
-<span class="lineNum">     232 </span>            :     /**
-<span class="lineNum">     233 </span>            :      *  Reference: https://github.com/qis/xorstr
-<span class="lineNum">     234 </span>            :      *
-<span class="lineNum">     235 </span>            :      *  Usage:
-<span class="lineNum">     236 </span>            :      *      const std::string str = xorstr(&quot;xorstr_test_verify_error&quot;);
-<span class="lineNum">     237 </span>            :      */
-<span class="lineNum">     238 </span>            :     #include &lt;array&gt;
-<span class="lineNum">     239 </span>            :     #include &lt;utility&gt;
+<span class="lineNum">      33 </span>            :     #define xorstr(str) xorstr_(str).crypt_get()
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            :     #define XORSTR_FORCEINLINE HEDLEY_ALWAYS_INLINE
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span>            :     // you can define this macro to get possibly faster code on gcc/clang
+<span class="lineNum">      38 </span>            :     // at the expense of constants being put into data section.
+<span class="lineNum">      39 </span>            :     #if !defined(XORSTR_ALLOW_DATA)
+<span class="lineNum">      40 </span>            :         // MSVC - no volatile
+<span class="lineNum">      41 </span>            :         // GCC and clang - volatile everywhere
+<span class="lineNum">      42 </span>            :         #if defined(__clang__) || defined(__GNUC__)
+<span class="lineNum">      43 </span>            :             #define XORSTR_VOLATILE volatile
+<span class="lineNum">      44 </span>            :         #endif
+<span class="lineNum">      45 </span>            :     #endif
+<span class="lineNum">      46 </span>            : 
+<span class="lineNum">      47 </span>            :     #ifndef XORSTR_VOLATILE
+<span class="lineNum">      48 </span>            :         #define XORSTR_VOLATILE
+<span class="lineNum">      49 </span>            :     #endif
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            :     namespace utils::xostring {
+<span class="lineNum">      52 </span>            :         namespace detail {
+<span class="lineNum">      53 </span>            :             template&lt;std::size_t S&gt;
+<span class="lineNum">      54 </span>            :             struct unsigned_;
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span>            :             template&lt;&gt;
+<span class="lineNum">      57 </span>            :             struct unsigned_&lt;1&gt; {
+<span class="lineNum">      58 </span>            :                 using type = std::uint8_t;
+<span class="lineNum">      59 </span>            :             };
+<span class="lineNum">      60 </span>            :             template&lt;&gt;
+<span class="lineNum">      61 </span>            :             struct unsigned_&lt;2&gt; {
+<span class="lineNum">      62 </span>            :                 using type = std::uint16_t;
+<span class="lineNum">      63 </span>            :             };
+<span class="lineNum">      64 </span>            :             template&lt;&gt;
+<span class="lineNum">      65 </span>            :             struct unsigned_&lt;4&gt; {
+<span class="lineNum">      66 </span>            :                 using type = std::uint32_t;
+<span class="lineNum">      67 </span>            :             };
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span>            :             template&lt;auto C, auto...&gt;
+<span class="lineNum">      70 </span>            :             struct pack_value_type {
+<span class="lineNum">      71 </span>            :                 using type = decltype(C);
+<span class="lineNum">      72 </span>            :             };
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            :             template&lt;std::size_t Size&gt;
+<span class="lineNum">      75 </span>            :             constexpr std::size_t _buffer_size() {
+<span class="lineNum">      76 </span>            :                 return ((Size / 16) + (Size % 16 != 0)) * 2;
+<span class="lineNum">      77 </span>            :             }
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            :             template&lt;auto... Cs&gt;
+<span class="lineNum">      80 </span>            :             struct tstring_ {
+<span class="lineNum">      81 </span>            :                 using value_type                  = typename pack_value_type&lt;Cs...&gt;::type;
+<span class="lineNum">      82 </span>            :                 constexpr static std::size_t size = sizeof...(Cs);
+<span class="lineNum">      83 </span>            :                 constexpr static value_type  str[size] = { Cs... };
+<span class="lineNum">      84 </span>            : 
+<span class="lineNum">      85 </span>            :                 constexpr static std::size_t buffer_size = _buffer_size&lt;sizeof(str)&gt;();
+<span class="lineNum">      86 </span>            :                 constexpr static std::size_t buffer_align =
+<span class="lineNum">      87 </span>            :                     #ifndef JM_XORSTR_DISABLE_AVX_INTRINSICS
+<span class="lineNum">      88 </span>            :                         ((sizeof(str) &gt; 16) ? 32 : 16);
+<span class="lineNum">      89 </span>            :                     #else
+<span class="lineNum">      90 </span>            :                         16;
+<span class="lineNum">      91 </span>            :                     #endif
+<span class="lineNum">      92 </span>            :             };
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span>            :             template&lt;std::uint32_t Seed&gt;
+<span class="lineNum">      95 </span>            :             constexpr std::uint32_t key4() noexcept {
+<span class="lineNum">      96 </span>            :                 std::uint32_t value = Seed;
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span>            :                 for (char c : __TIME__)
+<span class="lineNum">      99 </span>            :                     value = static_cast&lt;std::uint32_t&gt;((value ^ c) * 16777619ull);
+<span class="lineNum">     100 </span>            : 
+<span class="lineNum">     101 </span>            :                 return value;
+<span class="lineNum">     102 </span>            :             }
+<span class="lineNum">     103 </span>            : 
+<span class="lineNum">     104 </span>            :             template&lt;std::size_t S&gt;
+<span class="lineNum">     105 </span>            :             constexpr std::uint64_t key8() {
+<span class="lineNum">     106 </span>            :                 constexpr auto first_part  = key4 &lt; 2166136261 + S &gt; ();
+<span class="lineNum">     107 </span>            :                 constexpr auto second_part = key4&lt;first_part&gt;();
+<span class="lineNum">     108 </span>            :                 return (static_cast&lt;std::uint64_t&gt;(first_part) &lt;&lt; 32) | second_part;
+<span class="lineNum">     109 </span>            :             }
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span>            :             // clang and gcc try really hard to place the constants in data
+<span class="lineNum">     112 </span>            :             // sections. to counter that there was a need to create an intermediate
+<span class="lineNum">     113 </span>            :             // constexpr string and then copy it into a non constexpr container with
+<span class="lineNum">     114 </span>            :             // volatile storage so that the constants would be placed directly into
+<span class="lineNum">     115 </span>            :             // code.
+<span class="lineNum">     116 </span>            :             template&lt;class T, std::uint64_t... Keys&gt;
+<span class="lineNum">     117 </span>            :             struct string_storage {
+<span class="lineNum">     118 </span>            :                 std::uint64_t storage[T::buffer_size];
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span>            :                 XORSTR_FORCEINLINE constexpr string_storage() noexcept : storage { Keys... }
+<span class="lineNum">     121 </span>            :                 {
+<span class="lineNum">     122 </span>            :                     using cast_type =
+<span class="lineNum">     123 </span>            :                         typename unsigned_&lt;sizeof(typename T::value_type)&gt;::type;
+<span class="lineNum">     124 </span>            :                     constexpr auto value_size = sizeof(typename T::value_type);
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :                     // puts the string into 64 bit integer blocks in a constexpr
+<span class="lineNum">     127 </span>            :                     // fashion
+<span class="lineNum">     128 </span>            :                     for (std::size_t i = 0; i &lt; T::size; ++i)
+<span class="lineNum">     129 </span>            :                         storage[i / (8 / value_size)] ^=
+<span class="lineNum">     130 </span>            :                             (std::uint64_t{ static_cast&lt;cast_type&gt;(T::str[i]) }
+<span class="lineNum">     131 </span>            :                              &lt;&lt; ((i % (8 / value_size)) * 8 * value_size));
+<span class="lineNum">     132 </span>            :                 }
+<span class="lineNum">     133 </span>            :             };
+<span class="lineNum">     134 </span>            :         }
+<span class="lineNum">     135 </span>            : 
+<span class="lineNum">     136 </span>            :         template&lt;class T, std::uint64_t... Keys&gt;
+<span class="lineNum">     137 </span>            :         class xor_string {
+<span class="lineNum">     138 </span>            :                 alignas(T::buffer_align) XORSTR_VOLATILE std::uint64_t _storage[T::buffer_size];
+<span class="lineNum">     139 </span>            : 
+<span class="lineNum">     140 </span>            :                 template&lt;std::size_t N&gt;
+<span class="lineNum">     141 </span>            :                 XORSTR_FORCEINLINE void _crypt(XORSTR_VOLATILE std::uint64_t *keys) noexcept {
+<span class="lineNum">     142 </span>            :                     if constexpr (T::buffer_size &gt; N) {
+<span class="lineNum">     143 </span>            :                         #ifndef JM_XORSTR_DISABLE_AVX_INTRINSICS
+<span class="lineNum">     144 </span>            :                             if constexpr ((T::buffer_size - N) &gt;= 4) {
+<span class="lineNum">     145 </span>            :                                 _mm256_store_si256(
+<span class="lineNum">     146 </span>            :                                     (__m256i *)(_storage + N),
+<span class="lineNum">     147 </span>            :                                     _mm256_xor_si256(
+<span class="lineNum">     148 </span>            :                                         _mm256_load_si256((const __m256i *)(_storage + N)),
+<span class="lineNum">     149 </span>            :                                         _mm256_load_si256((const __m256i *)(keys + N))));
+<span class="lineNum">     150 </span>            :                                 _crypt &lt; N + 4 &gt; (keys);
+<span class="lineNum">     151 </span>            :                             } else
+<span class="lineNum">     152 </span>            :                         #endif
+<span class="lineNum">     153 </span>            :                         {
+<span class="lineNum">     154 </span>            :                             _mm_store_si128(
+<span class="lineNum">     155 </span>            :                                 (__m128i *)(_storage + N),
+<span class="lineNum">     156 </span>            :                                 _mm_xor_si128(_mm_load_si128((const __m128i *)(_storage + N)),
+<span class="lineNum">     157 </span>            :                                               _mm_load_si128((const __m128i *)(keys + N))));
+<span class="lineNum">     158 </span>            :                             _crypt&lt;N + 2&gt;(keys);
+<span class="lineNum">     159 </span>            :                         }
+<span class="lineNum">     160 </span>            :                     }
+<span class="lineNum">     161 </span>            :                 }
+<span class="lineNum">     162 </span>            : 
+<span class="lineNum">     163 </span>            :                 XORSTR_FORCEINLINE constexpr void _copy_single(
+<span class="lineNum">     164 </span>            :                         XORSTR_VOLATILE std::uint64_t&amp; dst,
+<span class="lineNum">     165 </span>            :                         std::uint64_t val) noexcept
+<span class="lineNum">     166 </span>            :                 {
+<span class="lineNum">     167 </span>            :                     dst = val;
+<span class="lineNum">     168 </span>            :                 }
+<span class="lineNum">     169 </span>            : 
+<span class="lineNum">     170 </span>            :                 // loop generates vectorized code which places constants in data dir
+<span class="lineNum">     171 </span>            :                 template&lt;std::size_t... Indices&gt;
+<span class="lineNum">     172 </span>            :                 XORSTR_FORCEINLINE constexpr void _copy(std::index_sequence&lt;Indices...&gt;) noexcept {
+<span class="lineNum">     173 </span>            :                     constexpr detail::string_storage&lt;T, Keys...&gt; storage;
+<span class="lineNum">     174 </span>            :                     (_copy_single(_storage[Indices], storage.storage[Indices]), ...);
+<span class="lineNum">     175 </span>            :                 }
+<span class="lineNum">     176 </span>            : 
+<span class="lineNum">     177 </span>            :                 template&lt;std::size_t... Indices&gt;
+<span class="lineNum">     178 </span>            :                 XORSTR_FORCEINLINE constexpr void _copy_keys(
+<span class="lineNum">     179 </span>            :                     XORSTR_VOLATILE std::uint64_t *keys, std::index_sequence&lt;Indices...&gt;) noexcept {
+<span class="lineNum">     180 </span>            :                     (_copy_single(keys[Indices], Keys), ...);
+<span class="lineNum">     181 </span>            :                 }
+<span class="lineNum">     182 </span>            : 
+<span class="lineNum">     183 </span>            :             public:
+<span class="lineNum">     184 </span>            :                 using value_type    = typename T::value_type;
+<span class="lineNum">     185 </span>            :                 using size_type     = std::size_t;
+<span class="lineNum">     186 </span>            :                 using pointer       = value_type*;
+<span class="lineNum">     187 </span>            :                 using const_pointer = const pointer;
+<span class="lineNum">     188 </span>            : 
+<span class="lineNum">     189 </span>            :                 XORSTR_FORCEINLINE xor_string() noexcept {
+<span class="lineNum">     190 </span>            :                     _copy(std::make_index_sequence&lt;T::buffer_size&gt; {});
+<span class="lineNum">     191 </span>            :                 }
+<span class="lineNum">     192 </span>            : 
+<span class="lineNum">     193 </span>            :                 XORSTR_FORCEINLINE constexpr size_type size() const noexcept {
+<span class="lineNum">     194 </span>            :                     return T::size - 1;
+<span class="lineNum">     195 </span>            :                 }
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :                 XORSTR_FORCEINLINE void crypt() noexcept {
+<span class="lineNum">     198 </span>            :                     alignas(T::buffer_align) XORSTR_VOLATILE std::uint64_t keys[T::buffer_size];
+<span class="lineNum">     199 </span>            :                     _copy_keys(keys, std::make_index_sequence&lt;sizeof...(Keys)&gt;());
+<span class="lineNum">     200 </span>            :                     _crypt&lt;0&gt;(keys);
+<span class="lineNum">     201 </span>            :                 }
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span>            :                 XORSTR_FORCEINLINE const_pointer get() const noexcept {
+<span class="lineNum">     204 </span>            :                     // C casts are used because buffer may or may not be volatile
+<span class="lineNum">     205 </span>            :                     return (const_pointer)(_storage);
+<span class="lineNum">     206 </span>            :                 }
+<span class="lineNum">     207 </span>            : 
+<span class="lineNum">     208 </span>            :                 XORSTR_FORCEINLINE const_pointer crypt_get() noexcept {
+<span class="lineNum">     209 </span>            :                     crypt();
+<span class="lineNum">     210 </span>            :                     // C casts are used because buffer may or may not be volatile
+<span class="lineNum">     211 </span>            :                     return (const_pointer)(_storage);
+<span class="lineNum">     212 </span>            :                 }
+<span class="lineNum">     213 </span>            :         };
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span>            :         template&lt;class Tstr, std::size_t... StringIndices, std::size_t... KeyIndices&gt;
+<span class="lineNum">     216 </span>            :         XORSTR_FORCEINLINE constexpr auto
+<span class="lineNum">     217 </span>            :         make_xorstr(Tstr,
+<span class="lineNum">     218 </span>            :                     std::index_sequence&lt;StringIndices...&gt;,
+<span class="lineNum">     219 </span>            :                     std::index_sequence&lt;KeyIndices...&gt;) noexcept {
+<span class="lineNum">     220 </span>            :             return xor_string&lt;
+<span class="lineNum">     221 </span>            :                    detail::tstring_&lt;Tstr().value[StringIndices]...&gt;,
+<span class="lineNum">     222 </span>            :                    detail::key8&lt;KeyIndices&gt;()...&gt; {};
+<span class="lineNum">     223 </span>            :         }
+<span class="lineNum">     224 </span>            :     }
+<span class="lineNum">     225 </span>            : 
+<span class="lineNum">     226 </span>            :     #undef XORSTR_FORCEINLINE
+<span class="lineNum">     227 </span>            :     #undef XORSTR_VOLATILE
+<span class="lineNum">     228 </span>            :     #undef JM_XORSTR_DISABLE_AVX_INTRINSICS
+<span class="lineNum">     229 </span>            : #elif XORSTR_USE == 2
+<span class="lineNum">     230 </span>            :     /**
+<span class="lineNum">     231 </span>            :      *  Reference: https://github.com/qis/xorstr
+<span class="lineNum">     232 </span>            :      *
+<span class="lineNum">     233 </span>            :      *  Usage:
+<span class="lineNum">     234 </span>            :      *      const std::string str = xorstr(&quot;xorstr_test_verify_error&quot;);
+<span class="lineNum">     235 </span>            :      */
+<span class="lineNum">     236 </span>            :     #include &lt;array&gt;
+<span class="lineNum">     237 </span>            :     #include &lt;utility&gt;
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span>            :     #define XORSTR_INLINE HEDLEY_ALWAYS_INLINE
 <span class="lineNum">     240 </span>            : 
-<span class="lineNum">     241 </span>            :     #ifdef _MSC_VER
-<span class="lineNum">     242 </span>            :         #define XORSTR_INLINE __forceinline
-<span class="lineNum">     243 </span>            :     #else
-<span class="lineNum">     244 </span>            :         #define XORSTR_INLINE inline
-<span class="lineNum">     245 </span>            :     #endif
-<span class="lineNum">     246 </span>            : 
-<span class="lineNum">     247 </span>            :     namespace utils::xostring {
-<span class="lineNum">     248 </span>            :         constexpr auto time = __TIME__;
-<span class="lineNum">     249 </span>            :         constexpr auto seed = static_cast&lt;int&gt;(time[7]) +
-<span class="lineNum">     250 </span>            :                               static_cast&lt;int&gt;(time[6]) * 10 +
-<span class="lineNum">     251 </span>            :                               static_cast&lt;int&gt;(time[4]) * 60 +
-<span class="lineNum">     252 </span>            :                               static_cast&lt;int&gt;(time[3]) * 600 +
-<span class="lineNum">     253 </span>            :                               static_cast&lt;int&gt;(time[1]) * 3600 +
-<span class="lineNum">     254 </span>            :                               static_cast&lt;int&gt;(time[0]) * 36000;
-<span class="lineNum">     255 </span>            : 
-<span class="lineNum">     256 </span>            :         // 1988, Stephen Park and Keith Miller
-<span class="lineNum">     257 </span>            :         // &quot;Random Number Generators: Good Ones Are Hard To Find&quot;, considered as &quot;minimal standard&quot;
-<span class="lineNum">     258 </span>            :         // Park-Miller 31 bit pseudo-random number generator, implemented with G. Carta's optimisation:
-<span class="lineNum">     259 </span>            :         // with 32-bit math and without divisions
-<span class="lineNum">     260 </span>            :         template &lt;int N&gt;
-<span class="lineNum">     261 </span>            :         struct random_generator {
-<span class="lineNum">     262 </span>            :             private:
-<span class="lineNum">     263 </span>            :                 static constexpr unsigned a   = 16807;  // 7^5
-<span class="lineNum">     264 </span>            :                 static constexpr unsigned m   = 2147483647;  // 2^31 - 1
-<span class="lineNum">     265 </span>            :                 static constexpr unsigned s   = random_generator&lt;N - 1&gt;::value;
-<span class="lineNum">     266 </span>            :                 static constexpr unsigned lo  = a * (s &amp; 0xFFFF);  // multiply lower 16 bits by 16807
-<span class="lineNum">     267 </span>            :                 static constexpr unsigned hi  = a * (s &gt;&gt; 16);  // multiply higher 16 bits by 16807
-<span class="lineNum">     268 </span>            :                 static constexpr unsigned lo2 = lo + ((hi &amp; 0x7FFF) &lt;&lt; 16);  // combine lower 15 bits of hi with lo's upper bits
-<span class="lineNum">     269 </span>            :                 static constexpr unsigned hi2 = hi &gt;&gt; 15;  // discard lower 15 bits of hi
-<span class="lineNum">     270 </span>            :                 static constexpr unsigned lo3 = lo2 + hi;
-<span class="lineNum">     271 </span>            : 
-<span class="lineNum">     272 </span>            :             public:
-<span class="lineNum">     273 </span>            :                 static constexpr unsigned max   = m;
-<span class="lineNum">     274 </span>            :                 static constexpr unsigned value = lo3 &gt; m ? lo3 - m : lo3;
-<span class="lineNum">     275 </span>            :         };
-<span class="lineNum">     276 </span>            : 
-<span class="lineNum">     277 </span>            :         template&lt;&gt;
-<span class="lineNum">     278 </span>            :         struct random_generator&lt;0&gt; {
-<span class="lineNum">     279 </span>            :             static constexpr unsigned value = seed;
-<span class="lineNum">     280 </span>            :         };
-<span class="lineNum">     281 </span>            : 
-<span class="lineNum">     282 </span>            :         template&lt;int N, int M&gt;
-<span class="lineNum">     283 </span>            :         struct random_int {
-<span class="lineNum">     284 </span>            :             static constexpr auto value = random_generator&lt;N + 1&gt;::value % M;
-<span class="lineNum">     285 </span>            :         };
-<span class="lineNum">     286 </span>            : 
-<span class="lineNum">     287 </span>            :         template&lt;int N&gt;
-<span class="lineNum">     288 </span>            :         struct random_char {
-<span class="lineNum">     289 </span>            :             static const char value = static_cast&lt;char&gt;(1 + random_int&lt;N, 0x7F - 1&gt;::value);
-<span class="lineNum">     290 </span>            :         };
+<span class="lineNum">     241 </span>            :     namespace utils::xostring {
+<span class="lineNum">     242 </span>            :         constexpr auto time = __TIME__;
+<span class="lineNum">     243 </span>            :         constexpr auto seed = static_cast&lt;int&gt;(time[7]) +
+<span class="lineNum">     244 </span>            :                               static_cast&lt;int&gt;(time[6]) * 10 +
+<span class="lineNum">     245 </span>            :                               static_cast&lt;int&gt;(time[4]) * 60 +
+<span class="lineNum">     246 </span>            :                               static_cast&lt;int&gt;(time[3]) * 600 +
+<span class="lineNum">     247 </span>            :                               static_cast&lt;int&gt;(time[1]) * 3600 +
+<span class="lineNum">     248 </span>            :                               static_cast&lt;int&gt;(time[0]) * 36000;
+<span class="lineNum">     249 </span>            : 
+<span class="lineNum">     250 </span>            :         // 1988, Stephen Park and Keith Miller
+<span class="lineNum">     251 </span>            :         // &quot;Random Number Generators: Good Ones Are Hard To Find&quot;, considered as &quot;minimal standard&quot;
+<span class="lineNum">     252 </span>            :         // Park-Miller 31 bit pseudo-random number generator, implemented with G. Carta's optimisation:
+<span class="lineNum">     253 </span>            :         // with 32-bit math and without divisions
+<span class="lineNum">     254 </span>            :         template &lt;int N&gt;
+<span class="lineNum">     255 </span>            :         struct random_generator {
+<span class="lineNum">     256 </span>            :             private:
+<span class="lineNum">     257 </span>            :                 static constexpr unsigned a   = 16807;  // 7^5
+<span class="lineNum">     258 </span>            :                 static constexpr unsigned m   = 2147483647;  // 2^31 - 1
+<span class="lineNum">     259 </span>            :                 static constexpr unsigned s   = random_generator&lt;N - 1&gt;::value;
+<span class="lineNum">     260 </span>            :                 static constexpr unsigned lo  = a * (s &amp; 0xFFFF);  // multiply lower 16 bits by 16807
+<span class="lineNum">     261 </span>            :                 static constexpr unsigned hi  = a * (s &gt;&gt; 16);  // multiply higher 16 bits by 16807
+<span class="lineNum">     262 </span>            :                 static constexpr unsigned lo2 = lo + ((hi &amp; 0x7FFF) &lt;&lt; 16);  // combine lower 15 bits of hi with lo's upper bits
+<span class="lineNum">     263 </span>            :                 static constexpr unsigned hi2 = hi &gt;&gt; 15;  // discard lower 15 bits of hi
+<span class="lineNum">     264 </span>            :                 static constexpr unsigned lo3 = lo2 + hi;
+<span class="lineNum">     265 </span>            : 
+<span class="lineNum">     266 </span>            :             public:
+<span class="lineNum">     267 </span>            :                 static constexpr unsigned max   = m;
+<span class="lineNum">     268 </span>            :                 static constexpr unsigned value = lo3 &gt; m ? lo3 - m : lo3;
+<span class="lineNum">     269 </span>            :         };
+<span class="lineNum">     270 </span>            : 
+<span class="lineNum">     271 </span>            :         template&lt;&gt;
+<span class="lineNum">     272 </span>            :         struct random_generator&lt;0&gt; {
+<span class="lineNum">     273 </span>            :             static constexpr unsigned value = seed;
+<span class="lineNum">     274 </span>            :         };
+<span class="lineNum">     275 </span>            : 
+<span class="lineNum">     276 </span>            :         template&lt;int N, int M&gt;
+<span class="lineNum">     277 </span>            :         struct random_int {
+<span class="lineNum">     278 </span>            :             static constexpr auto value = random_generator&lt;N + 1&gt;::value % M;
+<span class="lineNum">     279 </span>            :         };
+<span class="lineNum">     280 </span>            : 
+<span class="lineNum">     281 </span>            :         template&lt;int N&gt;
+<span class="lineNum">     282 </span>            :         struct random_char {
+<span class="lineNum">     283 </span>            :             static const char value = static_cast&lt;char&gt;(1 + random_int&lt;N, 0x7F - 1&gt;::value);
+<span class="lineNum">     284 </span>            :         };
+<span class="lineNum">     285 </span>            : 
+<span class="lineNum">     286 </span>            :         template&lt;size_t N, int K&gt;
+<span class="lineNum">     287 </span>            :         struct string {
+<span class="lineNum">     288 </span>            :             private:
+<span class="lineNum">     289 </span>            :                 const char key_;
+<a name="290"><span class="lineNum">     290 </span>            :                 std::array&lt;char, N + 1&gt; encrypted_;</a>
 <span class="lineNum">     291 </span>            : 
-<span class="lineNum">     292 </span>            :         template&lt;size_t N, int K&gt;
-<span class="lineNum">     293 </span>            :         struct string {
-<span class="lineNum">     294 </span>            :             private:
-<span class="lineNum">     295 </span>            :                 const char key_;
-<a name="296"><span class="lineNum">     296 </span>            :                 std::array&lt;char, N + 1&gt; encrypted_;</a>
-<span class="lineNum">     297 </span>            : 
-<span class="lineNum">     298 </span><span class="lineCov">       2088 :                 constexpr char enc(char c) const {</span>
-<span class="lineNum">     299 </span><span class="lineCov">       2088 :                     return c ^ key_;</span>
-<a name="300"><span class="lineNum">     300 </span>            :                 }</a>
-<span class="lineNum">     301 </span>            : 
-<span class="lineNum">     302 </span><span class="lineCov">       2088 :                 char dec(char c) const {</span>
-<span class="lineNum">     303 </span><span class="lineCov">       2088 :                     return c ^ key_;</span>
-<span class="lineNum">     304 </span>            :                 }
-<span class="lineNum">     305 </span>            : 
-<a name="306"><span class="lineNum">     306 </span>            :             public:</a>
-<span class="lineNum">     307 </span>            :                 template&lt;size_t... Is&gt;
-<span class="lineNum">     308 </span><span class="lineCov">          1 :                 constexpr XORSTR_INLINE string(const char *str, std::index_sequence&lt;Is...&gt;) :</span>
-<a name="309"><span class="lineNum">     309 </span><span class="lineCov">          1 :                     key_(random_char&lt;K&gt;::value), encrypted_{ { enc(str[Is])... } } {}</span></a>
-<span class="lineNum">     310 </span>            : 
-<span class="lineNum">     311 </span><span class="lineCov">          1 :                 XORSTR_INLINE decltype(auto) decrypt() {</span>
-<span class="lineNum">     312 </span><span class="lineCov">       2089 :                     for (size_t i = 0; i &lt; N; ++i) {</span>
-<span class="lineNum">     313 </span><span class="lineCov">       2088 :                         encrypted_[i] = dec(encrypted_[i]);</span>
-<span class="lineNum">     314 </span>            :                     }
-<span class="lineNum">     315 </span>            : 
-<span class="lineNum">     316 </span><span class="lineCov">          1 :                     encrypted_[N] = '\0';</span>
-<span class="lineNum">     317 </span><span class="lineCov">          1 :                     return encrypted_.data();</span>
-<span class="lineNum">     318 </span>            :                 }
-<span class="lineNum">     319 </span>            :         };
+<span class="lineNum">     292 </span><span class="lineCov">       2088 :                 constexpr char enc(char c) const {</span>
+<span class="lineNum">     293 </span><span class="lineCov">       2088 :                     return c ^ key_;</span>
+<a name="294"><span class="lineNum">     294 </span>            :                 }</a>
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span><span class="lineCov">       2088 :                 char dec(char c) const {</span>
+<span class="lineNum">     297 </span><span class="lineCov">       2088 :                     return c ^ key_;</span>
+<span class="lineNum">     298 </span>            :                 }
+<span class="lineNum">     299 </span>            : 
+<span class="lineNum">     300 </span>            :             public:
+<span class="lineNum">     301 </span>            :                 template&lt;size_t... Is&gt;
+<span class="lineNum">     302 </span><span class="lineCov">          1 :                 constexpr XORSTR_INLINE string(const char *str, std::index_sequence&lt;Is...&gt;) :</span>
+<span class="lineNum">     303 </span><span class="lineCov">          1 :                     key_(random_char&lt;K&gt;::value), encrypted_{ { enc(str[Is])... } } {}</span>
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span>            :                 XORSTR_INLINE decltype(auto) decrypt() {
+<span class="lineNum">     306 </span><span class="lineCov">       2089 :                     for (size_t i = 0; i &lt; N; ++i) {</span>
+<span class="lineNum">     307 </span><span class="lineCov">       2088 :                         encrypted_[i] = dec(encrypted_[i]);</span>
+<span class="lineNum">     308 </span>            :                     }
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span><span class="lineCov">          1 :                     encrypted_[N] = '\0';</span>
+<span class="lineNum">     311 </span><span class="lineCov">          1 :                     return encrypted_.data();</span>
+<span class="lineNum">     312 </span>            :                 }
+<span class="lineNum">     313 </span>            :         };
+<span class="lineNum">     314 </span>            : 
+<span class="lineNum">     315 </span>            :         /**
+<span class="lineNum">     316 </span>            :          *  Obfuscate strings at compile time
+<span class="lineNum">     317 </span>            :          */
+<span class="lineNum">     318 </span>            :         #define xorstr(s) (utils::xostring::string&lt;sizeof(s) - 1, \
+<span class="lineNum">     319 </span>            :                            __COUNTER__&gt;(s, std::make_index_sequence&lt;sizeof(s) - 1&gt;()).decrypt())
 <span class="lineNum">     320 </span>            : 
-<span class="lineNum">     321 </span>            :         /**
-<span class="lineNum">     322 </span>            :          *  Obfuscate strings at compile time
-<span class="lineNum">     323 </span>            :          */
-<span class="lineNum">     324 </span>            :         #define xorstr(s) (utils::xostring::string&lt;sizeof(s) - 1, \
-<span class="lineNum">     325 </span>            :                             __COUNTER__&gt;(s, std::make_index_sequence&lt;sizeof(s) - 1&gt;()).decrypt())
-<span class="lineNum">     326 </span>            : 
-<span class="lineNum">     327 </span>            :     }
-<span class="lineNum">     328 </span>            : 
-<span class="lineNum">     329 </span>            :     #undef XORSTR_INLINE
-<span class="lineNum">     330 </span>            : #else
-<span class="lineNum">     331 </span>            :     #define xorstr(s) s
-<span class="lineNum">     332 </span>            : #endif
-<span class="lineNum">     333 </span>            : 
-<span class="lineNum">     334 </span>            : #undef XORSTR_USE
-<span class="lineNum">     335 </span>            : #endif // UTILS_XORSTRING_HPP
+<span class="lineNum">     321 </span>            :     }
+<span class="lineNum">     322 </span>            : 
+<span class="lineNum">     323 </span>            :     #undef XORSTR_INLINE
+<span class="lineNum">     324 </span>            : #else
+<span class="lineNum">     325 </span>            :     #define xorstr(s) s
+<span class="lineNum">     326 </span>            : #endif
+<span class="lineNum">     327 </span>            : 
+<span class="lineNum">     328 </span>            : #undef XORSTR_USE
+<span class="lineNum">     329 </span>            : #endif // UTILS_XORSTRING_HPP
 </pre>
       </td>
     </tr>

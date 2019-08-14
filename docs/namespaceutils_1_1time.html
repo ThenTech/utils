@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -83,6 +83,8 @@ Namespaces</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:afeb64e7e9e0f69d9e8e760f8cf65eadb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#afeb64e7e9e0f69d9e8e760f8cf65eadb">nanoseconds</a> = std::chrono::duration&lt; double, std::nano &gt;</td></tr>
 <tr class="separator:afeb64e7e9e0f69d9e8e760f8cf65eadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb119c8b195aeadd8308668c938b8e02"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#afb119c8b195aeadd8308668c938b8e02">microseconds</a> = std::chrono::duration&lt; double, std::micro &gt;</td></tr>
+<tr class="separator:afb119c8b195aeadd8308668c938b8e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cb261fc5f4e324e906572440abfe096"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a8cb261fc5f4e324e906572440abfe096">milliseconds</a> = std::chrono::duration&lt; double, std::milli &gt;</td></tr>
 <tr class="separator:a8cb261fc5f4e324e906572440abfe096"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69c66212d694b3a2f6ed111fc505777d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a69c66212d694b3a2f6ed111fc505777d">seconds</a> = std::chrono::duration&lt; double &gt;</td></tr>
@@ -104,10 +106,14 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a392e9970a29ea2471023c1a1c539f651"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a392e9970a29ea2471023c1a1c539f651">Timestamp</a> (const char *frmt=utils::time::TIMESTAMP_FORMAT.data(), const std::time_t *epoch_time=nullptr)</td></tr>
+<tr class="memitem:a035f3182d18d07d24841244caa296089"><td class="memTemplParams" colspan="2">template&lt;typename _Rep , typename _Period &gt; </td></tr>
+<tr class="memitem:a035f3182d18d07d24841244caa296089"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a035f3182d18d07d24841244caa296089">sleep</a> (const std::chrono::duration&lt; _Rep, _Period &gt; &amp;period)</td></tr>
+<tr class="memdesc:a035f3182d18d07d24841244caa296089"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sleep the current thread with the given time period.  <a href="#a035f3182d18d07d24841244caa296089">More...</a><br /></td></tr>
+<tr class="separator:a035f3182d18d07d24841244caa296089"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a392e9970a29ea2471023c1a1c539f651"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a392e9970a29ea2471023c1a1c539f651">Timestamp</a> (const char *frmt=utils::time::TIMESTAMP_FORMAT.data(), const std::time_t *epoch_time=nullptr)</td></tr>
 <tr class="memdesc:a392e9970a29ea2471023c1a1c539f651"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a formatted timestamp with the given time since epoch, or the current time if nullptr.  <a href="#a392e9970a29ea2471023c1a1c539f651">More...</a><br /></td></tr>
 <tr class="separator:a392e9970a29ea2471023c1a1c539f651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04a2ee342abfc58971dc15bb2b8787ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a04a2ee342abfc58971dc15bb2b8787ee">Timestamp</a> (const std::time_t stamp, const char *frmt=utils::time::TIMESTAMP_FORMAT.data())</td></tr>
+<tr class="memitem:a04a2ee342abfc58971dc15bb2b8787ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html#a04a2ee342abfc58971dc15bb2b8787ee">Timestamp</a> (const std::time_t stamp, const char *frmt=utils::time::TIMESTAMP_FORMAT.data())</td></tr>
 <tr class="separator:a04a2ee342abfc58971dc15bb2b8787ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -129,7 +135,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00020">20</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00023">23</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -145,7 +151,23 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00019">19</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00022">22</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afb119c8b195aeadd8308668c938b8e02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb119c8b195aeadd8308668c938b8e02">&#9670;&nbsp;</a></span>microseconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespaceutils_1_1time.html#afb119c8b195aeadd8308668c938b8e02">utils::time::microseconds</a> = typedef std::chrono::duration&lt;double, std::micro&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00018">18</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -161,7 +183,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00016">16</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00019">19</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -177,7 +199,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00018">18</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00021">21</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -193,7 +215,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00022">22</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00025">25</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -210,7 +232,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Chrono time ranges aliases </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00015">15</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00017">17</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -226,7 +248,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00017">17</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00020">20</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -243,7 +265,7 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <p>Chrono::time_point alias. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00029">29</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00032">32</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -259,7 +281,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00021">21</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00024">24</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -275,11 +297,49 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00023">23</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00026">26</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a035f3182d18d07d24841244caa296089"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a035f3182d18d07d24841244caa296089">&#9670;&nbsp;</a></span>sleep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _Rep , typename _Period &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::time::sleep </td>
+          <td>(</td>
+          <td class="paramtype">const std::chrono::duration&lt; _Rep, _Period &gt; &amp;&#160;</td>
+          <td class="paramname"><em>period</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sleep the current thread with the given time period. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">period</td><td>The period to sleep from <a class="el" href="namespaceutils_1_1time.html">utils::time</a>:: ranges aliases. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00146">146</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a392e9970a29ea2471023c1a1c539f651"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a392e9970a29ea2471023c1a1c539f651">&#9670;&nbsp;</a></span>Timestamp() <span class="overload">[1/2]</span></h2>
 
@@ -290,7 +350,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::time::Timestamp </td>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::time::Timestamp </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>frmt</em> = <code>utils::time::TIMESTAMP_FORMAT.data()</code>, </td>
@@ -331,7 +391,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a string type with the formatted time. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00158">158</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00172">172</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -345,7 +405,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::time::Timestamp </td>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::time::Timestamp </td>
           <td>(</td>
           <td class="paramtype">const std::time_t&#160;</td>
           <td class="paramname"><em>stamp</em>, </td>
@@ -369,7 +429,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00180">180</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00194">194</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>
@@ -388,7 +448,7 @@ Variables</h2></td></tr>
 
 <p>Default format for timestamp. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00034">34</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__time_8hpp_source.html#l00037">37</a> of file <a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>.</p>
 
 </div>
 </div>

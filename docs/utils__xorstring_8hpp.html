@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -73,16 +73,19 @@ $(document).ready(function(){initNavTree('utils__xorstring_8hpp.html','');});
 <div class="title">utils_xorstring.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;array&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="utils__compiler_8hpp_source.html">utils_compiler.hpp</a>&quot;</code><br />
+<code>#include &lt;array&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for utils_xorstring.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__xorstring_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__xorstring_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__xorstring_8hpp" id="utils__lib_2utils__xorstring_8hpp">
-<area shape="rect"  title=" " alt="" coords="5,5,181,32"/>
-<area shape="rect"  title=" " alt="" coords="31,80,81,107"/>
-<area shape="rect"  title=" " alt="" coords="105,80,159,107"/>
+<area shape="rect"  title=" " alt="" coords="112,5,288,32"/>
+<area shape="rect"  href="utils__compiler_8hpp.html" title=" " alt="" coords="23,80,150,107"/>
+<area shape="rect"  title=" " alt="" coords="175,80,225,107"/>
+<area shape="rect"  title=" " alt="" coords="249,80,303,107"/>
+<area shape="rect"  title=" " alt="" coords="5,155,168,181"/>
 </map>
 </div>
 </div>
@@ -112,7 +115,7 @@ Namespaces</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:afbc1e5344e142ea891e8b1b8f16dd097"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__xorstring_8hpp.html#afbc1e5344e142ea891e8b1b8f16dd097">XORSTR_USE</a>&#160;&#160;&#160;2</td></tr>
 <tr class="separator:afbc1e5344e142ea891e8b1b8f16dd097"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51f9580e525a2a67bd7190abc66cfd9a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__xorstring_8hpp.html#a51f9580e525a2a67bd7190abc66cfd9a">XORSTR_INLINE</a>&#160;&#160;&#160;inline</td></tr>
+<tr class="memitem:a51f9580e525a2a67bd7190abc66cfd9a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__xorstring_8hpp.html#a51f9580e525a2a67bd7190abc66cfd9a">XORSTR_INLINE</a>&#160;&#160;&#160;HEDLEY_ALWAYS_INLINE</td></tr>
 <tr class="separator:a51f9580e525a2a67bd7190abc66cfd9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34b53b9cf614da9b57be49f31970fe83"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__xorstring_8hpp.html#a34b53b9cf614da9b57be49f31970fe83">xorstr</a>(s)</td></tr>
 <tr class="separator:a34b53b9cf614da9b57be49f31970fe83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,11 +143,11 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">(<a class="code" href="structutils_1_1xostring_1_1string.html">utils::xostring::string</a>&lt;<span class="keyword">sizeof</span>(s) - 1, \</div><div class="line">                            __COUNTER__&gt;(s, std::make_index_sequence&lt;<span class="keyword">sizeof</span>(s) - 1&gt;()).<a class="code" href="structutils_1_1xostring_1_1string.html#ad30461ac361b7b90de460a8586ea1405">decrypt</a>())</div><div class="ttc" id="structutils_1_1xostring_1_1string_html_ad30461ac361b7b90de460a8586ea1405"><div class="ttname"><a href="structutils_1_1xostring_1_1string.html#ad30461ac361b7b90de460a8586ea1405">utils::xostring::string::decrypt</a></div><div class="ttdeci">decltype(auto) XORSTR_INLINE decrypt()</div><div class="ttdef"><b>Definition:</b> <a href="utils__xorstring_8hpp_source.html#l00311">utils_xorstring.hpp:311</a></div></div>
-<div class="ttc" id="structutils_1_1xostring_1_1string_html"><div class="ttname"><a href="structutils_1_1xostring_1_1string.html">utils::xostring::string</a></div><div class="ttdef"><b>Definition:</b> <a href="utils__xorstring_8hpp_source.html#l00293">utils_xorstring.hpp:293</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line">(<a class="code" href="structutils_1_1xostring_1_1string.html">utils::xostring::string</a>&lt;<span class="keyword">sizeof</span>(s) - 1, \</div><div class="line">                           __COUNTER__&gt;(s, std::make_index_sequence&lt;<span class="keyword">sizeof</span>(s) - 1&gt;()).<a class="code" href="structutils_1_1xostring_1_1string.html#ad30461ac361b7b90de460a8586ea1405">decrypt</a>())</div><div class="ttc" id="structutils_1_1xostring_1_1string_html_ad30461ac361b7b90de460a8586ea1405"><div class="ttname"><a href="structutils_1_1xostring_1_1string.html#ad30461ac361b7b90de460a8586ea1405">utils::xostring::string::decrypt</a></div><div class="ttdeci">decltype(auto) XORSTR_INLINE decrypt()</div><div class="ttdef"><b>Definition:</b> <a href="utils__xorstring_8hpp_source.html#l00305">utils_xorstring.hpp:305</a></div></div>
+<div class="ttc" id="structutils_1_1xostring_1_1string_html"><div class="ttname"><a href="structutils_1_1xostring_1_1string.html">utils::xostring::string</a></div><div class="ttdef"><b>Definition:</b> <a href="utils__xorstring_8hpp_source.html#l00287">utils_xorstring.hpp:287</a></div></div>
 </div><!-- fragment --><p>Obfuscate strings at compile time </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__xorstring_8hpp_source.html#l00324">324</a> of file <a class="el" href="utils__xorstring_8hpp_source.html">utils_xorstring.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__xorstring_8hpp_source.html#l00318">318</a> of file <a class="el" href="utils__xorstring_8hpp_source.html">utils_xorstring.hpp</a>.</p>
 
 </div>
 </div>
@@ -155,14 +158,14 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define XORSTR_INLINE&#160;&#160;&#160;inline</td>
+          <td class="memname">#define XORSTR_INLINE&#160;&#160;&#160;HEDLEY_ALWAYS_INLINE</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Reference: <a href="https://github.com/qis/xorstr">https://github.com/qis/xorstr</a></p>
 <p>Usage: const std::string str = xorstr("xorstr_test_verify_error"); </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__xorstring_8hpp_source.html#l00244">244</a> of file <a class="el" href="utils__xorstring_8hpp_source.html">utils_xorstring.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__xorstring_8hpp_source.html#l00239">239</a> of file <a class="el" href="utils__xorstring_8hpp_source.html">utils_xorstring.hpp</a>.</p>
 
 </div>
 </div>
@@ -178,7 +181,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__xorstring_8hpp_source.html#l00004">4</a> of file <a class="el" href="utils__xorstring_8hpp_source.html">utils_xorstring.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__xorstring_8hpp_source.html#l00005">5</a> of file <a class="el" href="utils__xorstring_8hpp_source.html">utils_xorstring.hpp</a>.</p>
 
 </div>
 </div>

@@ -14,6 +14,7 @@ var namespaceutils_1_1traits =
     [ "is_container< std::unordered_set< T, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__set_3_01_t_00_01_t_hash_00_01_t_pred_00_01_t_allocator_01_4_01_4.html", null ],
     [ "is_container< std::vector< T, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html", null ],
     [ "is_container< T[N]>", "structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html", null ],
+    [ "is_container< utils::csv::detail::unordered_map< b, n, TKey, TValue, THash, KEqual > >", "structutils_1_1traits_1_1is__container_3_01utils_1_1csv_1_1detail_1_1unordered__map_3_01b_00_01n31c6f6ef03c7e2fd4f922c60b62be7d6.html", null ],
     [ "is_iterable", "structutils_1_1traits_1_1is__iterable.html", null ],
     [ "is_iterable< T, std::void_t< utils::traits::is_iterator< decltype(std::begin(std::declval< T & >()))>, utils::traits::is_iterator< decltype(std::end(std::declval< T & >()))> > >", "structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html", null ],
     [ "is_iterator", "structutils_1_1traits_1_1is__iterator.html", "structutils_1_1traits_1_1is__iterator" ],

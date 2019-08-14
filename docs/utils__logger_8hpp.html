@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -78,6 +78,7 @@ $(document).ready(function(){initNavTree('utils__logger_8hpp.html','');});
 <code>#include &quot;<a class="el" href="utils__time_8hpp_source.html">utils_time.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils__catch_8hpp_source.html">utils_catch.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils__threading_8hpp_source.html">utils_threading.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="utils__algorithm_8hpp_source.html">utils_algorithm.hpp</a>&quot;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;ostream&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
@@ -87,56 +88,56 @@ Include dependency graph for utils_logger.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__logger_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__logger_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__logger_8hpp" id="utils__lib_2utils__logger_8hpp">
-<area shape="rect"  title=" " alt="" coords="1539,5,1700,32"/>
-<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="604,155,715,181"/>
-<area shape="rect"  href="utils__print_8hpp.html" title=" " alt="" coords="988,80,1091,107"/>
-<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="1269,229,1380,256"/>
-<area shape="rect"  title=" " alt="" coords="1571,311,1643,338"/>
-<area shape="rect"  href="utils__os_8hpp.html" title=" " alt="" coords="1532,80,1624,107"/>
-<area shape="rect"  href="utils__time_8hpp.html" title=" " alt="" coords="1583,229,1685,256"/>
-<area shape="rect"  href="utils__threading_8hpp.html" title=" " alt="" coords="1974,155,2105,181"/>
-<area shape="rect"  title=" " alt="" coords="2467,229,2526,256"/>
-<area shape="rect"  title=" " alt="" coords="2179,80,2249,107"/>
-<area shape="rect"  title=" " alt="" coords="2273,80,2339,107"/>
-<area shape="rect"  href="utils__exceptions_8hpp.html" title=" " alt="" coords="969,229,1110,256"/>
-<area shape="rect"  title=" " alt="" coords="839,311,893,338"/>
-<area shape="rect"  href="utils__memory_8hpp.html" title=" " alt="" coords="107,229,233,256"/>
-<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="1123,311,1230,338"/>
-<area shape="rect"  title=" " alt="" coords="418,393,474,420"/>
-<area shape="rect"  title=" " alt="" coords="33,311,107,338"/>
-<area shape="rect"  title=" " alt="" coords="577,229,662,256"/>
-<area shape="rect"  title=" " alt="" coords="737,229,793,256"/>
-<area shape="rect"  title=" " alt="" coords="257,229,323,256"/>
-<area shape="rect"  title=" " alt="" coords="347,229,409,256"/>
-<area shape="rect"  title=" " alt="" coords="483,229,553,256"/>
-<area shape="rect"  title=" " alt="" coords="969,311,1048,338"/>
-<area shape="rect"  title=" " alt="" coords="135,311,205,338"/>
-<area shape="rect"  title=" " alt="" coords="767,393,850,420"/>
-<area shape="rect"  title=" " alt="" coords="891,393,953,420"/>
-<area shape="rect"  title=" " alt="" coords="1061,393,1100,420"/>
-<area shape="rect"  title=" " alt="" coords="1125,393,1165,420"/>
-<area shape="rect"  title=" " alt="" coords="1189,393,1293,420"/>
-<area shape="rect"  title=" " alt="" coords="1317,393,1364,420"/>
-<area shape="rect"  title=" " alt="" coords="1388,393,1499,420"/>
-<area shape="rect"  title=" " alt="" coords="1523,393,1574,420"/>
-<area shape="rect"  title=" " alt="" coords="978,393,1037,420"/>
-<area shape="rect"  title=" " alt="" coords="1598,393,1649,420"/>
-<area shape="rect"  title=" " alt="" coords="1673,393,1739,420"/>
-<area shape="rect"  title=" " alt="" coords="1004,155,1075,181"/>
-<area shape="rect"  title=" " alt="" coords="1341,304,1455,345"/>
-<area shape="rect"  title=" " alt="" coords="1758,311,1835,338"/>
-<area shape="rect"  title=" " alt="" coords="1479,311,1547,338"/>
-<area shape="rect"  title=" " alt="" coords="1255,311,1317,338"/>
-<area shape="rect"  href="utils__bits_8hpp.html" title=" " alt="" coords="1699,155,1798,181"/>
-<area shape="rect"  title=" " alt="" coords="1787,229,1849,256"/>
-<area shape="rect"  title=" " alt="" coords="1710,229,1763,256"/>
-<area shape="rect"  title=" " alt="" coords="1939,311,2001,338"/>
-<area shape="rect"  title=" " alt="" coords="1667,311,1734,338"/>
-<area shape="rect"  title=" " alt="" coords="1860,311,1915,338"/>
-<area shape="rect"  title=" " alt="" coords="2075,229,2134,256"/>
-<area shape="rect"  title=" " alt="" coords="2159,229,2213,256"/>
-<area shape="rect"  title=" " alt="" coords="2237,229,2361,256"/>
-<area shape="rect"  title=" " alt="" coords="2385,229,2443,256"/>
+<area shape="rect"  title=" " alt="" coords="2162,5,2323,32"/>
+<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="1585,304,1695,331"/>
+<area shape="rect"  href="utils__print_8hpp.html" title=" " alt="" coords="1739,80,1842,107"/>
+<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="2599,304,2710,331"/>
+<area shape="rect"  title=" " alt="" coords="2944,386,3016,413"/>
+<area shape="rect"  href="utils__time_8hpp.html" title=" " alt="" coords="846,304,949,331"/>
+<area shape="rect"  href="utils__os_8hpp.html" title=" " alt="" coords="2546,155,2638,181"/>
+<area shape="rect"  href="utils__algorithm_8hpp.html" title=" " alt="" coords="2177,304,2308,331"/>
+<area shape="rect"  href="utils__threading_8hpp.html" title=" " alt="" coords="361,304,492,331"/>
+<area shape="rect"  title=" " alt="" coords="5,386,64,413"/>
+<area shape="rect"  title=" " alt="" coords="3081,80,3151,107"/>
+<area shape="rect"  title=" " alt="" coords="3175,80,3241,107"/>
+<area shape="rect"  href="utils__exceptions_8hpp.html" title=" " alt="" coords="480,386,621,413"/>
+<area shape="rect"  title=" " alt="" coords="717,468,771,495"/>
+<area shape="rect"  href="utils__compiler_8hpp.html" title=" " alt="" coords="2361,468,2487,495"/>
+<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="1256,386,1363,413"/>
+<area shape="rect"  title=" " alt="" coords="897,468,953,495"/>
+<area shape="rect"  title=" " alt="" coords="1437,386,1523,413"/>
+<area shape="rect"  title=" " alt="" coords="1547,386,1603,413"/>
+<area shape="rect"  title=" " alt="" coords="1627,386,1693,413"/>
+<area shape="rect"  title=" " alt="" coords="1717,386,1779,413"/>
+<area shape="rect"  title=" " alt="" coords="2048,386,2123,413"/>
+<area shape="rect"  title=" " alt="" coords="1803,386,1872,413"/>
+<area shape="rect"  title=" " alt="" coords="511,468,590,495"/>
+<area shape="rect"  title=" " alt="" coords="2343,543,2505,569"/>
+<area shape="rect"  title=" " alt="" coords="1060,468,1143,495"/>
+<area shape="rect"  title=" " alt="" coords="1167,468,1230,495"/>
+<area shape="rect"  title=" " alt="" coords="1539,468,1578,495"/>
+<area shape="rect"  title=" " alt="" coords="1603,468,1643,495"/>
+<area shape="rect"  title=" " alt="" coords="1667,468,1771,495"/>
+<area shape="rect"  title=" " alt="" coords="1795,468,1842,495"/>
+<area shape="rect"  title=" " alt="" coords="1254,468,1365,495"/>
+<area shape="rect"  title=" " alt="" coords="1389,468,1440,495"/>
+<area shape="rect"  title=" " alt="" coords="977,468,1036,495"/>
+<area shape="rect"  title=" " alt="" coords="1464,468,1515,495"/>
+<area shape="rect"  title=" " alt="" coords="1997,468,2064,495"/>
+<area shape="rect"  href="utils__math_8hpp.html" title=" " alt="" coords="2381,229,2488,256"/>
+<area shape="rect"  title=" " alt="" coords="1947,386,2024,413"/>
+<area shape="rect"  title=" " alt="" coords="2657,386,2725,413"/>
+<area shape="rect"  title=" " alt="" coords="2749,386,2811,413"/>
+<area shape="rect"  title=" " alt="" coords="867,386,928,413"/>
+<area shape="rect"  title=" " alt="" coords="696,386,763,413"/>
+<area shape="rect"  title=" " alt="" coords="787,386,842,413"/>
+<area shape="rect"  title=" " alt="" coords="397,386,456,413"/>
+<area shape="rect"  href="utils__bits_8hpp.html" title=" " alt="" coords="2512,229,2611,256"/>
+<area shape="rect"  title=" " alt="" coords="2513,386,2581,413"/>
+<area shape="rect"  title=" " alt="" coords="2197,379,2336,420"/>
+<area shape="rect"  title=" " alt="" coords="170,386,225,413"/>
+<area shape="rect"  title=" " alt="" coords="249,386,373,413"/>
+<area shape="rect"  title=" " alt="" coords="89,386,146,413"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -185,7 +186,7 @@ Macros</h2></td></tr>
 </div><div class="memdoc">
 <p>Macro to print an error trace to Logger. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__logger_8hpp_source.html#l00024">24</a> of file <a class="el" href="utils__logger_8hpp_source.html">utils_logger.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__logger_8hpp_source.html#l00025">25</a> of file <a class="el" href="utils__logger_8hpp_source.html">utils_logger.hpp</a>.</p>
 
 </div>
 </div>

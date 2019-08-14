@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -88,13 +88,15 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af62a63c00a37e1ba385c8f6f6f8ae33d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#af62a63c00a37e1ba385c8f6f6f8ae33d">Command</a> (const <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">command_t</a> cmd, std::ostream &amp;out=std::cout)</td></tr>
-<tr class="memdesc:af62a63c00a37e1ba385c8f6f6f8ae33d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the given commands <code>cmd</code> and write the appropriate virtual terminal codes to the given stream.  <a href="#af62a63c00a37e1ba385c8f6f6f8ae33d">More...</a><br /></td></tr>
-<tr class="separator:af62a63c00a37e1ba385c8f6f6f8ae33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6634f1194346db636740ec73a06b78d5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#a6634f1194346db636740ec73a06b78d5">SetScreenTitle</a> (const std::string_view &amp;title, std::ostream &amp;out=std::cout)</td></tr>
-<tr class="memdesc:a6634f1194346db636740ec73a06b78d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the title of the current terminal window by calling the corresponding virtual code.  <a href="#a6634f1194346db636740ec73a06b78d5">More...</a><br /></td></tr>
-<tr class="separator:a6634f1194346db636740ec73a06b78d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7bd88cae21a98302047df066a0975a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#ac7bd88cae21a98302047df066a0975a8">EnableVirtualConsole</a> ()</td></tr>
+<tr class="memitem:ac5748b843a60ab6da0404d055a770bd7"><td class="memTemplParams" colspan="2">template&lt;typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:ac5748b843a60ab6da0404d055a770bd7"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#ac5748b843a60ab6da0404d055a770bd7">Command</a> (const <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">command_t</a> cmd, std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;out=std::cout)</td></tr>
+<tr class="memdesc:ac5748b843a60ab6da0404d055a770bd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the given commands <code>cmd</code> and write the appropriate virtual terminal codes to the given stream.  <a href="#ac5748b843a60ab6da0404d055a770bd7">More...</a><br /></td></tr>
+<tr class="separator:ac5748b843a60ab6da0404d055a770bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="memTemplParams" colspan="2">template&lt;typename TChar , typename TCharTraits &gt; </td></tr>
+<tr class="memitem:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#a89aaf6bebc5c241cf89f6e328a43bcc7">SetScreenTitle</a> (const std::string_view &amp;title, std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;out=std::cout)</td></tr>
+<tr class="memdesc:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the title of the current terminal window by calling the corresponding virtual code.  <a href="#a89aaf6bebc5c241cf89f6e328a43bcc7">More...</a><br /></td></tr>
+<tr class="separator:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7bd88cae21a98302047df066a0975a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#ac7bd88cae21a98302047df066a0975a8">EnableVirtualConsole</a> ()</td></tr>
 <tr class="memdesc:ac7bd88cae21a98302047df066a0975a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable virtual commands processing for the default output handle on Windows. Unix is supported by default.  <a href="#ac7bd88cae21a98302047df066a0975a8">More...</a><br /></td></tr>
 <tr class="separator:ac7bd88cae21a98302047df066a0975a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -113,22 +115,24 @@ Functions</h2></td></tr>
 
 <p>Public console command variable type. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00080">80</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00084">84</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="af62a63c00a37e1ba385c8f6f6f8ae33d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af62a63c00a37e1ba385c8f6f6f8ae33d">&#9670;&nbsp;</a></span>Command()</h2>
+<a id="ac5748b843a60ab6da0404d055a770bd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5748b843a60ab6da0404d055a770bd7">&#9670;&nbsp;</a></span>Command()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename TChar , typename TCharTraits &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::Command </td>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::Command </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespaceutils_1_1os_1_1internal.html#a037fb5a369631dec8cf21fda9ce94fb2">command_t</a>&#160;</td>
           <td class="paramname"><em>cmd</em>, </td>
@@ -136,7 +140,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramtype">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td>
           <td class="paramname"><em>out</em> = <code>std::cout</code>&#160;</td>
         </tr>
         <tr>
@@ -162,7 +166,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00121">121</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00126">126</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -176,7 +180,7 @@ Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::EnableVirtualConsole </td>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::EnableVirtualConsole </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -191,21 +195,23 @@ Functions</h2></td></tr>
 
 <p>Enable virtual commands processing for the default output handle on Windows. Unix is supported by default. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00187">187</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00203">203</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a6634f1194346db636740ec73a06b78d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6634f1194346db636740ec73a06b78d5">&#9670;&nbsp;</a></span>SetScreenTitle()</h2>
+<a id="a89aaf6bebc5c241cf89f6e328a43bcc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89aaf6bebc5c241cf89f6e328a43bcc7">&#9670;&nbsp;</a></span>SetScreenTitle()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename TChar , typename TCharTraits &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::SetScreenTitle </td>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::SetScreenTitle </td>
           <td>(</td>
           <td class="paramtype">const std::string_view &amp;&#160;</td>
           <td class="paramname"><em>title</em>, </td>
@@ -213,7 +219,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramtype">std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;&#160;</td>
           <td class="paramname"><em>out</em> = <code>std::cout</code>&#160;</td>
         </tr>
         <tr>
@@ -238,7 +244,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00178">178</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00188">188</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>

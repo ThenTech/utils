@@ -6,5 +6,5 @@ var classutils_1_1algo_1_1_b_s_tree_node_base =
     [ "BSTreeNodeBase", "classutils_1_1algo_1_1_b_s_tree_node_base.html#a78bd9651fde4e593ecc9a4a5db265fc4", null ],
     [ "operator=", "classutils_1_1algo_1_1_b_s_tree_node_base.html#aaefb80334ab20b9b436bc4be99301e60", null ],
     [ "operator=", "classutils_1_1algo_1_1_b_s_tree_node_base.html#aaa6a4ce067baf9317e7ce0f4e4718896", null ],
-    [ "BSTree", "classutils_1_1algo_1_1_b_s_tree_node_base.html#a3f9c1218a036865619d1820bd15005fd", null ]
+    [ "BSTree< T >", "classutils_1_1algo_1_1_b_s_tree_node_base.html#adeb41dafc92e23446b1e6da0d1af4064", null ]
 ];

@@ -1,8 +1,12 @@
 <map id="utils_lib/utils_bits.hpp" name="utils_lib/utils_bits.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="94,5,241,32"/>
-<area shape="rect" id="node2" href="$utils__os_8hpp.html" title=" " alt="" coords="16,80,156,107"/>
-<area shape="rect" id="node5" href="$utils__io_8hpp.html" title=" " alt="" coords="181,80,317,107"/>
-<area shape="rect" id="node3" href="$utils__logger_8hpp.html" title=" " alt="" coords="5,155,167,181"/>
-<area shape="rect" id="node4" href="$algo__huffman_8hpp.html" title=" " alt="" coords="83,229,206,271"/>
-<area shape="rect" id="node6" href="$utils__ini_8hpp.html" title=" " alt="" coords="242,155,381,181"/>
+<area shape="rect" id="node1" title=" " alt="" coords="489,5,635,32"/>
+<area shape="rect" id="node2" href="$algo__huffman_8hpp.html" title=" " alt="" coords="590,304,713,345"/>
+<area shape="rect" id="node3" href="$utils__os_8hpp.html" title=" " alt="" coords="492,80,632,107"/>
+<area shape="rect" id="node10" href="$utils__io_8hpp.html" title=" " alt="" coords="190,229,326,256"/>
+<area shape="rect" id="node4" href="$utils__print_8hpp.html" title=" " alt="" coords="399,155,549,181"/>
+<area shape="rect" id="node5" href="$utils__logger_8hpp.html" title=" " alt="" coords="571,229,732,256"/>
+<area shape="rect" id="node6" href="$utils__misc_8hpp.html" title=" " alt="" coords="11,229,166,256"/>
+<area shape="rect" id="node8" href="$utils__ini_8hpp.html" title=" " alt="" coords="191,311,330,338"/>
+<area shape="rect" id="node9" href="$utils__csv_8hpp.html" title=" " alt="" coords="401,229,547,256"/>
+<area shape="rect" id="node7" href="$utils__colour_8hpp.html" title=" " alt="" coords="5,311,167,338"/>
 </map>

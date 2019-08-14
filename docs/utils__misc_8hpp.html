@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -71,7 +71,8 @@ $(document).ready(function(){initNavTree('utils__misc_8hpp.html','');});
 <div class="title">utils_misc.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="utils__exceptions_8hpp_source.html">utils_exceptions.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="utils__compiler_8hpp_source.html">utils_compiler.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="utils__exceptions_8hpp_source.html">utils_exceptions.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils__print_8hpp_source.html">utils_print.hpp</a>&quot;</code><br />
 <code>#include &lt;iomanip&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -79,41 +80,52 @@ Include dependency graph for utils_misc.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__misc_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__misc_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__misc_8hpp" id="utils__lib_2utils__misc_8hpp">
-<area shape="rect"  title=" " alt="" coords="1659,5,1813,32"/>
-<area shape="rect"  href="utils__exceptions_8hpp.html" title=" " alt="" coords="1557,237,1699,263"/>
-<area shape="rect"  href="utils__print_8hpp.html" title=" " alt="" coords="703,80,806,107"/>
-<area shape="rect"  title=" " alt="" coords="1773,80,1840,107"/>
-<area shape="rect"  title=" " alt="" coords="1589,319,1667,345"/>
-<area shape="rect"  title=" " alt="" coords="1501,319,1555,345"/>
-<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="565,319,672,345"/>
-<area shape="rect"  title=" " alt="" coords="1404,393,1487,420"/>
-<area shape="rect"  title=" " alt="" coords="1633,393,1695,420"/>
-<area shape="rect"  title=" " alt="" coords="1080,393,1136,420"/>
-<area shape="rect"  title=" " alt="" coords="104,393,163,420"/>
-<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="311,155,422,181"/>
-<area shape="rect"  title=" " alt="" coords="499,237,571,263"/>
-<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="1042,155,1153,181"/>
-<area shape="rect"  title=" " alt="" coords="1307,319,1381,345"/>
-<area shape="rect"  title=" " alt="" coords="646,155,717,181"/>
-<area shape="rect"  title=" " alt="" coords="567,393,606,420"/>
-<area shape="rect"  title=" " alt="" coords="631,393,671,420"/>
-<area shape="rect"  title=" " alt="" coords="695,393,799,420"/>
-<area shape="rect"  title=" " alt="" coords="823,393,870,420"/>
-<area shape="rect"  title=" " alt="" coords="894,393,1005,420"/>
-<area shape="rect"  title=" " alt="" coords="327,393,377,420"/>
-<area shape="rect"  title=" " alt="" coords="401,393,452,420"/>
-<area shape="rect"  title=" " alt="" coords="476,393,543,420"/>
-<area shape="rect"  title=" " alt="" coords="310,229,423,271"/>
-<area shape="rect"  title=" " alt="" coords="29,237,107,263"/>
-<area shape="rect"  title=" " alt="" coords="131,237,199,263"/>
-<area shape="rect"  title=" " alt="" coords="223,237,286,263"/>
-<area shape="rect"  href="utils__memory_8hpp.html" title=" " alt="" coords="1096,237,1221,263"/>
-<area shape="rect"  title=" " alt="" coords="1245,237,1331,263"/>
-<area shape="rect"  title=" " alt="" coords="747,237,803,263"/>
-<area shape="rect"  title=" " alt="" coords="827,237,893,263"/>
-<area shape="rect"  title=" " alt="" coords="917,237,979,263"/>
-<area shape="rect"  title=" " alt="" coords="1003,237,1072,263"/>
-<area shape="rect"  title=" " alt="" coords="1052,319,1121,345"/>
+<area shape="rect"  title=" " alt="" coords="728,5,883,32"/>
+<area shape="rect"  href="utils__compiler_8hpp.html" title=" " alt="" coords="979,468,1106,495"/>
+<area shape="rect"  href="utils__exceptions_8hpp.html" title=" " alt="" coords="5,386,147,413"/>
+<area shape="rect"  href="utils__print_8hpp.html" title=" " alt="" coords="1377,80,1479,107"/>
+<area shape="rect"  title=" " alt="" coords="1919,386,1985,413"/>
+<area shape="rect"  title=" " alt="" coords="961,543,1124,569"/>
+<area shape="rect"  title=" " alt="" coords="37,468,115,495"/>
+<area shape="rect"  title=" " alt="" coords="173,468,227,495"/>
+<area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="2060,386,2167,413"/>
+<area shape="rect"  title=" " alt="" coords="2415,468,2497,495"/>
+<area shape="rect"  title=" " alt="" coords="2522,468,2585,495"/>
+<area shape="rect"  title=" " alt="" coords="1632,468,1688,495"/>
+<area shape="rect"  title=" " alt="" coords="2609,468,2668,495"/>
+<area shape="rect"  href="utils__catch_8hpp.html" title=" " alt="" coords="1242,304,1353,331"/>
+<area shape="rect"  title=" " alt="" coords="832,386,904,413"/>
+<area shape="rect"  href="utils__string_8hpp.html" title=" " alt="" coords="609,304,719,331"/>
+<area shape="rect"  title=" " alt="" coords="1311,386,1385,413"/>
+<area shape="rect"  href="utils__time_8hpp.html" title=" " alt="" coords="2151,304,2254,331"/>
+<area shape="rect"  href="utils__os_8hpp.html" title=" " alt="" coords="759,155,851,181"/>
+<area shape="rect"  href="utils__math_8hpp.html" title=" " alt="" coords="1439,229,1545,256"/>
+<area shape="rect"  title=" " alt="" coords="2069,468,2107,495"/>
+<area shape="rect"  title=" " alt="" coords="2132,468,2172,495"/>
+<area shape="rect"  title=" " alt="" coords="2196,468,2300,495"/>
+<area shape="rect"  title=" " alt="" coords="1713,468,1759,495"/>
+<area shape="rect"  title=" " alt="" coords="1783,468,1894,495"/>
+<area shape="rect"  title=" " alt="" coords="1919,468,1969,495"/>
+<area shape="rect"  title=" " alt="" coords="1993,468,2044,495"/>
+<area shape="rect"  title=" " alt="" coords="2324,468,2391,495"/>
+<area shape="rect"  title=" " alt="" coords="1553,386,1631,413"/>
+<area shape="rect"  title=" " alt="" coords="1218,386,1286,413"/>
+<area shape="rect"  title=" " alt="" coords="1131,386,1194,413"/>
+<area shape="rect"  title=" " alt="" coords="723,386,808,413"/>
+<area shape="rect"  title=" " alt="" coords="373,386,429,413"/>
+<area shape="rect"  title=" " alt="" coords="453,386,520,413"/>
+<area shape="rect"  title=" " alt="" coords="544,386,605,413"/>
+<area shape="rect"  title=" " alt="" coords="629,386,699,413"/>
+<area shape="rect"  title=" " alt="" coords="2241,386,2303,413"/>
+<area shape="rect"  title=" " alt="" coords="2327,386,2382,413"/>
+<area shape="rect"  title=" " alt="" coords="2407,386,2465,413"/>
+<area shape="rect"  href="utils__bits_8hpp.html" title=" " alt="" coords="1040,229,1139,256"/>
+<area shape="rect"  title=" " alt="" coords="977,304,1039,331"/>
+<area shape="rect"  title=" " alt="" coords="1063,304,1116,331"/>
+<area shape="rect"  title=" " alt="" coords="1461,386,1529,413"/>
+<area shape="rect"  href="utils__algorithm_8hpp.html" title=" " alt="" coords="1529,304,1660,331"/>
+<area shape="rect"  title=" " alt="" coords="1735,304,1793,331"/>
+<area shape="rect"  title=" " alt="" coords="1705,379,1844,420"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -139,11 +151,11 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a99e01afa3bf2c78ce2b99fd4776752b9"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a99e01afa3bf2c78ce2b99fd4776752b9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1misc.html#a99e01afa3bf2c78ce2b99fd4776752b9">utils::misc::lexical_cast</a> (const std::string_view &amp;buffer)</td></tr>
+<tr class="memitem:a99e01afa3bf2c78ce2b99fd4776752b9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1misc.html#a99e01afa3bf2c78ce2b99fd4776752b9">utils::misc::lexical_cast</a> (const std::string_view &amp;buffer)</td></tr>
 <tr class="memdesc:a99e01afa3bf2c78ce2b99fd4776752b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given char* to a variable of type T. Use this method instead of the raw C functions: atoi, atof, atol, atoll.  <a href="namespaceutils_1_1misc.html#a99e01afa3bf2c78ce2b99fd4776752b9">More...</a><br /></td></tr>
 <tr class="separator:a99e01afa3bf2c78ce2b99fd4776752b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af759168eca26c856f13d4c450a9a92ea"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:af759168eca26c856f13d4c450a9a92ea"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::optional&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1misc.html#af759168eca26c856f13d4c450a9a92ea">utils::misc::try_lexical_cast</a> (const std::string_view &amp;buffer, <a class="el" href="classutils_1_1exceptions_1_1_exception.html">utils::exceptions::Exception</a> *error=nullptr)</td></tr>
+<tr class="memitem:af759168eca26c856f13d4c450a9a92ea"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::optional&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1misc.html#af759168eca26c856f13d4c450a9a92ea">utils::misc::try_lexical_cast</a> (const std::string_view &amp;buffer, <a class="el" href="classutils_1_1exceptions_1_1_exception.html">utils::exceptions::Exception</a> *error=nullptr)</td></tr>
 <tr class="separator:af759168eca26c856f13d4c450a9a92ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-06-19</td>
+            <td class="headerValue">2019-08-14</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -68,7 +68,7 @@
 <span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_xorstring.hpp&quot;
 <span class="lineNum">       7 </span>            : #include &quot;../utils_lib/utils_traits.hpp&quot;
 <span class="lineNum">       8 </span>            : 
-<span class="lineNum">       9 </span>            : #ifdef UTILS_TRAITS_MSVC
+<span class="lineNum">       9 </span>            : #ifdef UTILS_COMPILER_MSVC
 <span class="lineNum">      10 </span>            :     #define ori_str \
 <span class="lineNum">      11 </span>            :         &quot;e|f@,b#b4?[a:()~6a8b?&lt;~)e'bb5,ce'&lt;.8.^]#970:]?=1]=66!)d&lt;:*6:2?2';d}{&amp;&amp;!@&quot; \
 <span class="lineNum">      12 </span>            :         &quot;}.$2|c&amp;)%d:c:(4[/:c,6#)1)_]:%;da_&gt;{&amp;#~^&gt;&gt;6?5+]++3#&gt;3?:/*{]]a4/[=(|[52)&gt;4&quot;
@@ -107,7 +107,7 @@
 <a name="45"><span class="lineNum">      45 </span>            : </a>
 <span class="lineNum">      46 </span>            : 
 <span class="lineNum">      47 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::xorstr&quot;, &quot;[utils][utils::xorstr]&quot; ) {</span>
-<span class="lineNum">      48 </span><span class="lineCov">          2 :     const std::string test_str = xorstr(ori_str);</span>
+<span class="lineNum">      48 </span><span class="lineCov">          4 :     const std::string test_str = xorstr(ori_str);</span>
 <span class="lineNum">      49 </span>            : 
 <span class="lineNum">      50 </span><span class="lineCov">          2 :     REQUIRE(ori_str == test_str);</span>
 <span class="lineNum">      51 </span><span class="lineCov">          1 : }</span>

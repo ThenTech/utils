@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.42.0-beta</span>
+   &#160;<span id="projectnumber">0.43.0-beta</span>
    </div>
   </td>
  </tr>
@@ -87,23 +87,23 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a40670afb865eeb55417ecf00090e3692"><td class="memTemplParams" colspan="2">template&lt;typename Container , typename  = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a40670afb865eeb55417ecf00090e3692"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a40670afb865eeb55417ecf00090e3692">pick_x_from</a> (size_t amount, const Container &amp;container)</td></tr>
+<tr class="memitem:a40670afb865eeb55417ecf00090e3692"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a40670afb865eeb55417ecf00090e3692">pick_x_from</a> (size_t amount, const Container &amp;container)</td></tr>
 <tr class="memdesc:a40670afb865eeb55417ecf00090e3692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick a certain amount of items from the given container, and copy them to a new Container of the same type. Items are chosen at random.  <a href="#a40670afb865eeb55417ecf00090e3692">More...</a><br /></td></tr>
 <tr class="separator:a40670afb865eeb55417ecf00090e3692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50e58f2308866725f81e106d4a2756f0"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Container  = std::vector&lt;T&gt;, typename  = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;                                         &amp;&amp; (   effolkronium::details::is_supported_number&lt;T&gt;::value                                             || effolkronium::details::is_supported_character&lt;T&gt;::value                                             || std::is_same&lt;T, bool&gt;::value                                            )&gt;&gt; </td></tr>
-<tr class="memitem:a50e58f2308866725f81e106d4a2756f0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a50e58f2308866725f81e106d4a2756f0">generate_x</a> (const size_t amount, T from=std::numeric_limits&lt; T &gt;::min(), T to=std::numeric_limits&lt; T &gt;::max())</td></tr>
+<tr class="memitem:a50e58f2308866725f81e106d4a2756f0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a50e58f2308866725f81e106d4a2756f0">generate_x</a> (const size_t amount, T from=std::numeric_limits&lt; T &gt;::min(), T to=std::numeric_limits&lt; T &gt;::max())</td></tr>
 <tr class="memdesc:a50e58f2308866725f81e106d4a2756f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a container (default: vector&lt;T&gt;) with <code>amount</code> items, randomly distributed between <code>from</code> and <code>to</code>.  <a href="#a50e58f2308866725f81e106d4a2756f0">More...</a><br /></td></tr>
 <tr class="separator:a50e58f2308866725f81e106d4a2756f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e26b40961f00cc0f7d7e6565029e911"><td class="memTemplParams" colspan="2">template&lt;typename T  = char, typename Container  = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;, typename  = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a7e26b40961f00cc0f7d7e6565029e911"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> Container&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a7e26b40961f00cc0f7d7e6565029e911">generate_string</a> (const size_t amount, const T from=std::numeric_limits&lt; T &gt;::min(), const T to=std::numeric_limits&lt; T &gt;::max())</td></tr>
+<tr class="memitem:a7e26b40961f00cc0f7d7e6565029e911"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> Container&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a7e26b40961f00cc0f7d7e6565029e911">generate_string</a> (const size_t amount, const T from=std::numeric_limits&lt; T &gt;::min(), const T to=std::numeric_limits&lt; T &gt;::max())</td></tr>
 <tr class="memdesc:a7e26b40961f00cc0f7d7e6565029e911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random string with length <code>amount</code> and chars chosen between <code>from</code> and <code>to</code>. Every char-type is supported and will create a <code>std::basic_string&lt;T&gt;</code> containter.  <a href="#a7e26b40961f00cc0f7d7e6565029e911">More...</a><br /></td></tr>
 <tr class="separator:a7e26b40961f00cc0f7d7e6565029e911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d074695e5ab84506a2785f0be8ba9ad"><td class="memTemplParams" colspan="2">template&lt;typename T  = bool, typename Container  = typename std::enable_if&lt;std::is_same&lt;T, bool&gt;::value, std::vector&lt;T&gt;&gt;::type, typename  = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a2d074695e5ab84506a2785f0be8ba9ad"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> Container&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a2d074695e5ab84506a2785f0be8ba9ad">generate_bool</a> (const size_t amount, const double probability=0.5)</td></tr>
+<tr class="memitem:a2d074695e5ab84506a2785f0be8ba9ad"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> Container&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a2d074695e5ab84506a2785f0be8ba9ad">generate_bool</a> (const size_t amount, const double probability=0.5)</td></tr>
 <tr class="memdesc:a2d074695e5ab84506a2785f0be8ba9ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random vector with length <code>amount</code> and containing booleans with the probability of them being true given by <code>probability</code>. Every char-type is supported and will create a <code>std::basic_string&lt;T&gt;</code> containter.  <a href="#a2d074695e5ab84506a2785f0be8ba9ad">More...</a><br /></td></tr>
 <tr class="separator:a2d074695e5ab84506a2785f0be8ba9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a603938b2a067f9b267c026b95d764f8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a603938b2a067f9b267c026b95d764f8b">generate_uuid</a> (void)</td></tr>
-<tr class="memdesc:a603938b2a067f9b267c026b95d764f8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate Universal Unique IDentifier v4.  <a href="#a603938b2a067f9b267c026b95d764f8b">More...</a><br /></td></tr>
+<tr class="memitem:a603938b2a067f9b267c026b95d764f8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1random.html#a603938b2a067f9b267c026b95d764f8b">generate_uuid</a> (void)</td></tr>
+<tr class="memdesc:a603938b2a067f9b267c026b95d764f8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate Universal Unique IDentifier v4 (UUID)  <a href="#a603938b2a067f9b267c026b95d764f8b">More...</a><br /></td></tr>
 <tr class="separator:a603938b2a067f9b267c026b95d764f8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
@@ -121,7 +121,7 @@ Functions</h2></td></tr>
 
 <p>Get base random alias which is auto seeded and has static API and internal state. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00018">18</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00019">19</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -139,7 +139,7 @@ Functions</h2></td></tr>
 
 <p>Get base random alias which is auto seeded and has local (stack) API and internal state. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00024">24</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00025">25</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -157,7 +157,7 @@ Functions</h2></td></tr>
 
 <p>Get base random alias which is auto seeded and has thread local API and internal state. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00030">30</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00031">31</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -174,7 +174,7 @@ template&lt;typename T  = bool, typename Container  = typename std::enable_if&lt
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> Container utils::random::generate_bool </td>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> Container utils::random::generate_bool </td>
           <td>(</td>
           <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>amount</em>, </td>
@@ -209,7 +209,7 @@ template&lt;typename T  = bool, typename Container  = typename std::enable_if&lt
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a new Container containing <code>amount</code> items of type T. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00186">186</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00187">187</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -225,7 +225,7 @@ template&lt;typename T  = char, typename Container  = typename std::enable_if_t&
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> Container utils::random::generate_string </td>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> Container utils::random::generate_string </td>
           <td>(</td>
           <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>amount</em>, </td>
@@ -267,7 +267,7 @@ template&lt;typename T  = char, typename Container  = typename std::enable_if_t&
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a new Container containing <code>amount</code> items of type T. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00158">158</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00159">159</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -281,7 +281,7 @@ template&lt;typename T  = char, typename Container  = typename std::enable_if_t&
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::random::generate_uuid </td>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::string utils::random::generate_uuid </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -295,10 +295,10 @@ template&lt;typename T  = char, typename Container  = typename std::enable_if_t&
 </table>
 </div><div class="memdoc">
 
-<p>Generate Universal Unique IDentifier v4. </p>
+<p>Generate Universal Unique IDentifier v4 (UUID) </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns a formatted string (groups with <code>-</code>) with a randon UUID. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00209">209</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00210">210</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -314,7 +314,7 @@ template&lt;typename T , typename Container  = std::vector&lt;T&gt;, typename  =
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto utils::random::generate_x </td>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto utils::random::generate_x </td>
           <td>(</td>
           <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>amount</em>, </td>
@@ -358,7 +358,7 @@ template&lt;typename T , typename Container  = std::vector&lt;T&gt;, typename  =
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a new Container containing <code>amount</code> items of type T. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00097">97</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00098">98</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>
@@ -374,7 +374,7 @@ template&lt;typename Container , typename  = typename std::enable_if_t&lt;utils:
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utils__traits_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__traits_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto utils::random::pick_x_from </td>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto utils::random::pick_x_from </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>amount</em>, </td>
@@ -408,7 +408,7 @@ template&lt;typename Container , typename  = typename std::enable_if_t&lt;utils:
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns a Container instance with the picked items. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00049">49</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__random_8hpp_source.html#l00050">50</a> of file <a class="el" href="utils__random_8hpp_source.html">utils_random.hpp</a>.</p>
 
 </div>
 </div>

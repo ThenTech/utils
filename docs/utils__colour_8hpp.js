@@ -10,8 +10,10 @@ var utils__colour_8hpp =
       [ "Inferno", "utils__colour_8hpp.html#a6a98f87e48e3d12a3c6baecd714f750ca8bb279f735c1d9c831e935cca2613b58", null ],
       [ "Plasma", "utils__colour_8hpp.html#a6a98f87e48e3d12a3c6baecd714f750cab20a4217acaf4316739c6a5f6679ef60", null ],
       [ "Viridis", "utils__colour_8hpp.html#a6a98f87e48e3d12a3c6baecd714f750ca951ee92ee5e947e1e7e1cb6376523c1a", null ],
+      [ "Cividis", "utils__colour_8hpp.html#a6a98f87e48e3d12a3c6baecd714f750ca64c2ad47aeb457c258518a5318ed071d", null ],
       [ "Github", "utils__colour_8hpp.html#a6a98f87e48e3d12a3c6baecd714f750cae1adbcbb92c622d0b3e619f9d0730abf", null ]
     ] ],
+    [ "GetCividisColor", "utils__colour_8hpp.html#a432258859e96204033734f219a686ef9", null ],
     [ "GetColor", "utils__colour_8hpp.html#ae131a83874f16303a70e52f4f09423d6", null ],
     [ "GetGithubColor", "utils__colour_8hpp.html#a41a90d9912edb8d315271a37495ac8ff", null ],
     [ "GetGrayColor", "utils__colour_8hpp.html#a527b1f37f304f367dcde7f2825b15d05", null ],
