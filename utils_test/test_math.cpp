@@ -184,6 +184,19 @@ TEST_CASE("Test utils::math::epsilon_equals", "[utils][utils::math]" ) {
     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));
 }
 
+TEST_CASE("Test utils::math::within", "[utils][utils::math]" ) {
+    REQUIRE(utils::math::within          (0.0f  , -1.0f, 1.0f));
+    REQUIRE(utils::math::within_inclusive(0.0f  ,  0.0f, 0.0f));
+    REQUIRE_FALSE(utils::math::within    (0.0f  ,  0.0f, 0.0f));
+
+    REQUIRE(utils::math::within(5, 0, 10));
+    REQUIRE(utils::math::within(9, 0, 10));
+    REQUIRE_FALSE(utils::math::within(10, 0, 10));
+    REQUIRE_FALSE(utils::math::within(0, 0, 10));
+    REQUIRE(utils::math::within_inclusive(0, 0, 10));
+    REQUIRE(utils::math::within_inclusive(10, 0, 10));
+}
+
 TEST_CASE("Test utils::math::mix", "[utils][utils::math]" ) {
     CHECK(utils::math::mix(5, 5, 0.00) == Approx(5));
     CHECK(utils::math::mix(5, 5, 0.33) == Approx(5));
@@ -217,6 +230,20 @@ TEST_CASE("Test utils::math::interpolate_hermite", "[utils][utils::math]" ) {
             == Approx(1057.018242));
 }
 
+TEST_CASE("Test utils::math::rounded", "[utils][utils::math]" ) {
+    const auto gen = utils::random::generate_x(10, 0.0, 100.0);
+    auto test = gen;
+
+    utils::math::rounded<2>(test);
+    REQUIRE_THAT(test, Catch::Approx(gen).epsilon(0.01));
+
+    utils::math::rounded<1>(test.begin(), test.end());
+    REQUIRE_THAT(test, Catch::Approx(gen).epsilon(0.1));
+
+    utils::math::rounded<0>(test.begin(), test.end());
+    REQUIRE_THAT(test, Catch::Approx(gen).epsilon(1));
+}
+
 TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" ) {
     constexpr size_t len = 9;
 
@@ -243,7 +270,7 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
     }
 
     SECTION("Test utils::math::stats::variance") {
-        const double result = 7.5;
+        const double result = 6.66666666666667;
         const double result1 = utils::math::stats::variance(test.begin(), test.end());
         const double result2 = utils::math::stats::variance(test);
         const double result3 = utils::math::stats::variance(test2);
@@ -251,19 +278,19 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
         const double sd3 = (  (test2[0] - mean3) * (test2[0] - mean3)
                             + (test2[1] - mean3) * (test2[1] - mean3)
                             + (test2[2] - mean3) * (test2[2] - mean3)
-                           ) / 2.0;
+                           ) / 3.0;
 
         CHECK(result == Approx(result1));
         CHECK(result == Approx(result2));
         CHECK(sd3    == Approx(result3));
 
         CHECK_FUNCTION_ABORTS(utils::math::stats::variance<std::vector<int>>, empty);
-        CHECK_FUNCTION_ABORTS(utils::math::stats::variance<std::vector<int>>, one);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance<std::vector<int>>, one);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance<std::vector<int>>, two);
     }
 
     SECTION("Test utils::math::stats::stddev") {
-        const double result = 2.7386127875258;
+        const double result = 2.5819888975;
         const double result1 = utils::math::stats::stddev(test.begin(), test.end());
         const double result2 = utils::math::stats::stddev(test);
         const double result3 = utils::math::stats::stddev(test2);
@@ -271,15 +298,50 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
         const double sd3 = std::sqrt((  (test2[0] - mean3) * (test2[0] - mean3)
                                       + (test2[1] - mean3) * (test2[1] - mean3)
                                       + (test2[2] - mean3) * (test2[2] - mean3)
-                                     ) / 2.0);
+                                     ) / 3.0);
 
         CHECK(result == Approx(result1));
         CHECK(result == Approx(result2));
         CHECK(sd3    == Approx(result3));
 
         CHECK_FUNCTION_ABORTS(utils::math::stats::stddev<std::vector<int>>, empty);
-        CHECK_FUNCTION_ABORTS(utils::math::stats::stddev<std::vector<int>>, one);
+        CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev<std::vector<int>>, one);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev<std::vector<int>>, two);
+    }
+
+    SECTION("Test utils::math::stats::normalise") {
+        std::vector<double> testd(len);
+        std::iota(testd.begin(), testd.end(), 0.0);
+        std::vector<double> result(len);
+        std::iota(result.begin(), result.end(), -4);
+        std::for_each(result.begin(), result.end(),
+            [stddev = utils::math::stats::stddev(result)](double& x){
+                x /= stddev;
+        });
+        auto testd2 = testd;
+
+        utils::math::stats::normalise(testd.begin(), testd.end());
+        utils::math::stats::normalise(testd2);
+
+        CHECK_THAT(testd , Catch::Approx(result));
+        CHECK_THAT(testd2, Catch::Approx(result));
+
+        std::vector<double> testd3 = utils::random::generate_x<double>(3, -1000.0, 1000.0);
+        const double mean3 = utils::math::stats::mean(testd3);
+        std::vector<double> result3 {
+            testd3[0] - mean3,
+            testd3[1] - mean3,
+            testd3[2] - mean3
+        };
+        const double sd3   = std::sqrt((  result3[0] * result3[0]
+                                        + result3[1] * result3[1]
+                                        + result3[2] * result3[2]
+                                       ) / 3.0);
+
+        utils::math::stats::normalise(testd3);
+        CHECK(testd3[0] == Approx(result3[0] / sd3));
+        CHECK(testd3[1] == Approx(result3[1] / sd3));
+        CHECK(testd3[2] == Approx(result3[2] / sd3));
     }
 }
 

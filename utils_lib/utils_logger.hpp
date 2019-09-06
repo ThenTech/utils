@@ -507,22 +507,26 @@ namespace utils {
             }
 
             template<typename T>
-            static void Stream(const T& arg) {
+            static const utils::Logger& Stream(const T& arg) {
                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
                     std::stringstream ss;
                     ss << arg;
                     utils::Logger::Write(ss.str());
                 }
+
+                return utils::Logger::Stream();
             }
 
             template<typename T, typename ...Type>
-            static void Stream(const T& arg, const Type& ...args) {
+            static const utils::Logger& Stream(const T& arg, const Type& ...args) {
                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
                     std::stringstream ss;
                     ss << arg;
                     ((ss << args), ...);
                     utils::Logger::Write(ss.str());
                 }
+
+                return utils::Logger::Stream();
             }
 
             template<typename ...Type>

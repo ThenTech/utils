@@ -207,6 +207,38 @@ namespace utils::math {
     }
 
     /**
+     *  \brief  Check if \p value is withing the interval [min, max], exclusive.
+     *
+     *  \param  value
+     *      The value to check.
+     *  \param  min
+     *      The lower bound.
+     *  \param  max
+     *      The upper bound.
+     *  \return Returns true if (min < value) && (value < max).
+     */
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool within(const T& value, const T min, const T max) {
+        return (min < value) && (value < max);
+    }
+
+    /**
+     *  \brief  Check if \p value is withing the interval [min, max], inclusive.
+     *
+     *  \param  value
+     *      The value to check.
+     *  \param  min
+     *      The lower bound.
+     *  \param  max
+     *      The upper bound.
+     *  \return Returns true if (min <= value) && (value <= max).
+     */
+    template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool within_inclusive(const T& value, const T min, const T max) {
+        return (min <= value) && (value <= max);
+    }
+
+    /**
      *  \brief  Linearly mix \p x and \p y with a \p factor.
      *
      *  \param  x
@@ -276,6 +308,41 @@ namespace utils::math {
         return min_new + (old_x_ratio * old_x_ratio * (3.0 - 2.0 * old_x_ratio)) * double(max_new - min_new);
     }
 
+    /**
+     *  \brief  Round every floating point value from \p first and \p last,
+     *          to \p precision digits (default=2ull).
+     *
+     *  \param  first
+     *      The iterator to start from.
+     *  \param  last
+     *      The end iterator.
+     */
+    template <
+        size_t precision = 2,
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>
+                                          && std::is_floating_point_v<T>>
+    > ATTR_MAYBE_UNUSED
+    static constexpr void rounded(Iterator start, Iterator end) {
+        constexpr double factor = utils::math::pow<precision>(10.0);
+        std::for_each(start, end, [](T& x) { x = std::round(x * factor) / factor; });
+    }
+
+    /**
+     *  \brief  Round every floating point value from \p first and \p last,
+     *          to \p precision digits.
+     *
+         *  \param  cont
+         *      The container to round in.
+     */
+    template <int precision = 2, typename Container> ATTR_MAYBE_UNUSED
+    static constexpr void rounded(Container& cont) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::math::rounded: Container must have iterator support.");
+        utils::math::rounded<precision>(std::begin(cont), std::end(cont));
+    }
+
     namespace stats {
         /**
          *  \brief  Calculate sample mean between \p first and \p last.
@@ -309,13 +376,14 @@ namespace utils::math {
         template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double mean(const Container& cont) {
             static_assert(utils::traits::is_iterable_v<Container>,
-                          "utils::algorithm::mean: Container must have iterator support.");
+                          "utils::math::stats::mean: Container must have iterator support.");
             return utils::math::stats::mean(std::begin(cont), std::end(cont));
         }
 
         /**
          *  \brief  Calculate sample variance between \p first and \p last.
          *          (`std::distance(first, last)` elements)
+         *          (Without Bessel's correction)
          *
          *  \param  first
          *      The iterator to start from.
@@ -330,14 +398,14 @@ namespace utils::math {
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static double variance(Iterator first, Iterator last) {
             const DiffType size = std::distance(first, last);
-            ASSERT(size > 1);
+            ASSERT(size > 0);
 
             const double mean   = utils::math::stats::mean(first, last);
             const double sq_sum = std::inner_product(first, last, first, 0.0,
                 [    ](const double& x, const double& y) { return x + y; },
                 [mean](const double& x, const double& y) { return (x - mean) * (y - mean); });
 
-            return sq_sum / (size - 1);
+            return sq_sum / size;
         }
 
         /**
@@ -350,7 +418,7 @@ namespace utils::math {
         template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double variance(const Container& cont) {
             static_assert(utils::traits::is_iterable_v<Container>,
-                          "utils::algorithm::variance: Container must have iterator support.");
+                          "utils::math::stats::variance: Container must have iterator support.");
             return utils::math::stats::variance(std::begin(cont), std::end(cont));
         }
 
@@ -368,7 +436,7 @@ namespace utils::math {
             typename Iterator,
             typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static double stddev(Iterator first, Iterator last) {
+        static inline double stddev(Iterator first, Iterator last) {
             return std::sqrt(utils::math::stats::variance(first, last));
         }
 
@@ -382,8 +450,51 @@ namespace utils::math {
         template<typename Container> ATTR_MAYBE_UNUSED ATTR_NODISCARD
         static inline double stddev(const Container& cont) {
             static_assert(utils::traits::is_iterable_v<Container>,
-                          "utils::algorithm::stddev: Container must have iterator support.");
+                          "utils::math::stats::stddev: Container must have iterator support.");
             return utils::math::stats::stddev(std::begin(cont), std::end(cont));
+        }
+
+        /**
+         *  \brief  Normalise the data between \p first and \p last in-place.
+         *          Iterator::value_type must be a floating point value.
+         *
+         *  \param  first
+         *      The iterator to start from.
+         *  \param  last
+         *      The end iterator.
+         */
+        template<
+            typename Iterator,
+            typename DiffType  = typename std::iterator_traits<Iterator>::difference_type,
+            typename ValueType = typename std::iterator_traits<Iterator>::value_type,
+            typename = typename std::enable_if_t<
+                    utils::traits::is_iterator_v<Iterator> && std::is_floating_point_v<ValueType>>
+        > ATTR_MAYBE_UNUSED
+        static void normalise(Iterator first, Iterator last) {
+            const ValueType mean   = utils::math::stats::mean(first, last);
+            std::for_each(first, last, [mean](ValueType& x){ x -= mean; });
+
+            const ValueType sq_sum = std::inner_product(first, last, first, 0.0,
+                [](const ValueType& x, const ValueType& y) { return x + y; },
+                [](const ValueType& x, const ValueType& y) { return x * y; });
+
+            const ValueType stddev = std::sqrt(sq_sum / std::distance(first, last));
+            if (stddev != 0.0) {
+                std::for_each(first, last, [stddev](ValueType& x){ x /= stddev; });
+            }
+        }
+
+        /**
+         *  \brief  Normalise the contents of \p cont in-place.
+         *
+         *  \param  cont
+         *      The container to normalise.
+         */
+        template<typename Container> ATTR_MAYBE_UNUSED
+        static inline void normalise(Container& cont) {
+            static_assert(utils::traits::is_iterable_v<Container>,
+                          "utils::math::stats::normalise: Container must have iterator support.");
+            utils::math::stats::normalise(std::begin(cont), std::end(cont));
         }
     }
 }

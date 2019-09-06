@@ -2,6 +2,7 @@
 #define UTILS_THREADING_HPP
 
 #include "utils_exceptions.hpp"
+#include "utils_traits.hpp"
 
 #include <mutex>
 #include <thread>
@@ -102,7 +103,7 @@ namespace utils::threading {
                 class result_type_t = typename std::invoke_result_t<F, Args...>
             >
             std::future<result_type_t> enqueue(F&& f, Args&& ... args) {
-                static_assert(std::is_invocable_v<F, Args...>,
+                static_assert(utils::traits::is_invocable_v<F, Args...>,
                               "ThreadPool::enqueue: Callable function required.");
 
                 std::packaged_task<result_type_t()> task(

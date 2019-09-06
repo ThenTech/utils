@@ -10,3 +10,6 @@
 [submodule "utils_lib/external/crc"]
 	path = utils_lib/external/crc
 	url = https://github.com/d-bahr/CRCpp
+[submodule "utils_lib/external/HTTPRequest"]
+	path = utils_lib/external/HTTPRequest
+	url = https://github.com/elnormous/HTTPRequest

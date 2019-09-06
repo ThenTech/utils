@@ -19,6 +19,7 @@
 HEDLEY_DIAGNOSTIC_PUSH
 HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_PRAGMAS
 #if HEDLEY_MSVC_VERSION_CHECK(15,0,0)
+    // TODO Ignore MSVC warnings
     #pragma warning(disable:xxxx)
 #else
     #pragma GCC diagnostic ignored "-Wpragmas"

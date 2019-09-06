@@ -5,13 +5,19 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)](https://github.com/Wosser1sProductions/utils/commits/master)
 ![License](https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue)
 
-[![version](https://img.shields.io/badge/version-0.43.0--beta-brightgreen.svg)](http://semver.org/)
+[![version](https://img.shields.io/badge/version-0.44.0--beta-brightgreen.svg)](http://semver.org/)
 ![c++-version](https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg)
 [![tested-unix](https://img.shields.io/badge/tested%20with-g%2B%2B--9.1-orange.svg)](https://gcc.gnu.org/gcc-9/)
 ![tested-win](https://img.shields.io/badge/tested%20with-MinGW--7.3-orange.svg)
 
 Compile with: `-std=c++17`
-Link with `-lstdc++fs` to enable `std::experimental::filesystem`, and with `-pthread` to use threading with CSV files.
+
+Linker options:
+- `-lstdc++fs` to enable `std::experimental::filesystem`
+- `-pthread` to use threading with CSV files
+- `-lws2_32` for Windows socket support (in `utils::http`)
+- `-lsqlite3` to link with SQLite on Unix systems (SQLite source is also available as alternative)
+
 
 [Doxygen documentation can be found here.](https://wosser1sproductions.github.io/utils/docs/)
 
@@ -25,9 +31,12 @@ Link with `-lstdc++fs` to enable `std::experimental::filesystem`, and with `-pth
 | [utils_bits.hpp](utils_lib/utils_bits.hpp)                | Bit related extensions                                       |
 | [utils_catch.hpp](utils_lib/utils_catch.hpp)              | Extra's for Catch2 like custom ASSERT and std::abort() recoverable test |
 | [utils_colour.hpp](utils_lib/utils_colour.hpp)            | Colour class and LUTs for colour mappings from [tinycolormap](https://github.com/yuki-koyama/tinycolormap) |
+| [utils_compiler.hpp](utils_lib/utils_compiler.hpp)        | MACRO helpers                                                |
+| [utils_control.hpp](utils_lib/utils_control.hpp)          | PIDController implementation from [tekdemo](https://github.com/tekdemo/MiniPID) |
 | [utils_crc.hpp](utils_lib/utils_crc.hpp)                  | Namespace wrapper for CRC calculations from [CRCpp](https://github.com/d-bahr/CRCpp) |
 | [utils_csv.hpp](utils_lib/utils_csv.hpp)                  | Namespace wrapper for CSV file IO from [p-ranav/csv](http://github.com/p-ranav/csv) |
 | [utils_exceptions.hpp](utils_lib/utils_exceptions.hpp)    | Extra Exceptions                                             |
+| [utils_http.hpp](utils_lib/utils_http.hpp)                | Namespace wrapper for HTTPRequest from [elnormous/HTTPRequest](http://github.com/elnormous/HTTPRequest) |
 | [utils_ini.hpp](utils_lib/utils_ini.hpp)                  | ConfigReader class commonly for `.ini` files                 |
 | [utils_io.hpp](utils_lib/utils_io.hpp)                    | File/Stream IO (BitStream...) and `::mio` with [memory mapped file io](https://github.com/mandreyel/mio) |
 | [utils_json.hpp](utils_lib/utils_json.hpp)                | Namespace wrapper for [nlohmann JSON](https://github.com/nlohmann/json) |
@@ -38,6 +47,7 @@ Link with `-lstdc++fs` to enable `std::experimental::filesystem`, and with `-pth
 | [utils_os.hpp](utils_lib/utils_os.hpp)                    | OS extensions (console manipulation with colours etc.)       |
 | [utils_print.hpp](utils_lib/utils_print.hpp)              | Generic pretty printer                                       |
 | [utils_random.hpp](utils_lib/utils_random.hpp)            | Namespace wrapper for [effolkronium/random](https://github.com/effolkronium/random) and extra generators |
+| [utils_sqlite.hpp](utils_lib/utils_sqlite.hpp)            | Namespace wrapper for [fnc12/sqlite_orm](https://github.com/fnc12/sqlite_orm) |
 | [utils_string.hpp](utils_lib/utils_string.hpp)            | String extensions                                            |
 | [utils_threading.hpp](utils_lib/utils_threading.hpp)      | Threadpool class                                             |
 | [utils_time.hpp](utils_lib/utils_time.hpp)                | Time measurement                                             |
@@ -48,9 +58,13 @@ Link with `-lstdc++fs` to enable `std::experimental::filesystem`, and with `-pth
 | [algo/algo_bstree.hpp](utils_lib/algo/algo_bstree.hpp)    | Binary Search Tree implementation                            |
 | [algo/algo_huffman.hpp](utils_lib/algo/algo_huffman.hpp)  | Huffman compress/decompress                                  |
 | [external/cppitertools](utils_lib/external/cppitertools/) | [CPPItertools](https://github.com/ryanhaining/cppitertools) by Ryan Haining |
+| [external/crc](utils_lib/external/crc)                    | CRC calculations from [CRCpp](https://github.com/d-bahr/CRCpp) |
 | [external/csv](utils_lib/external/csv/)                   | [csv](http://github.com/p-ranav/csv) library by p-ranav      |
+| [external/hedley](utils_lib/external/hedley/)             | [Hedley](https://github.com/nemequ/hedley) MACRO helpers     |
+| [external/HTTPRequest](utils_lib/external/HTTPRequest/)   | [HTTPRequest](http://github.com/elnormous/HTTPRequest) library by elnormous |
+| [external/sqlite_orm](utils_lib/external/sqlite_orm/)     | [SQLite3](https://www.sqlite.org/index.html) wrapper by [fnc12](https://github.com/fnc12/sqlite_orm). Also contains sqlite3 amalgamation. |
 | [external/catch.hpp](utils_lib/external/catch.hpp)        | [Catch2](https://github.com/catchorg/Catch2) C++ test framework |
-| [external/CRC.hpp](utils_lib/external/CRC.hpp)            | CRC calculations from [CRCpp](https://github.com/d-bahr/CRCpp) |
+| [external/doctest.hpp](utils_lib/external/doctest.hpp)    | [Doctest](https://github.com/onqtam/doctest) C++ test framework |
 | [external/json.hpp](utils_lib/external/json.hpp)          | [JSON](https://github.com/nlohmann/json) library by Niels Lohmann |
 | [external/mio.hpp](utils_lib/external/mio.hpp)            | [mio](https://github.com/mandreyel/mio) by Mabdreyel         |
 | [external/random.hpp](utils_lib/external/random.hpp)      | Modern random utilities from [effolkronium/random](https://github.com/effolkronium/random) |

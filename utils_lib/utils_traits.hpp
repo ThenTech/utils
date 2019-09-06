@@ -75,6 +75,15 @@ namespace utils::traits {
     inline constexpr bool is_iterable_v = is_iterable<T>::value;
 
     ////////////////////////////////////////////////////////////////////////////
+    /// True if F can be invoked with an argument type T, T& or T&&
+    ////////////////////////////////////////////////////////////////////////////
+
+    template<typename F, typename... Args>
+    inline constexpr bool is_invocable_v = std::is_invocable_v<F, Args...>
+                                        || std::is_invocable_v<F, Args&...>
+                                        || std::is_invocable_v<F, Args&&...>;
+
+    ////////////////////////////////////////////////////////////////////////////
     /// True if type T is a member of the variant VARIANT_T
     ////////////////////////////////////////////////////////////////////////////
     template<typename T, typename VARIANT_T>

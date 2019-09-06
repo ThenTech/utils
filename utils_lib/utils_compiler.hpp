@@ -86,6 +86,10 @@
  */
 #define UTILS_ADD_PADDING(TYPE, SIZE) char __utils_padding[alignof(TYPE) * SIZE - 1];
 
+/**
+ *  Align bit fields by packing the bytes.
+ */
+#define UTILS_PACK_BITS __attribute__((__packed__))
 
 /**
  *  Return the arguments as-is with commas in between.

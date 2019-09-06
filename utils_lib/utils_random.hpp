@@ -49,16 +49,17 @@ namespace utils::random {
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static auto pick_x_from(size_t amount, const Container& container) {
         Container picked;
-        picked.reserve(amount);
+        picked.resize(amount);
 
         const auto size = std::distance(std::begin(container), std::end(container));
         if(HEDLEY_UNLIKELY(0 == size)) return picked;
 
         using diff_t = typename std::iterator_traits<decltype(std::begin(container))>::difference_type;
 
-        for (size_t i = 0; i < amount; ++i) {
-            picked.push_back(*std::next(std::begin(container), Random::get<diff_t>( 0, size - 1)));
-        }
+        std::generate_n(std::begin(picked), amount,
+        [&container, &size]() {
+            return *std::next(std::begin(container), Random::get<diff_t>( 0, size - 1 ));
+        });
 
         return picked;
     }
@@ -100,10 +101,17 @@ namespace utils::random {
                            T to   = std::numeric_limits<T>::max())
     {
         Container picked;
-        picked.reserve(amount);
+        picked.resize(amount);
 
         if (HEDLEY_UNLIKELY(to < from))  // Allow range from higher to lower
             std::swap(from, to);
+
+        const auto dist_generate = [&picked, &amount](auto& dist){
+            std::generate_n(std::begin(picked), amount,
+                [&dist, &eng = Random::engine()]() {
+                    return static_cast<T>(dist(eng));
+            });
+        };
 
         if constexpr (effolkronium::details::is_uniform_real<T>::value) {
             auto dist = Random::real_dist_t<T> {
@@ -111,24 +119,18 @@ namespace utils::random {
                 static_cast<T>(to)
             };
 
-            for (size_t i = 0; i < amount; ++i) {
-                picked.push_back(static_cast<T>(dist(Random::engine())));
-            }
+            dist_generate(dist);
         } else if constexpr (std::is_same<T, bool>::value) {
             auto dist = Random::bool_dist_t{ 0.5 };
 
-            for (size_t i = 0; i < amount; ++i) {
-                picked.push_back(static_cast<T>(dist(Random::engine())));
-            }
+            dist_generate(dist);
         } else {
             auto dist = Random::integer_dist_t<int64_t> {
                 static_cast<int64_t>(from),
                 static_cast<int64_t>(to)
             };
 
-            for (size_t i = 0; i < amount; ++i) {
-                picked.push_back(static_cast<T>(dist(Random::engine())));
-            }
+            dist_generate(dist);
         }
 
         return picked;
@@ -164,10 +166,45 @@ namespace utils::random {
     };
 
     /**
+     *  \brief  Generate a random string with length \p amount and chars chosen
+     *          in `utils::string::_base64_chars[0:62]` to make the name path safe.
+     *          Every char-type is supported and will create a `std::basic_string<T>`
+     *          containter.
+     *
+     *          Only enabled if T is a character type.
+     *
+     *  \param  amount
+     *      The amount of items to generate.
+     *  \return Returns a new Container containing \p amount items of type T.
+     */
+    template<
+        typename T = char,
+        typename Container = typename std::enable_if_t<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>,
+        typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline Container generate_safe_string(const size_t amount)
+    {
+        Container picked;
+        picked.resize(amount);
+
+        auto dist = Random::integer_dist_t<size_t> {
+            0ull, utils::string::_base64_chars.size() - 3ull
+        };
+
+        std::generate_n(std::begin(picked), amount,
+        [&dist]() {
+            const char gen = utils::string::_base64_chars[dist(Random::engine())];
+            return static_cast<T>(gen);
+        });
+
+        return picked;
+    };
+
+    /**
      *  \brief  Generate a random vector with length \p amount and containing
      *          booleans with the probability of them being true given by
      *          \p probability.
-     *          Every char-type is supported and will create a `std::basic_string<T>`
+     *          Every boolean-type is supported and will create a `std::vector<T>`
      *          containter.
      *
      *          Only enabled if T is a boolean.
@@ -190,13 +227,14 @@ namespace utils::random {
         ASSERT(0 <= probability && 1 >= probability);
 
         Container picked;
-        picked.reserve(amount);
+        picked.resize(amount);
 
         auto dist = Random::bool_dist_t{ probability };
 
-        for (size_t i = 0; i < amount; ++i) {
-            picked.push_back(static_cast<T>(dist(Random::engine())));
-        }
+        std::generate_n(std::begin(picked), amount,
+        [&dist]() {
+            return static_cast<T>(dist(Random::engine()));
+        });
 
         return picked;
     };

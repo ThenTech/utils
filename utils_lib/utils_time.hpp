@@ -92,7 +92,8 @@ namespace utils::time {
             class... Args
         > ATTR_MAYBE_UNUSED
         static inline double time(F&& f, Args&& ... args) {
-            static_assert(std::is_invocable_v<F, Args...>, "utils::time::Timer::time: Callable function required.");
+            static_assert(utils::traits::is_invocable_v<F, Args...>,
+                          "utils::time::Timer::time: Callable function required.");
 
             const auto start = utils::time::Timer::Start();
             std::invoke(std::forward<F>(f), std::forward<Args>(args)...);
@@ -122,8 +123,10 @@ namespace utils::time {
             class... Args
         > ATTR_MAYBE_UNUSED
         static inline double time_n(F&& f, Args&& ... args) {
-            static_assert(std::is_invocable_v<F, Args...>, "utils::time::Timer::time: Callable function required.");
-            static_assert(N > 0, "utils::time::Timer::time: Time at least 1 run.");
+            static_assert(utils::traits::is_invocable_v<F, Args...>,
+                          "utils::time::Timer::time: Callable function required.");
+            static_assert(N > 0,
+                          "utils::time::Timer::time: Time at least 1 run.");
             double total_time = 0.0;
 
             for (size_t i = 0; i < N; i++) {

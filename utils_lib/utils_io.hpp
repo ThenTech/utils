@@ -8,10 +8,12 @@
 #include "utils_string.hpp"
 #include "utils_memory.hpp"
 #include "utils_traits.hpp"
+#include "utils_random.hpp"
 
 #include <fstream>
 #include <vector>
 #include <chrono>
+#include <cstdio>
 
 /**
  *  Enable FileSystem
@@ -27,7 +29,7 @@
 
 
 namespace utils::io {
-    /**
+    /*
      *  Wrap mio as ::mio (memory mapping file io)
      *  Reference: https://github.com/mandreyel/mio (10/06/2019)
      */
@@ -68,7 +70,7 @@ namespace utils::io {
         static auto list_contents(const std::string_view& folder,
                                   TFilter predicate = utils::io::filter::all())
         {
-            static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>,
+            static_assert(utils::traits::is_invocable_v<decltype(predicate), fs::directory_entry&>,
                           "utils::io::list_contents: Callable function required.");
 
 			const fs::path path{ folder.begin(), folder.end() };
@@ -88,7 +90,7 @@ namespace utils::io {
         static auto list_contents_recur(const std::string_view& folder,
                                         TFilter predicate = utils::io::filter::all())
         {
-            static_assert(std::is_invocable_v<decltype(predicate), fs::directory_entry&>,
+            static_assert(utils::traits::is_invocable_v<decltype(predicate), fs::directory_entry&>,
                           "utils::io::list_contents_recur: Callable function required.");
 
 			const fs::path path{ folder.begin(), folder.end() };
@@ -179,6 +181,141 @@ namespace utils::io {
         utils::io::safe_filename(str);
         return str;
     }
+
+#ifdef UTILS_IO_FS_SUPPORTED
+    class TemporaryFile {
+        private:
+            utils::io::fs::path name;
+            std::FILE *file;
+
+        public:
+            /**
+             *  \brief  TemporaryFile that deletes itself after leaving scope.
+             *          Provides basic I/O methods.
+             *
+             *  \param  create
+             *      Wheter to actually create the file on disk or not.
+             *      False is useful when another piece of code wants to create a
+             *      file in a scope, but it cannot exist yet.
+             *      TemporaryFile will then create the path, while deleting the
+             *      file on disk later, without having owned a FILE pointer.
+             *  \param  name
+             *      The name to give the file.
+             *      If empty, a safe, random name will be generated.
+             *  \param  folder
+             *      The folder to put the file.
+             *      If empty, the current %TMP% folder will be chosen.
+             *  \param  prefix
+             *      An optional prefix for the name. Not used if /p name is set.
+             *  \param  suffix
+             *      An optional suffix for the name. Not used if /p name is set.
+             */
+            TemporaryFile(bool create = true,
+                          const std::string& name   = "",
+                          const std::string& folder = "",
+                          std::string prefix = "",
+                          std::string suffix = "")
+                : file(nullptr)
+            {
+                if (folder.empty() || !utils::io::fs::exists(folder)) {
+                    this->name = utils::io::fs::temp_directory_path();
+                } else {
+                    this->name = folder;
+                }
+
+                if (name.empty()) {
+                    utils::io::safe_filename(prefix);
+                    utils::io::safe_filename(suffix);
+                    this->name /= prefix + "tmp_" + utils::random::generate_safe_string(6) + suffix;
+                }
+
+                if (create) {
+                    this->reopen();
+                }
+            }
+
+            TemporaryFile(bool create) : TemporaryFile(create, "", "", "", "") {
+                // Empty
+            }
+
+            TemporaryFile(TemporaryFile const&)       = delete;
+            TemporaryFile(TemporaryFile&&)            = delete;
+            void operator=(TemporaryFile const&)      = delete;
+            TemporaryFile& operator=(TemporaryFile&&) = delete;
+
+            ~TemporaryFile() {
+                if (this->file != nullptr) {
+                    std::fclose(this->file);
+                }
+                utils::io::fs::remove(this->name);
+            }
+
+            const inline std::string get_name() const {
+                return this->name.string();
+            }
+
+            const inline utils::io::fs::path& get_path() const {
+                return this->name;
+            }
+
+            inline bool exists() const {
+                return utils::io::fs::exists(this->get_path());
+            }
+
+            inline bool reopen() {
+                if (this->file != nullptr) {
+                    std::fflush(this->file);
+                    this->seekstart();
+                } else if (this->exists()) {
+                    this->file = std::fopen(this->get_name().data(), "rb+");
+                } else {
+                    this->file = std::fopen(this->get_name().data(), "wb+");
+                }
+                return true;
+            }
+
+            inline void seekstart() {
+                std::rewind(this->file);
+            }
+
+            inline int seekend() {
+                return 0 == std::fseek(this->file, 0, SEEK_END);
+            }
+
+            inline int errof() const {
+                return std::ferror(this->file);
+            }
+
+            inline int eof() const {
+                return std::feof(this->file);
+            }
+
+            inline size_t write(const char* buffer, const size_t len) {
+                return std::fwrite(buffer, sizeof(char), len, this->file);
+            }
+
+            inline size_t read(char* buffer, const size_t len) {
+                return std::fread(buffer, sizeof(char), len, this->file);
+            }
+
+            template<typename ...Type>
+            inline int printf(const std::string_view& format, const Type& ...args) {
+                return std::fprintf(this->file, format.data(), args...);
+            }
+
+            template<typename TChar, typename TCharTraits>
+            friend auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                                    const TemporaryFile& tmpf)
+            {
+                stream << "<"
+                       << (tmpf.exists() ? "Temporary file opened at "
+                                         : "Temporary file possible at ")
+                       << tmpf.get_path()
+                       << ">";
+                return stream;
+            }
+    };
+#endif  // UTILS_IO_FS_SUPPORTED
 
     /**	\brief	Read the given file and return a pointer to a string containing its contents.
      *

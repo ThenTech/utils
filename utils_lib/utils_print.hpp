@@ -664,7 +664,7 @@ namespace utils::print {
                                  std::basic_ostream<TChar, TCharTraits>& stream,
                                  F&& f)
     {
-        static_assert(std::is_invocable_v<F, T>,
+        static_assert(utils::traits::is_invocable_v<F, T>,
                       "utils::print::with_progressbar: Callable function required.");
         utils::print::Progressbar bar(std::distance(start, end));
 

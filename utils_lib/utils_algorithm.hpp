@@ -12,7 +12,7 @@
 
 
 namespace utils::algorithm {
-    /**
+    /*
      *  Wrap CPPItertools as ::iter
      *  Reference: https://github.com/ryanhaining/cppitertools (04/08/2019)
      */
@@ -239,7 +239,7 @@ namespace utils::algorithm {
      */
     template<size_t times = 1, typename F, typename... Args>
     void repeat(F&& fn, Args&&... args) {
-        static_assert(std::is_invocable_v<F, Args...>,
+        static_assert(utils::traits::is_invocable_v<F, Args...>,
                       "utils::algorithm::repeat: Callable function required.");
         for (size_t i = 0; i < times; i++) {
             std::invoke(std::forward<F>(fn), std::forward<Args>(args)...);
@@ -247,14 +247,14 @@ namespace utils::algorithm {
     }
 
     /**
-     *  \brief  Wrapper to call std::for_each with a Container instead of iterators.
+     *  \brief  Wrapper to call std::for_each with iterators.
      *
      *  \param  start
      *      The start iterator to begin from.
      *  \param  end
      *      The end iterator to stop at.
      *  \param  fn
-     *      The action to call. Must be invocable with Container::value_type.
+     *      The action to call. Must be invocable with Iterator::value_type.
      */
     template <
         typename Iterator,
@@ -263,9 +263,10 @@ namespace utils::algorithm {
         typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
     > ATTR_MAYBE_UNUSED
     static inline constexpr auto for_each(Iterator start, Iterator end, F&& fn) {
-        static_assert(std::is_invocable_v<F, T>,
+        static_assert(utils::traits::is_invocable_v<F, T>,
                       "utils::algorithm::for_each: Callable function required.");
-        std::for_each(start, end, fn);
+
+        return std::for_each(start, end, std::forward<F>(fn));
     }
 
     /**
@@ -281,6 +282,180 @@ namespace utils::algorithm {
         static_assert(utils::traits::is_iterable_v<Container>,
                       "utils::algorithm::for_each: Container must have iterator support.");
         return utils::algorithm::for_each(std::begin(cont), std::end(cont), std::forward<F>(fn));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::min_element with iterators.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn_compare
+     *      The compare function to call. Must be invocable with Iterator::value_type.
+     *  \return Returns the smallest element.
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename F = typename std::less<T>,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto min_element(Iterator start, Iterator end, F&& fn_compare = std::less<T>()) {
+        static_assert(utils::traits::is_invocable_v<F, T, T>,
+                      "utils::algorithm::min_element: Callable function required.");
+        return std::min_element(start, end, std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::min_element with a Container instead of iterators.
+     *
+     *  \param cont
+     *      The container to apply min_element to.
+     *  \param  fn
+     *      The compare function to call. Must be invocable with Container::value_type.
+     *  \return Returns the smallest element.
+     */
+    template <
+        typename Container,
+        typename T = typename Container::value_type,
+        typename F = typename std::less<T>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto min_element(const Container& cont, F&& fn_compare = std::less<T>()) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::min_element: Container must have iterator support.");
+        return utils::algorithm::min_element(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::max_element with iterators.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn_compare
+     *      The compare function to call. Must be invocable with Iterator::value_type.
+     *  \return Returns the largest element.
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename F = typename std::less<T>,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto max_element(Iterator start, Iterator end, F&& fn_compare = std::less<T>()) {
+        static_assert(utils::traits::is_invocable_v<F, T, T>,
+                      "utils::algorithm::max_element: Callable function required.");
+        return std::max_element(start, end, std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::max_element with a Container instead of iterators.
+     *
+     *  \param cont
+     *      The container to apply min_element to.
+     *  \param  fn
+     *      The compare function to call. Must be invocable with Container::value_type.
+     *  \return Returns the largest element.
+     */
+    template <
+        typename Container,
+        typename T = typename Container::value_type,
+        typename F = typename std::less<T>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto max_element(const Container& cont, F&& fn_compare = std::less<T>()) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::max_element: Container must have iterator support.");
+        return utils::algorithm::max_element(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::is_sorted with iterators to check ascending order.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn_compare
+     *      The compare function to call. Must be invocable with Iterator::value_type.
+     *  \return Returns true if the elements are sorted from low to high.
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename F = typename std::less<T>,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool is_ascending(Iterator start, Iterator end, F&& fn_compare = std::less<T>()) {
+        return std::is_sorted(start, end, std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::is_sorted with a Container instead of iterators
+     *          to check ascending order.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn_compare
+     *      The compare function to call. Must be invocable with Iterator::value_type.
+     *  \return Returns true if the elements are sorted from low to high.
+     */
+    template <
+        typename Container,
+        typename T = typename Container::value_type,
+        typename F = typename std::less<T>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool is_ascending(const Container& cont, F&& fn_compare = std::less<T>()) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::is_ascending: Container must have iterator support.");
+        return std::is_sorted(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::is_sorted with iterators to check descending order.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn_compare
+     *      The compare function to call. Must be invocable with Iterator::value_type.
+     *  \return Returns true if the elements are sorted from high to low.
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename F = typename std::greater<T>,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool is_descending(Iterator start, Iterator end, F&& fn_compare = std::greater<T>()) {
+        return std::is_sorted(start, end, std::forward<F>(fn_compare));
+    }
+
+    /**
+     *  \brief  Wrapper to call std::is_sorted with a Container instead of iterators
+     *          to check descending order.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     *  \param  fn_compare
+     *      The compare function to call. Must be invocable with Iterator::value_type.
+     *  \return Returns true if the elements are sorted from high to low.
+     */
+    template <
+        typename Container,
+        typename T = typename Container::value_type,
+        typename F = typename std::greater<T>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool is_descending(const Container& cont, F&& fn_compare = std::greater<T>()) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::is_descending: Container must have iterator support.");
+        return std::is_sorted(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
     }
 
     /**

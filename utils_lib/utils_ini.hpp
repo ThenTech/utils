@@ -116,7 +116,8 @@ namespace utils::ini {
 
             template<class F>
             void ForEachSection(F&& callback) {
-                static_assert(std::is_invocable_v<F, const std::string&>, "ForEachSection: Callable function required.");
+                static_assert(utils::traits::is_invocable_v<F, const std::string&>,
+                              "ForEachSection: Callable function required.");
 
                 for (const auto& [section, mapped_values] : this->settings_map) {
                     UNUSED(mapped_values);
@@ -126,7 +127,8 @@ namespace utils::ini {
 
             template<class F>
             void ForEachSectionKey(const std::string& section, F&& callback) {
-                static_assert(std::is_invocable_v<F, const std::string&, const Value&>, "ForEachSectionKey: Callable function required.");
+                static_assert(utils::traits::is_invocable_v<F, const std::string&, const Value&>,
+                              "ForEachSectionKey: Callable function required.");
 
                 if (const auto it = this->settings_map.find(section);
                     it != this->settings_map.end())
@@ -214,8 +216,7 @@ namespace utils::ini {
             template<
                 typename T,
                 typename std::enable_if<utils::traits::is_variant_member_v<T, Value>, int>::type = 0
-            >
-            void SetValue(std::string section, std::string key, T&& val) {
+            > void SetValue(std::string section, std::string key, T&& val) {
                 utils::string::trim(section);
                 utils::string::trim(key);
 
@@ -239,8 +240,7 @@ namespace utils::ini {
             template<
                 typename T,
                 typename std::enable_if<utils::traits::is_variant_member_v<T, Value>, int>::type = 0
-            >
-            T GetValue(const std::string& section, const std::string& key, const T default_value = T()) const {
+            > T GetValue(const std::string& section, const std::string& key, const T default_value = T()) const {
                 if (const auto it = this->settings_map.find(section);
                     it != this->settings_map.end())
                 {

@@ -2,6 +2,7 @@
 #define UTILS_MISC_HPP
 
 #include "utils_compiler.hpp"
+#include "utils_traits.hpp"
 #include "utils_exceptions.hpp"
 #include "utils_print.hpp"
 
@@ -73,6 +74,25 @@ namespace utils::misc {
 
         return value;
     }
+
+    template<
+        typename F,
+        typename = typename std::enable_if_t<utils::traits::is_invocable_v<F>>
+    > class Scoped {
+        private:
+            F callback;
+        public:
+            Scoped(F&& callback) : callback(std::move(callback)) {}
+            ~Scoped() { std::invoke<F>(std::forward<F>(this->callback)); }
+    };
+
+    template<typename F> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline auto MakeScoped(F&& callback) {
+        return Scoped<F>(std::forward<F>(callback));
+    }
+
+    #define UTILS_MISC_MAKE_SCOPED(callback) \
+        auto HEDLEY_CONCAT(scope_exit_, __LINE__) = utils::misc::MakeScoped(callback);
 }
 
 #endif // UTILS_MISC_HPP

@@ -53,4 +53,18 @@ TEST_CASE("Test utils::misc::lexical_cast", "[utils][utils::misc]") {
     }
 }
 
+TEST_CASE("Test utils::misc::Scoped", "[utils][utils::misc]") {
+    int test = 0;
+
+    {
+        auto scoped  = utils::misc::Scoped([&](){ test++; });
+        auto scoped1 = utils::misc::MakeScoped([&](){ test++; });
+        UTILS_MISC_MAKE_SCOPED([&](){ test++; });
+
+        REQUIRE(test == 0);
+    }
+
+    CHECK(test == 3);
+}
+
 #endif

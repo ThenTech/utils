@@ -9,12 +9,14 @@
 #include <limits>
 #include <numeric>
 
-
 /*
  *  Refer to: https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
  */
 #ifdef UTILS_COMPILER_MSVC
-    #define UTILS_BITS_CLZ_ULL  utils::bits::internal::_clz_template
+    #include <intrin.h>
+    #define UTILS_BITS_CLZ_ULL  __lzcnt64  // ?
+
+//  #define UTILS_BITS_CLZ_ULL  utils::bits::internal::_clz_template
     #define UTILS_BITS_FFS_LL   utils::bits::internal::_ffs_template
     #define UTILS_BITS_CNT_LL   utils::bits::internal::_cnt_template
 #else
@@ -78,7 +80,7 @@ namespace utils::bits {
     template<class T = uint64_t> ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr T mask_one(uint_fast32_t pos) {
         return !pos || pos > utils::bits::size_of<T>()
-             ? 0 : (1ull << (pos - 1));
+             ? 0 : (T(1ull) << (pos - 1));
     }
 
     /**
@@ -518,6 +520,32 @@ namespace utils::bits {
         ASSERT(bool_vec.size() <= utils::bits::size_of<T>());
         return std::accumulate(bool_vec.begin(), bool_vec.end(), T(0),
                                [](T x, T y) { return (x << 1) | (y & 1); });
+    }
+
+    /**
+     *  \brief  Create a string representation of the bits in \p value.
+     *
+     *          TODO In C++20, is_integral_v can be left out and
+     *          std::bit_cast<T> can be used as new value.
+     *
+     *  \param  value
+     *      The value to create a string for.
+     *  \return Returns a string representation consisting of '0's and '1's.
+     */
+    template<
+        typename T,
+        typename = typename std::enable_if_t<std::is_integral_v<T>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::string to_string(T value) {
+        const size_t length = utils::bits::size_of<T>();
+        std::string out(length, '0');
+
+        for (auto it = out.rbegin(); value && it != out.rend(); value >>= 1, it++) {
+            if (value & 1)
+                *it = '1';
+        }
+
+        return out;
     }
 }
 

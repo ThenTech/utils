@@ -91,11 +91,11 @@
  *  Assertion macro.
  */
 #if defined(ENABLE_TESTS)
-    #define ASSERT(condition) do { if (!(condition)) std::abort(); } while (false)
+    #define ASSERT(condition) do { if (HEDLEY_UNLIKELY(!(condition))) std::abort(); } while (false)
 #elif !defined(NDEBUG)
     #define ASSERT(condition) \
         do {                                                                     \
-            if (!(condition)) {                                                  \
+            if (HEDLEY_UNLIKELY(!(condition))) {                                 \
                 std::cerr << "\n\033[31;1m"                                      \
                           << "Assertion '" #condition "' failed"                 \
                              "\033[0m" " in" "\033[36;1m\n    "                  \
@@ -157,7 +157,7 @@ namespace utils::Catch {
      */
     template<class F, class... Args> ATTR_NODISCARD
     bool Function_Aborts(F&& f, Args&& ... args) {
-        static_assert(std::is_invocable_v<F, Args...>, "Function_Aborts: Callable function required.");
+        static_assert(utils::traits::is_invocable_v<F, Args...>, "Function_Aborts: Callable function required.");
 
         auto previous_handler = std::signal(SIGABRT, utils::Catch::internal::_function_abort_signal_handler);
 

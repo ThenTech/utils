@@ -196,6 +196,25 @@ namespace utils::os {
     }
 
     /**
+     *  \brief  Pause the console and wait for user input.
+     *
+     *  \param  out
+     *      The stream to write the virtual codes to. (default: std::cout)
+     */
+    ATTR_MAYBE_UNUSED
+    static void PromptChar(const char expected = '\n') {
+        switch (expected) {
+            case '\r': ATTR_FALLTHROUGH
+            case '\n':
+                std::cout << "Press <RETURN> to continue...";
+                break;
+            default:
+                std::cout << utils::string::format("Press %c to continue... ", expected);
+        }
+        while (std::cin.get() != expected);
+    }
+
+    /**
      *  \brief  Enable virtual commands processing for the default output handle
      *          on Windows. Unix is supported by default.
      */
@@ -205,7 +224,7 @@ namespace utils::os {
 
         #ifdef UTILS_OS_ENABLE_VIRTUAL_TERMINAL
             // Set-up Windows terminal
-            do {
+            do { // Dummy loop to be able to break on error
                 HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
                 if (hOut == INVALID_HANDLE_VALUE) {
                     error = int(GetLastError());

@@ -8,7 +8,7 @@ OUTPUT_GCOV = ./docs/code_coverage
 COV_IGNORE  = /usr/include utils_lib/external
 
 # Link libs such as: -pthread -lm -fopenmp
-LIBS = -lstdc++fs -pthread
+LIBS = -lstdc++fs -pthread -lsqlite3
 
 # Use a g++ executable with c++17 support
 #   Install: 

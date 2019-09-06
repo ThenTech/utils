@@ -220,6 +220,65 @@ TEST_CASE("Test utils::algorithm::for_each", "[utils][utils::algorithm]") {
     });
 }
 
+TEST_CASE("Test utils::algorithm::min_element", "[utils][utils::algorithm]") {
+    auto     test = utils::random::generate_x<int>(20, 0, 10);
+    const int min = utils::random::Random::get(-10, -1);
+    auto   it_min = utils::random::Random::get(test);
+    *it_min = min;
+
+    const auto found_it  = utils::algorithm::min_element(test.begin(), test.end());
+    const auto found_it2 = utils::algorithm::min_element(test);
+    CHECK( found_it  == it_min);
+    CHECK(*found_it  == min);
+    CHECK( found_it2 == it_min);
+    CHECK(*found_it2 == min);
+}
+
+TEST_CASE("Test utils::algorithm::max_element", "[utils][utils::algorithm]") {
+    auto     test = utils::random::generate_x<int>(20, 0, 10);
+    const int max = utils::random::Random::get(11, 100);
+    auto   it_max = utils::random::Random::get(test);
+
+    *it_max = max;
+
+    const auto found_it  = utils::algorithm::max_element(test.begin(), test.end());
+    const auto found_it2 = utils::algorithm::max_element(test);
+    CHECK( found_it  == it_max);
+    CHECK(*found_it  == max);
+    CHECK( found_it2 == it_max);
+    CHECK(*found_it2 == max);
+}
+
+TEST_CASE("Test utils::algorithm::is_ascending", "[utils][utils::algorithm]") {
+    std::vector<int> test(10);
+    std::iota(test.begin(), test.end(), 0);
+
+    REQUIRE(utils::algorithm::is_ascending(test));
+    REQUIRE(utils::algorithm::is_ascending(test.begin(), test.end()));
+    REQUIRE_FALSE(utils::algorithm::is_ascending(test.rbegin(), test.rend()));
+
+    std::reverse(test.begin(), test.end());
+
+    REQUIRE_FALSE(utils::algorithm::is_ascending(test));
+    REQUIRE_FALSE(utils::algorithm::is_ascending(test.begin(), test.end()));
+    REQUIRE(utils::algorithm::is_ascending(test.rbegin(), test.rend()));
+}
+
+TEST_CASE("Test utils::algorithm::is_descending", "[utils][utils::algorithm]") {
+    std::vector<int> test(10);
+    std::iota(test.begin(), test.end(), 0);
+
+    REQUIRE_FALSE(utils::algorithm::is_descending(test));
+    REQUIRE_FALSE(utils::algorithm::is_descending(test.begin(), test.end()));
+    REQUIRE(utils::algorithm::is_descending(test.rbegin(), test.rend()));
+
+    std::reverse(test.begin(), test.end());
+
+    REQUIRE(utils::algorithm::is_descending(test));
+    REQUIRE(utils::algorithm::is_descending(test.begin(), test.end()));
+    REQUIRE_FALSE(utils::algorithm::is_descending(test.rbegin(), test.rend()));
+}
+
 TEST_CASE("Test utils::algorithm::enumerate", "[utils][utils::algorithm]") {
     std::vector<int> test(10);
     std::iota(test.begin(), test.end(), 0);

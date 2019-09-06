@@ -335,4 +335,20 @@ TEST_CASE("Test utils::bits::to_binary", "[utils][utils::bits]" ) {
     CHECK(utils::bits::to_binary<int>(test_i8) == 0xAA);
 }
 
+TEST_CASE("Test utils::bits::to_string", "[utils][utils::bits]" ) {
+    constexpr uint32_t test0 = 0x00000000;
+    constexpr uint32_t test1 = 0x00000001;
+    constexpr uint32_t test2 = 0x80000000;
+    constexpr uint32_t test3 = 0xAAAAAAAA;
+    constexpr uint32_t test4 = 0xFFFFFFFF;
+    constexpr uint32_t test5 = 0x005500AA;
+
+    CHECK(utils::bits::to_string(test0) == "00000000000000000000000000000000");
+    CHECK(utils::bits::to_string(test1) == "00000000000000000000000000000001");
+    CHECK(utils::bits::to_string(test2) == "10000000000000000000000000000000");
+    CHECK(utils::bits::to_string(test3) == "10101010101010101010101010101010");
+    CHECK(utils::bits::to_string(test4) == "11111111111111111111111111111111");
+    CHECK(utils::bits::to_string(test5) == "00000000010101010000000010101010");
+}
+
 #endif

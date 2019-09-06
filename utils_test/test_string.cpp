@@ -689,6 +689,12 @@ TEST_CASE("Test utils::string::extract_quoted", "[utils][utils::string]") {
     utils::string::extract_quoted(list, quoted);
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "World"));
+
+    int checkidx = 0;
+    utils::string::for_each_quoted([&](const std::string_view& sv){
+        CHECK(list[checkidx] == sv);
+        checkidx++;
+    }, quoted);
 }
 
 TEST_CASE("Test utils::string::join", "[utils][utils::string]") {
@@ -779,6 +785,12 @@ TEST_CASE("Test utils::string::split", "[utils][utils::string]") {
     CHECK(splitted[2] == "");
     CHECK(splitted[3] == "2");
     CHECK(splitted[4] == "");
+
+    auto split_iter = splitted.begin();
+    utils::string::for_each_splitted([&](const std::string_view& sv){
+        CHECK(*split_iter == sv);
+        split_iter++;
+    }, "**1****2**", "**");
 }
 
 TEST_CASE("Test utils::string::rsplit", "[utils][utils::string]") {
@@ -843,6 +855,12 @@ TEST_CASE("Test utils::string::rsplit", "[utils][utils::string]") {
     CHECK(splitted[2] == "");
     CHECK(splitted[3] == "2");
     CHECK(splitted[4] == "");
+
+    auto split_iter = splitted.rbegin();
+    utils::string::for_each_rsplitted([&](const std::string_view& sv){
+        CHECK(*split_iter == sv);
+        split_iter++;
+    }, "**1****2**", "**");
 }
 
 TEST_CASE("Test utils::string::format", "[utils][utils::string]") {

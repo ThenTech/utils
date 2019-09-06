@@ -11,6 +11,7 @@
 #include <codecvt>
 #include <cstring>
 #include <algorithm>
+#include <functional>
 #include <sstream>
 #include <vector>
 
@@ -397,7 +398,9 @@ namespace utils::string {
      *      The character to surround the string with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void quote(std::string& str, const utils::string::string_view& quote='\"') {
+    static inline void quote(std::string& str, const
+                             utils::string::string_view& quote='\"')
+    {
         if (HEDLEY_UNLIKELY(utils::string::starts_with(str, quote)
                          && utils::string::ends_with(str, quote)))
         {
@@ -420,32 +423,35 @@ namespace utils::string {
      *      The character to surround the string with.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string quoted(std::string str, const utils::string::string_view& quote='\"') {
+    static inline std::string quoted(std::string str,
+                                     const utils::string::string_view& quote='\"')
+    {
         utils::string::quote(str, quote);
         return str;
     }
 
     /**
-     *  \brief  Extract a vector of strings from the given string \p s that have
-     *          been quoted with char \p str_char.
+     *  \brief  Invoke \p callback on each substring in \p s that has been quoted
+     *          with char/string \p quote.
      *
      *          e.g. 'str1', 'str2' => extract every string between 2 `'`
-     *                  => returns [ "str1", "str2" ]
+     *                  => performs callback("str1"); callback("str2");
      *
-     *  \param  v
-     *      The vector to add the strings to. Will be cleared on start.
+     *  \param  callback
+     *      The function to call with an std::string_view argument.
      *  \param  s
      *      The string to look for quoted strings in.
      *  \param  quote
      *      The char the strings are quoted in.
-     *  \return Returns the list of quoted strings, without quotes.
      */
-    ATTR_MAYBE_UNUSED
-    static void extract_quoted(std::vector<std::string_view>& v, const std::string_view& s,
-                               const utils::string::string_view& quote='\"')
+    template<typename F> ATTR_MAYBE_UNUSED
+    static void for_each_quoted(F&& callback,
+                                const std::string_view& s,
+                                const utils::string::string_view& quote='\"')
     {
+        static_assert(utils::traits::is_invocable_v<F, const std::string_view>,
+                      "utils::string::for_each_quoted: Callable function required.");
         const size_t len = s.length();
-        v.clear();
 
         if (HEDLEY_UNLIKELY(len < quote.size() * 2)) return;
 
@@ -454,11 +460,37 @@ namespace utils::string {
         do {
             if ((found_start = utils::string::contains(s, quote, *found_start))) {
                 if ((found_end = utils::string::contains(s, quote, ++(*found_start)))) {
-                    v.emplace_back(std::string_view{s.data() + *found_start, *found_end - *found_start});
+                    std::invoke<F>(std::forward<F>(callback),
+                                   std::string_view{s.data() + *found_start, *found_end - *found_start});
                     found_start = *found_end + quote.size();
                 }
             }
         } while (found_start && *found_start < len);
+    }
+
+    /**
+     *  \brief  Extract a vector of strings from the given string \p s that have
+     *          been quoted with char \p quote.
+     *
+     *          e.g. 'str1', 'str2' => extract every string between 2 `'`
+     *                  => results in v = [ "str1", "str2" ]
+     *
+     *  \param  v
+     *      The vector to add the strings to. Will be cleared on start.
+     *  \param  s
+     *      The string to look for quoted strings in.
+     *  \param  quote
+     *      The char the strings are quoted in.
+     */
+    ATTR_MAYBE_UNUSED
+    static void extract_quoted(std::vector<std::string_view>& v,
+                               const std::string_view& s,
+                               const utils::string::string_view& quote='\"')
+    {
+        v.clear();
+        utils::string::for_each_quoted([&](const std::string_view& sv){
+            v.emplace_back(sv);
+        }, s, quote);
     }
 
     /**
@@ -472,7 +504,9 @@ namespace utils::string {
      *          to eachother, joined by \p join_with.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string join(const std::vector<std::string>& v, const utils::string::string_view& join_with = ",") {
+    static std::string join(const std::vector<std::string>& v,
+                            const utils::string::string_view& join_with = ",")
+    {
         std::string joined;
         const auto end = v.end();
 
@@ -518,7 +552,9 @@ namespace utils::string {
                                   || std::is_same<CharT, char32_t>::value,
                                      int> = 0
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string join(const std::vector<CharT>& v, const char join_with = '\0') {
+    static std::string join(const std::vector<CharT>& v,
+                            const char join_with = '\0')
+    {
         std::string joined;
         const auto end = v.end();
 
@@ -541,7 +577,57 @@ namespace utils::string {
     }
 
     /**
-     *  \brief  Split the given string \p s into parts delimited by \p delim.
+     *  \brief  Split the given string \p s into parts delimited by \p delim,
+     *          and invoke \p callback on each of them.
+     *
+     *  \param  callback
+     *      The function to call with each splitted std::string_view.
+     *  \param  s
+     *      The string to split.
+     *  \param  delim
+     *      The string delimiter.
+     *  \param  max_splits
+     *      The maximum amount of splits to make.
+     *      `-1`    split and call on all delimiters
+     *      `0`     don't split: call will be made with the original string \p s
+     *      `1`     call will be made with the first splitted element,
+     *              and the rest of the string as second call.
+     */
+    template<typename F> ATTR_MAYBE_UNUSED
+    static void for_each_splitted(F&& callback,
+                                  const std::string_view& s,
+                                  const utils::string::string_view& delim = ',',
+                                  int max_splits = -1)
+    {
+        static_assert(utils::traits::is_invocable_v<F, const std::string_view>,
+                      "utils::string::for_each_splitted: Callable function required.");
+
+        utils::traits::found_t found = 0ull;
+        size_t prev_end = 0ull;
+
+        if (max_splits != 0 && (found = utils::string::contains(s, delim, 0))) {
+            std::invoke<F>(std::forward<F>(callback),
+                           std::string_view{s.data(), *found});
+            max_splits--;
+            prev_end = *found + delim.size();
+
+            while (max_splits != 0 && (found = utils::string::contains(s, delim, prev_end))) {
+                std::invoke<F>(std::forward<F>(callback),
+                               std::string_view{s.data() + prev_end, *found - prev_end});
+                max_splits--;
+                prev_end = *found + delim.size();
+            }
+        }
+
+        if (prev_end < s.size() + delim.size() || max_splits == 0) {
+            std::invoke<F>(std::forward<F>(callback),
+                           std::string_view{s.data() + prev_end, s.size() - prev_end});
+        }
+    }
+
+    /**
+     *  \brief  Split the given string \p s into parts delimited by \p delim,
+     *          and put them in \p v as std::string_views.
      *
      *  \param  v
      *      The vector to add the splitted strings to.
@@ -554,31 +640,70 @@ namespace utils::string {
      *      `-1`    split on all delimiters
      *      `0`     don't split: vector will contain the original string \p s
      *      `1`     vector has the first splitted element,
-     *              and the rest of the string as second element
-     *  \return Returns a list of seperate strings that were delimited by \p delim.
+     *              and the rest of the string as second element.
      */
     ATTR_MAYBE_UNUSED
-    static void split(std::vector<std::string_view> &v, const std::string_view& s,
-                      const utils::string::string_view& delim = ',', int max_splits = -1)
+    static void split(std::vector<std::string_view> &v,
+                      const std::string_view& s,
+                      const utils::string::string_view& delim = ',',
+                      int max_splits = -1)
     {
-        utils::traits::found_t found = 0ull;
-        size_t prev_end = 0ull;
         v.clear();
+        utils::string::for_each_splitted([&](const std::string_view& sv){
+            v.emplace_back(sv);
+        }, s, delim, max_splits);
+    }
 
-        if (max_splits != 0 && (found = utils::string::contains(s, delim, 0))) {
-            v.emplace_back(std::string_view{s.data(), *found});
+    /**
+     *  \brief  Split the given string \p s into parts delimited by \p delim,
+     *          but start from the end, i.e. the first time \p callback is invoked,
+     *          it will be on the right-most splitted substring.
+     *
+     *  \param  callback
+     *      The function to call with each splitted std::string_view.
+     *  \param  s
+     *      The string to split.
+     *  \param  delim
+     *      The string delimiter.
+     *  \param  max_splits
+     *      The maximum amount of splits to make.
+     *      `-1`    split and call on all delimiters
+     *      `0`     don't split: call will be made with the original string \p s
+     *      `1`     call will be made with the first splitted element
+     *              (starting from the right), and the rest of the string (left)
+     *              as second call.
+     */
+    template<typename F> ATTR_MAYBE_UNUSED
+    static void for_each_rsplitted(F&& callback,
+                                  const std::string_view& s,
+                                  const utils::string::string_view& delim = ',',
+                                  int max_splits = -1)
+    {
+        static_assert(utils::traits::is_invocable_v<F, const std::string_view>,
+                      "utils::string::for_each_rsplitted: Callable function required.");
+        utils::traits::found_t found = 0ull;
+        const size_t delim_len = delim.size();
+        size_t prev_start = s.size() - delim_len;
+
+        while (max_splits != 0 && (found = utils::string::rcontains(s, delim, prev_start))) {
+            const size_t size = prev_start - *found;
+            std::invoke<F>(std::forward<F>(callback),
+                           std::string_view{ s.data() + *found + delim_len, size });
             max_splits--;
-            prev_end = *found + delim.size();
 
-            while (max_splits != 0 && (found = utils::string::contains(s, delim, prev_end))) {
-                v.emplace_back(std::string_view{s.data() + prev_end, *found - prev_end});
-                max_splits--;
-                prev_end = *found + delim.size();
-            }
+            prev_start = *found;
+            if (*found < delim_len) break;
+            prev_start -= delim_len;
         }
 
-        if (prev_end < s.size() + delim.size() || max_splits == 0) {
-            v.emplace_back(std::string_view{s.data() + prev_end, s.size() - prev_end});
+        if ((!found && prev_start+delim_len > 0) || (found && max_splits == 0)) {
+            std::invoke<F>(std::forward<F>(callback),
+                           std::string_view{ s.data(), prev_start + delim_len });
+        } else if (found && *found < delim_len) {
+            std::invoke<F>(std::forward<F>(callback),
+                           std::string_view{ s.data(), prev_start });
+        } else if (prev_start > delim_len) {
+            std::invoke<F>(std::forward<F>(callback), s);
         }
     }
 
@@ -601,32 +726,15 @@ namespace utils::string {
      *  \return Returns a list of seperate strings that were delimited by \p delim.
      */
     ATTR_MAYBE_UNUSED
-    static void rsplit(std::vector<std::string_view> &v, const std::string_view& s,
-                       const utils::string::string_view delim = ",", int max_splits = -1)
+    static void rsplit(std::vector<std::string_view> &v,
+                       const std::string_view& s,
+                       const utils::string::string_view delim = ',',
+                       int max_splits = -1)
     {
-        utils::traits::found_t found = 0ull;
-        const size_t delim_len = delim.size();
-        size_t prev_start = s.size() - delim_len;
         v.clear();
-
-        while (max_splits != 0 && (found = utils::string::rcontains(s, delim, prev_start))) {
-            const size_t size = prev_start - *found;
-            v.emplace_back(std::string_view{s.data() + *found + delim_len, size});
-            max_splits--;
-
-            prev_start = *found;
-            if (*found < delim_len) break;
-            prev_start -= delim_len;
-        }
-
-        if ((!found && prev_start+delim_len > 0) || (found && max_splits == 0)) {
-            v.emplace_back(std::string_view{ s.data(), prev_start + delim_len });
-        } else if (found && *found < delim_len) {
-            v.emplace_back(std::string_view{ s.data(), prev_start });
-        } else if (prev_start > delim_len) {
-            v.emplace_back(s);
-        }
-
+        utils::string::for_each_rsplitted([&](const std::string_view& sv){
+            v.emplace_back(sv);
+        }, s, delim, max_splits);
         std::reverse(v.begin(), v.end());
     }
 

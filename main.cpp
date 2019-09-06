@@ -3,7 +3,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::beta);
+static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::beta);
 
 #ifdef ENABLE_TESTS
     HEDLEY_WARNING("Warning: TESTS ENABLED")
@@ -12,6 +12,10 @@ static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::be
     #define CATCH_CONFIG_CONSOLE_WIDTH 100
     #define CATCH_CONFIG_FAST_COMPILE
     #include "utils_lib/external/catch.hpp"
+
+//    #define DOCTEST_CONFIG_IMPLEMENT
+//    #include "utils_lib/external/doctest.hpp"
+
     #include "utils_lib/utils_logger.hpp"
     #include "utils_lib/utils_time.hpp"
 #else
@@ -24,6 +28,7 @@ static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::be
     #include "utils_lib/utils_colour.hpp"
     #include "utils_lib/utils_crc.hpp"
     #include "utils_lib/utils_csv.hpp"
+    #include "utils_lib/utils_http.hpp"
     #include "utils_lib/utils_ini.hpp"
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
@@ -34,6 +39,7 @@ static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::be
     #include "utils_lib/utils_os.hpp"
     #include "utils_lib/utils_print.hpp"
     #include "utils_lib/utils_random.hpp"
+    #include "utils_lib/utils_sqlite.hpp"
     #include "utils_lib/utils_string.hpp"
     #include "utils_lib/utils_threading.hpp"
     #include "utils_lib/utils_time.hpp"
@@ -54,9 +60,11 @@ static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::be
  *
  *      - Catch 2 with BENCHMARK or Hayai
  *          => Move to doctest for faster compilation...
+ *             https://github.com/onqtam/doctest
  *
  *  https://github.com/Martchus/cpp-utilities
  *  https://github.com/tlx/tlx
+ *  https://github.com/nothings/single_file_libs
  *
  *  https://github.com/palacaze/sigslot
  *  https://github.com/fgoujeon/signal
@@ -78,11 +86,27 @@ static constexpr utils::Version VERSION(0, 43, 0, utils::version::prerelease::be
  *      https://github.com/r-lyeh-archived/statvs
  *      https://github.com/nemequ/portable-snippets
  *      https://github.com/chronoxor/CppCommon/blob/master/source/system/stack_trace.cpp
+ *      https://github.com/chuyangliu/tastylib
  *
  *      https://github.com/k06a/boolinq
  *      https://github.com/pfultz2/Linq
+ *      https://github.com/mrange/cpplinq
  *
- *      https://github.com/elnormous/HTTPRequest
+ *      /// Add to linker: -lsqlite3; also see ../SQLite_test
+ *      https://github.com/qicosmos/ormpp
+ *
+ *      https://github.com/whoshuu/cpr
+ *
+ *      https://github.com/yhirose/cpp-httplib
+ *      https://github.com/seomoz/url-cpp
+ *      https://github.com/chmike/CxxUrl
+ *      https://github.com/jwerle/url.h
+ *
+ *      https://github.com/troldal/OpenXLSX
+ *      https://github.com/tfussell/xlnt
+ *
+ *      https://github.com/arun11299/cpp-subprocess
+ *      https://github.com/sheredom/process.h
  *
  *  GCC >= 9:
  *      https://github.com/Neargye/magic_enum
@@ -104,6 +128,7 @@ int main(int argc, char *argv[]) {
     int status = 0;
     const auto test_duration = utils::time::Timer::time<utils::time::Timer::time_ms>([&]() {
         status = Catch::Session().run(argc, argv);
+        // status = doctest::Context(argc, argv).run();
     });
 
     utils::Logger::Notice("Tests completed in %.3f ms (%d)", test_duration, status);
@@ -149,7 +174,7 @@ int main(int argc, char *argv[]) {
 
 //    auto arr = utils::memory::new_unique_flat_array<int>(10, 10);
 //    std::iota(arr.get(), arr.get()+100, 0);
-//    utils::Logger::Writef("sum: %d\n", std::accumulate(arr.get(), arr.get() + 100, 0));
+//    utils::Logger::Writef("sum: %d\n", utils::algorithm::sum(arr.get(), arr.get() + 100));
 
     const auto file_list = utils::io::list_contents("./");
     const auto rfile     = utils::random::Random::get(*file_list);
@@ -174,8 +199,8 @@ int main(int argc, char *argv[]) {
 //    utils::Logger::Stream(utils::colour::GetHotColor(0.5));
 //    utils::Logger::Stream(utils::colour::Colour::from_hex("#ABCDEF").to_hex());
 
-    utils::Logger::WriteProgress(utils::algorithm::iter::range<size_t>(0, 400),
-                                 [](size_t){ utils::time::sleep(utils::time::milliseconds(1)); });
+//    utils::Logger::WriteProgress(utils::algorithm::iter::range<size_t>(0, 400),
+//                                 [](size_t){ utils::time::sleep(utils::time::milliseconds(1)); });
 
     return 0;
 #endif  // ENABLE_TESTS
