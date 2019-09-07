@@ -1,13 +1,13 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_memory.hpp"
 #include <numeric>
 
 
-TEST_CASE("Test utils::memory::allocVar", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::allocVar") {
     int *test     = utils::memory::new_var<int>();
     int *test_val = utils::memory::new_var<int>(0xDEADBEEF);
 
@@ -22,7 +22,7 @@ TEST_CASE("Test utils::memory::allocVar", "[utils][utils::memory]") {
     utils::memory::delete_var(test_val);
 }
 
-TEST_CASE("Test utils::memory::new_unique_var", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::new_unique_var") {
     auto test     = utils::memory::new_unique_var<int>();
     auto test_val = utils::memory::new_unique_var<int>(0xDEADBEEF);
 
@@ -34,7 +34,7 @@ TEST_CASE("Test utils::memory::new_unique_var", "[utils][utils::memory]") {
     CHECK(*test_val == 0xDEADBEEF);
 }
 
-TEST_CASE("Test utils::memory::allocArray", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::allocArray") {
     auto test_0  = utils::memory::new_array<int>(0);
     auto test_10 = utils::memory::new_array<int>(10);
 
@@ -54,7 +54,7 @@ TEST_CASE("Test utils::memory::allocArray", "[utils][utils::memory]") {
     utils::memory::delete_array(test_10);
 }
 
-TEST_CASE("Test utils::memory::allocFlatArray", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::allocFlatArray") {
     auto test_0   = utils::memory::new_flat_array<int>(0);
     auto test_10  = utils::memory::new_flat_array<int>(10);
     auto test_2_2 = utils::memory::new_flat_array<int>(2, 2);
@@ -80,7 +80,7 @@ TEST_CASE("Test utils::memory::allocFlatArray", "[utils][utils::memory]") {
     utils::memory::delete_array(test_2_2);
 }
 
-TEST_CASE("Test utils::memory::reallocArray", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::reallocArray") {
     size_t length = 0;
     auto test = utils::memory::new_array<int>(length);
     REQUIRE(test != nullptr);
@@ -130,7 +130,7 @@ TEST_CASE("Test utils::memory::reallocArray", "[utils][utils::memory]") {
     utils::memory::delete_array(empty);
 }
 
-TEST_CASE("Test utils::memory::new_unique_array", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::new_unique_array") {
     auto test_0  = utils::memory::new_unique_array<int>(0);
     auto test_10 = utils::memory::new_unique_array<int>(10);
 
@@ -147,7 +147,7 @@ TEST_CASE("Test utils::memory::new_unique_array", "[utils][utils::memory]") {
     }
 }
 
-TEST_CASE("Test utils::memory::new_unique_flat_array", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::new_unique_flat_array") {
     auto test_0   = utils::memory::new_unique_flat_array<int>(0);
     auto test_10  = utils::memory::new_unique_flat_array<int>(10);
     auto test_2_2 = utils::memory::new_unique_flat_array<int>(2, 2);
@@ -169,7 +169,7 @@ TEST_CASE("Test utils::memory::new_unique_flat_array", "[utils][utils::memory]")
     }
 }
 
-TEST_CASE("Test utils::memory::deallocContainer", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::deallocContainer") {
     auto uv_p = utils::memory::new_var<std::vector<int*>>();
     REQUIRE(uv_p != nullptr);
     for (int i = 0; i < 10; i++) {
@@ -190,7 +190,7 @@ TEST_CASE("Test utils::memory::deallocContainer", "[utils][utils::memory]") {
     utils::memory::delete_container(um_p);
 }
 
-TEST_CASE("Test utils::memory::new_unique_container", "[utils][utils::memory]") {
+TEST_CASE("Test utils::memory::new_unique_container") {
     auto uv_p = utils::memory::new_unique_vector<int>();
     REQUIRE(uv_p.get() != nullptr);
 

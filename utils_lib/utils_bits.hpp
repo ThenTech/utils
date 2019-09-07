@@ -2,7 +2,7 @@
 #define UTILS_BITS_HPP
 
 #include "utils_compiler.hpp"
-#include "utils_catch.hpp"
+#include "utils_test.hpp"
 #include "utils_traits.hpp"
 
 #include <cstdint>

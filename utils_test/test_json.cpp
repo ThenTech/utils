@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_json.hpp"
 
@@ -11,7 +11,7 @@
 //#define TEST_JSON_LOG_STEPS
 
 
-TEST_CASE("Test utils::json::to_ubjson", "[utils][utils::json]" ) {
+TEST_CASE("Test utils::json::to_ubjson") {
     utils::json start = R"(
         {
             "LABELS": {

@@ -8,27 +8,24 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
 #ifdef ENABLE_TESTS
     HEDLEY_WARNING("Warning: TESTS ENABLED")
 
-    #define CATCH_CONFIG_RUNNER
-    #define CATCH_CONFIG_CONSOLE_WIDTH 100
-    #define CATCH_CONFIG_FAST_COMPILE
-    #include "utils_lib/external/catch.hpp"
-
-//    #define DOCTEST_CONFIG_IMPLEMENT
-//    #include "utils_lib/external/doctest.hpp"
+    #define DOCTEST_CONFIG_IMPLEMENT
+    #include "utils_lib/external/doctest.hpp"
 
     #include "utils_lib/utils_logger.hpp"
     #include "utils_lib/utils_time.hpp"
 #else
     HEDLEY_WARNING("Warning: TESTS DISABLED")
 
+    // Include first to evade warning about needing to include winsock before windows.h
+    #include "utils_lib/utils_http.hpp"
+
     #include "utils_lib/utils_exceptions.hpp"
     #include "utils_lib/utils_algorithm.hpp"
     #include "utils_lib/utils_bits.hpp"
-    #include "utils_lib/utils_catch.hpp"
     #include "utils_lib/utils_colour.hpp"
     #include "utils_lib/utils_crc.hpp"
     #include "utils_lib/utils_csv.hpp"
-    #include "utils_lib/utils_http.hpp"
+//    #include "utils_lib/utils_http.hpp"
     #include "utils_lib/utils_ini.hpp"
     #include "utils_lib/utils_io.hpp"
     #include "utils_lib/utils_json.hpp"
@@ -41,6 +38,7 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
     #include "utils_lib/utils_random.hpp"
     #include "utils_lib/utils_sqlite.hpp"
     #include "utils_lib/utils_string.hpp"
+    #include "utils_lib/utils_test.hpp"
     #include "utils_lib/utils_threading.hpp"
     #include "utils_lib/utils_time.hpp"
     #include "utils_lib/utils_traits.hpp"
@@ -127,8 +125,8 @@ int main(int argc, char *argv[]) {
 
     int status = 0;
     const auto test_duration = utils::time::Timer::time<utils::time::Timer::time_ms>([&]() {
-        status = Catch::Session().run(argc, argv);
-        // status = doctest::Context(argc, argv).run();
+//        status = Catch::Session().run(argc, argv);
+         status = doctest::Context(argc, argv).run();
     });
 
     utils::Logger::Notice("Tests completed in %.3f ms (%d)", test_duration, status);

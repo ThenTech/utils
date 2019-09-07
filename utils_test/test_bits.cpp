@@ -1,12 +1,12 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_bits.hpp"
 
 
-TEST_CASE("Test utils::bits::size_of", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::size_of") {
     REQUIRE(utils::bits::size_of< int8_t>()  == 8);
     REQUIRE(utils::bits::size_of<uint8_t>()  == 8);
     REQUIRE(utils::bits::size_of< int16_t>() == 16);
@@ -17,7 +17,7 @@ TEST_CASE("Test utils::bits::size_of", "[utils][utils::bits]") {
     REQUIRE(utils::bits::size_of<uint64_t>() == 64);
 }
 
-TEST_CASE("Test utils::bits::mask", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::mask") {
     REQUIRE(utils::bits::mask_one(0) == 0);
     REQUIRE(utils::bits::mask_msb(0) == 0);
     REQUIRE(utils::bits::mask_lsb(0) == 0);
@@ -37,7 +37,7 @@ TEST_CASE("Test utils::bits::mask", "[utils][utils::bits]") {
     }
 }
 
-TEST_CASE("Test utils::bits::select", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::select") {
     REQUIRE(utils::bits::select_one(0, 1) == 0);
     REQUIRE(utils::bits::select_msb(0, 1) == 0);
     REQUIRE(utils::bits::select_lsb(0, 1) == 0);
@@ -49,7 +49,7 @@ TEST_CASE("Test utils::bits::select", "[utils][utils::bits]") {
     REQUIRE(utils::bits::select_lsb((1ull << 63), 1) == 0);
 }
 
-TEST_CASE("Test utils::bits::set", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::set") {
     int x = 0;
     REQUIRE(utils::bits::set_one(x, 1,  1)   == 0x00000001);
     REQUIRE(utils::bits::set_one(x, 1, 32)   == 0x80000001);
@@ -63,7 +63,7 @@ TEST_CASE("Test utils::bits::set", "[utils][utils::bits]") {
     REQUIRE(utils::bits::set_lsb(x, 0x11, 5) == 0x78000031);
 }
 
-TEST_CASE("Test utils::bits::and_all", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::and_all") {
     REQUIRE(utils::bits::and_all( 0) ==  0);
     REQUIRE(utils::bits::and_all( 1) ==  1);
     REQUIRE(utils::bits::and_all(-1) == -1);
@@ -73,7 +73,7 @@ TEST_CASE("Test utils::bits::and_all", "[utils][utils::bits]") {
     REQUIRE(0x1004 == utils::bits::and_all(0x100F, 0x1234, 0xFFFC));
 }
 
-TEST_CASE("Test utils::bits::or_all", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::or_all") {
     REQUIRE(utils::bits::or_all( 0) ==  0);
     REQUIRE(utils::bits::or_all( 1) ==  1);
     REQUIRE(utils::bits::or_all(-1) == -1);
@@ -84,7 +84,7 @@ TEST_CASE("Test utils::bits::or_all", "[utils][utils::bits]") {
     REQUIRE(0xF050 == utils::bits::or_all(0x8000, 0x4000, 0x2000, 0x1000, 0x0050));
 }
 
-TEST_CASE("Test utils::bits::xor_all", "[utils][utils::bits]") {
+TEST_CASE("Test utils::bits::xor_all") {
     REQUIRE(utils::bits::xor_all( 0) ==  0);
     REQUIRE(utils::bits::xor_all( 1) ==  1);
     REQUIRE(utils::bits::xor_all(-1) == -1);
@@ -96,7 +96,7 @@ TEST_CASE("Test utils::bits::xor_all", "[utils][utils::bits]") {
     REQUIRE(0xF050 == utils::bits::xor_all(0x8000, 0x4000, 0x2000, 0x1000, 0x0050));
 }
 
-TEST_CASE("Test utils::bits::ffs", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::ffs" ) {
     REQUIRE(utils::bits::ffs<int>(-1)     == 1);
     REQUIRE(utils::bits::ffs<int>(1)      == 1);
     REQUIRE(utils::bits::ffs<int>(0)      == 0);
@@ -107,7 +107,7 @@ TEST_CASE("Test utils::bits::ffs", "[utils][utils::bits]" ) {
     }
 }
 
-TEST_CASE("Test utils::bits::msb", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::msb" ) {
     REQUIRE(utils::bits::msb<int>(1)      == 1);
     REQUIRE(utils::bits::msb<int>(-1)     == utils::bits::size_of<int>());
     REQUIRE(utils::bits::msb<int>(0)      == 0);
@@ -118,7 +118,7 @@ TEST_CASE("Test utils::bits::msb", "[utils][utils::bits]" ) {
     }
 }
 
-TEST_CASE("Test utils::bits::popcount", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::popcount" ) {
     REQUIRE(utils::bits::popcount<int>(0)      == 0);
     REQUIRE(utils::bits::popcount<int>(1)      == 1);
     REQUIRE(utils::bits::popcount<int>(-1)     == utils::bits::size_of<int>());
@@ -130,7 +130,7 @@ TEST_CASE("Test utils::bits::popcount", "[utils][utils::bits]" ) {
     }
 }
 
-TEST_CASE("Test utils::bits::rotl", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::rotl" ) {
     REQUIRE(0x00 == utils::bits::rotl(0));
     REQUIRE(0xFF == utils::bits::rotl<uint8_t>(0xFF, 8));
     REQUIRE(0xA5 == utils::bits::rotl<uint8_t>(0xA5, 8));
@@ -153,7 +153,7 @@ TEST_CASE("Test utils::bits::rotl", "[utils][utils::bits]" ) {
     REQUIRE( uint64_t(1)        == utils::bits::rotl(uint64_t(1) << 63, 1));
 }
 
-TEST_CASE("Test utils::bits::rotr", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::rotr" ) {
     REQUIRE(0x00 == utils::bits::rotr(0));
     REQUIRE(0xFF == utils::bits::rotr<uint8_t>(0xFF, 8));
     REQUIRE(0xA5 == utils::bits::rotr<uint8_t>(0xA5, 8));
@@ -176,7 +176,7 @@ TEST_CASE("Test utils::bits::rotr", "[utils][utils::bits]" ) {
     REQUIRE((uint64_t(1) << 63) == utils::bits::rotr(uint64_t(1), 1));
 }
 
-TEST_CASE("Test utils::bits::is_power_of_2", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::is_power_of_2" ) {
     REQUIRE(utils::bits::is_power_of_2<int>(1)      == true);
     REQUIRE(utils::bits::is_power_of_2<int>(-1)     == false);
     REQUIRE(utils::bits::is_power_of_2<int>(0)      == false);
@@ -187,7 +187,7 @@ TEST_CASE("Test utils::bits::is_power_of_2", "[utils][utils::bits]" ) {
     }
 }
 
-TEST_CASE("Test utils::bits::is_odd", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::is_odd" ) {
     REQUIRE(utils::bits::is_odd(1)      == true);
     REQUIRE(utils::bits::is_odd(-1)     == true);
     REQUIRE(utils::bits::is_odd(0)      == false);
@@ -195,7 +195,7 @@ TEST_CASE("Test utils::bits::is_odd", "[utils][utils::bits]" ) {
     REQUIRE(utils::bits::is_odd(2)      == false);
 }
 
-TEST_CASE("Test utils::bits::is_even", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::is_even" ) {
     REQUIRE(utils::bits::is_even(1)      == false);
     REQUIRE(utils::bits::is_even(-1)     == false);
     REQUIRE(utils::bits::is_even(0)      == true);
@@ -203,7 +203,7 @@ TEST_CASE("Test utils::bits::is_even", "[utils][utils::bits]" ) {
     REQUIRE(utils::bits::is_even(2)      == true);
 }
 
-TEST_CASE("Test utils::bits::round_to_multiple", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::round_to_multiple" ) {
     REQUIRE(utils::bits::round_to_multiple(-1, 10)     == 0);
     REQUIRE(utils::bits::round_to_multiple(0 , 10)     == 0);
     REQUIRE(utils::bits::round_to_multiple(0x8000, 16) == 0x8000);
@@ -220,7 +220,7 @@ TEST_CASE("Test utils::bits::round_to_multiple", "[utils][utils::bits]" ) {
     CHECK(utils::bits::round_to_multiple(-10, 10) == -10);
 }
 
-TEST_CASE("Test utils::bits::round_to_byte", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::round_to_byte" ) {
     REQUIRE(utils::bits::round_to_byte(    0) == 0);
     REQUIRE(utils::bits::round_to_byte(  4*8) == 4);
     REQUIRE(utils::bits::round_to_byte(  255) == 32);
@@ -232,7 +232,7 @@ TEST_CASE("Test utils::bits::round_to_byte", "[utils][utils::bits]" ) {
     }
 }
 
-TEST_CASE("Test utils::bits::shift_signed", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::shift_signed" ) {
     REQUIRE(utils::bits::shift_signed<int8_t>(0, 0) == 0);
     REQUIRE(utils::bits::shift_signed<int8_t>(0, 8) == 0);
     REQUIRE(utils::bits::shift_signed<int8_t>((-1) & 0xFF, 8) == -1);
@@ -289,7 +289,7 @@ TEST_CASE("Test utils::bits::shift_signed", "[utils][utils::bits]" ) {
     #endif
 }
 
-TEST_CASE("Test utils::bits::extend_sign", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::extend_sign" ) {
     REQUIRE(utils::bits::extend_sign<int8_t, 1>(0) == 0);
     REQUIRE(utils::bits::extend_sign<int8_t, 8>(0) == 0);
     REQUIRE(utils::bits::extend_sign<int8_t, 8>((-1) & 0xFF) == -1);
@@ -303,7 +303,7 @@ TEST_CASE("Test utils::bits::extend_sign", "[utils][utils::bits]" ) {
     CHECK(utils::bits::extend_sign<int16_t, 16>(0xDEAD) == -8531);
 }
 
-TEST_CASE("Test utils::bits::bits_needed", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::bits_needed" ) {
     REQUIRE(utils::bits::bits_needed<uint8_t >(0) == 1);
     REQUIRE(utils::bits::bits_needed<uint8_t >(1) == 1);
     REQUIRE(utils::bits::bits_needed<uint8_t >(0xFF) == 8);
@@ -318,7 +318,7 @@ TEST_CASE("Test utils::bits::bits_needed", "[utils][utils::bits]" ) {
     }
 }
 
-TEST_CASE("Test utils::bits::to_binary", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::to_binary" ) {
     const std::vector<bool> empty  {};
     const std::vector<bool> test_f { false };
     const std::vector<bool> test_t { true  };
@@ -335,7 +335,7 @@ TEST_CASE("Test utils::bits::to_binary", "[utils][utils::bits]" ) {
     CHECK(utils::bits::to_binary<int>(test_i8) == 0xAA);
 }
 
-TEST_CASE("Test utils::bits::to_string", "[utils][utils::bits]" ) {
+TEST_CASE("Test utils::bits::to_string" ) {
     constexpr uint32_t test0 = 0x00000000;
     constexpr uint32_t test1 = 0x00000001;
     constexpr uint32_t test2 = 0x80000000;

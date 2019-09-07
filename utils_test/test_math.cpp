@@ -1,14 +1,14 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_math.hpp"
 
 #include "../utils_lib/utils_random.hpp"
 
 
-TEST_CASE("Test utils::math::sign", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::sign") {
     REQUIRE(utils::math::sign(-1) == -1);
     REQUIRE(utils::math::sign( 1) ==  1);
     REQUIRE(utils::math::sign( 0) ==  0);
@@ -23,39 +23,39 @@ TEST_CASE("Test utils::math::sign", "[utils][utils::math]" ) {
 }
 
 
-TEST_CASE("Test utils::math::sum", "[utils][utils::math]") {
+TEST_CASE("Test utils::math::sum") {
     REQUIRE(utils::math::sum( ) == 0);
     REQUIRE(utils::math::sum(0) == 0);
     REQUIRE(utils::math::sum(1) == 1);
     REQUIRE(utils::math::sum(0.0) == 0.0);
 
-    const double rnd = utils::random::Random::get<double>();
-    REQUIRE(utils::math::sum(rnd)      == Approx(rnd));
-    REQUIRE(utils::math::sum(rnd, rnd) == Approx(rnd + rnd));
+    const double rnd = utils::random::Random::get<double>(-1e6, 1e6);
+    REQUIRE(utils::math::sum(rnd)      == doctest::Approx(rnd));
+    REQUIRE(utils::math::sum(rnd, rnd) == doctest::Approx(rnd + rnd));
 
     const double div = rnd / 5.0;
-    REQUIRE(utils::math::sum(div, div, div, div, div) == Approx(rnd));
+    REQUIRE(utils::math::sum(div, div, div, div, div) == doctest::Approx(rnd));
 
     REQUIRE(utils::math::sum(10, 20, 30, 40, 50) == 150);
 }
 
-TEST_CASE("Test utils::math::product", "[utils][utils::math]") {
+TEST_CASE("Test utils::math::product") {
     REQUIRE(utils::math::product( ) == 1);
     REQUIRE(utils::math::product(0) == 0);
     REQUIRE(utils::math::product(1) == 1);
     REQUIRE(utils::math::product(0.0) == 0.0);
 
-    const double rnd = utils::random::Random::get<double>();
-    REQUIRE(utils::math::product(rnd)      == Approx(rnd));
-    REQUIRE(utils::math::product(rnd, rnd) == Approx(rnd * rnd));
+    const double rnd = utils::random::Random::get<double>(-1e6, 1e6);
+    REQUIRE(utils::math::product(rnd)      == doctest::Approx(rnd));
+    REQUIRE(utils::math::product(rnd, rnd) == doctest::Approx(rnd * rnd));
 
-    const double div = rnd / utils::random::Random::get<double>();
-    REQUIRE(utils::math::product(div, div, div, div, div) == Approx(std::pow(div, 5.0)));
+    const double div = rnd / utils::random::Random::get<double>(-1e6, 1e6);
+    REQUIRE(utils::math::product(div, div, div, div, div) == doctest::Approx(std::pow(div, 5.0)));
 
     REQUIRE(utils::math::product(10, 20, 30, 40, 50) == 12000000);
 }
 
-TEST_CASE("Test utils::math::min", "[utils][utils::math]") {
+TEST_CASE("Test utils::math::min") {
     REQUIRE(utils::math::min( 0,  0) ==  0);
     REQUIRE(utils::math::min( 1,  0) ==  0);
     REQUIRE(utils::math::min( 0,  1) ==  0);
@@ -64,15 +64,15 @@ TEST_CASE("Test utils::math::min", "[utils][utils::math]") {
 
     const double smaller = utils::random::Random::get<double>(0.0, 100.0);
     const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
-    REQUIRE(utils::math::min(smaller, bigger ) == Approx(smaller));
-    REQUIRE(utils::math::min(bigger , smaller) == Approx(smaller));
+    REQUIRE(utils::math::min(smaller, bigger ) == doctest::Approx(smaller));
+    REQUIRE(utils::math::min(bigger , smaller) == doctest::Approx(smaller));
 
-    REQUIRE(utils::math::min(bigger,  bigger, bigger,  bigger, smaller) == Approx(smaller));
-    REQUIRE(utils::math::min(bigger,  bigger, bigger, smaller) == Approx(smaller));
-    REQUIRE(utils::math::min(bigger, smaller, bigger,  bigger) == Approx(smaller));
+    REQUIRE(utils::math::min(bigger,  bigger, bigger,  bigger, smaller) == doctest::Approx(smaller));
+    REQUIRE(utils::math::min(bigger,  bigger, bigger, smaller) == doctest::Approx(smaller));
+    REQUIRE(utils::math::min(bigger, smaller, bigger,  bigger) == doctest::Approx(smaller));
 }
 
-TEST_CASE("Test utils::math::max", "[utils][utils::math]") {
+TEST_CASE("Test utils::math::max") {
     REQUIRE(utils::math::max( 0,  0) ==  0);
     REQUIRE(utils::math::max( 1,  0) ==  1);
     REQUIRE(utils::math::max( 0,  1) ==  1);
@@ -81,15 +81,15 @@ TEST_CASE("Test utils::math::max", "[utils][utils::math]") {
 
     const double smaller = utils::random::Random::get<double>(0.0, 100.0);
     const double bigger  = utils::random::Random::get<double>(smaller + 1.0);
-    REQUIRE(utils::math::max(smaller, bigger ) == Approx(bigger));
-    REQUIRE(utils::math::max(bigger , smaller) == Approx(bigger));
+    REQUIRE(utils::math::max(smaller, bigger ) == doctest::Approx(bigger));
+    REQUIRE(utils::math::max(bigger , smaller) == doctest::Approx(bigger));
 
-    REQUIRE(utils::math::max(smaller, smaller, smaller, smaller, bigger) == Approx(bigger));
-    REQUIRE(utils::math::max(smaller, smaller, smaller,  bigger) == Approx(bigger));
-    REQUIRE(utils::math::max(smaller,  bigger, smaller, smaller) == Approx(bigger));
+    REQUIRE(utils::math::max(smaller, smaller, smaller, smaller, bigger) == doctest::Approx(bigger));
+    REQUIRE(utils::math::max(smaller, smaller, smaller,  bigger) == doctest::Approx(bigger));
+    REQUIRE(utils::math::max(smaller,  bigger, smaller, smaller) == doctest::Approx(bigger));
 }
 
-TEST_CASE("Test utils::math::pow", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::pow") {
     REQUIRE(utils::math::pow( 0) ==  0);
     REQUIRE(utils::math::pow( 1) ==  1);
     REQUIRE(utils::math::pow<0>(42) == 1);
@@ -100,11 +100,11 @@ TEST_CASE("Test utils::math::pow", "[utils][utils::math]" ) {
     REQUIRE(utils::math::pow<10>(2) == (1 << 10));
     REQUIRE(utils::math::pow<12>(4) == (4*4*4*4*4*4*4*4*4*4*4*4));
 
-    REQUIRE(utils::math::pow   (1.9) == Approx(3.61));
-    REQUIRE(utils::math::pow<5>(2.5) == Approx(97.65625));
+    REQUIRE(utils::math::pow   (1.9) == doctest::Approx(3.61));
+    REQUIRE(utils::math::pow<5>(2.5) == doctest::Approx(97.65625));
 }
 
-TEST_CASE("Test utils::math::gcd", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::gcd") {
     REQUIRE(utils::math::gcd(10,  0) == 10);
     REQUIRE(utils::math::gcd( 0, 10) == 10);
     REQUIRE(utils::math::gcd(10,  1) ==  1);
@@ -131,11 +131,11 @@ TEST_CASE("Test utils::math::gcd", "[utils][utils::math]" ) {
     REQUIRE(utils::math::gcd(irnd, irnd * 3) == irnd);
 
     REQUIRE(utils::math::gcd(11 * 2, 17 * 3) == 1);
-    REQUIRE(utils::math::gcd(irnd, double(irnd * 3.0)) == Approx(irnd));
-    REQUIRE(utils::math::gcd(-irnd, double(irnd)) == Approx(irnd));
+    REQUIRE(utils::math::gcd(irnd, double(irnd * 3.0)) == doctest::Approx(irnd));
+    REQUIRE(utils::math::gcd(-irnd, double(irnd)) == doctest::Approx(irnd));
 }
 
-TEST_CASE("Test utils::math::lcm", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::lcm") {
     REQUIRE(utils::math::lcm<int, int>( 0,  0) == 0);
     REQUIRE(utils::math::lcm<int, int>( 0, 10) == 0);
     REQUIRE(utils::math::lcm<int, int>(10,  0) == 0);
@@ -160,8 +160,8 @@ TEST_CASE("Test utils::math::lcm", "[utils][utils::math]" ) {
     REQUIRE(utils::math::lcm(-irnd, -irnd) == irnd);
 
     REQUIRE(utils::math::lcm(irnd, irnd * 3) == (irnd * 3));
-    REQUIRE(utils::math::lcm(irnd, double(irnd * 3.0)) == Approx(irnd * 3));
-    REQUIRE(utils::math::lcm(-irnd, double(irnd)) == Approx(irnd));
+    REQUIRE(utils::math::lcm(irnd, double(irnd * 3.0)) == doctest::Approx(irnd * 3));
+    REQUIRE(utils::math::lcm(-irnd, double(irnd)) == doctest::Approx(irnd));
 
     REQUIRE(utils::math::lcm_chain(1, 2, 3, 4, 5)    ==  60);
     REQUIRE(utils::math::lcm_chain(2, 7, 11)         == 154);
@@ -169,7 +169,7 @@ TEST_CASE("Test utils::math::lcm", "[utils][utils::math]" ) {
     REQUIRE(utils::math::lcm_chain(irnd, 2, 0, 3, 1) == 0);
 }
 
-TEST_CASE("Test utils::math::epsilon_equals", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::epsilon_equals") {
     constexpr double eps = 1e-4;
 
     REQUIRE(utils::math::epsilon_equals(0.0f  , 0.0f   , eps));
@@ -184,7 +184,7 @@ TEST_CASE("Test utils::math::epsilon_equals", "[utils][utils::math]" ) {
     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));
 }
 
-TEST_CASE("Test utils::math::within", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::within") {
     REQUIRE(utils::math::within          (0.0f  , -1.0f, 1.0f));
     REQUIRE(utils::math::within_inclusive(0.0f  ,  0.0f, 0.0f));
     REQUIRE_FALSE(utils::math::within    (0.0f  ,  0.0f, 0.0f));
@@ -197,54 +197,60 @@ TEST_CASE("Test utils::math::within", "[utils][utils::math]" ) {
     REQUIRE(utils::math::within_inclusive(10, 0, 10));
 }
 
-TEST_CASE("Test utils::math::mix", "[utils][utils::math]" ) {
-    CHECK(utils::math::mix(5, 5, 0.00) == Approx(5));
-    CHECK(utils::math::mix(5, 5, 0.33) == Approx(5));
-    CHECK(utils::math::mix(5, 5, 0.50) == Approx(5));
-    CHECK(utils::math::mix(5, 5, 0.75) == Approx(5));
-    CHECK(utils::math::mix(5, 5, 1.00) == Approx(5));
+TEST_CASE("Test utils::math::mix") {
+    CHECK(utils::math::mix(5, 5, 0.00) == doctest::Approx(5));
+    CHECK(utils::math::mix(5, 5, 0.33) == doctest::Approx(5));
+    CHECK(utils::math::mix(5, 5, 0.50) == doctest::Approx(5));
+    CHECK(utils::math::mix(5, 5, 0.75) == doctest::Approx(5));
+    CHECK(utils::math::mix(5, 5, 1.00) == doctest::Approx(5));
 
-    CHECK(utils::math::mix( 0, 10, 0.6) == Approx(6));
-    CHECK(utils::math::mix(10,  0, 0.6) == Approx(4));
+    CHECK(utils::math::mix( 0, 10, 0.6) == doctest::Approx(6));
+    CHECK(utils::math::mix(10,  0, 0.6) == doctest::Approx(4));
 
-    CHECK(utils::math::mix( 5, 10, 0.5) == Approx(7.5));
+    CHECK(utils::math::mix( 5, 10, 0.5) == doctest::Approx(7.5));
 }
 
-TEST_CASE("Test utils::math::interpolate_linear", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::interpolate_linear") {
     CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 0) == 0);
     CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 5) == 500);
 
     CHECK(utils::math::interpolate_linear(0.0, 10.0, 0.0, 1000.0, 7.32)
-            == Approx(732));
+            == doctest::Approx(732));
     CHECK(utils::math::interpolate_linear(0.0, 10.0, 233.4, 1234.12, 7.32)
-            == Approx(965.92704));
+            == doctest::Approx(965.92704));
 }
 
-TEST_CASE("Test utils::math::interpolate_hermite", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::interpolate_hermite") {
     CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 0) == 0);
     CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 5) == 500);
 
     CHECK(utils::math::interpolate_hermite(0.0, 10.0, 0.0, 1000.0, 7.32)
-            == Approx(823.026));
+            == doctest::Approx(823.026));
     CHECK(utils::math::interpolate_hermite(0.0, 10.0, 233.4, 1234.12, 7.32)
-            == Approx(1057.018242));
+            == doctest::Approx(1057.018242));
 }
 
-TEST_CASE("Test utils::math::rounded", "[utils][utils::math]" ) {
+TEST_CASE("Test utils::math::rounded") {
     const auto gen = utils::random::generate_x(10, 0.0, 100.0);
     auto test = gen;
 
     utils::math::rounded<2>(test);
-    REQUIRE_THAT(test, Catch::Approx(gen).epsilon(0.01));
+    for (size_t i = 0; i < 10; i++) {
+        CHECK(test[i] == doctest::Approx(gen[i]).epsilon(0.01));
+    }
 
     utils::math::rounded<1>(test.begin(), test.end());
-    REQUIRE_THAT(test, Catch::Approx(gen).epsilon(0.1));
+    for (size_t i = 0; i < 10; i++) {
+        CHECK(test[i] == doctest::Approx(gen[i]).epsilon(0.1));
+    }
 
     utils::math::rounded<0>(test.begin(), test.end());
-    REQUIRE_THAT(test, Catch::Approx(gen).epsilon(1));
+    for (size_t i = 0; i < 10; i++) {
+        CHECK(test[i] == doctest::Approx(gen[i]).epsilon(1));
+    }
 }
 
-TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" ) {
+TEST_CASE("Test utils::math::stats") {
     constexpr size_t len = 9;
 
     std::vector<int> empty;
@@ -255,21 +261,21 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
 
     const std::vector<int> test2 = utils::random::generate_x<int>(3, -1000, 1000);
 
-    SECTION("Test utils::math::stats::mean") {
+    SUBCASE("Test utils::math::stats::mean") {
         const double result = double(0+1+2+3+4+5+6+7+8) / len;
         const double result1 = utils::math::stats::mean(test.begin(), test.end());
         const double result2 = utils::math::stats::mean(test);
         const double result3 = utils::math::stats::mean(test2);
 
-        CHECK(result == Approx(result1));
-        CHECK(result == Approx(result2));
-        CHECK((double(test2[0]+test2[1]+test2[2]) / 3.0) == Approx(result3));
+        CHECK(result == doctest::Approx(result1));
+        CHECK(result == doctest::Approx(result2));
+        CHECK((double(test2[0]+test2[1]+test2[2]) / 3.0) == doctest::Approx(result3));
 
         CHECK_FUNCTION_ABORTS(utils::math::stats::mean<std::vector<int>>, empty);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::mean<std::vector<int>>, one);
     }
 
-    SECTION("Test utils::math::stats::variance") {
+    SUBCASE("Test utils::math::stats::variance") {
         const double result = 6.66666666666667;
         const double result1 = utils::math::stats::variance(test.begin(), test.end());
         const double result2 = utils::math::stats::variance(test);
@@ -280,16 +286,16 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
                             + (test2[2] - mean3) * (test2[2] - mean3)
                            ) / 3.0;
 
-        CHECK(result == Approx(result1));
-        CHECK(result == Approx(result2));
-        CHECK(sd3    == Approx(result3));
+        CHECK(result == doctest::Approx(result1));
+        CHECK(result == doctest::Approx(result2));
+        CHECK(sd3    == doctest::Approx(result3));
 
         CHECK_FUNCTION_ABORTS(utils::math::stats::variance<std::vector<int>>, empty);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance<std::vector<int>>, one);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance<std::vector<int>>, two);
     }
 
-    SECTION("Test utils::math::stats::stddev") {
+    SUBCASE("Test utils::math::stats::stddev") {
         const double result = 2.5819888975;
         const double result1 = utils::math::stats::stddev(test.begin(), test.end());
         const double result2 = utils::math::stats::stddev(test);
@@ -300,16 +306,16 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
                                       + (test2[2] - mean3) * (test2[2] - mean3)
                                      ) / 3.0);
 
-        CHECK(result == Approx(result1));
-        CHECK(result == Approx(result2));
-        CHECK(sd3    == Approx(result3));
+        CHECK(result == doctest::Approx(result1));
+        CHECK(result == doctest::Approx(result2));
+        CHECK(sd3    == doctest::Approx(result3));
 
         CHECK_FUNCTION_ABORTS(utils::math::stats::stddev<std::vector<int>>, empty);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev<std::vector<int>>, one);
         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev<std::vector<int>>, two);
     }
 
-    SECTION("Test utils::math::stats::normalise") {
+    SUBCASE("Test utils::math::stats::normalise") {
         std::vector<double> testd(len);
         std::iota(testd.begin(), testd.end(), 0.0);
         std::vector<double> result(len);
@@ -323,8 +329,10 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
         utils::math::stats::normalise(testd.begin(), testd.end());
         utils::math::stats::normalise(testd2);
 
-        CHECK_THAT(testd , Catch::Approx(result));
-        CHECK_THAT(testd2, Catch::Approx(result));
+        for (size_t i = 0; i < len; i++) {
+            CHECK(testd[i]  == doctest::Approx(result[i]));
+            CHECK(testd2[i] == doctest::Approx(result[i]));
+        }
 
         std::vector<double> testd3 = utils::random::generate_x<double>(3, -1000.0, 1000.0);
         const double mean3 = utils::math::stats::mean(testd3);
@@ -339,9 +347,9 @@ TEST_CASE("Test utils::math::stats", "[utils][utils::math][utils::math::stats]" 
                                        ) / 3.0);
 
         utils::math::stats::normalise(testd3);
-        CHECK(testd3[0] == Approx(result3[0] / sd3));
-        CHECK(testd3[1] == Approx(result3[1] / sd3));
-        CHECK(testd3[2] == Approx(result3[2] / sd3));
+        CHECK(testd3[0] == doctest::Approx(result3[0] / sd3));
+        CHECK(testd3[1] == doctest::Approx(result3[1] / sd3));
+        CHECK(testd3[2] == doctest::Approx(result3[2] / sd3));
     }
 }
 

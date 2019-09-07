@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_print.hpp"
 
@@ -17,14 +17,14 @@
 
 #define PUT_SS(V)       std::stringstream().swap(test_op); test_op << V;
 
-TEST_CASE("Test utils::print", "[utils][utils::print]") {
+TEST_CASE("Test utils::print") {
     std::stringstream test_op;
     std::stringstream formatter;
 
     const int         randomint(utils::random::Random::get<int>());
     const std::string randomstr(std::to_string(randomint));
 
-    SECTION("Test std::pair printing") {
+    SUBCASE("Test std::pair printing") {
         utils::print::delimiters_values dels(
             utils::print::delimiters<std::pair<int, std::string>, char>::values);
         formatter << (dels.prefix    ? dels.prefix    : "") << randomint
@@ -47,7 +47,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         CHECK(test_op.str() == formatter.str());
     }
 
-    SECTION("Test std::array printing") {
+    SUBCASE("Test std::array printing") {
         utils::print::delimiters_values dels(
             utils::print::delimiters<std::array<char, 5>, char>::values);
         formatter << (dels.prefix    ? dels.prefix    : "") << 'h'
@@ -66,7 +66,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         CHECK(test_op.str() == "h");
     }
 
-    SECTION("Test c-style array printing") {
+    SUBCASE("Test c-style array printing") {
         int var[] = {
             utils::random::Random::get<int>(),
             utils::random::Random::get<int>(),
@@ -97,7 +97,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 //        CHECK(test_op.str() == "<Object int [0]>");
     }
 
-    SECTION("Test flat array printing") {
+    SUBCASE("Test flat array printing") {
         auto var = utils::memory::new_unique_flat_array<int>(10, 10);
         std::generate_n(var.get(), 100, [&](){ return utils::random::Random::get<int>(); });
 
@@ -115,8 +115,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         CHECK(test_op.str() == formatter.str());
     }
 
-    SECTION("Test std::tuple printing") {
-        SECTION("Test std::tuple<int> printing") {
+    SUBCASE("Test std::tuple printing") {
+        SUBCASE("Test std::tuple<int> printing") {
             utils::print::delimiters_values dels(
                 utils::print::delimiters<std::tuple<int>, char>::values);
             formatter << (dels.prefix  ? dels.prefix  : "")    << randomint
@@ -127,7 +127,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
             CHECK(test_op.str() == formatter.str());
         }
 
-        SECTION("Test std::tuple<string, pair, int> printing") {
+        SUBCASE("Test std::tuple<string, pair, int> printing") {
             const auto var1 = std::make_pair(randomstr, randomint);
 
             utils::print::delimiters_values dels(
@@ -144,7 +144,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
             CHECK(test_op.str() == formatter.str());
         }
 
-        SECTION("Test std::tuple<int, int, pair> printing") {
+        SUBCASE("Test std::tuple<int, int, pair> printing") {
             const int    randomint2(utils::random::Random::get<int>());
             const double randomdbl (utils::random::Random::get<double>());
             const std::pair<double, std::string> var1(randomdbl, "meow");
@@ -162,8 +162,8 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         }
     }
 
-    SECTION("Test std::optional printing") {
-        SECTION("Test empty std::optional printing") {
+    SUBCASE("Test std::optional printing") {
+        SUBCASE("Test empty std::optional printing") {
             const std::optional<int> var1;
 
             utils::print::delimiters_values dels(
@@ -176,7 +176,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
             CHECK(test_op.str() == formatter.str());
         }
 
-        SECTION("Test std::optional<int> printing") {
+        SUBCASE("Test std::optional<int> printing") {
             const std::optional<int> var1(randomint);
 
             utils::print::delimiters_values dels(
@@ -190,10 +190,10 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         }
     }
 
-    SECTION("Test std::variant printing") {
+    SUBCASE("Test std::variant printing") {
         std::variant<int, double> var1;
 
-        SECTION("Test std::variant int printing") {
+        SUBCASE("Test std::variant int printing") {
             var1 = randomint;
 
             utils::print::delimiters_values dels(
@@ -206,7 +206,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
             CHECK(test_op.str() == formatter.str());
         }
 
-        SECTION("Test std::variant double printing") {
+        SUBCASE("Test std::variant double printing") {
             const double randomdbl (utils::random::Random::get<double>());
             var1 = randomdbl;
 
@@ -220,7 +220,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
         }
     }
 
-    SECTION("Test object printing") {
+    SUBCASE("Test object printing") {
         PUT_SS(formatter);
         CHECK(utils::string::starts_with(test_op.str(), "<Object"));
         CHECK(utils::string::ends_with(test_op.str(), ">"));
@@ -283,7 +283,7 @@ TEST_CASE("Test utils::print", "[utils][utils::print]") {
 //    ;
 }
 
-TEST_CASE("Test utils::print::type2name", "[utils][utils::print]") {
+TEST_CASE("Test utils::print::type2name") {
     CHECK(utils::string::contains(utils::print::type2name(3)    , "int"   ));
     CHECK(utils::string::contains(utils::print::type2name(3.0)  , "double"));
     CHECK(utils::string::contains(utils::print::type2name(3.0f) , "float" ));
@@ -301,7 +301,7 @@ TEST_CASE("Test utils::print::type2name", "[utils][utils::print]") {
     CHECK_FALSE(utils::string::contains(name, "std::"));
 }
 
-TEST_CASE("Test utils::print::hexDump", "[utils][utils::print]") {
+TEST_CASE("Test utils::print::hexDump") {
     std::ostringstream test_op;
     #define STR_TEST(DATA, LEN, RESULT) \
         utils::print::hexdump(test_op, DATA, LEN); \
@@ -320,7 +320,7 @@ TEST_CASE("Test utils::print::hexDump", "[utils][utils::print]") {
              "0010 : 5...6...7...8... 35 00 00 00 36 00 00 00 37 00 00 00 38 00 00 00\n");
 }
 
-TEST_CASE("Test utils::print::with_progressbar", "[utils][utils::print]") {
+TEST_CASE("Test utils::print::with_progressbar") {
     std::ostringstream test_op;
     std::vector<int> test(10);
     constexpr size_t size =  70 * 10;

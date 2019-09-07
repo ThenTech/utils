@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_algorithm.hpp"
 
@@ -9,7 +9,7 @@
 #include <map>
 
 
-TEST_CASE("Test utils::algorithm::contains", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::contains") {
     std::vector<int> empty, test(10);
     std::iota(test.begin(), test.end(), 0);
 
@@ -36,7 +36,7 @@ TEST_CASE("Test utils::algorithm::contains", "[utils][utils::algorithm]") {
     }
 }
 
-TEST_CASE("Test utils::algorithm::all", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::all") {
     REQUIRE(utils::algorithm::all());
 
     REQUIRE(utils::algorithm::all(true));
@@ -57,7 +57,7 @@ TEST_CASE("Test utils::algorithm::all", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::all(true, true, true, true, true, true,  true, true, true, true));
 }
 
-TEST_CASE("Test utils::algorithm::any", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::any") {
     REQUIRE_FALSE(utils::algorithm::any());
 
     REQUIRE(utils::algorithm::any(true));
@@ -79,7 +79,7 @@ TEST_CASE("Test utils::algorithm::any", "[utils][utils::algorithm]") {
     REQUIRE_FALSE(utils::algorithm::any(false, false, false, false, false, false, false, false, false, false));
 }
 
-TEST_CASE("Test utils::algorithm::none", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::none") {
     REQUIRE(utils::algorithm::none());
 
     REQUIRE_FALSE(utils::algorithm::none(true));
@@ -101,7 +101,7 @@ TEST_CASE("Test utils::algorithm::none", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::none(false, false, false, false, false, false, false, false, false, false));
 }
 
-TEST_CASE("Test utils::algorithm::all_equal", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::all_equal") {
     REQUIRE(utils::algorithm::all_equal());
 
     REQUIRE(utils::algorithm::all_equal(true));
@@ -131,7 +131,7 @@ TEST_CASE("Test utils::algorithm::all_equal", "[utils][utils::algorithm]") {
     REQUIRE_FALSE(utils::algorithm::all_equal(42, 42, 42, 42, 42, 42, 43, 42, 52));
 }
 
-TEST_CASE("Test utils::algorithm::all_within", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::all_within") {
     REQUIRE(utils::algorithm::all_within(0, 10));
     REQUIRE(utils::algorithm::all_within(0, 10, 0));
     REQUIRE(utils::algorithm::all_within(0, 10, 10));
@@ -159,7 +159,7 @@ TEST_CASE("Test utils::algorithm::all_within", "[utils][utils::algorithm]") {
     CHECK(utils::algorithm::within(15, 0, c.begin(), c.end()));
 }
 
-TEST_CASE("Test utils::algorithm::sum", "[utils][utils::math]") {
+TEST_CASE("Test utils::algorithm::sum") {
     constexpr int sum = 55;
     const std::vector<int>    e{};
     const std::vector<int>    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -169,11 +169,11 @@ TEST_CASE("Test utils::algorithm::sum", "[utils][utils::math]") {
     REQUIRE(utils::algorithm::sum(e.begin(), e.end()) == 0);
     REQUIRE(utils::algorithm::sum(x) == sum);
     REQUIRE(utils::algorithm::sum(x.begin(), x.end()) == sum);
-    REQUIRE(utils::algorithm::sum(y) == Approx(sum));
-    REQUIRE(utils::algorithm::sum(y.begin(), y.end()) == Approx(sum));
+    REQUIRE(utils::algorithm::sum(y) == doctest::Approx(sum));
+    REQUIRE(utils::algorithm::sum(y.begin(), y.end()) == doctest::Approx(sum));
 }
 
-TEST_CASE("Test utils::algorithm::product", "[utils][utils::math]") {
+TEST_CASE("Test utils::algorithm::product") {
     constexpr int prod = 3628800;
     const std::vector<int>    e{};
     const std::vector<int>    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -183,13 +183,13 @@ TEST_CASE("Test utils::algorithm::product", "[utils][utils::math]") {
     REQUIRE(utils::algorithm::product(e.begin(), e.end()) == 0);
     REQUIRE(utils::algorithm::product(x) == prod);
     REQUIRE(utils::algorithm::product(x.begin(), x.end()) == prod);
-    REQUIRE(utils::algorithm::product(y) == Approx(prod));
-    REQUIRE(utils::algorithm::product(y.begin(), y.end()) == Approx(prod));
+    REQUIRE(utils::algorithm::product(y) == doctest::Approx(prod));
+    REQUIRE(utils::algorithm::product(y.begin(), y.end()) == doctest::Approx(prod));
 }
 
 static void __test_func(int& x) { x /= 5; }
 
-TEST_CASE("Test utils::algorithm::repeat", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::repeat") {
     int test = 0;
     utils::algorithm::repeat<5>([&](){ test++; });
     REQUIRE(test == 5);
@@ -205,7 +205,7 @@ TEST_CASE("Test utils::algorithm::repeat", "[utils][utils::algorithm]") {
     REQUIRE(test == 1);
 }
 
-TEST_CASE("Test utils::algorithm::for_each", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::for_each") {
     std::vector<int> test(10);
     std::iota(test.begin(), test.end(), 0);
     int cnt = 0;
@@ -220,7 +220,7 @@ TEST_CASE("Test utils::algorithm::for_each", "[utils][utils::algorithm]") {
     });
 }
 
-TEST_CASE("Test utils::algorithm::min_element", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::min_element") {
     auto     test = utils::random::generate_x<int>(20, 0, 10);
     const int min = utils::random::Random::get(-10, -1);
     auto   it_min = utils::random::Random::get(test);
@@ -234,7 +234,7 @@ TEST_CASE("Test utils::algorithm::min_element", "[utils][utils::algorithm]") {
     CHECK(*found_it2 == min);
 }
 
-TEST_CASE("Test utils::algorithm::max_element", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::max_element") {
     auto     test = utils::random::generate_x<int>(20, 0, 10);
     const int max = utils::random::Random::get(11, 100);
     auto   it_max = utils::random::Random::get(test);
@@ -249,7 +249,7 @@ TEST_CASE("Test utils::algorithm::max_element", "[utils][utils::algorithm]") {
     CHECK(*found_it2 == max);
 }
 
-TEST_CASE("Test utils::algorithm::is_ascending", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::is_ascending") {
     std::vector<int> test(10);
     std::iota(test.begin(), test.end(), 0);
 
@@ -264,7 +264,7 @@ TEST_CASE("Test utils::algorithm::is_ascending", "[utils][utils::algorithm]") {
     REQUIRE(utils::algorithm::is_ascending(test.rbegin(), test.rend()));
 }
 
-TEST_CASE("Test utils::algorithm::is_descending", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::is_descending") {
     std::vector<int> test(10);
     std::iota(test.begin(), test.end(), 0);
 
@@ -279,7 +279,7 @@ TEST_CASE("Test utils::algorithm::is_descending", "[utils][utils::algorithm]") {
     REQUIRE_FALSE(utils::algorithm::is_descending(test.rbegin(), test.rend()));
 }
 
-TEST_CASE("Test utils::algorithm::enumerate", "[utils][utils::algorithm]") {
+TEST_CASE("Test utils::algorithm::enumerate") {
     std::vector<int> test(10);
     std::iota(test.begin(), test.end(), 0);
     int cnt = 0;

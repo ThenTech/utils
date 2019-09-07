@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_xorstring.hpp"
 #include "../utils_lib/utils_traits.hpp"
@@ -44,7 +44,7 @@
 #endif
 
 
-TEST_CASE("Test utils::xorstr", "[utils][utils::xorstr]" ) {
+TEST_CASE("Test utils::xorstr") {
     const std::string test_str = xorstr(ori_str);
 
     REQUIRE(ori_str == test_str);

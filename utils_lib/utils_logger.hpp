@@ -5,7 +5,7 @@
 #include "utils_print.hpp"
 #include "utils_os.hpp"
 #include "utils_time.hpp"
-#include "utils_catch.hpp"
+#include "utils_test.hpp"
 #include "utils_threading.hpp"
 #include "utils_algorithm.hpp"
 
@@ -608,12 +608,7 @@ namespace utils {
              *  std::string_format("%c", 219)
              *  219
              */
-            static inline constexpr size_t  CONSOLE_WIDTH
-                #ifdef CATCH_CONFIG_CONSOLE_WIDTH
-                    = (CATCH_CONFIG_CONSOLE_WIDTH - 1);
-                #else
-                    = 79;
-                #endif
+            static inline constexpr size_t  CONSOLE_WIDTH = 79;
             static inline const std::string FILL  = "#";
             static inline const std::string EMPTY = " ";
             static inline const std::string CRLF  = "\r\n";

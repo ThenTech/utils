@@ -1,12 +1,12 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_csv.hpp"
 
 
-TEST_CASE("Test utils::csv", "[utils][utils::csv]") {
+TEST_CASE("Test utils::csv") {
     utils::csv::Reader file;
     file.use_dialect("excel");
     file.read("./utils_lib/external/csv/tests/inputs/test_11_excel.csv");

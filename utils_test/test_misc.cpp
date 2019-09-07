@@ -1,17 +1,17 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_misc.hpp"
 
 
-TEST_CASE("Test utils::misc::lexical_cast", "[utils][utils::misc]") {
-    SECTION("Normal") {
+TEST_CASE("Test utils::misc::lexical_cast") {
+    SUBCASE("Normal") {
         CHECK_THROWS_AS(utils::misc::lexical_cast<int>(""), utils::exceptions::CastingException);
         CHECK(utils::misc::lexical_cast<int>   ("123") == 123);
-        CHECK(utils::misc::lexical_cast<float> ("1.3") == Approx(1.3));
-        CHECK(utils::misc::lexical_cast<double>("1.3") == Approx(1.3));
+        CHECK(utils::misc::lexical_cast<float> ("1.3") == doctest::Approx(1.3));
+        CHECK(utils::misc::lexical_cast<double>("1.3") == doctest::Approx(1.3));
         CHECK(utils::misc::lexical_cast<int>   ("1a")  == 1);
 
         // Defined behaviour, but probalby unintended
@@ -23,27 +23,27 @@ TEST_CASE("Test utils::misc::lexical_cast", "[utils][utils::misc]") {
         CHECK_THROWS_AS(utils::misc::lexical_cast<int>(std::to_string(too_large + 1)), utils::exceptions::CastingException);
     }
 
-    SECTION("Hexadecimal") {
+    SUBCASE("Hexadecimal") {
         CHECK(utils::misc::lexical_cast<int>     ("0xAA")       == 0xAA);
         CHECK(utils::misc::lexical_cast<uint32_t>("0XDEADBEEF") == 0xDEADBEEF);
         CHECK(utils::misc::lexical_cast<uint32_t>("#FF55AA")    == 0xFF55AA);
         CHECK(utils::misc::lexical_cast<int>     ("0xAAG")      == 0xAA);
     }
 
-    SECTION("Binary") {
+    SUBCASE("Binary") {
         CHECK(utils::misc::lexical_cast<int>     ("0b10101010") == 0xAA);
         CHECK(utils::misc::lexical_cast<uint32_t>("0B01010101") == 0x55);
         CHECK(utils::misc::lexical_cast<int>     ("0b12")       == 1);
         CHECK_THROWS_AS(utils::misc::lexical_cast<int>("0b2"), utils::exceptions::CastingException);
     }
 
-    SECTION("Octal") {
+    SUBCASE("Octal") {
         CHECK(utils::misc::lexical_cast<int>     ("01234567") == 342391);
         CHECK(utils::misc::lexical_cast<uint32_t>("0100")     == 64);
         CHECK(utils::misc::lexical_cast<int>     ("08")       == 0);
     }
 
-    SECTION("Nothrow") {
+    SUBCASE("Nothrow") {
         const uint64_t too_large = std::numeric_limits<int>::max();
 
         CHECK(utils::misc::try_lexical_cast<int>("2").has_value());
@@ -53,7 +53,7 @@ TEST_CASE("Test utils::misc::lexical_cast", "[utils][utils::misc]") {
     }
 }
 
-TEST_CASE("Test utils::misc::Scoped", "[utils][utils::misc]") {
+TEST_CASE("Test utils::misc::Scoped") {
     int test = 0;
 
     {

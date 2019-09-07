@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_string.hpp"
 
@@ -13,10 +13,10 @@ static constexpr std::string_view alphabet_lower = "abcdefghijklmnopqrstuvwxyz";
 static constexpr std::string_view alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
-TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::contains") {
     utils::traits::found_t found;
 
-    SECTION("Test with char") {
+    SUBCASE("Test with char") {
         REQUIRE_FALSE(utils::string::contains("", '.'));
         REQUIRE_FALSE(utils::string::rcontains("", '.'));
 
@@ -49,7 +49,7 @@ TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
         REQUIRE_FALSE(utils::string::rcontains(test_1, 'A'));
     }
 
-    SECTION("Test with string") {
+    SUBCASE("Test with string") {
         REQUIRE_FALSE(utils::string::contains("", "."));
         REQUIRE_FALSE(utils::string::rcontains("", "."));
 
@@ -101,7 +101,7 @@ TEST_CASE("Test utils::string::contains", "[utils][utils::string]") {
     }
 }
 
-TEST_CASE("Test utils::string::starts_with", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::starts_with") {
     CHECK_FALSE(utils::string::starts_with(""   , '.'));
     CHECK_FALSE(utils::string::starts_with(""   , '\0'));
     CHECK_FALSE(utils::string::starts_with("abc", '\0'));
@@ -129,7 +129,7 @@ TEST_CASE("Test utils::string::starts_with", "[utils][utils::string]") {
     CHECK      (utils::string::starts_with(std::string("\t\n_?abcd"), std::string("\t\n")));
 }
 
-TEST_CASE("Test utils::string::ends_with", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::ends_with") {
     CHECK_FALSE(utils::string::ends_with(""   , '.'));
     CHECK_FALSE(utils::string::ends_with(""   , '\0'));
     CHECK_FALSE(utils::string::ends_with("abc", '\0'));
@@ -160,7 +160,7 @@ TEST_CASE("Test utils::string::ends_with", "[utils][utils::string]") {
     CHECK      (utils::string::ends_with(std::string("\t\n_?abcd"), std::string("cd")));
 }
 
-TEST_CASE("Test utils::string::ltrim", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::ltrim") {
     std::string empty("");
     utils::string::ltrim(empty);
     REQUIRE(empty.size() == 0);
@@ -197,7 +197,7 @@ TEST_CASE("Test utils::string::ltrim", "[utils][utils::string]") {
     REQUIRE(test_5 == charstr);
 }
 
-TEST_CASE("Test utils::string::rtrim", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::rtrim") {
     std::string empty("");
     utils::string::rtrim(empty);
     REQUIRE(empty.size() == 0);
@@ -234,7 +234,7 @@ TEST_CASE("Test utils::string::rtrim", "[utils][utils::string]") {
     REQUIRE(test_5 == charstr);
 }
 
-TEST_CASE("Test utils::string::trim", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::trim") {
     std::string empty("");
     utils::string::trim(empty);
     REQUIRE(empty.size() == 0);
@@ -271,7 +271,7 @@ TEST_CASE("Test utils::string::trim", "[utils][utils::string]") {
     REQUIRE(test_5 == charstr);
 }
 
-TEST_CASE("Test utils::string::trimmed", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::trimmed") {
     std::string empty("");
     REQUIRE(utils::string::trimmed(empty).size() == 0);
 
@@ -296,7 +296,7 @@ TEST_CASE("Test utils::string::trimmed", "[utils][utils::string]") {
     REQUIRE(utils::string::trimmed(charstr) == charstr);
 }
 
-TEST_CASE("Test utils::string::erase_from", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::erase_from") {
     std::string empty("");
     utils::string::erase_from(empty, ".");
     REQUIRE(empty.size() == 0);
@@ -321,7 +321,7 @@ TEST_CASE("Test utils::string::erase_from", "[utils][utils::string]") {
     REQUIRE(test_4.size() == erase_index);
 }
 
-TEST_CASE("Test utils::string::erased_from", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::erased_from") {
     std::string empty("");
     REQUIRE(utils::string::erased_from(empty, ".").size() == 0);
 
@@ -341,7 +341,7 @@ TEST_CASE("Test utils::string::erased_from", "[utils][utils::string]") {
     REQUIRE(utils::string::erased_from(test_4, erase_char).size() == erase_index);
 }
 
-TEST_CASE("Test utils::string::erase_to", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::erase_to") {
     std::string empty("");
     utils::string::erase_to(empty, ".");
     REQUIRE(empty.size() == 0);
@@ -366,7 +366,7 @@ TEST_CASE("Test utils::string::erase_to", "[utils][utils::string]") {
     REQUIRE(test_4.size() == alphabet_lower.size() - erase_index);
 }
 
-TEST_CASE("Test utils::string::erased_to", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::erased_to") {
     std::string empty("");
     REQUIRE(utils::string::erased_to(empty, ".").size() == 0);
 
@@ -386,7 +386,7 @@ TEST_CASE("Test utils::string::erased_to", "[utils][utils::string]") {
     REQUIRE(utils::string::erased_to(test_4, erase_char).size() == alphabet_lower.size() - erase_index);
 }
 
-TEST_CASE("Test utils::string::to_upper", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_upper") {
     std::string empty ("");
     std::string test_1(" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
     std::string test_2(alphabet_lower);
@@ -420,7 +420,7 @@ TEST_CASE("Test utils::string::to_upper", "[utils][utils::string]") {
     CHECK_FALSE(wtest_3 == L"ÜÊÉÈ");
 }
 
-TEST_CASE("Test utils::string::to_uppercase", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_uppercase") {
     const std::string empty ("");
     const std::string test_1(" \t\n\rabcd\t-=_+[]'#;/,.<>?:@~)");
     const std::string test_2(alphabet_lower);
@@ -442,7 +442,7 @@ TEST_CASE("Test utils::string::to_uppercase", "[utils][utils::string]") {
     CHECK_FALSE(utils::string::to_uppercase(wtest_3) == L"ÜÊÉÈ");
 }
 
-TEST_CASE("Test utils::string::to_lower", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_lower") {
     std::string empty ("");
     std::string test_1(" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
     std::string test_2(alphabet_upper);
@@ -476,7 +476,7 @@ TEST_CASE("Test utils::string::to_lower", "[utils][utils::string]") {
     CHECK_FALSE(wtest_3 == L"üêéè");
 }
 
-TEST_CASE("Test utils::string::to_lowercase", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_lowercase") {
     const std::string empty ("");
     const std::string test_1(" \t\n\rABCD\t-=_+[]'#;/,.<>?:@~)");
     const std::string test_2(alphabet_upper);
@@ -498,7 +498,7 @@ TEST_CASE("Test utils::string::to_lowercase", "[utils][utils::string]") {
     CHECK_FALSE(utils::string::to_lowercase(wtest_3) == L"üêéè");
 }
 
-TEST_CASE("Test utils::string::erase_consecutive", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::erase_consecutive") {
     std::string empty("");
     utils::string::erase_consecutive(empty, '.');
     REQUIRE(empty.size() == 0);
@@ -528,7 +528,7 @@ TEST_CASE("Test utils::string::erase_consecutive", "[utils][utils::string]") {
     REQUIRE(test_2.size() == prelen - charstr.size() + 1);
 }
 
-TEST_CASE("Test utils::string::replace_all", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::replace_all") {
     std::string empty("");
     utils::string::replace_all(empty, "", "");
     REQUIRE(empty.size() == 0);
@@ -557,7 +557,7 @@ TEST_CASE("Test utils::string::replace_all", "[utils][utils::string]") {
     REQUIRE(test_2 == part1 + std::string(charstr.size(), '=') + part2);
 }
 
-TEST_CASE("Test utils::string::erase_all", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::erase_all") {
     std::string empty("");
     utils::string::erase_all(empty, "");
     REQUIRE(empty.size() == 0);
@@ -587,7 +587,7 @@ TEST_CASE("Test utils::string::erase_all", "[utils][utils::string]") {
     REQUIRE(test_2 == part1 + part2);
 }
 
-TEST_CASE("Test utils::string::to_wstring", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_wstring") {
     std::wstring test = utils::string::to_wstring("\0");
     REQUIRE(test == L"");
     REQUIRE(std::wcscmp(test.data(), L"\0") == 0);
@@ -602,7 +602,7 @@ TEST_CASE("Test utils::string::to_wstring", "[utils][utils::string]") {
     REQUIRE(std::wcscmp(test.data(), L"\x20ac") == 0);
 }
 
-TEST_CASE("Test utils::string::to_string", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_string") {
     std::string test = utils::string::to_string(L"\0");
     REQUIRE(test == "");
     REQUIRE(std::strcmp(test.data(), "\0") == 0);
@@ -617,7 +617,7 @@ TEST_CASE("Test utils::string::to_string", "[utils][utils::string]") {
     REQUIRE(std::strcmp(test.data(), "\xE2\x82\xAC") == 0);
 }
 
-TEST_CASE("Test utils::string::quote", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::quote") {
     std::string em = "";
     std::string q1 = ".";
     std::string q2 = "'Hello'";
@@ -641,7 +641,7 @@ TEST_CASE("Test utils::string::quote", "[utils][utils::string]") {
     CHECK(q3 == "**_\"Hello\"_**");
 }
 
-TEST_CASE("Test utils::string::quoted", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::quoted") {
     const std::string em = "";
     const std::string q1 = ".";
     const std::string q2 = "'Hello'";
@@ -657,7 +657,7 @@ TEST_CASE("Test utils::string::quoted", "[utils][utils::string]") {
     CHECK(utils::string::quoted(q3, "**") == "**Hello**");
 }
 
-TEST_CASE("Test utils::string::extract_quoted", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::extract_quoted") {
     std::vector<std::string_view> list;
     std::string quoted;
 
@@ -690,14 +690,14 @@ TEST_CASE("Test utils::string::extract_quoted", "[utils][utils::string]") {
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "World"));
 
-    int checkidx = 0;
+    size_t checkidx = 0;
     utils::string::for_each_quoted([&](const std::string_view& sv){
         CHECK(list[checkidx] == sv);
         checkidx++;
     }, quoted);
 }
 
-TEST_CASE("Test utils::string::join", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::join") {
     REQUIRE(utils::string::join({}) == "");
     REQUIRE(utils::string::join({"test"}) == "test");
     REQUIRE(utils::string::join({"test", "tset"}, ",")  == "test,tset");
@@ -722,7 +722,7 @@ TEST_CASE("Test utils::string::join", "[utils][utils::string]") {
     CHECK(int(ds[3]) == int('\"'));
 }
 
-TEST_CASE("Test utils::string::split", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::split") {
     std::vector<std::string_view> splitted;
 
     utils::string::split(splitted, "");
@@ -793,7 +793,7 @@ TEST_CASE("Test utils::string::split", "[utils][utils::string]") {
     }, "**1****2**", "**");
 }
 
-TEST_CASE("Test utils::string::rsplit", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::rsplit") {
     std::vector<std::string_view> splitted;
 
     utils::string::rsplit(splitted, "");
@@ -863,7 +863,7 @@ TEST_CASE("Test utils::string::rsplit", "[utils][utils::string]") {
     }, "**1****2**", "**");
 }
 
-TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::format") {
     std::stringstream ss;
     std::string test;
 
@@ -912,7 +912,7 @@ TEST_CASE("Test utils::string::format", "[utils][utils::string]") {
     REQUIRE(ss.str() == "123\n");
 }
 
-TEST_CASE("Test utils::string::is_base64", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::is_base64") {
     REQUIRE(utils::string::is_base64(""        ));
     REQUIRE(utils::string::is_base64("Zg=="    ));
     REQUIRE(utils::string::is_base64("Zm8="    ));
@@ -940,7 +940,7 @@ TEST_CASE("Test utils::string::is_base64", "[utils][utils::string]") {
     REQUIRE_FALSE(utils::string::is_base64("AA======"));
 }
 
-TEST_CASE("Test utils::string::to_base64", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::to_base64") {
     std::string enc, dec, str;
 
     REQUIRE(utils::string::to_base64(""      ) == "");
@@ -975,7 +975,7 @@ TEST_CASE("Test utils::string::to_base64", "[utils][utils::string]") {
     }
 }
 
-TEST_CASE("Test utils::string::from_base64", "[utils][utils::string]") {
+TEST_CASE("Test utils::string::from_base64") {
     REQUIRE(utils::string::from_base64(""        ) == ""      );
     REQUIRE(utils::string::from_base64("Zg=="    ) == "f"     );
     REQUIRE(utils::string::from_base64("Zm8="    ) == "fo"    );

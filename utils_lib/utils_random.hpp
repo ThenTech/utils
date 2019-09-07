@@ -4,7 +4,7 @@
 #include "external/random.hpp"
 #include "utils_compiler.hpp"
 #include "utils_traits.hpp"
-#include "utils_catch.hpp"
+#include "utils_test.hpp"
 #include "utils_string.hpp"
 
 #include <sstream>

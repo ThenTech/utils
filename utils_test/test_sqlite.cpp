@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_sqlite.hpp"
 #include "../utils_lib/utils_json.hpp"
@@ -15,7 +15,7 @@ struct Entry {
     std::string val;
 };
 
-TEST_CASE("Test utils::sqlite", "[utils][utils::sqlite]" ) {
+TEST_CASE("Test utils::sqlite") {
     static constexpr std::string_view dbfile = "test_db.sqlite";
 
     auto storage = utils::sqlite::make_storage(std::string(dbfile),

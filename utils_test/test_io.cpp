@@ -1,7 +1,7 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_io.hpp"
 
@@ -9,10 +9,10 @@
 #include "../utils_lib/utils_random.hpp"
 
 
-TEST_CASE("Test utils::io::TemporaryFile", "[utils][utils::io]") {
+TEST_CASE("Test utils::io::TemporaryFile") {
     utils::io::fs::path pp;
 
-    SECTION("Test utils::io::TemporaryFile deleted after scope") {
+    SUBCASE("Test utils::io::TemporaryFile deleted after scope") {
         {
             utils::io::TemporaryFile t;
             pp = t.get_path();
@@ -33,7 +33,7 @@ TEST_CASE("Test utils::io::TemporaryFile", "[utils][utils::io]") {
         REQUIRE_FALSE(utils::io::fs::exists(pp));
     }
 
-    SECTION("Test utils::io::TemporaryFile deleted after created after ctor") {
+    SUBCASE("Test utils::io::TemporaryFile deleted after created after ctor") {
         {
             utils::io::TemporaryFile t(false, "", "", "_test_", ".abc");
             pp = t.get_path();

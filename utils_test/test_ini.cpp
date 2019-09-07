@@ -1,11 +1,12 @@
 #include "test_settings.hpp"
 
 #ifdef ENABLE_TESTS
-#include "../utils_lib/utils_catch.hpp"
+#include "../utils_lib/external/doctest.hpp"
 
 #include "../utils_lib/utils_ini.hpp"
 
-TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
+
+TEST_CASE("Test utils::ini") {
     utils::ini::ConfigReader reader;
 
     reader.SetValue("   TEST    ", "een int", 6);
@@ -15,7 +16,7 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
     reader.SetValue<std::string>("str", "s1", "verder met dit");
     reader.SetValue<std::string>("str", "path", "./hier/volgt/een/file/kijk.txt");
 
-    SECTION("Test utils::ini sections and keys are set") {
+    SUBCASE("Test utils::ini sections and keys are set") {
         REQUIRE(reader.SectionSize() == 3);
         REQUIRE(reader.hasSection("TEST"));
         REQUIRE(reader["TEST"]);
@@ -35,13 +36,13 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
 
         CHECK(  6 == reader.GetValue<int>("TEST", "een int"));
         CHECK(-99 == reader.GetValue<int>("TEST", "nog een int"));
-        CHECK(Approx(0.212)    == reader.GetValue<double>("floats", "f1"));
-        CHECK(Approx(3.141596) == reader.GetValue<double>("floats", "pi"));
+        CHECK(doctest::Approx(0.212)    == reader.GetValue<double>("floats", "f1"));
+        CHECK(doctest::Approx(3.141596) == reader.GetValue<double>("floats", "pi"));
         CHECK("verder met dit" == reader.GetValue<std::string>("str", "s1"));
         CHECK("./hier/volgt/een/file/kijk.txt" == reader.GetValue<std::string>("str", "path"));
     }
 
-    SECTION("Test utils::ini creation from stream") {
+    SUBCASE("Test utils::ini creation from stream") {
         std::stringstream streamed;
         streamed << reader;
 
@@ -85,14 +86,14 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
         utils::io::fs::remove("./tmp");
     }
 
-    SECTION("Test utils::ini section") {
+    SUBCASE("Test utils::ini section") {
         reader.CreateSection("add_section");
         REQUIRE(reader.hasSection("add_section"));
         reader.RemoveSection("add_section");
         REQUIRE_FALSE(reader.hasSection("add_section"));
     }
 
-    SECTION("Test utils::ini creation of key, and section that did not exist") {
+    SUBCASE("Test utils::ini creation of key, and section that did not exist") {
         reader.CreateSectionKey("add_section_and_key", "sect_key");
         REQUIRE(reader.hasSection("add_section_and_key"));
         CHECK(reader.hasSectionKey("add_section_and_key", "sect_key"));
@@ -101,7 +102,7 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
         CHECK_FALSE(reader.hasSectionKey("add_section_and_key", "sect_key"));
     }
 
-    SECTION("Test utils::ini creation of key, and section that did exist") {
+    SUBCASE("Test utils::ini creation of key, and section that did exist") {
         reader.CreateSectionKey("TEST", "temp");
         REQUIRE(reader.hasSection("TEST"));
         CHECK(reader.hasSectionKey("TEST", "een int"));
@@ -113,7 +114,7 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
         CHECK_FALSE(reader.hasSectionKey("TEST", "temp"));
     }
 
-    SECTION("Test utils::ini value") {
+    SUBCASE("Test utils::ini value") {
         reader.CreateSectionKey("TEST", "temp");
         REQUIRE(reader.GetValue<int>("TEST", "temp") == 0);
         reader.SetValue("TEST", "temp", 889879);
@@ -125,13 +126,13 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
         REQUIRE(reader.SectionKeySize("FOO") == 1);
         REQUIRE(reader.hasSection("FOO"));
         REQUIRE(reader.hasSectionKey("FOO", "temp2"));
-        REQUIRE(Approx(0.2f) == reader.GetValue<float>("FOO", "temp2"));
+        REQUIRE(doctest::Approx(0.2) == reader.GetValue<float>("FOO", "temp2"));
         REQUIRE("0.2" == reader.GetValue<std::string>("FOO", "temp2"));
         REQUIRE(0  == reader.GetValue<int>("FOO", "temp2"));
         REQUIRE(3  == reader.GetValue<int>("floats", "pi"));
     }
 
-    SECTION("Test utils::ini boolean value") {
+    SUBCASE("Test utils::ini boolean value") {
         reader.SetValue<std::string>("FLAGS", "true1", "true");
         reader.SetValue<std::string>("FLAGS", "true2", "True");
         reader.SetValue<std::string>("FLAGS", "true3", "YES");
@@ -164,18 +165,18 @@ TEST_CASE("Test utils::ini", "[utils][utils::ini]") {
         CHECK_FALSE(reader.GetValue<bool>("FLAGS", "false8"));
     }
 
-    SECTION("Test utils::ini remove empty section") {
+    SUBCASE("Test utils::ini remove empty section") {
         reader.SetValue("FOO", "temp2", 0.2f);
         reader.RemoveSectionKey("FOO", "temp2", true);
         CHECK_FALSE(reader.hasSection("FOO"));
     }
 
-    SECTION("Test utils::ini get non existing value") {
+    SUBCASE("Test utils::ini get non existing value") {
         REQUIRE_THROWS_AS(reader.GetValue<int>("TEST", "does not exist"), utils::exceptions::KeyDoesNotExistException);
         REQUIRE_THROWS_AS(reader.GetValue<int>("does not exist", "pi"), utils::exceptions::KeyDoesNotExistException);
     }
 
-    SECTION("Test utils::ini invalid file input/output") {
+    SUBCASE("Test utils::ini invalid file input/output") {
         // FIXME Why not throwing utils::exceptions::FileReadException ?
         REQUIRE_THROWS_AS(utils::ini::ConfigReader(std::string("")), std::exception);
 
