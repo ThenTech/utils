@@ -1,7 +1,7 @@
 #ifndef TEST_SETTINGS_HPP
 #define TEST_SETTINGS_HPP
 
-#define ENABLE_TESTS
+// #define ENABLE_TESTS
 
 #ifndef ENABLE_TESTS
     #define DOCTEST_CONFIG_DISABLE
