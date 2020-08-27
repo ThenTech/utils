@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,20,89,47"/>
-<area shape="rect" id="node2" href="$structutils_1_1traits_1_1is__variant__member_3_01_t_00_01std_1_1variant_3_01_a_l_l___t_8_8_8_01_4_01_4.html" title=" " alt="" coords="137,5,304,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,20,128,47"/>
+<area shape="rect" id="node2" href="$structutils_1_1string_1_1basic__string__view.html" title="Struct to wrap a char in a std::string_view, and act as a string_view in all other cases." alt="" coords="176,5,325,61"/>
 </map>

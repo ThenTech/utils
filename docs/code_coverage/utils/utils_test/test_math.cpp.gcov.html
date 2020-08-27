@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_math.cpp<span style="font-size: 80%;"> (source / <a href="test_math.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_math.cpp<span style="font-size: 80%;"> (source / <a href="test_math.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">215</td>
-            <td class="headerCovTableEntry">215</td>
+            <td class="headerCovTableEntry">276</td>
+            <td class="headerCovTableEntry">276</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">13</td>
-            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">16</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -63,289 +63,371 @@
 <a name="1"><span class="lineNum">       1 </span>            : #include &quot;test_settings.hpp&quot;</a>
 <span class="lineNum">       2 </span>            : 
 <span class="lineNum">       3 </span>            : #ifdef ENABLE_TESTS
-<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/utils_catch.hpp&quot;
+<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/external/doctest.hpp&quot;
 <span class="lineNum">       5 </span>            : 
 <span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_math.hpp&quot;
 <span class="lineNum">       7 </span>            : 
 <span class="lineNum">       8 </span>            : #include &quot;../utils_lib/utils_random.hpp&quot;
 <a name="9"><span class="lineNum">       9 </span>            : </a>
 <span class="lineNum">      10 </span>            : 
-<span class="lineNum">      11 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::sign&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">      12 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign(-1) == -1);</span>
-<span class="lineNum">      13 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign( 1) ==  1);</span>
-<span class="lineNum">      14 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign( 0) ==  0);</span>
-<span class="lineNum">      15 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign(int16_t(0x8001)) == -1);</span>
+<span class="lineNum">      11 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::sign&quot;) {</span>
+<span class="lineNum">      12 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign(-1) == -1);</span>
+<span class="lineNum">      13 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign( 1) ==  1);</span>
+<span class="lineNum">      14 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign( 0) ==  0);</span>
+<span class="lineNum">      15 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign(int16_t(0x8001)) == -1);</span>
 <span class="lineNum">      16 </span>            : 
 <span class="lineNum">      17 </span><span class="lineCov">          1 :     const int val_neg = utils::random::Random::get&lt;int&gt;(std::numeric_limits&lt;int&gt;::min(), -1);</span>
 <span class="lineNum">      18 </span><span class="lineCov">          1 :     const int val_zer = utils::random::Random::get&lt;int&gt;(0, 0);</span>
 <span class="lineNum">      19 </span><span class="lineCov">          1 :     const int val_one = utils::random::Random::get&lt;int&gt;(1);</span>
-<span class="lineNum">      20 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign(val_neg) == -1);</span>
-<span class="lineNum">      21 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign(val_zer) ==  0);</span>
-<span class="lineNum">      22 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sign(val_one) ==  1);</span>
+<span class="lineNum">      20 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign(val_neg) == -1);</span>
+<span class="lineNum">      21 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign(val_zer) ==  0);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sign(val_one) ==  1);</span>
 <span class="lineNum">      23 </span><span class="lineCov">          1 : }</span>
 <a name="24"><span class="lineNum">      24 </span>            : </a>
 <span class="lineNum">      25 </span>            : 
-<span class="lineNum">      26 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::sum&quot;, &quot;[utils][utils::math]&quot;) {</span>
-<span class="lineNum">      27 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum( ) == 0);</span>
-<span class="lineNum">      28 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(0) == 0);</span>
-<span class="lineNum">      29 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(1) == 1);</span>
-<span class="lineNum">      30 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(0.0) == 0.0);</span>
+<span class="lineNum">      26 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::sum&quot;) {</span>
+<span class="lineNum">      27 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum( ) == 0);</span>
+<span class="lineNum">      28 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(0) == 0);</span>
+<span class="lineNum">      29 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(1) == 1);</span>
+<span class="lineNum">      30 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(0.0) == 0.0);</span>
 <span class="lineNum">      31 </span>            : 
-<span class="lineNum">      32 </span><span class="lineCov">          1 :     const double rnd = utils::random::Random::get&lt;double&gt;();</span>
-<span class="lineNum">      33 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(rnd)      == Approx(rnd));</span>
-<span class="lineNum">      34 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(rnd, rnd) == Approx(rnd + rnd));</span>
+<span class="lineNum">      32 </span><span class="lineCov">          1 :     const double rnd = utils::random::Random::get&lt;double&gt;(-1e6, 1e6);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(rnd)      == doctest::Approx(rnd));</span>
+<span class="lineNum">      34 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(rnd, rnd) == doctest::Approx(rnd + rnd));</span>
 <span class="lineNum">      35 </span>            : 
 <span class="lineNum">      36 </span><span class="lineCov">          1 :     const double div = rnd / 5.0;</span>
-<span class="lineNum">      37 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(div, div, div, div, div) == Approx(rnd));</span>
+<span class="lineNum">      37 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(div, div, div, div, div) == doctest::Approx(rnd));</span>
 <span class="lineNum">      38 </span>            : 
-<span class="lineNum">      39 </span><span class="lineCov">          2 :     REQUIRE(utils::math::sum(10, 20, 30, 40, 50) == 150);</span>
+<span class="lineNum">      39 </span><span class="lineCov">          1 :     REQUIRE(utils::math::sum(10, 20, 30, 40, 50) == 150);</span>
 <a name="40"><span class="lineNum">      40 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      41 </span>            : 
-<span class="lineNum">      42 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::product&quot;, &quot;[utils][utils::math]&quot;) {</span>
-<span class="lineNum">      43 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product( ) == 1);</span>
-<span class="lineNum">      44 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(0) == 0);</span>
-<span class="lineNum">      45 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(1) == 1);</span>
-<span class="lineNum">      46 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(0.0) == 0.0);</span>
+<span class="lineNum">      42 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::product&quot;) {</span>
+<span class="lineNum">      43 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product( ) == 1);</span>
+<span class="lineNum">      44 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(0) == 0);</span>
+<span class="lineNum">      45 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(1) == 1);</span>
+<span class="lineNum">      46 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(0.0) == 0.0);</span>
 <span class="lineNum">      47 </span>            : 
-<span class="lineNum">      48 </span><span class="lineCov">          1 :     const double rnd = utils::random::Random::get&lt;double&gt;();</span>
-<span class="lineNum">      49 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(rnd)      == Approx(rnd));</span>
-<span class="lineNum">      50 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(rnd, rnd) == Approx(rnd * rnd));</span>
+<span class="lineNum">      48 </span><span class="lineCov">          1 :     const double rnd = utils::random::Random::get&lt;double&gt;(-1e6, 1e6);</span>
+<span class="lineNum">      49 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(rnd)      == doctest::Approx(rnd));</span>
+<span class="lineNum">      50 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(rnd, rnd) == doctest::Approx(rnd * rnd));</span>
 <span class="lineNum">      51 </span>            : 
-<span class="lineNum">      52 </span><span class="lineCov">          1 :     const double div = rnd / utils::random::Random::get&lt;double&gt;();</span>
-<span class="lineNum">      53 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(div, div, div, div, div) == Approx(std::pow(div, 5.0)));</span>
+<span class="lineNum">      52 </span><span class="lineCov">          1 :     const double div = rnd / utils::random::Random::get&lt;double&gt;(-1e6, 1e6);</span>
+<span class="lineNum">      53 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(div, div, div, div, div) == doctest::Approx(std::pow(div, 5.0)));</span>
 <span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span><span class="lineCov">          2 :     REQUIRE(utils::math::product(10, 20, 30, 40, 50) == 12000000);</span>
+<span class="lineNum">      55 </span><span class="lineCov">          1 :     REQUIRE(utils::math::product(10, 20, 30, 40, 50) == 12000000);</span>
 <a name="56"><span class="lineNum">      56 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      57 </span>            : 
-<span class="lineNum">      58 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::min&quot;, &quot;[utils][utils::math]&quot;) {</span>
-<span class="lineNum">      59 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min( 0,  0) ==  0);</span>
-<span class="lineNum">      60 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min( 1,  0) ==  0);</span>
-<span class="lineNum">      61 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min( 0,  1) ==  0);</span>
-<span class="lineNum">      62 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min(-1,  0) == -1);</span>
-<span class="lineNum">      63 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min( 0, -1) == -1);</span>
+<span class="lineNum">      58 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::min&quot;) {</span>
+<span class="lineNum">      59 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min( 0,  0) ==  0);</span>
+<span class="lineNum">      60 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min( 1,  0) ==  0);</span>
+<span class="lineNum">      61 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min( 0,  1) ==  0);</span>
+<span class="lineNum">      62 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min(-1,  0) == -1);</span>
+<span class="lineNum">      63 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min( 0, -1) == -1);</span>
 <span class="lineNum">      64 </span>            : 
 <span class="lineNum">      65 </span><span class="lineCov">          1 :     const double smaller = utils::random::Random::get&lt;double&gt;(0.0, 100.0);</span>
 <span class="lineNum">      66 </span><span class="lineCov">          1 :     const double bigger  = utils::random::Random::get&lt;double&gt;(smaller + 1.0);</span>
-<span class="lineNum">      67 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min(smaller, bigger ) == Approx(smaller));</span>
-<span class="lineNum">      68 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min(bigger , smaller) == Approx(smaller));</span>
+<span class="lineNum">      67 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min(smaller, bigger ) == doctest::Approx(smaller));</span>
+<span class="lineNum">      68 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min(bigger , smaller) == doctest::Approx(smaller));</span>
 <span class="lineNum">      69 </span>            : 
-<span class="lineNum">      70 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min(bigger,  bigger, bigger,  bigger, smaller) == Approx(smaller));</span>
-<span class="lineNum">      71 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min(bigger,  bigger, bigger, smaller) == Approx(smaller));</span>
-<span class="lineNum">      72 </span><span class="lineCov">          2 :     REQUIRE(utils::math::min(bigger, smaller, bigger,  bigger) == Approx(smaller));</span>
+<span class="lineNum">      70 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min(bigger,  bigger, bigger,  bigger, smaller) == doctest::Approx(smaller));</span>
+<span class="lineNum">      71 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min(bigger,  bigger, bigger, smaller) == doctest::Approx(smaller));</span>
+<span class="lineNum">      72 </span><span class="lineCov">          1 :     REQUIRE(utils::math::min(bigger, smaller, bigger,  bigger) == doctest::Approx(smaller));</span>
 <a name="73"><span class="lineNum">      73 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      74 </span>            : 
-<span class="lineNum">      75 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::max&quot;, &quot;[utils][utils::math]&quot;) {</span>
-<span class="lineNum">      76 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max( 0,  0) ==  0);</span>
-<span class="lineNum">      77 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max( 1,  0) ==  1);</span>
-<span class="lineNum">      78 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max( 0,  1) ==  1);</span>
-<span class="lineNum">      79 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max(-1,  0) ==  0);</span>
-<span class="lineNum">      80 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max( 0, -1) ==  0);</span>
+<span class="lineNum">      75 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::max&quot;) {</span>
+<span class="lineNum">      76 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max( 0,  0) ==  0);</span>
+<span class="lineNum">      77 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max( 1,  0) ==  1);</span>
+<span class="lineNum">      78 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max( 0,  1) ==  1);</span>
+<span class="lineNum">      79 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max(-1,  0) ==  0);</span>
+<span class="lineNum">      80 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max( 0, -1) ==  0);</span>
 <span class="lineNum">      81 </span>            : 
 <span class="lineNum">      82 </span><span class="lineCov">          1 :     const double smaller = utils::random::Random::get&lt;double&gt;(0.0, 100.0);</span>
 <span class="lineNum">      83 </span><span class="lineCov">          1 :     const double bigger  = utils::random::Random::get&lt;double&gt;(smaller + 1.0);</span>
-<span class="lineNum">      84 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max(smaller, bigger ) == Approx(bigger));</span>
-<span class="lineNum">      85 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max(bigger , smaller) == Approx(bigger));</span>
+<span class="lineNum">      84 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max(smaller, bigger ) == doctest::Approx(bigger));</span>
+<span class="lineNum">      85 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max(bigger , smaller) == doctest::Approx(bigger));</span>
 <span class="lineNum">      86 </span>            : 
-<span class="lineNum">      87 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max(smaller, smaller, smaller, smaller, bigger) == Approx(bigger));</span>
-<span class="lineNum">      88 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max(smaller, smaller, smaller,  bigger) == Approx(bigger));</span>
-<span class="lineNum">      89 </span><span class="lineCov">          2 :     REQUIRE(utils::math::max(smaller,  bigger, smaller, smaller) == Approx(bigger));</span>
+<span class="lineNum">      87 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max(smaller, smaller, smaller, smaller, bigger) == doctest::Approx(bigger));</span>
+<span class="lineNum">      88 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max(smaller, smaller, smaller,  bigger) == doctest::Approx(bigger));</span>
+<span class="lineNum">      89 </span><span class="lineCov">          1 :     REQUIRE(utils::math::max(smaller,  bigger, smaller, smaller) == doctest::Approx(bigger));</span>
 <a name="90"><span class="lineNum">      90 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">      91 </span>            : 
-<span class="lineNum">      92 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::pow&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">      93 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow( 0) ==  0);</span>
-<span class="lineNum">      94 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow( 1) ==  1);</span>
-<span class="lineNum">      95 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow&lt;0&gt;(42) == 1);</span>
-<span class="lineNum">      96 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow&lt;1&gt;(42) == 42);</span>
-<span class="lineNum">      97 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow&lt;2&gt;(42) == 1764);</span>
-<span class="lineNum">      98 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow   (42) == 1764);</span>
+<span class="lineNum">      92 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::pow&quot;) {</span>
+<span class="lineNum">      93 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow( 0) ==  0);</span>
+<span class="lineNum">      94 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow( 1) ==  1);</span>
+<span class="lineNum">      95 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow&lt;0&gt;(42) == 1);</span>
+<span class="lineNum">      96 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow&lt;1&gt;(42) == 42);</span>
+<span class="lineNum">      97 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow&lt;2&gt;(42) == 1764);</span>
+<span class="lineNum">      98 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow   (42) == 1764);</span>
 <span class="lineNum">      99 </span>            : 
-<span class="lineNum">     100 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow&lt;10&gt;(2) == (1 &lt;&lt; 10));</span>
-<span class="lineNum">     101 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow&lt;12&gt;(4) == (4*4*4*4*4*4*4*4*4*4*4*4));</span>
+<span class="lineNum">     100 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow&lt;10&gt;(2) == (1 &lt;&lt; 10));</span>
+<span class="lineNum">     101 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow&lt;12&gt;(4) == (4*4*4*4*4*4*4*4*4*4*4*4));</span>
 <span class="lineNum">     102 </span>            : 
-<span class="lineNum">     103 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow   (1.9) == Approx(3.61));</span>
-<span class="lineNum">     104 </span><span class="lineCov">          2 :     REQUIRE(utils::math::pow&lt;5&gt;(2.5) == Approx(97.65625));</span>
+<span class="lineNum">     103 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow   (1.9) == doctest::Approx(3.61));</span>
+<span class="lineNum">     104 </span><span class="lineCov">          1 :     REQUIRE(utils::math::pow&lt;5&gt;(2.5) == doctest::Approx(97.65625));</span>
 <a name="105"><span class="lineNum">     105 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     106 </span>            : 
-<span class="lineNum">     107 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::gcd&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">     108 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(10,  0) == 10);</span>
-<span class="lineNum">     109 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd( 0, 10) == 10);</span>
-<span class="lineNum">     110 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(10,  1) ==  1);</span>
-<span class="lineNum">     111 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd( 1, 10) ==  1);</span>
-<span class="lineNum">     112 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd( 5, 15) ==  5);</span>
+<span class="lineNum">     107 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::gcd&quot;) {</span>
+<span class="lineNum">     108 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(10,  0) == 10);</span>
+<span class="lineNum">     109 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd( 0, 10) == 10);</span>
+<span class="lineNum">     110 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(10,  1) ==  1);</span>
+<span class="lineNum">     111 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd( 1, 10) ==  1);</span>
+<span class="lineNum">     112 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd( 5, 15) ==  5);</span>
 <span class="lineNum">     113 </span>            : 
 <span class="lineNum">     114 </span><span class="lineCov">          1 :     constexpr int imax = std::numeric_limits&lt;int&gt;::max();</span>
 <span class="lineNum">     115 </span><span class="lineCov">          1 :     const int64_t irnd = utils::random::Random::get&lt;int&gt;(1);</span>
 <span class="lineNum">     116 </span>            : 
-<span class="lineNum">     117 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(2, 3) == 1);</span>
-<span class="lineNum">     118 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(0, imax) == imax);</span>
-<span class="lineNum">     119 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(imax, 0) == imax);</span>
-<span class="lineNum">     120 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(1, imax) == 1);</span>
-<span class="lineNum">     121 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(imax, 1) == 1);</span>
-<span class="lineNum">     122 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(0, 0) == 0);</span>
-<span class="lineNum">     123 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(1, 1) == 1);</span>
-<span class="lineNum">     124 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(imax, imax) == imax);</span>
-<span class="lineNum">     125 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(irnd, irnd) == irnd);</span>
-<span class="lineNum">     126 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(-irnd, irnd) == irnd);</span>
-<span class="lineNum">     127 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(irnd, -irnd) == irnd);</span>
-<span class="lineNum">     128 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(-irnd, -irnd) == irnd);</span>
+<span class="lineNum">     117 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(2, 3) == 1);</span>
+<span class="lineNum">     118 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(0, imax) == imax);</span>
+<span class="lineNum">     119 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(imax, 0) == imax);</span>
+<span class="lineNum">     120 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(1, imax) == 1);</span>
+<span class="lineNum">     121 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(imax, 1) == 1);</span>
+<span class="lineNum">     122 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(0, 0) == 0);</span>
+<span class="lineNum">     123 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(1, 1) == 1);</span>
+<span class="lineNum">     124 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(imax, imax) == imax);</span>
+<span class="lineNum">     125 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(irnd, irnd) == irnd);</span>
+<span class="lineNum">     126 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(-irnd, irnd) == irnd);</span>
+<span class="lineNum">     127 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(irnd, -irnd) == irnd);</span>
+<span class="lineNum">     128 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(-irnd, -irnd) == irnd);</span>
 <span class="lineNum">     129 </span>            : 
-<span class="lineNum">     130 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(11 * 2, 17 * 2) == 2);</span>
-<span class="lineNum">     131 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(irnd, irnd * 3) == irnd);</span>
+<span class="lineNum">     130 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(11 * 2, 17 * 2) == 2);</span>
+<span class="lineNum">     131 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(irnd, irnd * 3) == irnd);</span>
 <span class="lineNum">     132 </span>            : 
-<span class="lineNum">     133 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(11 * 2, 17 * 3) == 1);</span>
-<span class="lineNum">     134 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(irnd, double(irnd * 3.0)) == Approx(irnd));</span>
-<span class="lineNum">     135 </span><span class="lineCov">          2 :     REQUIRE(utils::math::gcd(-irnd, double(irnd)) == Approx(irnd));</span>
+<span class="lineNum">     133 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(11 * 2, 17 * 3) == 1);</span>
+<span class="lineNum">     134 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(irnd, double(irnd * 3.0)) == doctest::Approx(irnd));</span>
+<span class="lineNum">     135 </span><span class="lineCov">          1 :     REQUIRE(utils::math::gcd(-irnd, double(irnd)) == doctest::Approx(irnd));</span>
 <a name="136"><span class="lineNum">     136 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     137 </span>            : 
-<span class="lineNum">     138 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::lcm&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">     139 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm&lt;int, int&gt;( 0,  0) == 0);</span>
-<span class="lineNum">     140 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm&lt;int, int&gt;( 0, 10) == 0);</span>
-<span class="lineNum">     141 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm&lt;int, int&gt;(10,  0) == 0);</span>
+<span class="lineNum">     138 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::lcm&quot;) {</span>
+<span class="lineNum">     139 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm&lt;int, int&gt;( 0,  0) == 0);</span>
+<span class="lineNum">     140 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm&lt;int, int&gt;( 0, 10) == 0);</span>
+<span class="lineNum">     141 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm&lt;int, int&gt;(10,  0) == 0);</span>
 <span class="lineNum">     142 </span>            : 
-<span class="lineNum">     143 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(1, 1) == 1);</span>
-<span class="lineNum">     144 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(10,  1) == 10);</span>
-<span class="lineNum">     145 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm( 1, 10) == 10);</span>
-<span class="lineNum">     146 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm( 5, 15) == 15);</span>
-<span class="lineNum">     147 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm( 2,  3) == (2 * 3));</span>
+<span class="lineNum">     143 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(1, 1) == 1);</span>
+<span class="lineNum">     144 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(10,  1) == 10);</span>
+<span class="lineNum">     145 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm( 1, 10) == 10);</span>
+<span class="lineNum">     146 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm( 5, 15) == 15);</span>
+<span class="lineNum">     147 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm( 2,  3) == (2 * 3));</span>
 <span class="lineNum">     148 </span>            : 
 <span class="lineNum">     149 </span><span class="lineCov">          1 :     constexpr int imax = std::numeric_limits&lt;int&gt;::max();</span>
 <span class="lineNum">     150 </span><span class="lineCov">          1 :     const int64_t irnd = utils::random::Random::get&lt;int&gt;(1);</span>
 <span class="lineNum">     151 </span>            : 
-<span class="lineNum">     152 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm&lt;int, int&gt;(   0, imax) == 0);</span>
-<span class="lineNum">     153 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm&lt;int, int&gt;(imax,    0) == 0);</span>
-<span class="lineNum">     154 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(1, imax) == imax);</span>
-<span class="lineNum">     155 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(imax, 1) == imax);</span>
-<span class="lineNum">     156 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(imax, imax) == imax);</span>
-<span class="lineNum">     157 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(irnd, irnd) == irnd);</span>
-<span class="lineNum">     158 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(-irnd, irnd) == irnd);</span>
-<span class="lineNum">     159 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(irnd, -irnd) == irnd);</span>
-<span class="lineNum">     160 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(-irnd, -irnd) == irnd);</span>
+<span class="lineNum">     152 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm&lt;int, int&gt;(   0, imax) == 0);</span>
+<span class="lineNum">     153 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm&lt;int, int&gt;(imax,    0) == 0);</span>
+<span class="lineNum">     154 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(1, imax) == imax);</span>
+<span class="lineNum">     155 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(imax, 1) == imax);</span>
+<span class="lineNum">     156 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(imax, imax) == imax);</span>
+<span class="lineNum">     157 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(irnd, irnd) == irnd);</span>
+<span class="lineNum">     158 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(-irnd, irnd) == irnd);</span>
+<span class="lineNum">     159 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(irnd, -irnd) == irnd);</span>
+<span class="lineNum">     160 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(-irnd, -irnd) == irnd);</span>
 <span class="lineNum">     161 </span>            : 
-<span class="lineNum">     162 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(irnd, irnd * 3) == (irnd * 3));</span>
-<span class="lineNum">     163 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(irnd, double(irnd * 3.0)) == Approx(irnd * 3));</span>
-<span class="lineNum">     164 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm(-irnd, double(irnd)) == Approx(irnd));</span>
+<span class="lineNum">     162 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(irnd, irnd * 3) == (irnd * 3));</span>
+<span class="lineNum">     163 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(irnd, double(irnd * 3.0)) == doctest::Approx(irnd * 3));</span>
+<span class="lineNum">     164 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm(-irnd, double(irnd)) == doctest::Approx(irnd));</span>
 <span class="lineNum">     165 </span>            : 
-<span class="lineNum">     166 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm_chain(1, 2, 3, 4, 5)    ==  60);</span>
-<span class="lineNum">     167 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm_chain(2, 7, 11)         == 154);</span>
-<span class="lineNum">     168 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm_chain(irnd, irnd, irnd) == irnd);</span>
-<span class="lineNum">     169 </span><span class="lineCov">          2 :     REQUIRE(utils::math::lcm_chain(irnd, 2, 0, 3, 1) == 0);</span>
+<span class="lineNum">     166 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm_chain(1, 2, 3, 4, 5)    ==  60);</span>
+<span class="lineNum">     167 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm_chain(2, 7, 11)         == 154);</span>
+<span class="lineNum">     168 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm_chain(irnd, irnd, irnd) == irnd);</span>
+<span class="lineNum">     169 </span><span class="lineCov">          1 :     REQUIRE(utils::math::lcm_chain(irnd, 2, 0, 3, 1) == 0);</span>
 <a name="170"><span class="lineNum">     170 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     171 </span>            : 
-<span class="lineNum">     172 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::epsilon_equals&quot;, &quot;[utils][utils::math]&quot; ) {</span>
+<span class="lineNum">     172 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::epsilon_equals&quot;) {</span>
 <span class="lineNum">     173 </span><span class="lineCov">          1 :     constexpr double eps = 1e-4;</span>
 <span class="lineNum">     174 </span>            : 
-<span class="lineNum">     175 </span><span class="lineCov">          2 :     REQUIRE(utils::math::epsilon_equals(0.0f  , 0.0f   , eps));</span>
-<span class="lineNum">     176 </span><span class="lineCov">          2 :     REQUIRE(utils::math::epsilon_equals(1.0   , 1.0    , eps));</span>
-<span class="lineNum">     177 </span><span class="lineCov">          2 :     REQUIRE(utils::math::epsilon_equals(1     , 1      , eps));</span>
-<span class="lineNum">     178 </span><span class="lineCov">          2 :     REQUIRE(utils::math::epsilon_equals(0.0001, 0.0001 , eps));</span>
-<span class="lineNum">     179 </span><span class="lineCov">          2 :     REQUIRE(utils::math::epsilon_equals(0.0001, 0.00015, eps));</span>
-<span class="lineNum">     180 </span><span class="lineCov">          2 :     REQUIRE(utils::math::epsilon_equals(0.0001, 0.0002 , 1e-3));</span>
+<span class="lineNum">     175 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_equals(0.0f  , 0.0f   , eps));</span>
+<span class="lineNum">     176 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_equals(1.0   , 1.0    , eps));</span>
+<span class="lineNum">     177 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_equals(1     , 1      , eps));</span>
+<span class="lineNum">     178 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_equals(0.0001, 0.0001 , eps));</span>
+<span class="lineNum">     179 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_equals(0.0001, 0.00015, eps));</span>
+<span class="lineNum">     180 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_equals(0.0001, 0.0002 , 1e-3));</span>
 <span class="lineNum">     181 </span>            : 
-<span class="lineNum">     182 </span><span class="lineCov">          2 :     REQUIRE_FALSE(utils::math::epsilon_equals(1     , 0     , eps));</span>
-<span class="lineNum">     183 </span><span class="lineCov">          2 :     REQUIRE_FALSE(utils::math::epsilon_equals(0.0   , 1.0   , eps));</span>
-<span class="lineNum">     184 </span><span class="lineCov">          2 :     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));</span>
-<a name="185"><span class="lineNum">     185 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     186 </span>            : 
-<span class="lineNum">     187 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::mix&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">     188 </span><span class="lineCov">          2 :     CHECK(utils::math::mix(5, 5, 0.00) == Approx(5));</span>
-<span class="lineNum">     189 </span><span class="lineCov">          2 :     CHECK(utils::math::mix(5, 5, 0.33) == Approx(5));</span>
-<span class="lineNum">     190 </span><span class="lineCov">          2 :     CHECK(utils::math::mix(5, 5, 0.50) == Approx(5));</span>
-<span class="lineNum">     191 </span><span class="lineCov">          2 :     CHECK(utils::math::mix(5, 5, 0.75) == Approx(5));</span>
-<span class="lineNum">     192 </span><span class="lineCov">          2 :     CHECK(utils::math::mix(5, 5, 1.00) == Approx(5));</span>
-<span class="lineNum">     193 </span>            : 
-<span class="lineNum">     194 </span><span class="lineCov">          2 :     CHECK(utils::math::mix( 0, 10, 0.6) == Approx(6));</span>
-<span class="lineNum">     195 </span><span class="lineCov">          2 :     CHECK(utils::math::mix(10,  0, 0.6) == Approx(4));</span>
-<span class="lineNum">     196 </span>            : 
-<span class="lineNum">     197 </span><span class="lineCov">          2 :     CHECK(utils::math::mix( 5, 10, 0.5) == Approx(7.5));</span>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     199 </span>            : 
-<span class="lineNum">     200 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::interpolate_linear&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">     201 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 0) == 0);</span>
-<span class="lineNum">     202 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 5) == 500);</span>
+<span class="lineNum">     182 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_equals(1     , 0     , eps));</span>
+<span class="lineNum">     183 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_equals(0.0   , 1.0   , eps));</span>
+<span class="lineNum">     184 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));</span>
+<span class="lineNum">     185 </span>            : 
+<span class="lineNum">     186 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_rel_equals(1.0   , 1.0    , eps));</span>
+<span class="lineNum">     187 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_rel_equals(1     , 1      , eps));</span>
+<span class="lineNum">     188 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_rel_equals(0.0001, 0.0001 , eps));</span>
+<span class="lineNum">     189 </span>            : 
+<span class="lineNum">     190 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0f  , 0.0f   , eps));</span>
+<span class="lineNum">     191 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0001, 0.00015, eps));</span>
+<span class="lineNum">     192 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0001, 0.0002 , 1e-3));</span>
+<span class="lineNum">     193 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_rel_equals(1     , 0     , eps));</span>
+<span class="lineNum">     194 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0   , 1.0   , eps));</span>
+<span class="lineNum">     195 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0001, 0.0002, eps));</span>
+<span class="lineNum">     196 </span><span class="lineCov">          1 :     REQUIRE(utils::math::epsilon_rel_equals(0.0001, 0.0002, 1.0));</span>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     198 </span>            : 
+<span class="lineNum">     199 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::within&quot;) {</span>
+<span class="lineNum">     200 </span><span class="lineCov">          1 :     REQUIRE(utils::math::within          (0.0f  , -1.0f, 1.0f));</span>
+<span class="lineNum">     201 </span><span class="lineCov">          1 :     REQUIRE(utils::math::within_inclusive(0.0f  ,  0.0f, 0.0f));</span>
+<span class="lineNum">     202 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::within    (0.0f  ,  0.0f, 0.0f));</span>
 <span class="lineNum">     203 </span>            : 
-<span class="lineNum">     204 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_linear(0.0, 10.0, 0.0, 1000.0, 7.32)</span>
-<span class="lineNum">     205 </span>            :             == Approx(732));
-<span class="lineNum">     206 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_linear(0.0, 10.0, 233.4, 1234.12, 7.32)</span>
-<span class="lineNum">     207 </span>            :             == Approx(965.92704));
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     209 </span>            : 
-<span class="lineNum">     210 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::interpolate_hermite&quot;, &quot;[utils][utils::math]&quot; ) {</span>
-<span class="lineNum">     211 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 0) == 0);</span>
-<span class="lineNum">     212 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 5) == 500);</span>
-<span class="lineNum">     213 </span>            : 
-<span class="lineNum">     214 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_hermite(0.0, 10.0, 0.0, 1000.0, 7.32)</span>
-<span class="lineNum">     215 </span>            :             == Approx(823.026));
-<span class="lineNum">     216 </span><span class="lineCov">          2 :     CHECK(utils::math::interpolate_hermite(0.0, 10.0, 233.4, 1234.12, 7.32)</span>
-<span class="lineNum">     217 </span>            :             == Approx(1057.018242));
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          1 : }</span></a>
-<span class="lineNum">     219 </span>            : 
-<span class="lineNum">     220 </span><span class="lineCov">          3 : TEST_CASE(&quot;Test utils::math::stats&quot;, &quot;[utils][utils::math][utils::math::stats]&quot; ) {</span>
-<span class="lineNum">     221 </span><span class="lineCov">          3 :     constexpr size_t len = 9;</span>
-<span class="lineNum">     222 </span>            : 
-<span class="lineNum">     223 </span><span class="lineCov">          6 :     std::vector&lt;int&gt; empty;</span>
-<span class="lineNum">     224 </span><span class="lineCov">          6 :     std::vector&lt;int&gt; one(1);</span>
-<span class="lineNum">     225 </span><span class="lineCov">          6 :     std::vector&lt;int&gt; two(2);</span>
-<span class="lineNum">     226 </span><span class="lineCov">          6 :     std::vector&lt;int&gt; test(len);</span>
-<span class="lineNum">     227 </span><span class="lineCov">          3 :     std::iota(test.begin(), test.end(), 0);</span>
+<span class="lineNum">     204 </span><span class="lineCov">          1 :     REQUIRE(utils::math::within(5, 0, 10));</span>
+<span class="lineNum">     205 </span><span class="lineCov">          1 :     REQUIRE(utils::math::within(9, 0, 10));</span>
+<span class="lineNum">     206 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::within(10, 0, 10));</span>
+<span class="lineNum">     207 </span><span class="lineCov">          1 :     REQUIRE_FALSE(utils::math::within(0, 0, 10));</span>
+<span class="lineNum">     208 </span><span class="lineCov">          1 :     REQUIRE(utils::math::within_inclusive(0, 0, 10));</span>
+<span class="lineNum">     209 </span><span class="lineCov">          1 :     REQUIRE(utils::math::within_inclusive(10, 0, 10));</span>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::mix&quot;) {</span>
+<span class="lineNum">     213 </span><span class="lineCov">          1 :     CHECK(utils::math::mix(5, 5, 0.00) == doctest::Approx(5));</span>
+<span class="lineNum">     214 </span><span class="lineCov">          1 :     CHECK(utils::math::mix(5, 5, 0.33) == doctest::Approx(5));</span>
+<span class="lineNum">     215 </span><span class="lineCov">          1 :     CHECK(utils::math::mix(5, 5, 0.50) == doctest::Approx(5));</span>
+<span class="lineNum">     216 </span><span class="lineCov">          1 :     CHECK(utils::math::mix(5, 5, 0.75) == doctest::Approx(5));</span>
+<span class="lineNum">     217 </span><span class="lineCov">          1 :     CHECK(utils::math::mix(5, 5, 1.00) == doctest::Approx(5));</span>
+<span class="lineNum">     218 </span>            : 
+<span class="lineNum">     219 </span><span class="lineCov">          1 :     CHECK(utils::math::mix( 0, 10, 0.6) == doctest::Approx(6));</span>
+<span class="lineNum">     220 </span><span class="lineCov">          1 :     CHECK(utils::math::mix(10,  0, 0.6) == doctest::Approx(4));</span>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span><span class="lineCov">          1 :     CHECK(utils::math::mix( 5, 10, 0.5) == doctest::Approx(7.5));</span>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::interpolate_linear&quot;) {</span>
+<span class="lineNum">     226 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 0) == 0);</span>
+<span class="lineNum">     227 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_linear(0, 10, 0, 1000, 5) == 500);</span>
 <span class="lineNum">     228 </span>            : 
-<span class="lineNum">     229 </span><span class="lineCov">          6 :     const std::vector&lt;int&gt; test2 = utils::random::generate_x&lt;int&gt;(3, -1000, 1000);</span>
-<span class="lineNum">     230 </span>            : 
-<span class="lineNum">     231 </span><span class="lineCov">          4 :     SECTION(&quot;Test utils::math::stats::mean&quot;) {</span>
-<span class="lineNum">     232 </span><span class="lineCov">          1 :         const double result = double(0+1+2+3+4+5+6+7+8) / len;</span>
-<span class="lineNum">     233 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::mean(test.begin(), test.end());</span>
-<span class="lineNum">     234 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::mean(test);</span>
-<span class="lineNum">     235 </span><span class="lineCov">          1 :         const double result3 = utils::math::stats::mean(test2);</span>
-<span class="lineNum">     236 </span>            : 
-<span class="lineNum">     237 </span><span class="lineCov">          2 :         CHECK(result == Approx(result1));</span>
-<span class="lineNum">     238 </span><span class="lineCov">          2 :         CHECK(result == Approx(result2));</span>
-<span class="lineNum">     239 </span><span class="lineCov">          2 :         CHECK((double(test2[0]+test2[1]+test2[2]) / 3.0) == Approx(result3));</span>
-<span class="lineNum">     240 </span>            : 
-<span class="lineNum">     241 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS(utils::math::stats::mean&lt;std::vector&lt;int&gt;&gt;, empty);</span>
-<span class="lineNum">     242 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::mean&lt;std::vector&lt;int&gt;&gt;, one);</span>
-<span class="lineNum">     243 </span>            :     }
+<span class="lineNum">     229 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_linear(0.0, 10.0, 0.0, 1000.0, 7.32)</span>
+<span class="lineNum">     230 </span>            :             == doctest::Approx(732));
+<span class="lineNum">     231 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_linear(0.0, 10.0, 233.4, 1234.12, 7.32)</span>
+<span class="lineNum">     232 </span>            :             == doctest::Approx(965.92704));
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          1 : }</span></a>
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::interpolate_hermite&quot;) {</span>
+<span class="lineNum">     236 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 0) == 0);</span>
+<span class="lineNum">     237 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_hermite(0, 10, 0, 1000, 5) == 500);</span>
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_hermite(0.0, 10.0, 0.0, 1000.0, 7.32)</span>
+<span class="lineNum">     240 </span>            :             == doctest::Approx(823.026));
+<span class="lineNum">     241 </span><span class="lineCov">          1 :     CHECK(utils::math::interpolate_hermite(0.0, 10.0, 233.4, 1234.12, 7.32)</span>
+<span class="lineNum">     242 </span>            :             == doctest::Approx(1057.018242));
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     244 </span>            : 
-<span class="lineNum">     245 </span><span class="lineCov">          4 :     SECTION(&quot;Test utils::math::stats::variance&quot;) {</span>
-<span class="lineNum">     246 </span><span class="lineCov">          1 :         const double result = 7.5;</span>
-<span class="lineNum">     247 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::variance(test.begin(), test.end());</span>
-<span class="lineNum">     248 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::variance(test);</span>
-<span class="lineNum">     249 </span><span class="lineCov">          1 :         const double result3 = utils::math::stats::variance(test2);</span>
-<span class="lineNum">     250 </span><span class="lineCov">          1 :         const double mean3   = utils::math::stats::mean(test2);</span>
-<span class="lineNum">     251 </span><span class="lineCov">          1 :         const double sd3 = (  (test2[0] - mean3) * (test2[0] - mean3)</span>
-<span class="lineNum">     252 </span><span class="lineCov">          1 :                             + (test2[1] - mean3) * (test2[1] - mean3)</span>
-<span class="lineNum">     253 </span><span class="lineCov">          1 :                             + (test2[2] - mean3) * (test2[2] - mean3)</span>
-<span class="lineNum">     254 </span><span class="lineCov">          1 :                            ) / 2.0;</span>
-<span class="lineNum">     255 </span>            : 
-<span class="lineNum">     256 </span><span class="lineCov">          2 :         CHECK(result == Approx(result1));</span>
-<span class="lineNum">     257 </span><span class="lineCov">          2 :         CHECK(result == Approx(result2));</span>
-<span class="lineNum">     258 </span><span class="lineCov">          2 :         CHECK(sd3    == Approx(result3));</span>
-<span class="lineNum">     259 </span>            : 
-<span class="lineNum">     260 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, empty);</span>
-<span class="lineNum">     261 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, one);</span>
-<span class="lineNum">     262 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, two);</span>
-<span class="lineNum">     263 </span>            :     }
+<span class="lineNum">     245 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::math::rounded&quot;) {</span>
+<span class="lineNum">     246 </span><span class="lineCov">          2 :     const auto gen = utils::random::generate_x(10, 0.0, 100.0);</span>
+<span class="lineNum">     247 </span><span class="lineCov">          2 :     auto test = gen;</span>
+<span class="lineNum">     248 </span>            : 
+<span class="lineNum">     249 </span><span class="lineCov">          1 :     utils::math::rounded&lt;2&gt;(test);</span>
+<span class="lineNum">     250 </span><span class="lineCov">         11 :     for (size_t i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     251 </span><span class="lineCov">         10 :         CHECK(test[i] == doctest::Approx(gen[i]).epsilon(0.01));</span>
+<span class="lineNum">     252 </span>            :     }
+<span class="lineNum">     253 </span>            : 
+<span class="lineNum">     254 </span><span class="lineCov">          1 :     utils::math::rounded&lt;1&gt;(test.begin(), test.end());</span>
+<span class="lineNum">     255 </span><span class="lineCov">         11 :     for (size_t i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     256 </span><span class="lineCov">         10 :         CHECK(test[i] == doctest::Approx(gen[i]).epsilon(0.1));</span>
+<span class="lineNum">     257 </span>            :     }
+<span class="lineNum">     258 </span>            : 
+<span class="lineNum">     259 </span><span class="lineCov">          1 :     utils::math::rounded&lt;0&gt;(test.begin(), test.end());</span>
+<span class="lineNum">     260 </span><span class="lineCov">         11 :     for (size_t i = 0; i &lt; 10; i++) {</span>
+<span class="lineNum">     261 </span><span class="lineCov">         10 :         CHECK(test[i] == doctest::Approx(gen[i]).epsilon(1));</span>
+<span class="lineNum">     262 </span>            :     }
+<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          1 : }</span></a>
 <span class="lineNum">     264 </span>            : 
-<span class="lineNum">     265 </span><span class="lineCov">          4 :     SECTION(&quot;Test utils::math::stats::stddev&quot;) {</span>
-<span class="lineNum">     266 </span><span class="lineCov">          1 :         const double result = 2.7386127875258;</span>
-<span class="lineNum">     267 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::stddev(test.begin(), test.end());</span>
-<span class="lineNum">     268 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::stddev(test);</span>
-<span class="lineNum">     269 </span><span class="lineCov">          1 :         const double result3 = utils::math::stats::stddev(test2);</span>
-<span class="lineNum">     270 </span><span class="lineCov">          1 :         const double mean3   = utils::math::stats::mean(test2);</span>
-<span class="lineNum">     271 </span><span class="lineCov">          1 :         const double sd3 = std::sqrt((  (test2[0] - mean3) * (test2[0] - mean3)</span>
-<span class="lineNum">     272 </span><span class="lineCov">          1 :                                       + (test2[1] - mean3) * (test2[1] - mean3)</span>
-<span class="lineNum">     273 </span><span class="lineCov">          1 :                                       + (test2[2] - mean3) * (test2[2] - mean3)</span>
-<span class="lineNum">     274 </span><span class="lineCov">          1 :                                      ) / 2.0);</span>
+<span class="lineNum">     265 </span><span class="lineCov">          4 : TEST_CASE(&quot;Test utils::math::stats&quot;) {</span>
+<span class="lineNum">     266 </span><span class="lineCov">          4 :     constexpr size_t len = 9;</span>
+<span class="lineNum">     267 </span>            : 
+<span class="lineNum">     268 </span><span class="lineCov">          8 :     std::vector&lt;int&gt; empty;</span>
+<span class="lineNum">     269 </span><span class="lineCov">          8 :     std::vector&lt;int&gt; one(1);</span>
+<span class="lineNum">     270 </span><span class="lineCov">          8 :     std::vector&lt;int&gt; two(2);</span>
+<span class="lineNum">     271 </span><span class="lineCov">          8 :     std::vector&lt;int&gt; test(len);</span>
+<span class="lineNum">     272 </span><span class="lineCov">          4 :     std::iota(test.begin(), test.end(), 0);</span>
+<span class="lineNum">     273 </span>            : 
+<span class="lineNum">     274 </span><span class="lineCov">          8 :     const std::vector&lt;int&gt; test2 = utils::random::generate_x&lt;int&gt;(3, -1000, 1000);</span>
 <span class="lineNum">     275 </span>            : 
-<span class="lineNum">     276 </span><span class="lineCov">          2 :         CHECK(result == Approx(result1));</span>
-<span class="lineNum">     277 </span><span class="lineCov">          2 :         CHECK(result == Approx(result2));</span>
-<span class="lineNum">     278 </span><span class="lineCov">          2 :         CHECK(sd3    == Approx(result3));</span>
-<span class="lineNum">     279 </span>            : 
-<span class="lineNum">     280 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS(utils::math::stats::stddev&lt;std::vector&lt;int&gt;&gt;, empty);</span>
-<span class="lineNum">     281 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS(utils::math::stats::stddev&lt;std::vector&lt;int&gt;&gt;, one);</span>
-<span class="lineNum">     282 </span><span class="lineCov">          2 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev&lt;std::vector&lt;int&gt;&gt;, two);</span>
-<span class="lineNum">     283 </span>            :     }
-<span class="lineNum">     284 </span><span class="lineCov">          3 : }</span>
+<span class="lineNum">     276 </span><span class="lineCov">          5 :     SUBCASE(&quot;Test utils::math::stats::mean&quot;) {</span>
+<span class="lineNum">     277 </span><span class="lineCov">          1 :         const double result = double(0+1+2+3+4+5+6+7+8) / len;</span>
+<span class="lineNum">     278 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::mean(test.begin(), test.end());</span>
+<span class="lineNum">     279 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::mean(test);</span>
+<span class="lineNum">     280 </span><span class="lineCov">          1 :         const double result3 = utils::math::stats::mean(test2);</span>
+<span class="lineNum">     281 </span>            : 
+<span class="lineNum">     282 </span><span class="lineCov">          1 :         CHECK(result == doctest::Approx(result1));</span>
+<span class="lineNum">     283 </span><span class="lineCov">          1 :         CHECK(result == doctest::Approx(result2));</span>
+<span class="lineNum">     284 </span><span class="lineCov">          1 :         CHECK((double(test2[0]+test2[1]+test2[2]) / 3.0) == doctest::Approx(result3));</span>
 <span class="lineNum">     285 </span>            : 
-<span class="lineNum">     286 </span>            : #endif
+<span class="lineNum">     286 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS(utils::math::stats::mean&lt;std::vector&lt;int&gt;&gt;, empty);</span>
+<span class="lineNum">     287 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::mean&lt;std::vector&lt;int&gt;&gt;, one);</span>
+<span class="lineNum">     288 </span>            :     }
+<span class="lineNum">     289 </span>            : 
+<span class="lineNum">     290 </span><span class="lineCov">          5 :     SUBCASE(&quot;Test utils::math::stats::variance&quot;) {</span>
+<span class="lineNum">     291 </span><span class="lineCov">          1 :         const double result = 6.66666666666667;</span>
+<span class="lineNum">     292 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::variance(test.begin(), test.end());</span>
+<span class="lineNum">     293 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::variance(test);</span>
+<span class="lineNum">     294 </span><span class="lineCov">          1 :         const double result3 = utils::math::stats::variance(test2);</span>
+<span class="lineNum">     295 </span><span class="lineCov">          1 :         const double mean3   = utils::math::stats::mean(test2);</span>
+<span class="lineNum">     296 </span><span class="lineCov">          1 :         const double sd3 = (  (test2[0] - mean3) * (test2[0] - mean3)</span>
+<span class="lineNum">     297 </span><span class="lineCov">          1 :                             + (test2[1] - mean3) * (test2[1] - mean3)</span>
+<span class="lineNum">     298 </span><span class="lineCov">          1 :                             + (test2[2] - mean3) * (test2[2] - mean3)</span>
+<span class="lineNum">     299 </span><span class="lineCov">          1 :                            ) / 3.0;</span>
+<span class="lineNum">     300 </span>            : 
+<span class="lineNum">     301 </span><span class="lineCov">          1 :         CHECK(result == doctest::Approx(result1));</span>
+<span class="lineNum">     302 </span><span class="lineCov">          1 :         CHECK(result == doctest::Approx(result2));</span>
+<span class="lineNum">     303 </span><span class="lineCov">          1 :         CHECK(sd3    == doctest::Approx(result3));</span>
+<span class="lineNum">     304 </span>            : 
+<span class="lineNum">     305 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, empty);</span>
+<span class="lineNum">     306 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, one);</span>
+<span class="lineNum">     307 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::variance&lt;std::vector&lt;int&gt;&gt;, two);</span>
+<span class="lineNum">     308 </span>            :     }
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span><span class="lineCov">          5 :     SUBCASE(&quot;Test utils::math::stats::stddev&quot;) {</span>
+<span class="lineNum">     311 </span><span class="lineCov">          1 :         const double result = 2.5819888975;</span>
+<span class="lineNum">     312 </span><span class="lineCov">          1 :         const double result1 = utils::math::stats::stddev(test.begin(), test.end());</span>
+<span class="lineNum">     313 </span><span class="lineCov">          1 :         const double result2 = utils::math::stats::stddev(test);</span>
+<span class="lineNum">     314 </span><span class="lineCov">          1 :         const double result3 = utils::math::stats::stddev(test2);</span>
+<span class="lineNum">     315 </span><span class="lineCov">          1 :         const double mean3   = utils::math::stats::mean(test2);</span>
+<span class="lineNum">     316 </span><span class="lineCov">          1 :         const double sd3 = std::sqrt((  (test2[0] - mean3) * (test2[0] - mean3)</span>
+<span class="lineNum">     317 </span><span class="lineCov">          1 :                                       + (test2[1] - mean3) * (test2[1] - mean3)</span>
+<span class="lineNum">     318 </span><span class="lineCov">          1 :                                       + (test2[2] - mean3) * (test2[2] - mean3)</span>
+<span class="lineNum">     319 </span><span class="lineCov">          1 :                                      ) / 3.0);</span>
+<span class="lineNum">     320 </span>            : 
+<span class="lineNum">     321 </span><span class="lineCov">          1 :         CHECK(result == doctest::Approx(result1));</span>
+<span class="lineNum">     322 </span><span class="lineCov">          1 :         CHECK(result == doctest::Approx(result2));</span>
+<span class="lineNum">     323 </span><span class="lineCov">          1 :         CHECK(sd3    == doctest::Approx(result3));</span>
+<span class="lineNum">     324 </span>            : 
+<span class="lineNum">     325 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS(utils::math::stats::stddev&lt;std::vector&lt;int&gt;&gt;, empty);</span>
+<span class="lineNum">     326 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev&lt;std::vector&lt;int&gt;&gt;, one);</span>
+<span class="lineNum">     327 </span><span class="lineCov">          1 :         CHECK_FUNCTION_ABORTS_FALSE(utils::math::stats::stddev&lt;std::vector&lt;int&gt;&gt;, two);</span>
+<span class="lineNum">     328 </span>            :     }
+<span class="lineNum">     329 </span>            : 
+<span class="lineNum">     330 </span><span class="lineCov">          5 :     SUBCASE(&quot;Test utils::math::stats::normalise&quot;) {</span>
+<span class="lineNum">     331 </span><span class="lineCov">          2 :         std::vector&lt;double&gt; testd(len);</span>
+<span class="lineNum">     332 </span><span class="lineCov">          1 :         std::iota(testd.begin(), testd.end(), 0.0);</span>
+<span class="lineNum">     333 </span><span class="lineCov">          2 :         std::vector&lt;double&gt; result(len);</span>
+<a name="334"><span class="lineNum">     334 </span><span class="lineCov">          1 :         std::iota(result.begin(), result.end(), -4);</span></a>
+<span class="lineNum">     335 </span>            :         std::for_each(result.begin(), result.end(),
+<span class="lineNum">     336 </span><span class="lineCov">          1 :             [stddev = utils::math::stats::stddev(result)](double&amp; x){</span>
+<span class="lineNum">     337 </span><span class="lineCov">          9 :                 x /= stddev;</span>
+<span class="lineNum">     338 </span><span class="lineCov">          1 :         });</span>
+<span class="lineNum">     339 </span><span class="lineCov">          2 :         auto testd2 = testd;</span>
+<span class="lineNum">     340 </span>            : 
+<span class="lineNum">     341 </span><span class="lineCov">          1 :         utils::math::stats::normalise(testd.begin(), testd.end());</span>
+<span class="lineNum">     342 </span><span class="lineCov">          1 :         utils::math::stats::normalise(testd2);</span>
+<span class="lineNum">     343 </span>            : 
+<span class="lineNum">     344 </span><span class="lineCov">         10 :         for (size_t i = 0; i &lt; len; i++) {</span>
+<span class="lineNum">     345 </span><span class="lineCov">          9 :             CHECK(testd[i]  == doctest::Approx(result[i]));</span>
+<span class="lineNum">     346 </span><span class="lineCov">          9 :             CHECK(testd2[i] == doctest::Approx(result[i]));</span>
+<span class="lineNum">     347 </span>            :         }
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span><span class="lineCov">          2 :         std::vector&lt;double&gt; testd3 = utils::random::generate_x&lt;double&gt;(3, -1000.0, 1000.0);</span>
+<span class="lineNum">     350 </span><span class="lineCov">          1 :         const double mean3 = utils::math::stats::mean(testd3);</span>
+<span class="lineNum">     351 </span>            :         std::vector&lt;double&gt; result3 {
+<span class="lineNum">     352 </span><span class="lineCov">          1 :             testd3[0] - mean3,</span>
+<span class="lineNum">     353 </span><span class="lineCov">          2 :             testd3[1] - mean3,</span>
+<span class="lineNum">     354 </span><span class="lineCov">          2 :             testd3[2] - mean3</span>
+<span class="lineNum">     355 </span><span class="lineCov">          2 :         };</span>
+<span class="lineNum">     356 </span><span class="lineCov">          1 :         const double sd3   = std::sqrt((  result3[0] * result3[0]</span>
+<span class="lineNum">     357 </span><span class="lineCov">          1 :                                         + result3[1] * result3[1]</span>
+<span class="lineNum">     358 </span><span class="lineCov">          1 :                                         + result3[2] * result3[2]</span>
+<span class="lineNum">     359 </span>            :                                        ) / 3.0);
+<span class="lineNum">     360 </span>            : 
+<span class="lineNum">     361 </span><span class="lineCov">          1 :         utils::math::stats::normalise(testd3);</span>
+<span class="lineNum">     362 </span><span class="lineCov">          1 :         CHECK(testd3[0] == doctest::Approx(result3[0] / sd3));</span>
+<span class="lineNum">     363 </span><span class="lineCov">          1 :         CHECK(testd3[1] == doctest::Approx(result3[1] / sd3));</span>
+<span class="lineNum">     364 </span><span class="lineCov">          1 :         CHECK(testd3[2] == doctest::Approx(result3[2] / sd3));</span>
+<span class="lineNum">     365 </span>            :     }
+<span class="lineNum">     366 </span><span class="lineCov">          4 : }</span>
+<span class="lineNum">     367 </span>            : 
+<span class="lineNum">     368 </span>            : #endif
 </pre>
       </td>
     </tr>
@@ -354,7 +436,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

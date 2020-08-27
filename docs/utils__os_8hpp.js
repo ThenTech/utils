@@ -1,6 +1,10 @@
 var utils__os_8hpp =
 [
     [ "BASE_", "utils__os_8hpp.html#a2dd6b35ca67936b568f77fda98d9a3ef", null ],
+    [ "FREE", "utils__os_8hpp.html#a25602c51e419f0e379d67fb72b3eccdf", null ],
+    [ "GET_STRINGS", "utils__os_8hpp.html#aca526da0e7f0b8b223d9eba8790a73b8", null ],
+    [ "GET_VAL", "utils__os_8hpp.html#a52f4216439e3bb8e74d2074036fac6fd", null ],
+    [ "NEXT", "utils__os_8hpp.html#afa19e2eadb751f3599e443d073862a2f", null ],
     [ "command_t", "utils__os_8hpp.html#a20293bf86960e58a102fb245f9decc23", null ],
     [ "_Console_commands", "utils__os_8hpp.html#a037fb5a369631dec8cf21fda9ce94fb2", [
       [ "_CC_CLS", "utils__os_8hpp.html#a037fb5a369631dec8cf21fda9ce94fb2a768e23a081c9daf43dc81d34d6053e9c", null ],
@@ -25,6 +29,8 @@ var utils__os_8hpp =
     ] ],
     [ "Command", "utils__os_8hpp.html#ac5748b843a60ab6da0404d055a770bd7", null ],
     [ "EnableVirtualConsole", "utils__os_8hpp.html#ac7bd88cae21a98302047df066a0975a8", null ],
+    [ "GetEnvironmentVar", "utils__os_8hpp.html#a9fb39ae51feca8cb66bcd9ca3f57c6e2", null ],
+    [ "GetEnvironmentVars", "utils__os_8hpp.html#af9b98450dddb150f42a75c0255065834", null ],
     [ "operator &", "utils__os_8hpp.html#a8131f5aad1a5d4f0a050799dafac6927", null ],
     [ "operator&=", "utils__os_8hpp.html#a34a6932b9453b4ce077d7658b865e8e4", null ],
     [ "operator<<", "utils__os_8hpp.html#ae8191f7ca7e3ed2819394200edf053f4", null ],
@@ -33,8 +39,9 @@ var utils__os_8hpp =
     [ "operator|", "utils__os_8hpp.html#ac67bd043950d71cb4562d2f18b39a8f4", null ],
     [ "operator|=", "utils__os_8hpp.html#a976cd1c3ca41af8004eab9b515bf2878", null ],
     [ "operator~", "utils__os_8hpp.html#a299c46ef905b35319b9ef96e73682765", null ],
+    [ "PromptChar", "utils__os_8hpp.html#a1ab568f8b09a060dfaaeae4ca1d597d1", null ],
     [ "SetScreenTitle", "utils__os_8hpp.html#a89aaf6bebc5c241cf89f6e328a43bcc7", null ],
-    [ "_virtual_console_enabled", "utils__os_8hpp.html#a65ad8032f13adf69bfbc7cc8c555ccda", null ],
+    [ "_virtual_console_enabled", "utils__os_8hpp.html#a03ecc4e190c06458ffec6a5f0f34e210", null ],
     [ "BG", "utils__os_8hpp.html#a3329a645f96d0dc294b9c48809baf83d", null ],
     [ "BLACK", "utils__os_8hpp.html#ad8d5af40fd928995b68510cab4650fbe", null ],
     [ "BLUE", "utils__os_8hpp.html#a3e2a0f7f1b41455500d5e2f5c5c92cc0", null ],
@@ -44,6 +51,7 @@ var utils__os_8hpp =
     [ "CLS", "utils__os_8hpp.html#a15ac2eb60f5b0a37256c075acced54ce", null ],
     [ "CURSOR", "utils__os_8hpp.html#a67676c4e8198f3c495b10b83de440d22", null ],
     [ "CYAN", "utils__os_8hpp.html#aa525f95bdbc0b89c5b526ce9ea9a1b2a", null ],
+    [ "environ", "utils__os_8hpp.html#aa006daaf11f1e2e45a6ababaf463212b", null ],
     [ "FG", "utils__os_8hpp.html#aead37af951526998843071c92f9ffdee", null ],
     [ "GREEN", "utils__os_8hpp.html#ac77c37c416889c08b0b1a28585472ab7", null ],
     [ "HEDLEY_FLAGS", "utils__os_8hpp.html#a37a17ba09432e5eb0b202dd0e036b921", null ],

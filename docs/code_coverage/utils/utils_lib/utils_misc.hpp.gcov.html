@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_misc.hpp<span style="font-size: 80%;"> (source / <a href="utils_misc.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_misc.hpp<span style="font-size: 80%;"> (source / <a href="utils_misc.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,18 +31,18 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">25</td>
-            <td class="headerCovTableEntry">25</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">29</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">7</td>
-            <td class="headerCovTableEntry">9</td>
-            <td class="headerCovTableEntryMed">77.8 %</td>
+            <td class="headerCovTableEntry">15</td>
+            <td class="headerCovTableEntry">17</td>
+            <td class="headerCovTableEntryMed">88.2 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -64,80 +64,117 @@
 <span class="lineNum">       2 </span>            : #define UTILS_MISC_HPP
 <span class="lineNum">       3 </span>            : 
 <span class="lineNum">       4 </span>            : #include &quot;utils_compiler.hpp&quot;
-<span class="lineNum">       5 </span>            : #include &quot;utils_exceptions.hpp&quot;
-<span class="lineNum">       6 </span>            : #include &quot;utils_print.hpp&quot;
-<span class="lineNum">       7 </span>            : 
-<span class="lineNum">       8 </span>            : #include &lt;iomanip&gt;
-<span class="lineNum">       9 </span>            : 
+<span class="lineNum">       5 </span>            : #include &quot;utils_traits.hpp&quot;
+<span class="lineNum">       6 </span>            : #include &quot;utils_exceptions.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;utils_print.hpp&quot;
+<span class="lineNum">       8 </span>            : 
+<span class="lineNum">       9 </span>            : #include &lt;iomanip&gt;
 <span class="lineNum">      10 </span>            : 
-<span class="lineNum">      11 </span>            : namespace utils::misc {
-<span class="lineNum">      12 </span>            :     /** \brief
-<span class="lineNum">      13 </span>            :      *      Convert the given char* to a variable of type T.
-<span class="lineNum">      14 </span>            :      *      Use this method instead of the raw C functions: atoi, atof, atol, atoll.
-<span class="lineNum">      15 </span>            :      *
-<span class="lineNum">      16 </span>            :      *      Also check for hex number.
-<span class="lineNum">      17 </span>            :      *
-<span class="lineNum">      18 </span>            :      *  \tparam T
-<span class="lineNum">      19 </span>            :      *      The type of object to cast to.
-<span class="lineNum">      20 </span>            :      *  \param  buffer
-<span class="lineNum">      21 </span>            :      *      The character buffer to convert.
-<span class="lineNum">      22 </span>            :      *  \return
-<span class="lineNum">      23 </span>            :      *      Returns a variable of type T with the value as given in buffer.
-<a name="24"><span class="lineNum">      24 </span>            :      */</a>
-<span class="lineNum">      25 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      26 </span><span class="lineCov">         26 :     static T lexical_cast(const std::string_view&amp; buffer) {</span>
-<span class="lineNum">      27 </span>            :         T out;
-<span class="lineNum">      28 </span>            : 
-<span class="lineNum">      29 </span><span class="lineCov">         26 :         if (HEDLEY_UNLIKELY(buffer.size() == 0))</span>
-<span class="lineNum">      30 </span><span class="lineCov">          2 :             throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));</span>
-<span class="lineNum">      31 </span>            : 
-<span class="lineNum">      32 </span><span class="lineCov">         28 :         std::stringstream cast;</span>
-<span class="lineNum">      33 </span>            : 
-<span class="lineNum">      34 </span><span class="lineCov">         24 :         if (buffer[0] == '0' &amp;&amp; buffer[1] != '.') {</span>
-<span class="lineNum">      35 </span><span class="lineCov">         12 :             if (buffer[1] == 'x' || buffer[1] == 'X') {</span>
-<span class="lineNum">      36 </span>            :                 // Hex literal
-<span class="lineNum">      37 </span><span class="lineCov">          4 :                 cast &lt;&lt; std::hex &lt;&lt; buffer;</span>
-<span class="lineNum">      38 </span><span class="lineCov">          8 :             } else if (buffer[1] == 'b' || buffer[1] == 'B') {</span>
-<span class="lineNum">      39 </span>            :                 // Binary literal
-<span class="lineNum">      40 </span>            :                 try {
-<span class="lineNum">      41 </span><span class="lineCov">          9 :                     cast &lt;&lt; std::stoll(std::string(buffer.substr(2)), nullptr, 2);</span>
-<span class="lineNum">      42 </span><span class="lineCov">          4 :                 } catch (std::invalid_argument const&amp;) {</span>
-<span class="lineNum">      43 </span><span class="lineCov">          2 :                     throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));</span>
-<span class="lineNum">      44 </span>            :                 }
-<span class="lineNum">      45 </span>            :             } else {
-<span class="lineNum">      46 </span>            :                 // Octal literal
-<span class="lineNum">      47 </span><span class="lineCov">          3 :                 cast &lt;&lt; std::oct &lt;&lt; buffer;</span>
-<span class="lineNum">      48 </span>            :             }
-<span class="lineNum">      49 </span><span class="lineCov">         12 :         } else if (buffer[0] == '#') {</span>
-<span class="lineNum">      50 </span>            :             // Hex colour string
-<span class="lineNum">      51 </span><span class="lineCov">          1 :             cast &lt;&lt; std::hex &lt;&lt; buffer.substr(1);</span>
-<span class="lineNum">      52 </span>            :         } else {
-<span class="lineNum">      53 </span>            :             // Decimal/float/...
-<span class="lineNum">      54 </span><span class="lineCov">         11 :             cast &lt;&lt; buffer;</span>
-<span class="lineNum">      55 </span>            :         }
-<span class="lineNum">      56 </span>            : 
-<span class="lineNum">      57 </span><span class="lineCov">         22 :         if (!(cast &gt;&gt; out))</span>
-<span class="lineNum">      58 </span><span class="lineCov">          2 :             throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));</span>
-<span class="lineNum">      59 </span>            : 
-<span class="lineNum">      60 </span><span class="lineCov">         40 :         return out;</span>
-<span class="lineNum">      61 </span>            :     }
-<a name="62"><span class="lineNum">      62 </span>            : </a>
-<span class="lineNum">      63 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      64 </span><span class="lineCov">          6 :     static std::optional&lt;T&gt; try_lexical_cast(const std::string_view&amp; buffer, utils::exceptions::Exception *error = nullptr) {</span>
-<span class="lineNum">      65 </span><span class="lineCov">          6 :         std::optional&lt;T&gt; value;</span>
-<span class="lineNum">      66 </span>            : 
-<span class="lineNum">      67 </span>            :         try {
-<span class="lineNum">      68 </span><span class="lineCov">          6 :             value = utils::misc::lexical_cast&lt;T&gt;(buffer);</span>
-<span class="lineNum">      69 </span><span class="lineCov">          6 :         } catch (const utils::exceptions::CastingException&amp; e) {</span>
-<span class="lineNum">      70 </span><span class="lineCov">          3 :             if (error) *error = e;</span>
-<span class="lineNum">      71 </span><span class="lineCov">          3 :             value = std::nullopt;</span>
-<span class="lineNum">      72 </span>            :         }
-<span class="lineNum">      73 </span>            : 
-<span class="lineNum">      74 </span><span class="lineCov">          6 :         return value;</span>
-<span class="lineNum">      75 </span>            :     }
-<span class="lineNum">      76 </span>            : }
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            : namespace utils::misc {
+<span class="lineNum">      13 </span>            :     /** \brief
+<span class="lineNum">      14 </span>            :      *      Convert the given char* to a variable of type T.
+<span class="lineNum">      15 </span>            :      *      Use this method instead of the raw C functions: atoi, atof, atol, atoll.
+<span class="lineNum">      16 </span>            :      *
+<span class="lineNum">      17 </span>            :      *      Also check for hex number.
+<span class="lineNum">      18 </span>            :      *
+<span class="lineNum">      19 </span>            :      *  \tparam T
+<span class="lineNum">      20 </span>            :      *      The type of object to cast to.
+<span class="lineNum">      21 </span>            :      *  \param  buffer
+<span class="lineNum">      22 </span>            :      *      The character buffer to convert.
+<span class="lineNum">      23 </span>            :      *  \return
+<span class="lineNum">      24 </span>            :      *      Returns a variable of type T with the value as given in buffer.
+<a name="25"><span class="lineNum">      25 </span>            :      */</a>
+<span class="lineNum">      26 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      27 </span><span class="lineCov">         26 :     static T lexical_cast(const std::string_view buffer) {</span>
+<span class="lineNum">      28 </span>            :         T out;
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span><span class="lineCov">         26 :         if (HEDLEY_UNLIKELY(buffer.size() == 0))</span>
+<span class="lineNum">      31 </span><span class="lineCov">          2 :             throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));</span>
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span><span class="lineCov">         28 :         std::stringstream cast;</span>
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span><span class="lineCov">         24 :         if (buffer.size() &gt; 1 &amp;&amp; buffer[0] == '0' &amp;&amp; buffer[1] != '.') {</span>
+<span class="lineNum">      36 </span><span class="lineCov">         12 :             if (buffer[1] == 'x' || buffer[1] == 'X') {</span>
+<span class="lineNum">      37 </span>            :                 // Hex literal
+<span class="lineNum">      38 </span><span class="lineCov">          4 :                 cast &lt;&lt; std::hex &lt;&lt; buffer;</span>
+<span class="lineNum">      39 </span><span class="lineCov">          8 :             } else if (buffer[1] == 'b' || buffer[1] == 'B') {</span>
+<span class="lineNum">      40 </span>            :                 // Binary literal
+<span class="lineNum">      41 </span>            :                 try {
+<span class="lineNum">      42 </span><span class="lineCov">          9 :                     cast &lt;&lt; std::stoll(std::string(buffer.substr(2)), nullptr, 2);</span>
+<span class="lineNum">      43 </span><span class="lineCov">          4 :                 } catch (std::invalid_argument const&amp;) {</span>
+<span class="lineNum">      44 </span><span class="lineCov">          2 :                     throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));</span>
+<span class="lineNum">      45 </span>            :                 }
+<span class="lineNum">      46 </span>            :             } else {
+<span class="lineNum">      47 </span>            :                 // Octal literal
+<span class="lineNum">      48 </span><span class="lineCov">          3 :                 cast &lt;&lt; std::oct &lt;&lt; buffer;</span>
+<span class="lineNum">      49 </span>            :             }
+<span class="lineNum">      50 </span><span class="lineCov">         12 :         } else if (buffer[0] == '#') {</span>
+<span class="lineNum">      51 </span>            :             // Hex colour string
+<span class="lineNum">      52 </span><span class="lineCov">          1 :             cast &lt;&lt; std::hex &lt;&lt; buffer.substr(1);</span>
+<span class="lineNum">      53 </span>            :         } else {
+<span class="lineNum">      54 </span>            :             // Decimal/float/...
+<span class="lineNum">      55 </span><span class="lineCov">         11 :             cast &lt;&lt; buffer;</span>
+<span class="lineNum">      56 </span>            :         }
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span><span class="lineCov">         22 :         if (!(cast &gt;&gt; out))</span>
+<span class="lineNum">      59 </span><span class="lineCov">          2 :             throw utils::exceptions::CastingException(std::string(buffer), utils::print::type2name(out));</span>
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span><span class="lineCov">         40 :         return out;</span>
+<span class="lineNum">      62 </span>            :     }
+<a name="63"><span class="lineNum">      63 </span>            : </a>
+<span class="lineNum">      64 </span>            :     template &lt;class T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      65 </span><span class="lineCov">          6 :     static std::optional&lt;T&gt; try_lexical_cast(const std::string_view buffer, utils::exceptions::Exception *error = nullptr) {</span>
+<span class="lineNum">      66 </span><span class="lineCov">          6 :         std::optional&lt;T&gt; value;</span>
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            :         try {
+<span class="lineNum">      69 </span><span class="lineCov">          6 :             value = utils::misc::lexical_cast&lt;T&gt;(buffer);</span>
+<span class="lineNum">      70 </span><span class="lineCov">          6 :         } catch (const utils::exceptions::CastingException&amp; e) {</span>
+<span class="lineNum">      71 </span><span class="lineCov">          3 :             if (error) *error = e;</span>
+<span class="lineNum">      72 </span><span class="lineCov">          3 :             value = std::nullopt;</span>
+<span class="lineNum">      73 </span>            :         }
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span><span class="lineCov">          6 :         return value;</span>
+<span class="lineNum">      76 </span>            :     }
 <span class="lineNum">      77 </span>            : 
-<span class="lineNum">      78 </span>            : #endif // UTILS_MISC_HPP
+<span class="lineNum">      78 </span>            :     /**
+<span class="lineNum">      79 </span>            :      *  Create a RAII (Resource Acquisition Is Initialization) scoped functor.
+<span class="lineNum">      80 </span>            :      *  This will call the given function or lambda when the Scoped object
+<span class="lineNum">      81 </span>            :      *  goes out of scope.
+<span class="lineNum">      82 </span>            :      *
+<span class="lineNum">      83 </span>            :      *  Useful for delayed deletion of objects or restoring settings after the
+<span class="lineNum">      84 </span>            :      *  scope ends.
+<span class="lineNum">      85 </span>            :      *
+<span class="lineNum">      86 </span>            :      *  e.g.
+<span class="lineNum">      87 </span>            :      *  {
+<span class="lineNum">      88 </span>            :      *      auto finally = utils::misc::MakeScoped([]{ std::cout &lt;&lt; &quot;done&quot;; });
+<span class="lineNum">      89 </span>            :      *      // ...
+<span class="lineNum">      90 </span>            :      *      //~finally() calls the lambda at scope exit.
+<span class="lineNum">      91 </span>            :      *  }
+<span class="lineNum">      92 </span>            :      *
+<span class="lineNum">      93 </span>            :      *  or use `UTILS_MISC_MAKE_SCOPED([]{})` for a generated unique name.
+<span class="lineNum">      94 </span>            :      */
+<span class="lineNum">      95 </span>            :     template&lt;
+<span class="lineNum">      96 </span>            :         typename F,
+<span class="lineNum">      97 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_invocable_v&lt;F&gt;&gt;
+<span class="lineNum">      98 </span>            :     &gt; class Scoped {
+<span class="lineNum">      99 </span>            :         private:
+<a name="100"><span class="lineNum">     100 </span>            :             F callback;</a>
+<a name="101"><span class="lineNum">     101 </span>            :         public:</a>
+<span class="lineNum">     102 </span><span class="lineCov">          3 :             Scoped(F&amp;&amp; callback) : callback(std::move(callback)) {}</span>
+<span class="lineNum">     103 </span><span class="lineCov">          3 :             ~Scoped() { std::invoke&lt;F&gt;(std::forward&lt;F&gt;(this-&gt;callback)); }</span>
+<span class="lineNum">     104 </span>            :     };
+<a name="105"><span class="lineNum">     105 </span>            : </a>
+<span class="lineNum">     106 </span>            :     template&lt;typename F&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     107 </span><span class="lineCov">          2 :     static inline auto MakeScoped(F&amp;&amp; callback) {</span>
+<span class="lineNum">     108 </span><span class="lineCov">          2 :         return Scoped&lt;F&gt;(std::forward&lt;F&gt;(callback));</span>
+<span class="lineNum">     109 </span>            :     }
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span>            :     #define UTILS_MISC_MAKE_SCOPED(callback) \
+<span class="lineNum">     112 </span>            :         auto HEDLEY_CONCAT(scope_exit_, __LINE__) = utils::misc::MakeScoped(callback);
+<span class="lineNum">     113 </span>            : }
+<span class="lineNum">     114 </span>            : 
+<span class="lineNum">     115 </span>            : #endif // UTILS_MISC_HPP
 </pre>
       </td>
     </tr>
@@ -146,7 +183,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

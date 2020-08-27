@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_algorithm.hpp<span style="font-size: 80%;"> (source / <a href="utils_algorithm.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_algorithm.hpp<span style="font-size: 80%;"> (source / <a href="utils_algorithm.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">61</td>
-            <td class="headerCovTableEntry">61</td>
+            <td class="headerCovTableEntry">94</td>
+            <td class="headerCovTableEntry">94</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">69</td>
-            <td class="headerCovTableEntry">69</td>
+            <td class="headerCovTableEntry">103</td>
+            <td class="headerCovTableEntry">103</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -71,328 +71,616 @@
 <span class="lineNum">       9 </span>            : #include &lt;functional&gt;
 <span class="lineNum">      10 </span>            : #include &lt;numeric&gt;
 <span class="lineNum">      11 </span>            : #include &lt;optional&gt;
-<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      12 </span>            : #include &lt;tuple&gt;
 <span class="lineNum">      13 </span>            : 
-<span class="lineNum">      14 </span>            : namespace utils::algorithm {
-<span class="lineNum">      15 </span>            :     /**
-<span class="lineNum">      16 </span>            :      *  Wrap CPPItertools as ::iter
-<span class="lineNum">      17 </span>            :      *  Reference: https://github.com/ryanhaining/cppitertools (04/08/2019)
-<span class="lineNum">      18 </span>            :      */
-<span class="lineNum">      19 </span>            :     namespace iter = ::iter;
-<span class="lineNum">      20 </span>            : 
-<span class="lineNum">      21 </span>            :     /**
-<span class="lineNum">      22 </span>            :      *  \brief  Check if the given container contains the given item.
-<span class="lineNum">      23 </span>            :      *          The type of item must be something that the container holds.
-<span class="lineNum">      24 </span>            :      *              e.g.
-<span class="lineNum">      25 </span>            :      *                  vector&lt;int&gt;  &lt;- int
-<span class="lineNum">      26 </span>            :      *                  string       &lt;- char
-<span class="lineNum">      27 </span>            :      *              and not:
-<span class="lineNum">      28 </span>            :      *                  vector&lt;Node&gt; /- int
-<span class="lineNum">      29 </span>            :      *
-<span class="lineNum">      30 </span>            :      *  \param  container
-<span class="lineNum">      31 </span>            :      *      The container to look in.
-<span class="lineNum">      32 </span>            :      *  \param  item
-<span class="lineNum">      33 </span>            :      *      The item to look for.
-<span class="lineNum">      34 </span>            :      *  \return Returns an `std:optional&lt;size_t&gt;` holding the offset from
-<span class="lineNum">      35 </span>            :      *          std::begin(container) if the item was found, or nothing if not.
-<span class="lineNum">      36 </span>            :      */
-<span class="lineNum">      37 </span>            :     template&lt;
-<span class="lineNum">      38 </span>            :         typename C, typename T,
-<a name="39"><span class="lineNum">      39 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_container&lt;C&gt;::value&gt;</a>
-<span class="lineNum">      40 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      41 </span><span class="lineCov">         14 :     static inline constexpr utils::traits::found_t contains(const C&amp; container, const T&amp; item) {</span>
-<span class="lineNum">      42 </span>            :         if constexpr (utils::traits::has_find_v&lt;C, T&gt;) {
-<span class="lineNum">      43 </span><span class="lineCov">          1 :             if (const auto idx = container.find(item); std::end(container) != idx) {</span>
-<span class="lineNum">      44 </span><span class="lineCov">          1 :                 return { std::distance(std::begin(container), idx) };</span>
-<span class="lineNum">      45 </span>            :             }
-<span class="lineNum">      46 </span>            :         } else {
-<span class="lineNum">      47 </span><span class="lineCov">         13 :             if (const auto idx = std::find(std::begin(container), std::end(container), item);</span>
-<span class="lineNum">      48 </span><span class="lineCov">         13 :                 std::end(container) != idx)</span>
-<span class="lineNum">      49 </span>            :             {
-<span class="lineNum">      50 </span><span class="lineCov">         11 :                 return { std::distance(std::begin(container), idx) };</span>
-<span class="lineNum">      51 </span>            :             }
-<span class="lineNum">      52 </span>            :         }
-<span class="lineNum">      53 </span>            : 
-<span class="lineNum">      54 </span><span class="lineCov">          2 :         return std::nullopt;</span>
-<span class="lineNum">      55 </span>            :     }
-<span class="lineNum">      56 </span>            : 
-<span class="lineNum">      57 </span>            :     /**
-<span class="lineNum">      58 </span>            :      *  \brief  Generic AND all args.
-<span class="lineNum">      59 </span>            :      *
-<span class="lineNum">      60 </span>            :      *  \return
-<span class="lineNum">      61 </span>            :      *      True if arg1 &amp;&amp; ... &amp;&amp; argn == true
-<a name="62"><span class="lineNum">      62 </span>            :      */</a>
-<span class="lineNum">      63 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      64 </span><span class="lineCov">         14 :     static inline constexpr bool all(T const&amp;... args) {</span>
-<span class="lineNum">      65 </span><span class="lineCov">         14 :         return (... &amp;&amp; args);</span>
-<span class="lineNum">      66 </span>            :     }
-<span class="lineNum">      67 </span>            : 
-<span class="lineNum">      68 </span>            :     /**
-<span class="lineNum">      69 </span>            :      *  \brief  Generic OR all args.
-<span class="lineNum">      70 </span>            :      *
-<span class="lineNum">      71 </span>            :      *  \return
-<span class="lineNum">      72 </span>            :      *      True if arg1 || ... || argn == true
-<a name="73"><span class="lineNum">      73 </span>            :      */</a>
-<span class="lineNum">      74 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      75 </span><span class="lineCov">         30 :     static inline constexpr bool any(T const&amp;... args) {</span>
-<span class="lineNum">      76 </span><span class="lineCov">         30 :         return (... || args);</span>
-<span class="lineNum">      77 </span>            :     }
-<span class="lineNum">      78 </span>            : 
-<span class="lineNum">      79 </span>            :     /**
-<span class="lineNum">      80 </span>            :      *  \brief  Generic NOT OR all args.
-<span class="lineNum">      81 </span>            :      *
-<span class="lineNum">      82 </span>            :      *  \return
-<span class="lineNum">      83 </span>            :      *      True if !(arg1 || ... || argn) == true
-<a name="84"><span class="lineNum">      84 </span>            :      */</a>
-<span class="lineNum">      85 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      86 </span><span class="lineCov">         15 :     static inline constexpr bool none(T const&amp;... args) {</span>
-<span class="lineNum">      87 </span><span class="lineCov">         15 :         return !any(args...);</span>
-<span class="lineNum">      88 </span>            :     }
-<span class="lineNum">      89 </span>            : 
-<span class="lineNum">      90 </span>            :     /**
-<span class="lineNum">      91 </span>            :      *  \brief  Generic test equality of all args.
-<span class="lineNum">      92 </span>            :      *
-<span class="lineNum">      93 </span>            :      *  \return
-<span class="lineNum">      94 </span>            :      *      True if arg1 == ... == argn
-<a name="95"><span class="lineNum">      95 </span>            :      */</a>
-<span class="lineNum">      96 </span>            :     template &lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      97 </span><span class="lineCov">         21 :     static inline constexpr bool all_equal(T const&amp;... args) {</span>
-<span class="lineNum">      98 </span>            :         if constexpr (sizeof...(T) &lt; 2) {
-<a name="99"><span class="lineNum">      99 </span><span class="lineCov">          8 :             return true;</span></a>
-<span class="lineNum">     100 </span>            :         } else {
-<span class="lineNum">     101 </span><span class="lineCov">         13 :             return [](auto const&amp; a0, auto const&amp;... rest){</span>
-<span class="lineNum">     102 </span><span class="lineCov">         13 :                 return ((a0 == rest) &amp;&amp; ...);</span>
-<span class="lineNum">     103 </span><span class="lineCov">         13 :             }(args...);</span>
-<span class="lineNum">     104 </span>            :         }
-<span class="lineNum">     105 </span>            :     }
-<span class="lineNum">     106 </span>            : 
-<span class="lineNum">     107 </span>            :     /**
-<span class="lineNum">     108 </span>            :      *  \brief  Generic test if all args are within [min, max] (inclusive).
-<span class="lineNum">     109 </span>            :      *
-<span class="lineNum">     110 </span>            :      *  \return
-<span class="lineNum">     111 </span>            :      *      True if (min &lt;= arg1 &amp;&amp; arg1 &lt;= max) &amp;&amp; ...
-<a name="112"><span class="lineNum">     112 </span>            :      */</a>
-<span class="lineNum">     113 </span>            :     template &lt;typename T, typename... Ts&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     114 </span><span class="lineCov">         10 :     static inline constexpr bool all_within(ATTR_MAYBE_UNUSED T min,</span>
-<span class="lineNum">     115 </span>            :                                             ATTR_MAYBE_UNUSED T max,
-<span class="lineNum">     116 </span>            :                                             const Ts&amp;... ts)
-<span class="lineNum">     117 </span>            :     {
-<span class="lineNum">     118 </span>            :         if constexpr (sizeof...(Ts) == 0) {
-<span class="lineNum">     119 </span><span class="lineCov">          1 :             return true;</span>
-<span class="lineNum">     120 </span>            :         } else {
-<span class="lineNum">     121 </span><span class="lineCov">          9 :             if (HEDLEY_UNLIKELY(max &lt; min)) // Allow range from higher to lower</span>
-<span class="lineNum">     122 </span><span class="lineCov">          2 :                 std::swap(min, max);</span>
-<span class="lineNum">     123 </span><span class="lineCov">          9 :             return ((min &lt;= ts &amp;&amp; ts &lt;= max) &amp;&amp; ...);</span>
-<span class="lineNum">     124 </span>            :         }
-<span class="lineNum">     125 </span>            :     }
-<span class="lineNum">     126 </span>            : 
-<span class="lineNum">     127 </span>            :     /**
-<span class="lineNum">     128 </span>            :      *  \brief  Generic test if all elements in the range
-<span class="lineNum">     129 </span>            :      *          are within [min, max] (inclusive).
-<span class="lineNum">     130 </span>            :      *
-<span class="lineNum">     131 </span>            :      *  \return
-<span class="lineNum">     132 </span>            :      *      True if (min &lt;= start[0] &amp;&amp; start[0] &lt;= max) &amp;&amp; ...
-<span class="lineNum">     133 </span>            :      */
-<span class="lineNum">     134 </span>            :     template &lt;
-<span class="lineNum">     135 </span>            :         typename Iterator,
-<span class="lineNum">     136 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
-<a name="137"><span class="lineNum">     137 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
-<span class="lineNum">     138 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     139 </span><span class="lineCov">          8 :     static inline constexpr bool within(T min, T max, Iterator start, Iterator end) {</span>
-<span class="lineNum">     140 </span><span class="lineCov">          8 :         if (HEDLEY_UNLIKELY(max &lt; min)) // Allow range from higher to lower</span>
-<a name="141"><span class="lineNum">     141 </span><span class="lineCov">          2 :             std::swap(min, max);</span></a>
-<span class="lineNum">     142 </span>            : 
-<span class="lineNum">     143 </span><span class="lineCov">        172 :         return std::all_of(start, end, [min, max](const T&amp; x){</span>
-<span class="lineNum">     144 </span><span class="lineCov">         82 :             return min &lt;= x &amp;&amp; x &lt;= max;</span>
-<span class="lineNum">     145 </span><span class="lineCov">          8 :         });</span>
-<span class="lineNum">     146 </span>            :     }
-<span class="lineNum">     147 </span>            : 
-<span class="lineNum">     148 </span>            :     /**
-<span class="lineNum">     149 </span>            :      *  \brief  Generic test if all elements in the container
-<span class="lineNum">     150 </span>            :      *          are within [min, max] (inclusive).
-<span class="lineNum">     151 </span>            :      *
-<span class="lineNum">     152 </span>            :      *  \return
-<span class="lineNum">     153 </span>            :      *      True if (min &lt;= arg1 &amp;&amp; arg1 &lt;= max) &amp;&amp; ...
-<a name="154"><span class="lineNum">     154 </span>            :      */</a>
-<span class="lineNum">     155 </span>            :     template &lt;typename T, typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     156 </span><span class="lineCov">          4 :     static inline constexpr bool within(T min, T max, const Container&amp; cont) {</span>
-<span class="lineNum">     157 </span>            :         static_assert (utils::traits::is_iterable_v&lt;Container&gt;,
-<span class="lineNum">     158 </span>            :                        &quot;utils::algorithm::within: Container must have iterator support.&quot;);
-<span class="lineNum">     159 </span><span class="lineCov">          4 :         return utils::algorithm::within(min, max, std::begin(cont), std::end(cont));</span>
-<span class="lineNum">     160 </span>            :     }
-<span class="lineNum">     161 </span>            : 
-<span class="lineNum">     162 </span>            :     /**
-<span class="lineNum">     163 </span>            :      *  \brief  Calculate the sum of all elements between \p start and \p end.
-<span class="lineNum">     164 </span>            :      *
-<span class="lineNum">     165 </span>            :      *  \param  start
-<span class="lineNum">     166 </span>            :      *      The start iterator to begin from.
-<span class="lineNum">     167 </span>            :      *  \param  end
-<span class="lineNum">     168 </span>            :      *      The end iterator to stop at.
-<span class="lineNum">     169 </span>            :      *  \return Returns the sum of the elements with type `Iterator::value_type`.
-<span class="lineNum">     170 </span>            :      */
-<span class="lineNum">     171 </span>            :     template &lt;
-<span class="lineNum">     172 </span>            :         typename Iterator,
-<span class="lineNum">     173 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
-<a name="174"><span class="lineNum">     174 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
-<span class="lineNum">     175 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     176 </span><span class="lineCov">         20 :     static inline constexpr T sum(Iterator start, Iterator end) {</span>
-<span class="lineNum">     177 </span><span class="lineCov">         20 :         return std::accumulate(start, end, T{0});</span>
-<span class="lineNum">     178 </span>            :     }
-<span class="lineNum">     179 </span>            : 
-<span class="lineNum">     180 </span>            :     /**
-<span class="lineNum">     181 </span>            :      *  \brief  Calculate the sum of all elements inside the container \p cont.
-<span class="lineNum">     182 </span>            :      *
-<span class="lineNum">     183 </span>            :      *  \param cont
-<span class="lineNum">     184 </span>            :      *      The container to calculate the sum for.
-<span class="lineNum">     185 </span>            :      *  \return Returns the sum of the elements with type `Container::value_type`.
-<a name="186"><span class="lineNum">     186 </span>            :      */</a>
-<span class="lineNum">     187 </span>            :     template &lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     188 </span><span class="lineCov">          3 :     static inline constexpr auto sum(const Container&amp; cont) {</span>
-<span class="lineNum">     189 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
-<span class="lineNum">     190 </span>            :                       &quot;utils::algorithm::sum: Container must have iterator support.&quot;);
-<span class="lineNum">     191 </span><span class="lineCov">          3 :         return utils::algorithm::sum(std::begin(cont), std::end(cont));</span>
-<span class="lineNum">     192 </span>            :     }
-<span class="lineNum">     193 </span>            : 
-<span class="lineNum">     194 </span>            :     /**
-<span class="lineNum">     195 </span>            :      *  \brief  Calculate the product of all elements between \p start and \p end.
-<span class="lineNum">     196 </span>            :      *
-<span class="lineNum">     197 </span>            :      *  \param  start
-<span class="lineNum">     198 </span>            :      *      The start iterator to begin from.
-<span class="lineNum">     199 </span>            :      *  \param  end
-<span class="lineNum">     200 </span>            :      *      The end iterator to stop at.
-<span class="lineNum">     201 </span>            :      *  \return Returns the product of the elements with type `Iterator::value_type`.
-<span class="lineNum">     202 </span>            :      */
-<span class="lineNum">     203 </span>            :     template &lt;
-<span class="lineNum">     204 </span>            :         typename Iterator,
-<span class="lineNum">     205 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
-<a name="206"><span class="lineNum">     206 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
-<span class="lineNum">     207 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">          6 :     static inline constexpr T product(Iterator start, Iterator end) {</span></a>
-<span class="lineNum">     209 </span><span class="lineCov">          6 :         return start != end</span>
-<span class="lineNum">     210 </span><span class="lineCov">         46 :              ? std::accumulate(start, end, T{1}, [](const T&amp; x, const T&amp; y){ return x * y; })</span>
-<span class="lineNum">     211 </span><span class="lineCov">          6 :              : T{0};</span>
-<span class="lineNum">     212 </span>            :     }
-<span class="lineNum">     213 </span>            : 
-<span class="lineNum">     214 </span>            :     /**
-<span class="lineNum">     215 </span>            :      *  \brief  Calculate the product of all elements inside the container \p cont.
-<span class="lineNum">     216 </span>            :      *
-<span class="lineNum">     217 </span>            :      *  \param cont
-<span class="lineNum">     218 </span>            :      *      The container to calculate the sum for.
-<span class="lineNum">     219 </span>            :      *  \return Returns the product of the elements with type `Container::value_type`.
-<a name="220"><span class="lineNum">     220 </span>            :      */</a>
-<span class="lineNum">     221 </span>            :     template &lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     222 </span><span class="lineCov">          3 :     static inline constexpr auto product(const Container&amp; cont) {</span>
-<span class="lineNum">     223 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
-<span class="lineNum">     224 </span>            :                       &quot;utils::algorithm::product: Container must have iterator support.&quot;);
-<span class="lineNum">     225 </span><span class="lineCov">          3 :         return utils::algorithm::product(std::begin(cont), std::end(cont));</span>
-<span class="lineNum">     226 </span>            :     }
-<span class="lineNum">     227 </span>            : 
-<span class="lineNum">     228 </span>            :     /**
-<span class="lineNum">     229 </span>            :      *  \brief  Generic repaet Action a certain amount of times.
-<span class="lineNum">     230 </span>            :      *          Call std::invoke on fn with the given arguments, \p times times.
-<span class="lineNum">     231 </span>            :      *          (default: 1 time)
-<span class="lineNum">     232 </span>            :      *
-<span class="lineNum">     233 </span>            :      *  \param  fn
-<span class="lineNum">     234 </span>            :      *      The action to call. Must be invocable with the given args.
-<span class="lineNum">     235 </span>            :      *      e.g. a lambda expression (scopeness does not matter),
-<span class="lineNum">     236 </span>            :      *           a function pointer.
-<span class="lineNum">     237 </span>            :      *  \param  ...args
-<span class="lineNum">     238 </span>            :      *      Arguments to be passed to fn.
-<a name="239"><span class="lineNum">     239 </span>            :      */</a>
-<span class="lineNum">     240 </span>            :     template&lt;size_t times = 1, typename F, typename... Args&gt;
-<span class="lineNum">     241 </span><span class="lineCov">          5 :     void repeat(F&amp;&amp; fn, Args&amp;&amp;... args) {</span>
-<span class="lineNum">     242 </span>            :         static_assert(std::is_invocable_v&lt;F, Args...&gt;,
-<span class="lineNum">     243 </span>            :                       &quot;utils::algorithm::repeat: Callable function required.&quot;);
-<span class="lineNum">     244 </span><span class="lineCov">         14 :         for (size_t i = 0; i &lt; times; i++) {</span>
-<span class="lineNum">     245 </span><span class="lineCov">          9 :             std::invoke(std::forward&lt;F&gt;(fn), std::forward&lt;Args&gt;(args)...);</span>
-<span class="lineNum">     246 </span>            :         }
-<span class="lineNum">     247 </span><span class="lineCov">          5 :     }</span>
-<span class="lineNum">     248 </span>            : 
-<span class="lineNum">     249 </span>            :     /**
-<span class="lineNum">     250 </span>            :      *  \brief  Wrapper to call std::for_each with a Container instead of iterators.
-<span class="lineNum">     251 </span>            :      *
-<span class="lineNum">     252 </span>            :      *  \param  start
-<span class="lineNum">     253 </span>            :      *      The start iterator to begin from.
-<span class="lineNum">     254 </span>            :      *  \param  end
-<span class="lineNum">     255 </span>            :      *      The end iterator to stop at.
-<span class="lineNum">     256 </span>            :      *  \param  fn
-<span class="lineNum">     257 </span>            :      *      The action to call. Must be invocable with Container::value_type.
-<span class="lineNum">     258 </span>            :      */
-<span class="lineNum">     259 </span>            :     template &lt;
-<span class="lineNum">     260 </span>            :         typename Iterator,
-<span class="lineNum">     261 </span>            :         typename F,
-<span class="lineNum">     262 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
-<a name="263"><span class="lineNum">     263 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
-<span class="lineNum">     264 </span>            :     &gt; ATTR_MAYBE_UNUSED
-<span class="lineNum">     265 </span><span class="lineCov">          2 :     static inline constexpr auto for_each(Iterator start, Iterator end, F&amp;&amp; fn) {</span>
-<span class="lineNum">     266 </span>            :         static_assert(std::is_invocable_v&lt;F, T&gt;,
-<span class="lineNum">     267 </span>            :                       &quot;utils::algorithm::for_each: Callable function required.&quot;);
-<span class="lineNum">     268 </span><span class="lineCov">          2 :         std::for_each(start, end, fn);</span>
-<span class="lineNum">     269 </span><span class="lineCov">          2 :     }</span>
-<span class="lineNum">     270 </span>            : 
-<span class="lineNum">     271 </span>            :     /**
-<span class="lineNum">     272 </span>            :      *  \brief  Wrapper to call std::for_each with a Container instead of iterators.
-<span class="lineNum">     273 </span>            :      *
-<span class="lineNum">     274 </span>            :      *  \param cont
-<span class="lineNum">     275 </span>            :      *      The container to apply for_each to.
-<span class="lineNum">     276 </span>            :      *  \param  fn
-<span class="lineNum">     277 </span>            :      *      The action to call. Must be invocable with Container::value_type.
+<span class="lineNum">      14 </span>            : 
+<span class="lineNum">      15 </span>            : namespace utils::algorithm {
+<span class="lineNum">      16 </span>            :     /*
+<span class="lineNum">      17 </span>            :      *  Wrap CPPItertools as ::iter
+<span class="lineNum">      18 </span>            :      *  Reference: https://github.com/ryanhaining/cppitertools (04/08/2019)
+<span class="lineNum">      19 </span>            :      */
+<span class="lineNum">      20 </span>            :     namespace iter = ::iter;
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            :     /**
+<span class="lineNum">      23 </span>            :      *  \brief  Check if the given container contains the given item.
+<span class="lineNum">      24 </span>            :      *          The type of item must be something that the container holds.
+<span class="lineNum">      25 </span>            :      *              e.g.
+<span class="lineNum">      26 </span>            :      *                  vector&lt;int&gt;  &lt;- int
+<span class="lineNum">      27 </span>            :      *                  string       &lt;- char
+<span class="lineNum">      28 </span>            :      *              and not:
+<span class="lineNum">      29 </span>            :      *                  vector&lt;Node&gt; /- int
+<span class="lineNum">      30 </span>            :      *
+<span class="lineNum">      31 </span>            :      *  \param  container
+<span class="lineNum">      32 </span>            :      *      The container to look in.
+<span class="lineNum">      33 </span>            :      *  \param  item
+<span class="lineNum">      34 </span>            :      *      The item to look for.
+<span class="lineNum">      35 </span>            :      *  \return Returns an `std:optional&lt;size_t&gt;` holding the offset from
+<span class="lineNum">      36 </span>            :      *          std::begin(container) if the item was found, or nothing if not.
+<span class="lineNum">      37 </span>            :      *          If \p container has `.constains` size_t(-1) is returned if found
+<span class="lineNum">      38 </span>            :      *          or std::nullopt othertwise.
+<span class="lineNum">      39 </span>            :      */
+<span class="lineNum">      40 </span>            :     template&lt;
+<span class="lineNum">      41 </span>            :         typename C, typename T,
+<a name="42"><span class="lineNum">      42 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_container&lt;C&gt;::value&gt;</a>
+<span class="lineNum">      43 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      44 </span><span class="lineCov">         17 :     static inline constexpr utils::traits::found_t contains(const C&amp; container, const T&amp; item) {</span>
+<span class="lineNum">      45 </span>            :         if constexpr (utils::traits::has_contains_v&lt;C, T&gt;) {
+<span class="lineNum">      46 </span>            :             if (const auto check = container.contains(item)) {
+<span class="lineNum">      47 </span>            :                 return { -1 };
+<span class="lineNum">      48 </span>            :             }
+<span class="lineNum">      49 </span>            :         } else if constexpr (utils::traits::has_find_v&lt;C, T&gt;) {
+<span class="lineNum">      50 </span><span class="lineCov">          1 :             if (const auto idx = container.find(item); std::end(container) != idx) {</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 :                 return { std::distance(std::begin(container), idx) };</span>
+<span class="lineNum">      52 </span>            :             }
+<span class="lineNum">      53 </span>            :         } else {
+<span class="lineNum">      54 </span><span class="lineCov">         16 :             if (const auto idx = std::find(std::begin(container), std::end(container), item);</span>
+<span class="lineNum">      55 </span><span class="lineCov">         16 :                 std::end(container) != idx)</span>
+<span class="lineNum">      56 </span>            :             {
+<span class="lineNum">      57 </span><span class="lineCov">         14 :                 return { std::distance(std::begin(container), idx) };</span>
+<span class="lineNum">      58 </span>            :             }
+<span class="lineNum">      59 </span>            :         }
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span><span class="lineCov">          2 :         return std::nullopt;</span>
+<span class="lineNum">      62 </span>            :     }
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :     /**
+<span class="lineNum">      65 </span>            :      *  \brief  Generic AND all args.
+<span class="lineNum">      66 </span>            :      *
+<span class="lineNum">      67 </span>            :      *  \return
+<span class="lineNum">      68 </span>            :      *      True if arg1 &amp;&amp; ... &amp;&amp; argn == true
+<a name="69"><span class="lineNum">      69 </span>            :      */</a>
+<span class="lineNum">      70 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      71 </span><span class="lineCov">         14 :     static inline constexpr bool all(T const&amp;... args) {</span>
+<span class="lineNum">      72 </span><span class="lineCov">         14 :         return (... &amp;&amp; args);</span>
+<span class="lineNum">      73 </span>            :     }
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            :     /**
+<span class="lineNum">      76 </span>            :      *  \brief  Generic OR all args.
+<span class="lineNum">      77 </span>            :      *
+<span class="lineNum">      78 </span>            :      *  \return
+<span class="lineNum">      79 </span>            :      *      True if arg1 || ... || argn == true
+<a name="80"><span class="lineNum">      80 </span>            :      */</a>
+<span class="lineNum">      81 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      82 </span><span class="lineCov">         30 :     static inline constexpr bool any(T const&amp;... args) {</span>
+<span class="lineNum">      83 </span><span class="lineCov">         30 :         return (... || args);</span>
+<span class="lineNum">      84 </span>            :     }
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span>            :     /**
+<span class="lineNum">      87 </span>            :      *  \brief  Generic NOT OR all args.
+<span class="lineNum">      88 </span>            :      *
+<span class="lineNum">      89 </span>            :      *  \return
+<span class="lineNum">      90 </span>            :      *      True if !(arg1 || ... || argn) == true
+<a name="91"><span class="lineNum">      91 </span>            :      */</a>
+<span class="lineNum">      92 </span>            :     template&lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      93 </span><span class="lineCov">         15 :     static inline constexpr bool none(T const&amp;... args) {</span>
+<span class="lineNum">      94 </span><span class="lineCov">         15 :         return !any(args...);</span>
+<span class="lineNum">      95 </span>            :     }
+<span class="lineNum">      96 </span>            : 
+<span class="lineNum">      97 </span>            :     /**
+<span class="lineNum">      98 </span>            :      *  \brief  Generic test equality of all args.
+<span class="lineNum">      99 </span>            :      *
+<span class="lineNum">     100 </span>            :      *  \return
+<span class="lineNum">     101 </span>            :      *      True if arg1 == ... == argn
+<a name="102"><span class="lineNum">     102 </span>            :      */</a>
+<span class="lineNum">     103 </span>            :     template &lt;typename... T&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     104 </span><span class="lineCov">         21 :     static inline constexpr bool all_equal(T const&amp;... args) {</span>
+<span class="lineNum">     105 </span>            :         if constexpr (sizeof...(T) &lt; 2) {
+<a name="106"><span class="lineNum">     106 </span><span class="lineCov">          8 :             return true;</span></a>
+<span class="lineNum">     107 </span>            :         } else {
+<span class="lineNum">     108 </span><span class="lineCov">         13 :             return [](auto const&amp; a0, auto const&amp;... rest){</span>
+<span class="lineNum">     109 </span><span class="lineCov">         13 :                 return ((a0 == rest) &amp;&amp; ...);</span>
+<span class="lineNum">     110 </span><span class="lineCov">         13 :             }(args...);</span>
+<span class="lineNum">     111 </span>            :         }
+<span class="lineNum">     112 </span>            :     }
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span>            :     /**
+<span class="lineNum">     115 </span>            :      *  \brief  Generic test if all args are within [min, max] (inclusive).
+<span class="lineNum">     116 </span>            :      *
+<span class="lineNum">     117 </span>            :      *  \return
+<span class="lineNum">     118 </span>            :      *      True if (min &lt;= arg1 &amp;&amp; arg1 &lt;= max) &amp;&amp; ...
+<a name="119"><span class="lineNum">     119 </span>            :      */</a>
+<span class="lineNum">     120 </span>            :     template &lt;typename T, typename... Ts&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     121 </span><span class="lineCov">         10 :     static inline constexpr bool all_within(ATTR_MAYBE_UNUSED T min,</span>
+<span class="lineNum">     122 </span>            :                                             ATTR_MAYBE_UNUSED T max,
+<span class="lineNum">     123 </span>            :                                             const Ts&amp;... ts)
+<span class="lineNum">     124 </span>            :     {
+<span class="lineNum">     125 </span>            :         if constexpr (sizeof...(Ts) == 0) {
+<span class="lineNum">     126 </span><span class="lineCov">          1 :             return true;</span>
+<span class="lineNum">     127 </span>            :         } else {
+<span class="lineNum">     128 </span><span class="lineCov">          9 :             if (HEDLEY_UNLIKELY(max &lt; min)) // Allow range from higher to lower</span>
+<span class="lineNum">     129 </span><span class="lineCov">          2 :                 std::swap(min, max);</span>
+<span class="lineNum">     130 </span><span class="lineCov">          9 :             return ((min &lt;= ts &amp;&amp; ts &lt;= max) &amp;&amp; ...);</span>
+<span class="lineNum">     131 </span>            :         }
+<span class="lineNum">     132 </span>            :     }
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span>            :     /**
+<span class="lineNum">     135 </span>            :      *  \brief  Generic test if all elements in the range
+<span class="lineNum">     136 </span>            :      *          are within [min, max] (inclusive).
+<span class="lineNum">     137 </span>            :      *
+<span class="lineNum">     138 </span>            :      *  \return
+<span class="lineNum">     139 </span>            :      *      True if (min &lt;= start[0] &amp;&amp; start[0] &lt;= max) &amp;&amp; ...
+<span class="lineNum">     140 </span>            :      */
+<span class="lineNum">     141 </span>            :     template &lt;
+<span class="lineNum">     142 </span>            :         typename Iterator,
+<span class="lineNum">     143 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<a name="144"><span class="lineNum">     144 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     145 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     146 </span><span class="lineCov">         20 :     static inline constexpr bool within(T min, T max, Iterator start, Iterator end) {</span>
+<span class="lineNum">     147 </span><span class="lineCov">         20 :         if (HEDLEY_UNLIKELY(max &lt; min)) // Allow range from higher to lower</span>
+<a name="148"><span class="lineNum">     148 </span><span class="lineCov">          2 :             std::swap(min, max);</span></a>
+<span class="lineNum">     149 </span>            : 
+<span class="lineNum">     150 </span><span class="lineCov">        556 :         return std::all_of(start, end, [min, max](const T&amp; x){</span>
+<span class="lineNum">     151 </span><span class="lineCov">        268 :             return min &lt;= x &amp;&amp; x &lt;= max;</span>
+<span class="lineNum">     152 </span><span class="lineCov">         20 :         });</span>
+<span class="lineNum">     153 </span>            :     }
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span>            :     /**
+<span class="lineNum">     156 </span>            :      *  \brief  Generic test if all elements in the container
+<span class="lineNum">     157 </span>            :      *          are within [min, max] (inclusive).
+<span class="lineNum">     158 </span>            :      *
+<span class="lineNum">     159 </span>            :      *  \return
+<span class="lineNum">     160 </span>            :      *      True if (min &lt;= arg1 &amp;&amp; arg1 &lt;= max) &amp;&amp; ...
+<a name="161"><span class="lineNum">     161 </span>            :      */</a>
+<span class="lineNum">     162 </span>            :     template &lt;typename T, typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     163 </span><span class="lineCov">         16 :     static inline constexpr bool within(T min, T max, const Container&amp; cont) {</span>
+<span class="lineNum">     164 </span>            :         static_assert (utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     165 </span>            :                        &quot;utils::algorithm::within: Container must have iterator support.&quot;);
+<span class="lineNum">     166 </span><span class="lineCov">         16 :         return utils::algorithm::within(min, max, std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     167 </span>            :     }
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span>            :     /**
+<span class="lineNum">     170 </span>            :      *  \brief  Calculate the sum of all elements between \p start and \p end.
+<span class="lineNum">     171 </span>            :      *
+<span class="lineNum">     172 </span>            :      *  \param  start
+<span class="lineNum">     173 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     174 </span>            :      *  \param  end
+<span class="lineNum">     175 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     176 </span>            :      *  \return Returns the sum of the elements with type `Iterator::value_type`.
+<span class="lineNum">     177 </span>            :      */
+<span class="lineNum">     178 </span>            :     template &lt;
+<span class="lineNum">     179 </span>            :         typename Iterator,
+<span class="lineNum">     180 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<a name="181"><span class="lineNum">     181 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     182 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     183 </span><span class="lineCov">         27 :     static inline constexpr T sum(Iterator start, Iterator end) {</span>
+<span class="lineNum">     184 </span><span class="lineCov">         27 :         return std::accumulate(start, end, T{0});</span>
+<span class="lineNum">     185 </span>            :     }
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span>            :     /**
+<span class="lineNum">     188 </span>            :      *  \brief  Calculate the sum of all elements inside the container \p cont.
+<span class="lineNum">     189 </span>            :      *
+<span class="lineNum">     190 </span>            :      *  \param cont
+<span class="lineNum">     191 </span>            :      *      The container to calculate the sum for.
+<span class="lineNum">     192 </span>            :      *  \return Returns the sum of the elements with type `Container::value_type`.
+<a name="193"><span class="lineNum">     193 </span>            :      */</a>
+<span class="lineNum">     194 </span>            :     template &lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     195 </span><span class="lineCov">          3 :     static inline constexpr auto sum(const Container&amp; cont) {</span>
+<span class="lineNum">     196 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     197 </span>            :                       &quot;utils::algorithm::sum: Container must have iterator support.&quot;);
+<span class="lineNum">     198 </span><span class="lineCov">          3 :         return utils::algorithm::sum(std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     199 </span>            :     }
+<span class="lineNum">     200 </span>            : 
+<span class="lineNum">     201 </span>            :     /**
+<span class="lineNum">     202 </span>            :      *  \brief  Calculate the product of all elements between \p start and \p end.
+<span class="lineNum">     203 </span>            :      *
+<span class="lineNum">     204 </span>            :      *  \param  start
+<span class="lineNum">     205 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     206 </span>            :      *  \param  end
+<span class="lineNum">     207 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     208 </span>            :      *  \return Returns the product of the elements with type `Iterator::value_type`.
+<span class="lineNum">     209 </span>            :      */
+<span class="lineNum">     210 </span>            :     template &lt;
+<span class="lineNum">     211 </span>            :         typename Iterator,
+<span class="lineNum">     212 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<a name="213"><span class="lineNum">     213 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     214 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<a name="215"><span class="lineNum">     215 </span><span class="lineCov">          6 :     static inline constexpr T product(Iterator start, Iterator end) {</span></a>
+<span class="lineNum">     216 </span><span class="lineCov">          6 :         return start != end</span>
+<span class="lineNum">     217 </span><span class="lineCov">         46 :              ? std::accumulate(start, end, T{1}, [](const T&amp; x, const T&amp; y){ return x * y; })</span>
+<span class="lineNum">     218 </span><span class="lineCov">          6 :              : T{0};</span>
+<span class="lineNum">     219 </span>            :     }
+<span class="lineNum">     220 </span>            : 
+<span class="lineNum">     221 </span>            :     /**
+<span class="lineNum">     222 </span>            :      *  \brief  Calculate the product of all elements inside the container \p cont.
+<span class="lineNum">     223 </span>            :      *
+<span class="lineNum">     224 </span>            :      *  \param cont
+<span class="lineNum">     225 </span>            :      *      The container to calculate the sum for.
+<span class="lineNum">     226 </span>            :      *  \return Returns the product of the elements with type `Container::value_type`.
+<a name="227"><span class="lineNum">     227 </span>            :      */</a>
+<span class="lineNum">     228 </span>            :     template &lt;typename Container&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     229 </span><span class="lineCov">          3 :     static inline constexpr auto product(const Container&amp; cont) {</span>
+<span class="lineNum">     230 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     231 </span>            :                       &quot;utils::algorithm::product: Container must have iterator support.&quot;);
+<span class="lineNum">     232 </span><span class="lineCov">          3 :         return utils::algorithm::product(std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     233 </span>            :     }
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span>            :     /**
+<span class="lineNum">     236 </span>            :      *  \brief  Reverse all elements between \p start and \p end.
+<span class="lineNum">     237 </span>            :      *
+<span class="lineNum">     238 </span>            :      *  \param  start
+<span class="lineNum">     239 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     240 </span>            :      *  \param  end
+<span class="lineNum">     241 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     242 </span>            :      */
+<span class="lineNum">     243 </span>            :     template &lt;
+<span class="lineNum">     244 </span>            :         typename Iterator,
+<span class="lineNum">     245 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<a name="246"><span class="lineNum">     246 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     247 </span>            :     &gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     248 </span><span class="lineCov">          4 :     static inline constexpr void reverse(Iterator start, Iterator end) {</span>
+<span class="lineNum">     249 </span><span class="lineCov">          4 :         if (start != end) {</span>
+<span class="lineNum">     250 </span><span class="lineCov">          3 :             std::reverse(start, end);</span>
+<span class="lineNum">     251 </span>            :         }
+<span class="lineNum">     252 </span><span class="lineCov">          4 :     }</span>
+<span class="lineNum">     253 </span>            : 
+<span class="lineNum">     254 </span>            :     /**
+<span class="lineNum">     255 </span>            :      *  \brief  Reverse all elements inside the container \p cont.
+<span class="lineNum">     256 </span>            :      *
+<span class="lineNum">     257 </span>            :      *  \param cont
+<span class="lineNum">     258 </span>            :      *      The container to reverse.
+<a name="259"><span class="lineNum">     259 </span>            :      */</a>
+<span class="lineNum">     260 </span>            :     template &lt;typename Container&gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     261 </span><span class="lineCov">          3 :     static inline constexpr void reverse(Container&amp; cont) {</span>
+<span class="lineNum">     262 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     263 </span>            :                       &quot;utils::algorithm::reverse: Container must have iterator support.&quot;);
+<span class="lineNum">     264 </span><span class="lineCov">          3 :         utils::algorithm::reverse(std::begin(cont), std::end(cont));</span>
+<span class="lineNum">     265 </span><span class="lineCov">          3 :     }</span>
+<span class="lineNum">     266 </span>            : 
+<span class="lineNum">     267 </span>            :     /**
+<span class="lineNum">     268 </span>            :      *  \brief  Generic repaet Action a certain amount of times.
+<span class="lineNum">     269 </span>            :      *          Call std::invoke on fn with the given arguments, \p times times.
+<span class="lineNum">     270 </span>            :      *          (default: 1 time)
+<span class="lineNum">     271 </span>            :      *
+<span class="lineNum">     272 </span>            :      *  \param  fn
+<span class="lineNum">     273 </span>            :      *      The action to call. Must be invocable with the given args.
+<span class="lineNum">     274 </span>            :      *      e.g. a lambda expression (scopeness does not matter),
+<span class="lineNum">     275 </span>            :      *           a function pointer.
+<span class="lineNum">     276 </span>            :      *  \param  ...args
+<span class="lineNum">     277 </span>            :      *      Arguments to be passed to fn.
 <a name="278"><span class="lineNum">     278 </span>            :      */</a>
-<span class="lineNum">     279 </span>            :     template &lt;typename Container, typename F&gt; ATTR_MAYBE_UNUSED
-<span class="lineNum">     280 </span><span class="lineCov">          1 :     static inline constexpr auto for_each(const Container&amp; cont, F&amp;&amp; fn) {</span>
-<span class="lineNum">     281 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
-<span class="lineNum">     282 </span>            :                       &quot;utils::algorithm::for_each: Container must have iterator support.&quot;);
-<span class="lineNum">     283 </span><span class="lineCov">          1 :         return utils::algorithm::for_each(std::begin(cont), std::end(cont), std::forward&lt;F&gt;(fn));</span>
-<span class="lineNum">     284 </span>            :     }
-<span class="lineNum">     285 </span>            : 
-<span class="lineNum">     286 </span>            :     /**
-<span class="lineNum">     287 </span>            :      *  \brief  Enumerate wrapper for containers.
-<span class="lineNum">     288 </span>            :      *          Return an iterator that also holds an index, starting at \p start_t.
-<span class="lineNum">     289 </span>            :      *
-<span class="lineNum">     290 </span>            :      *          Does the same as the one from ::iter::enumerate, but includes
-<span class="lineNum">     291 </span>            :      *          an offsetable start index.
-<span class="lineNum">     292 </span>            :      *
-<span class="lineNum">     293 </span>            :      *  \param  iterable
-<span class="lineNum">     294 </span>            :      *      The container to wrap.
-<span class="lineNum">     295 </span>            :      *  \param  start_i
-<span class="lineNum">     296 </span>            :      *      The starting index when looping over the container.
-<span class="lineNum">     297 </span>            :      *  \return Returns a wrapper to enumarete over \p iterable.
-<span class="lineNum">     298 </span>            :      */
-<span class="lineNum">     299 </span>            :     template &lt;
-<span class="lineNum">     300 </span>            :         typename T,
-<span class="lineNum">     301 </span>            :         typename TIter = decltype(std::begin(std::declval&lt;T&gt;())),
-<a name="302"><span class="lineNum">     302 </span>            :         typename       = decltype(std::end  (std::declval&lt;T&gt;()))</a>
-<span class="lineNum">     303 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     304 </span><span class="lineCov">          2 :     static inline constexpr auto enumerate(T&amp;&amp; iterable, size_t start_i = 0) {</span>
-<span class="lineNum">     305 </span>            :         struct iterator {
-<span class="lineNum">     306 </span>            :             size_t i;
-<a name="307"><span class="lineNum">     307 </span>            :             TIter iter;</a>
-<span class="lineNum">     308 </span>            : 
-<span class="lineNum">     309 </span><span class="lineCov">         22 :             bool operator!=(const iterator&amp; other) const {</span>
-<span class="lineNum">     310 </span><span class="lineCov">         22 :                 return iter != other.iter;</span>
-<a name="311"><span class="lineNum">     311 </span>            :             }</a>
-<span class="lineNum">     312 </span>            : 
-<span class="lineNum">     313 </span><span class="lineCov">         20 :             void operator++() {</span>
-<span class="lineNum">     314 </span><span class="lineCov">         20 :                 ++i; ++iter;</span>
-<a name="315"><span class="lineNum">     315 </span><span class="lineCov">         20 :             }</span></a>
-<span class="lineNum">     316 </span>            : 
-<span class="lineNum">     317 </span><span class="lineCov">         20 :             auto operator*() const {</span>
-<span class="lineNum">     318 </span><span class="lineCov">         20 :                 return std::tie(i, *iter);</span>
-<span class="lineNum">     319 </span>            :             }
-<span class="lineNum">     320 </span>            :         };
-<span class="lineNum">     321 </span>            : 
-<span class="lineNum">     322 </span>            :         struct iterable_wrapper {
-<a name="323"><span class="lineNum">     323 </span>            :             T iterable;</a>
-<a name="324"><span class="lineNum">     324 </span>            :             size_t start;</a>
-<span class="lineNum">     325 </span><span class="lineCov">          2 :             auto begin() { return iterator{ start, std::begin(iterable) }; }</span>
-<span class="lineNum">     326 </span><span class="lineCov">          2 :             auto end()   { return iterator{ start, std::end  (iterable) }; }</span>
-<span class="lineNum">     327 </span>            :         };
-<span class="lineNum">     328 </span>            : 
-<span class="lineNum">     329 </span><span class="lineCov">          2 :         return iterable_wrapper{ std::forward&lt;T&gt;(iterable), start_i };</span>
-<span class="lineNum">     330 </span>            :     }
-<span class="lineNum">     331 </span>            : }
-<span class="lineNum">     332 </span>            : 
-<span class="lineNum">     333 </span>            : #endif // UTILS_ALGORITHM_HPP
+<span class="lineNum">     279 </span>            :     template&lt;size_t times = 1, typename F, typename... Args&gt;
+<span class="lineNum">     280 </span><span class="lineCov">          5 :     void repeat(F&amp;&amp; fn, Args&amp;&amp;... args) {</span>
+<span class="lineNum">     281 </span>            :         static_assert(utils::traits::is_invocable_v&lt;F, Args...&gt;,
+<span class="lineNum">     282 </span>            :                       &quot;utils::algorithm::repeat: Callable function required.&quot;);
+<span class="lineNum">     283 </span><span class="lineCov">         14 :         for (size_t i = 0; i &lt; times; i++) {</span>
+<span class="lineNum">     284 </span><span class="lineCov">          9 :             std::invoke(std::forward&lt;F&gt;(fn), std::forward&lt;Args&gt;(args)...);</span>
+<span class="lineNum">     285 </span>            :         }
+<span class="lineNum">     286 </span><span class="lineCov">          5 :     }</span>
+<span class="lineNum">     287 </span>            : 
+<span class="lineNum">     288 </span>            :     /**
+<span class="lineNum">     289 </span>            :      *  \brief  Wrapper to call std::for_each with iterators.
+<span class="lineNum">     290 </span>            :      *
+<span class="lineNum">     291 </span>            :      *  \param  start
+<span class="lineNum">     292 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     293 </span>            :      *  \param  end
+<span class="lineNum">     294 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     295 </span>            :      *  \param  fn
+<span class="lineNum">     296 </span>            :      *      The action to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     297 </span>            :      */
+<span class="lineNum">     298 </span>            :     template &lt;
+<span class="lineNum">     299 </span>            :         typename Iterator,
+<span class="lineNum">     300 </span>            :         typename F,
+<span class="lineNum">     301 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<a name="302"><span class="lineNum">     302 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     303 </span>            :     &gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     304 </span><span class="lineCov">          2 :     static inline constexpr auto for_each(Iterator start, Iterator end, F&amp;&amp; fn) {</span>
+<span class="lineNum">     305 </span>            :         static_assert(utils::traits::is_invocable_v&lt;F, T&gt;,
+<span class="lineNum">     306 </span>            :                       &quot;utils::algorithm::for_each: Callable function required.&quot;);
+<span class="lineNum">     307 </span>            : 
+<span class="lineNum">     308 </span><span class="lineCov">          2 :         return std::for_each(start, end, std::forward&lt;F&gt;(fn));</span>
+<span class="lineNum">     309 </span>            :     }
+<span class="lineNum">     310 </span>            : 
+<span class="lineNum">     311 </span>            :     /**
+<span class="lineNum">     312 </span>            :      *  \brief  Wrapper to call std::for_each with a Container instead of iterators.
+<span class="lineNum">     313 </span>            :      *
+<span class="lineNum">     314 </span>            :      *  \param cont
+<span class="lineNum">     315 </span>            :      *      The container to apply for_each to.
+<span class="lineNum">     316 </span>            :      *  \param  fn
+<span class="lineNum">     317 </span>            :      *      The action to call. Must be invocable with Container::value_type.
+<a name="318"><span class="lineNum">     318 </span>            :      */</a>
+<span class="lineNum">     319 </span>            :     template &lt;typename Container, typename F&gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     320 </span><span class="lineCov">          1 :     static inline constexpr auto for_each(const Container&amp; cont, F&amp;&amp; fn) {</span>
+<span class="lineNum">     321 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     322 </span>            :                       &quot;utils::algorithm::for_each: Container must have iterator support.&quot;);
+<span class="lineNum">     323 </span><span class="lineCov">          1 :         return utils::algorithm::for_each(std::begin(cont), std::end(cont), std::forward&lt;F&gt;(fn));</span>
+<span class="lineNum">     324 </span>            :     }
+<span class="lineNum">     325 </span>            : 
+<span class="lineNum">     326 </span>            :     /**
+<span class="lineNum">     327 </span>            :      *  \brief  Wrapper to call std::min_element with iterators.
+<span class="lineNum">     328 </span>            :      *
+<span class="lineNum">     329 </span>            :      *  \param  start
+<span class="lineNum">     330 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     331 </span>            :      *  \param  end
+<span class="lineNum">     332 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     333 </span>            :      *  \param  fn_compare
+<span class="lineNum">     334 </span>            :      *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     335 </span>            :      *  \return Returns the smallest element.
+<span class="lineNum">     336 </span>            :      */
+<span class="lineNum">     337 </span>            :     template &lt;
+<span class="lineNum">     338 </span>            :         typename Iterator,
+<span class="lineNum">     339 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<span class="lineNum">     340 </span>            :         typename F = typename std::less&lt;T&gt;,
+<a name="341"><span class="lineNum">     341 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     342 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     343 </span><span class="lineCov">          2 :     static inline constexpr auto min_element(Iterator start, Iterator end, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     344 </span>            :         static_assert(utils::traits::is_invocable_v&lt;F, T, T&gt;,
+<span class="lineNum">     345 </span>            :                       &quot;utils::algorithm::min_element: Callable function required.&quot;);
+<span class="lineNum">     346 </span><span class="lineCov">          2 :         return std::min_element(start, end, std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     347 </span>            :     }
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span>            :     /**
+<span class="lineNum">     350 </span>            :      *  \brief  Wrapper to call std::min_element with a Container instead of iterators.
+<span class="lineNum">     351 </span>            :      *
+<span class="lineNum">     352 </span>            :      *  \param cont
+<span class="lineNum">     353 </span>            :      *      The container to apply min_element to.
+<span class="lineNum">     354 </span>            :      *  \param  fn
+<span class="lineNum">     355 </span>            :      *      The compare function to call. Must be invocable with Container::value_type.
+<span class="lineNum">     356 </span>            :      *  \return Returns the smallest element.
+<span class="lineNum">     357 </span>            :      */
+<span class="lineNum">     358 </span>            :     template &lt;
+<span class="lineNum">     359 </span>            :         typename Container,
+<span class="lineNum">     360 </span>            :         typename T = typename Container::value_type,
+<a name="361"><span class="lineNum">     361 </span>            :         typename F = typename std::less&lt;T&gt;</a>
+<span class="lineNum">     362 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     363 </span><span class="lineCov">          1 :     static inline constexpr auto min_element(const Container&amp; cont, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     364 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     365 </span>            :                       &quot;utils::algorithm::min_element: Container must have iterator support.&quot;);
+<span class="lineNum">     366 </span><span class="lineCov">          1 :         return utils::algorithm::min_element(std::begin(cont), std::end(cont), std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     367 </span>            :     }
+<span class="lineNum">     368 </span>            : 
+<span class="lineNum">     369 </span>            :     /**
+<span class="lineNum">     370 </span>            :      *  \brief  Wrapper to call std::max_element with iterators.
+<span class="lineNum">     371 </span>            :      *
+<span class="lineNum">     372 </span>            :      *  \param  start
+<span class="lineNum">     373 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     374 </span>            :      *  \param  end
+<span class="lineNum">     375 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     376 </span>            :      *  \param  fn_compare
+<span class="lineNum">     377 </span>            :      *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     378 </span>            :      *  \return Returns the largest element.
+<span class="lineNum">     379 </span>            :      */
+<span class="lineNum">     380 </span>            :     template &lt;
+<span class="lineNum">     381 </span>            :         typename Iterator,
+<span class="lineNum">     382 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<span class="lineNum">     383 </span>            :         typename F = typename std::less&lt;T&gt;,
+<a name="384"><span class="lineNum">     384 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     385 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     386 </span><span class="lineCov">          2 :     static inline constexpr auto max_element(Iterator start, Iterator end, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     387 </span>            :         static_assert(utils::traits::is_invocable_v&lt;F, T, T&gt;,
+<span class="lineNum">     388 </span>            :                       &quot;utils::algorithm::max_element: Callable function required.&quot;);
+<span class="lineNum">     389 </span><span class="lineCov">          2 :         return std::max_element(start, end, std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     390 </span>            :     }
+<span class="lineNum">     391 </span>            : 
+<span class="lineNum">     392 </span>            :     /**
+<span class="lineNum">     393 </span>            :      *  \brief  Wrapper to call std::max_element with a Container instead of iterators.
+<span class="lineNum">     394 </span>            :      *
+<span class="lineNum">     395 </span>            :      *  \param cont
+<span class="lineNum">     396 </span>            :      *      The container to apply min_element to.
+<span class="lineNum">     397 </span>            :      *  \param  fn
+<span class="lineNum">     398 </span>            :      *      The compare function to call. Must be invocable with Container::value_type.
+<span class="lineNum">     399 </span>            :      *  \return Returns the largest element.
+<span class="lineNum">     400 </span>            :      */
+<span class="lineNum">     401 </span>            :     template &lt;
+<span class="lineNum">     402 </span>            :         typename Container,
+<span class="lineNum">     403 </span>            :         typename T = typename Container::value_type,
+<a name="404"><span class="lineNum">     404 </span>            :         typename F = typename std::less&lt;T&gt;</a>
+<span class="lineNum">     405 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     406 </span><span class="lineCov">          1 :     static inline constexpr auto max_element(const Container&amp; cont, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     407 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     408 </span>            :                       &quot;utils::algorithm::max_element: Container must have iterator support.&quot;);
+<span class="lineNum">     409 </span><span class="lineCov">          1 :         return utils::algorithm::max_element(std::begin(cont), std::end(cont), std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     410 </span>            :     }
+<span class="lineNum">     411 </span>            : 
+<span class="lineNum">     412 </span>            :     /**
+<span class="lineNum">     413 </span>            :      *  \brief  Wrapper to call std::is_sorted with iterators to check ascending order.
+<span class="lineNum">     414 </span>            :      *
+<span class="lineNum">     415 </span>            :      *  \param  start
+<span class="lineNum">     416 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     417 </span>            :      *  \param  end
+<span class="lineNum">     418 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     419 </span>            :      *  \param  fn_compare
+<span class="lineNum">     420 </span>            :      *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     421 </span>            :      *  \return Returns true if the elements are sorted from low to high.
+<span class="lineNum">     422 </span>            :      */
+<span class="lineNum">     423 </span>            :     template &lt;
+<span class="lineNum">     424 </span>            :         typename Iterator,
+<span class="lineNum">     425 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<span class="lineNum">     426 </span>            :         typename F = typename std::less&lt;T&gt;,
+<a name="427"><span class="lineNum">     427 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     428 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     429 </span><span class="lineCov">          4 :     static inline constexpr bool is_ascending(Iterator start, Iterator end, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     430 </span><span class="lineCov">          4 :         return std::is_sorted(start, end, std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     431 </span>            :     }
+<span class="lineNum">     432 </span>            : 
+<span class="lineNum">     433 </span>            :     /**
+<span class="lineNum">     434 </span>            :      *  \brief  Wrapper to call std::is_sorted with a Container instead of iterators
+<span class="lineNum">     435 </span>            :      *          to check ascending order.
+<span class="lineNum">     436 </span>            :      *
+<span class="lineNum">     437 </span>            :      *  \param  start
+<span class="lineNum">     438 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     439 </span>            :      *  \param  end
+<span class="lineNum">     440 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     441 </span>            :      *  \param  fn_compare
+<span class="lineNum">     442 </span>            :      *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     443 </span>            :      *  \return Returns true if the elements are sorted from low to high.
+<span class="lineNum">     444 </span>            :      */
+<span class="lineNum">     445 </span>            :     template &lt;
+<span class="lineNum">     446 </span>            :         typename Container,
+<span class="lineNum">     447 </span>            :         typename T = typename Container::value_type,
+<a name="448"><span class="lineNum">     448 </span>            :         typename F = typename std::less&lt;T&gt;</a>
+<span class="lineNum">     449 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     450 </span><span class="lineCov">         10 :     static inline constexpr bool is_ascending(const Container&amp; cont, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     451 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     452 </span>            :                       &quot;utils::algorithm::is_ascending: Container must have iterator support.&quot;);
+<span class="lineNum">     453 </span><span class="lineCov">         10 :         return std::is_sorted(std::begin(cont), std::end(cont), std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     454 </span>            :     }
+<span class="lineNum">     455 </span>            : 
+<span class="lineNum">     456 </span>            :     /**
+<span class="lineNum">     457 </span>            :      *  \brief  Wrapper to call std::is_sorted with iterators to check descending order.
+<span class="lineNum">     458 </span>            :      *
+<span class="lineNum">     459 </span>            :      *  \param  start
+<span class="lineNum">     460 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     461 </span>            :      *  \param  end
+<span class="lineNum">     462 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     463 </span>            :      *  \param  fn_compare
+<span class="lineNum">     464 </span>            :      *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     465 </span>            :      *  \return Returns true if the elements are sorted from high to low.
+<span class="lineNum">     466 </span>            :      */
+<span class="lineNum">     467 </span>            :     template &lt;
+<span class="lineNum">     468 </span>            :         typename Iterator,
+<span class="lineNum">     469 </span>            :         typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<span class="lineNum">     470 </span>            :         typename F = typename std::greater&lt;T&gt;,
+<a name="471"><span class="lineNum">     471 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;</a>
+<span class="lineNum">     472 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     473 </span><span class="lineCov">          4 :     static inline constexpr bool is_descending(Iterator start, Iterator end, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     474 </span><span class="lineCov">          4 :         return std::is_sorted(start, end, std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     475 </span>            :     }
+<span class="lineNum">     476 </span>            : 
+<span class="lineNum">     477 </span>            :     /**
+<span class="lineNum">     478 </span>            :      *  \brief  Wrapper to call std::is_sorted with a Container instead of iterators
+<span class="lineNum">     479 </span>            :      *          to check descending order.
+<span class="lineNum">     480 </span>            :      *
+<span class="lineNum">     481 </span>            :      *  \param  start
+<span class="lineNum">     482 </span>            :      *      The start iterator to begin from.
+<span class="lineNum">     483 </span>            :      *  \param  end
+<span class="lineNum">     484 </span>            :      *      The end iterator to stop at.
+<span class="lineNum">     485 </span>            :      *  \param  fn_compare
+<span class="lineNum">     486 </span>            :      *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     487 </span>            :      *  \return Returns true if the elements are sorted from high to low.
+<span class="lineNum">     488 </span>            :      */
+<span class="lineNum">     489 </span>            :     template &lt;
+<span class="lineNum">     490 </span>            :         typename Container,
+<span class="lineNum">     491 </span>            :         typename T = typename Container::value_type,
+<a name="492"><span class="lineNum">     492 </span>            :         typename F = typename std::greater&lt;T&gt;</a>
+<span class="lineNum">     493 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     494 </span><span class="lineCov">          2 :     static inline constexpr bool is_descending(const Container&amp; cont, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     495 </span>            :         static_assert(utils::traits::is_iterable_v&lt;Container&gt;,
+<span class="lineNum">     496 </span>            :                       &quot;utils::algorithm::is_descending: Container must have iterator support.&quot;);
+<span class="lineNum">     497 </span><span class="lineCov">          2 :         return std::is_sorted(std::begin(cont), std::end(cont), std::forward&lt;F&gt;(fn_compare));</span>
+<span class="lineNum">     498 </span>            :     }
+<span class="lineNum">     499 </span>            : 
+<span class="lineNum">     500 </span>            :     namespace sort {
+<span class="lineNum">     501 </span>            :         /**
+<span class="lineNum">     502 </span>            :          *  \brief  Basic insertion sort with iterators.
+<span class="lineNum">     503 </span>            :          *
+<span class="lineNum">     504 </span>            :          *  \param  start
+<span class="lineNum">     505 </span>            :          *      The start iterator to begin from.
+<span class="lineNum">     506 </span>            :          *  \param  end
+<span class="lineNum">     507 </span>            :          *      The end iterator to stop at.
+<a name="508"><span class="lineNum">     508 </span>            :          */</a>
+<span class="lineNum">     509 </span>            :         template &lt;typename Iterator&gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     510 </span><span class="lineCov">          2 :         static inline constexpr void insertion(Iterator start, Iterator end) {</span>
+<span class="lineNum">     511 </span><span class="lineCov">         22 :             for (auto it = start; it != end; ++it) {</span>
+<span class="lineNum">     512 </span><span class="lineCov">         20 :                 std::rotate(std::upper_bound(start, it, *it), it, std::next(it));</span>
+<span class="lineNum">     513 </span>            :             }
+<span class="lineNum">     514 </span><span class="lineCov">          2 :         }</span>
+<span class="lineNum">     515 </span>            : 
+<span class="lineNum">     516 </span>            :         /**
+<span class="lineNum">     517 </span>            :          *  \brief  Quicksort using STL algos, with iterators.
+<span class="lineNum">     518 </span>            :          *
+<span class="lineNum">     519 </span>            :          *  \param  start
+<span class="lineNum">     520 </span>            :          *      The start iterator to begin from.
+<span class="lineNum">     521 </span>            :          *  \param  end
+<span class="lineNum">     522 </span>            :          *      The end iterator to stop at.
+<span class="lineNum">     523 </span>            :          *  \param  fn_compare
+<span class="lineNum">     524 </span>            :          *      The compare function to call. Must be invocable with Iterator::value_type.
+<span class="lineNum">     525 </span>            :          */
+<span class="lineNum">     526 </span>            :         template &lt;
+<span class="lineNum">     527 </span>            :             typename Iterator,
+<span class="lineNum">     528 </span>            :             typename T = typename std::iterator_traits&lt;Iterator&gt;::value_type,
+<a name="529"><span class="lineNum">     529 </span>            :             typename F = typename std::less&lt;T&gt;</a>
+<span class="lineNum">     530 </span>            :         &gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     531 </span><span class="lineCov">         38 :         static constexpr void quick(Iterator start, Iterator end, F&amp;&amp; fn_compare = F{}) {</span>
+<span class="lineNum">     532 </span><span class="lineCov">         38 :             const auto length = std::distance(start, end);</span>
+<span class="lineNum">     533 </span><span class="lineCov">         38 :             if (HEDLEY_UNLIKELY(length &lt;= 1)) return;</span>
+<span class="lineNum">     534 </span>            : 
+<span class="lineNum">     535 </span><span class="lineCov">         18 :             const auto pivot = std::next(start, length / 2);</span>
+<span class="lineNum">     536 </span><span class="lineCov">         18 :             std::nth_element(start, pivot, end, fn_compare);</span>
+<span class="lineNum">     537 </span><span class="lineCov">         18 :             utils::algorithm::sort::quick(start, pivot, fn_compare);</span>
+<span class="lineNum">     538 </span><span class="lineCov">         18 :             utils::algorithm::sort::quick(pivot, end, fn_compare);</span>
+<span class="lineNum">     539 </span>            :         }
+<span class="lineNum">     540 </span>            :     }
+<span class="lineNum">     541 </span>            : 
+<span class="lineNum">     542 </span>            :     /**
+<span class="lineNum">     543 </span>            :      *  \brief  Enumerate wrapper for containers.
+<span class="lineNum">     544 </span>            :      *          Return an iterator that also holds an index, starting at \p start_t.
+<span class="lineNum">     545 </span>            :      *
+<span class="lineNum">     546 </span>            :      *          Does the same as the one from ::iter::enumerate, but includes
+<span class="lineNum">     547 </span>            :      *          an offsetable start index.
+<span class="lineNum">     548 </span>            :      *
+<span class="lineNum">     549 </span>            :      *  \param  iterable
+<span class="lineNum">     550 </span>            :      *      The container to wrap.
+<span class="lineNum">     551 </span>            :      *  \param  start_i
+<span class="lineNum">     552 </span>            :      *      The starting index when looping over the container.
+<span class="lineNum">     553 </span>            :      *  \return Returns a wrapper to enumarete over \p iterable.
+<span class="lineNum">     554 </span>            :      */
+<span class="lineNum">     555 </span>            :     template &lt;
+<span class="lineNum">     556 </span>            :         typename T,
+<span class="lineNum">     557 </span>            :         typename TIter = decltype(std::begin(std::declval&lt;T&gt;())),
+<a name="558"><span class="lineNum">     558 </span>            :         typename       = decltype(std::end  (std::declval&lt;T&gt;()))</a>
+<span class="lineNum">     559 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     560 </span><span class="lineCov">          2 :     static inline constexpr auto enumerate(T&amp;&amp; iterable, size_t start_i = 0) {</span>
+<span class="lineNum">     561 </span>            :         struct iterator {
+<span class="lineNum">     562 </span>            :             size_t i;
+<a name="563"><span class="lineNum">     563 </span>            :             TIter iter;</a>
+<span class="lineNum">     564 </span>            : 
+<span class="lineNum">     565 </span><span class="lineCov">         22 :             bool operator!=(const iterator&amp; other) const {</span>
+<span class="lineNum">     566 </span><span class="lineCov">         22 :                 return iter != other.iter;</span>
+<a name="567"><span class="lineNum">     567 </span>            :             }</a>
+<span class="lineNum">     568 </span>            : 
+<span class="lineNum">     569 </span><span class="lineCov">         20 :             void operator++() {</span>
+<span class="lineNum">     570 </span><span class="lineCov">         20 :                 ++i; ++iter;</span>
+<a name="571"><span class="lineNum">     571 </span><span class="lineCov">         20 :             }</span></a>
+<span class="lineNum">     572 </span>            : 
+<span class="lineNum">     573 </span><span class="lineCov">         20 :             auto operator*() const {</span>
+<span class="lineNum">     574 </span><span class="lineCov">         20 :                 return std::tie(i, *iter);</span>
+<span class="lineNum">     575 </span>            :             }
+<span class="lineNum">     576 </span>            :         };
+<span class="lineNum">     577 </span>            : 
+<span class="lineNum">     578 </span>            :         struct iterable_wrapper {
+<a name="579"><span class="lineNum">     579 </span>            :             T iterable;</a>
+<a name="580"><span class="lineNum">     580 </span>            :             size_t start;</a>
+<span class="lineNum">     581 </span><span class="lineCov">          2 :             auto begin() { return iterator{ start, std::begin(iterable) }; }</span>
+<span class="lineNum">     582 </span><span class="lineCov">          2 :             auto end()   { return iterator{ start, std::end  (iterable) }; }</span>
+<span class="lineNum">     583 </span>            :         };
+<span class="lineNum">     584 </span>            : 
+<span class="lineNum">     585 </span><span class="lineCov">          2 :         return iterable_wrapper{ std::forward&lt;T&gt;(iterable), start_i };</span>
+<span class="lineNum">     586 </span>            :     }
+<span class="lineNum">     587 </span>            : 
+<span class="lineNum">     588 </span>            :     /**
+<span class="lineNum">     589 </span>            :      *  \brief  The any_tie struct. Use to tie a result back into itself
+<span class="lineNum">     590 </span>            :      *          for any type that supports structured bindings access.
+<span class="lineNum">     591 </span>            :      *
+<span class="lineNum">     592 </span>            :      *          Example:
+<span class="lineNum">     593 </span>            :      *              any_tie(value1, value2) = value2;
+<span class="lineNum">     594 </span>            :      *
+<span class="lineNum">     595 </span>            :      *          because this does not work:
+<span class="lineNum">     596 </span>            :      *              auto&amp; [value1, value2] = value2;
+<span class="lineNum">     597 </span>            :      *
+<span class="lineNum">     598 </span>            :      *  \ref    Structured bindings uncovered - Dawid Zalewski [ C++ on Sea 2020 ]
+<span class="lineNum">     599 </span>            :      */
+<span class="lineNum">     600 </span>            :     template&lt;typename ...Types&gt;
+<span class="lineNum">     601 </span>            :     struct any_tie {
+<span class="lineNum">     602 </span>            :         std::tuple&lt;Types&amp;...&gt; _tuple;
+<span class="lineNum">     603 </span>            : 
+<span class="lineNum">     604 </span>            :         any_tie(Types&amp;... values) noexcept : _tuple{values...} {}
+<span class="lineNum">     605 </span>            : 
+<span class="lineNum">     606 </span>            :         template&lt;typename TupleLike&gt;
+<span class="lineNum">     607 </span>            :         any_tie&amp; operator=(TupleLike&amp;&amp; tl) {
+<span class="lineNum">     608 </span>            :             constexpr auto size = std::tuple_size_v&lt;utils::traits::remove_cvref_t&lt;TupleLike&gt;&gt;;
+<span class="lineNum">     609 </span>            :             this-&gt;assign(std::forward&lt;TupleLike&gt;(tl), std::make_index_sequence&lt;size&gt;());
+<span class="lineNum">     610 </span>            :             return *this;
+<span class="lineNum">     611 </span>            :         }
+<span class="lineNum">     612 </span>            : 
+<span class="lineNum">     613 </span>            :         private:
+<span class="lineNum">     614 </span>            :             template&lt;typename TupleLike, size_t... Idx&gt;
+<span class="lineNum">     615 </span>            :             void assign(TupleLike&amp;&amp; tl, std::index_sequence&lt;Idx...&gt;) {
+<span class="lineNum">     616 </span>            :                 this-&gt;_tuple = std::forward_as_tuple(std::get&lt;Idx&gt;(std::forward&lt;TupleLike&gt;(tl))...);
+<span class="lineNum">     617 </span>            :             }
+<span class="lineNum">     618 </span>            :     };
+<span class="lineNum">     619 </span>            : }
+<span class="lineNum">     620 </span>            : 
+<span class="lineNum">     621 </span>            : #endif // UTILS_ALGORITHM_HPP
 </pre>
       </td>
     </tr>
@@ -401,7 +689,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

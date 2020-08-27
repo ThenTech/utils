@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -65,10 +65,12 @@ $(document).ready(function(){initNavTree('utils__memory_8hpp.html','');});
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">utils_memory.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -78,17 +80,19 @@ $(document).ready(function(){initNavTree('utils__memory_8hpp.html','');});
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;cstring&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for utils_memory.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__memory_8hpp__incl.png" border="0" usemap="#utils__lib_2utils__memory_8hpp" alt=""/></div>
 <map name="utils__lib_2utils__memory_8hpp" id="utils__lib_2utils__memory_8hpp">
-<area shape="rect"  title=" " alt="" coords="487,5,660,32"/>
+<area shape="rect"  title=" " alt="" coords="544,5,717,32"/>
 <area shape="rect"  href="utils__compiler_8hpp.html" title=" " alt="" coords="23,155,150,181"/>
 <area shape="rect"  href="utils__traits_8hpp.html" title=" " alt="" coords="520,80,627,107"/>
 <area shape="rect"  title=" " alt="" coords="175,155,231,181"/>
 <area shape="rect"  title=" " alt="" coords="651,80,725,107"/>
 <area shape="rect"  title=" " alt="" coords="749,80,819,107"/>
+<area shape="rect"  title=" " alt="" coords="843,80,904,107"/>
 <area shape="rect"  title=" " alt="" coords="5,229,168,256"/>
 <area shape="rect"  title=" " alt="" coords="713,155,796,181"/>
 <area shape="rect"  title=" " alt="" coords="821,155,883,181"/>
@@ -108,107 +112,147 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="utils__memory_8hpp__dep__incl.png" border="0" usemap="#utils__lib_2utils__memory_8hppdep" alt=""/></div>
 <map name="utils__lib_2utils__memory_8hppdep" id="utils__lib_2utils__memory_8hppdep">
-<area shape="rect"  title=" " alt="" coords="72,5,245,32"/>
-<area shape="rect"  href="algo__huffman_8hpp.html" title=" " alt="" coords="5,155,128,196"/>
-<area shape="rect"  href="utils__io_8hpp.html" title=" " alt="" coords="91,80,227,107"/>
-<area shape="rect"  href="utils__ini_8hpp.html" title=" " alt="" coords="180,162,319,189"/>
+<area shape="rect"  title=" " alt="" coords="252,5,425,32"/>
+<area shape="rect"  href="algo__huffman_8hpp.html" title=" " alt="" coords="227,169,349,211"/>
+<area shape="rect"  href="crypto__packager_8hpp.html" title=" " alt="" coords="165,259,312,300"/>
+<area shape="rect"  href="utils__io_8hpp.html" title=" " alt="" coords="324,87,460,114"/>
+<area shape="rect"  href="crypto__feistel_8hpp.html" title=" " alt="" coords="424,169,571,211"/>
+<area shape="rect"  href="utils__ini_8hpp.html" title=" " alt="" coords="595,177,733,203"/>
+<area shape="rect"  href="crypto__aes_8hpp.html" title=" " alt="" coords="5,80,152,121"/>
 </map>
 </div>
 </div>
 <p><a href="utils__memory_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1memory_1_1_metrics__t.html">utils::memory::Metrics_t</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceutils"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html">utils</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1memory"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html">utils::memory</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceutils_1_1utils"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils.html">utils::utils</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceutils_1_1utils_1_1memory"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html">utils::utils::memory</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:afe5b26b09d17c330e62cb4a2a8a33a0b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__memory_8hpp.html#afe5b26b09d17c330e62cb4a2a8a33a0b">UTILS_MEMORY_ALLOC_LOG</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:afe5b26b09d17c330e62cb4a2a8a33a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceb23a8ff22565c16286f28bf315c165"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utils__memory_8hpp.html#aceb23a8ff22565c16286f28bf315c165">UTILS_MEMORY_NEW_LOG</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:aceb23a8ff22565c16286f28bf315c165"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a960783879ab51bbdf3c91a62fd4f5e59"><td class="memTemplParams" colspan="2">template&lt;class T , typename _Dp  = std::default_delete&lt;T&gt;&gt; </td></tr>
-<tr class="memitem:a960783879ab51bbdf3c91a62fd4f5e59"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a960783879ab51bbdf3c91a62fd4f5e59">utils::memory::unique_t</a> = std::unique_ptr&lt; T, _Dp &gt;</td></tr>
-<tr class="separator:a960783879ab51bbdf3c91a62fd4f5e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab4b7f289369ea7f088c5f6a17558121"><td class="memTemplParams" colspan="2">template&lt;class T , typename _Dp  = decltype(&amp;delete_array&lt;T&gt;)&gt; </td></tr>
-<tr class="memitem:aab4b7f289369ea7f088c5f6a17558121"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#aab4b7f289369ea7f088c5f6a17558121">utils::memory::unique_arr_t</a> = unique_t&lt; T[], _Dp &gt;</td></tr>
-<tr class="separator:aab4b7f289369ea7f088c5f6a17558121"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a481d13ea66d3a3c1d1942b9ee16661db"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a481d13ea66d3a3c1d1942b9ee16661db"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a481d13ea66d3a3c1d1942b9ee16661db">utils::memory::unique_container_t</a> = unique_t&lt; T, decltype(&amp;delete_container&lt; T &gt;)&gt;</td></tr>
-<tr class="separator:a481d13ea66d3a3c1d1942b9ee16661db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72f4f91b38d5f32a5f4157ee0de4a8fa"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a72f4f91b38d5f32a5f4157ee0de4a8fa"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a72f4f91b38d5f32a5f4157ee0de4a8fa">utils::memory::unique_vect_t</a> = unique_container_t&lt; std::vector&lt; T * &gt; &gt;</td></tr>
-<tr class="separator:a72f4f91b38d5f32a5f4157ee0de4a8fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa102e508e6f5310190b9f92d7b1518de"><td class="memTemplParams" colspan="2">template&lt;class T , typename _Dp  = std::default_delete&lt;T&gt;&gt; </td></tr>
+<tr class="memitem:aa102e508e6f5310190b9f92d7b1518de"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#aa102e508e6f5310190b9f92d7b1518de">utils::utils::memory::unique_t</a> = std::unique_ptr&lt; T, _Dp &gt;</td></tr>
+<tr class="separator:aa102e508e6f5310190b9f92d7b1518de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0c49a3f5937d92402a7cf0976da096d"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ac0c49a3f5937d92402a7cf0976da096d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#ac0c49a3f5937d92402a7cf0976da096d">utils::utils::memory::shared_t</a> = std::shared_ptr&lt; T &gt;</td></tr>
+<tr class="separator:ac0c49a3f5937d92402a7cf0976da096d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20848c63461cd298fc24208a0bac9cd4"><td class="memTemplParams" colspan="2">template&lt;class T , typename _Dp  = decltype(&amp;delete_array&lt;T&gt;)&gt; </td></tr>
+<tr class="memitem:a20848c63461cd298fc24208a0bac9cd4"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a20848c63461cd298fc24208a0bac9cd4">utils::utils::memory::unique_arr_t</a> = unique_t&lt; T[], _Dp &gt;</td></tr>
+<tr class="separator:a20848c63461cd298fc24208a0bac9cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb45a8540959164f5953947667455ddb"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:acb45a8540959164f5953947667455ddb"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#acb45a8540959164f5953947667455ddb">utils::utils::memory::unique_container_t</a> = unique_t&lt; T, decltype(&amp;delete_container&lt; T &gt;)&gt;</td></tr>
+<tr class="separator:acb45a8540959164f5953947667455ddb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8512165d6117117b6682542f67f68398"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8512165d6117117b6682542f67f68398"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a8512165d6117117b6682542f67f68398">utils::utils::memory::unique_vect_t</a> = unique_container_t&lt; std::vector&lt; T * &gt; &gt;</td></tr>
+<tr class="separator:a8512165d6117117b6682542f67f68398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a16bd66e263f887c6deab0ed25306b318"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
-<tr class="memitem:a16bd66e263f887c6deab0ed25306b318"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a16bd66e263f887c6deab0ed25306b318">utils::memory::new_var</a> (Type &amp;&amp;... args)</td></tr>
-<tr class="memdesc:a16bd66e263f887c6deab0ed25306b318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable.  <a href="namespaceutils_1_1memory.html#a16bd66e263f887c6deab0ed25306b318">More...</a><br /></td></tr>
-<tr class="separator:a16bd66e263f887c6deab0ed25306b318"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c53972465f7d89150c952b8f1a9f2f3"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a3c53972465f7d89150c952b8f1a9f2f3"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a3c53972465f7d89150c952b8f1a9f2f3">utils::memory::delete_var</a> (T *v)</td></tr>
-<tr class="memdesc:a3c53972465f7d89150c952b8f1a9f2f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an object of type T that was allocated using SysUtils::allocVar&lt;T&gt;().  <a href="namespaceutils_1_1memory.html#a3c53972465f7d89150c952b8f1a9f2f3">More...</a><br /></td></tr>
-<tr class="separator:a3c53972465f7d89150c952b8f1a9f2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720d365099a14ecd00270749639a822e"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
-<tr class="memitem:a720d365099a14ecd00270749639a822e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a720d365099a14ecd00270749639a822e">utils::memory::new_unique_var</a> (Type &amp;&amp;... args)</td></tr>
-<tr class="memdesc:a720d365099a14ecd00270749639a822e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_t&lt;T&gt; variable that deletes itself.  <a href="namespaceutils_1_1memory.html#a720d365099a14ecd00270749639a822e">More...</a><br /></td></tr>
-<tr class="separator:a720d365099a14ecd00270749639a822e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae28050b534b966d2fc34ecea0bc6aab8"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:ae28050b534b966d2fc34ecea0bc6aab8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ae28050b534b966d2fc34ecea0bc6aab8">utils::memory::new_array</a> (size_t x)</td></tr>
-<tr class="memdesc:ae28050b534b966d2fc34ecea0bc6aab8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arrays.  <a href="namespaceutils_1_1memory.html#ae28050b534b966d2fc34ecea0bc6aab8">More...</a><br /></td></tr>
-<tr class="separator:ae28050b534b966d2fc34ecea0bc6aab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56edd3966fceda86bf1e30fe5a0aeb79"><td class="memTemplParams" colspan="2">template&lt;class T , typename ... size_t&gt; </td></tr>
-<tr class="memitem:a56edd3966fceda86bf1e30fe5a0aeb79"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a56edd3966fceda86bf1e30fe5a0aeb79">utils::memory::new_flat_array</a> (size_t... dims)</td></tr>
-<tr class="memdesc:a56edd3966fceda86bf1e30fe5a0aeb79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate an array of objects of type T on the heap with a total length of all dims multiplied. Access elements in this array with e.g. <code>y * y_dim + x</code> ((x_dim, y_dim) alloced)  <a href="namespaceutils_1_1memory.html#a56edd3966fceda86bf1e30fe5a0aeb79">More...</a><br /></td></tr>
-<tr class="separator:a56edd3966fceda86bf1e30fe5a0aeb79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a772db109228917b1af9ab7a6825fbe8b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a772db109228917b1af9ab7a6825fbe8b"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a772db109228917b1af9ab7a6825fbe8b">utils::memory::delete_array</a> (T *a)</td></tr>
-<tr class="memdesc:a772db109228917b1af9ab7a6825fbe8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an array of type T that was allocated using SysUtils::allocArray&lt;T&gt;(size_t).  <a href="namespaceutils_1_1memory.html#a772db109228917b1af9ab7a6825fbe8b">More...</a><br /></td></tr>
-<tr class="separator:a772db109228917b1af9ab7a6825fbe8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5408032e2bdc458fa3f9b22936eba959"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a5408032e2bdc458fa3f9b22936eba959"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a5408032e2bdc458fa3f9b22936eba959">utils::memory::realloc_array</a> (T *&amp;a, size_t &amp;old_size, size_t new_size)</td></tr>
-<tr class="memdesc:a5408032e2bdc458fa3f9b22936eba959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate the given array to a new array with different size. Elements will be copied to the new array.  <a href="namespaceutils_1_1memory.html#a5408032e2bdc458fa3f9b22936eba959">More...</a><br /></td></tr>
-<tr class="separator:a5408032e2bdc458fa3f9b22936eba959"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a332f8cab9c3d54e438d2b2d9f85e8a3b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a332f8cab9c3d54e438d2b2d9f85e8a3b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> unique_arr_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a332f8cab9c3d54e438d2b2d9f85e8a3b">utils::memory::new_unique_array</a> (size_t x)</td></tr>
-<tr class="memdesc:a332f8cab9c3d54e438d2b2d9f85e8a3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_arr_t&lt;T&gt; variable that deletes itself.  <a href="namespaceutils_1_1memory.html#a332f8cab9c3d54e438d2b2d9f85e8a3b">More...</a><br /></td></tr>
-<tr class="separator:a332f8cab9c3d54e438d2b2d9f85e8a3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e6c4b7724c64bbb76f5b93c9f152d1f"><td class="memTemplParams" colspan="2">template&lt;class T , typename ... size_t&gt; </td></tr>
-<tr class="memitem:a3e6c4b7724c64bbb76f5b93c9f152d1f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> unique_arr_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a3e6c4b7724c64bbb76f5b93c9f152d1f">utils::memory::new_unique_flat_array</a> (size_t ... dims)</td></tr>
-<tr class="memdesc:a3e6c4b7724c64bbb76f5b93c9f152d1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_arr_t&lt;T&gt; variable that deletes itself.  <a href="namespaceutils_1_1memory.html#a3e6c4b7724c64bbb76f5b93c9f152d1f">More...</a><br /></td></tr>
-<tr class="separator:a3e6c4b7724c64bbb76f5b93c9f152d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5d8d9256a6f9ca7b992b5dd63985ae3"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:ac5d8d9256a6f9ca7b992b5dd63985ae3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T **&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ac5d8d9256a6f9ca7b992b5dd63985ae3">utils::memory::new_array</a> (size_t x, size_t y)</td></tr>
-<tr class="memdesc:ac5d8d9256a6f9ca7b992b5dd63985ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate y arrays of objects of type T and length x on the heap.  <a href="namespaceutils_1_1memory.html#ac5d8d9256a6f9ca7b992b5dd63985ae3">More...</a><br /></td></tr>
-<tr class="separator:ac5d8d9256a6f9ca7b992b5dd63985ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab37ccd187e3670cdbec2004ace47a039"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:ab37ccd187e3670cdbec2004ace47a039"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ab37ccd187e3670cdbec2004ace47a039">utils::memory::delete_array</a> (T **a, size_t y)</td></tr>
-<tr class="memdesc:ab37ccd187e3670cdbec2004ace47a039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an array of type T that was allocated using SysUtils::allocArray&lt;T&gt;(size_t, size_t).  <a href="namespaceutils_1_1memory.html#ab37ccd187e3670cdbec2004ace47a039">More...</a><br /></td></tr>
-<tr class="separator:ab37ccd187e3670cdbec2004ace47a039"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c70378ba1a1d5619ac9c18ab9470dd5"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:a5c70378ba1a1d5619ac9c18ab9470dd5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T ***&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a5c70378ba1a1d5619ac9c18ab9470dd5">utils::memory::new_array</a> (size_t x, size_t y, size_t z)</td></tr>
-<tr class="memdesc:a5c70378ba1a1d5619ac9c18ab9470dd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate z arrays of y arrays of objects of type T and length x on the heap.  <a href="namespaceutils_1_1memory.html#a5c70378ba1a1d5619ac9c18ab9470dd5">More...</a><br /></td></tr>
-<tr class="separator:a5c70378ba1a1d5619ac9c18ab9470dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab20ce3ace49767967878a6a86f74851c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
-<tr class="memitem:ab20ce3ace49767967878a6a86f74851c"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ab20ce3ace49767967878a6a86f74851c">utils::memory::delete_array</a> (T ***a, size_t y, size_t z)</td></tr>
-<tr class="memdesc:ab20ce3ace49767967878a6a86f74851c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an array of type T that was allocated using SysUtils::allocArray&lt;T&gt;(size_t, size_t, size_t).  <a href="namespaceutils_1_1memory.html#ab20ce3ace49767967878a6a86f74851c">More...</a><br /></td></tr>
-<tr class="separator:ab20ce3ace49767967878a6a86f74851c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2bc61b39a3d07597db3c0fdf98f45c2"><td class="memTemplParams" colspan="2">template&lt;class Container , typename  = typename std::enable_if_t&lt;utils::traits::is_container&lt;Container&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:ad2bc61b39a3d07597db3c0fdf98f45c2"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ad2bc61b39a3d07597db3c0fdf98f45c2">utils::memory::delete_container</a> (Container *container)</td></tr>
-<tr class="memdesc:ad2bc61b39a3d07597db3c0fdf98f45c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Containers.  <a href="namespaceutils_1_1memory.html#ad2bc61b39a3d07597db3c0fdf98f45c2">More...</a><br /></td></tr>
-<tr class="separator:ad2bc61b39a3d07597db3c0fdf98f45c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0eb260631b47359ec6da0bf215500fc4"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
-<tr class="memitem:a0eb260631b47359ec6da0bf215500fc4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#a0eb260631b47359ec6da0bf215500fc4">utils::memory::new_unique_container</a> (Type &amp;&amp;... args)</td></tr>
-<tr class="separator:a0eb260631b47359ec6da0bf215500fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab30d0f21e62a121980d60f06d5101037"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
-<tr class="memitem:ab30d0f21e62a121980d60f06d5101037"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ab30d0f21e62a121980d60f06d5101037">utils::memory::new_unique_vector</a> (Type &amp;&amp;... args)</td></tr>
-<tr class="memdesc:ab30d0f21e62a121980d60f06d5101037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_vect_t&lt;T&gt; variable that deletes its contents and itself. The vector will contain T* items.  <a href="namespaceutils_1_1memory.html#ab30d0f21e62a121980d60f06d5101037">More...</a><br /></td></tr>
-<tr class="separator:ab30d0f21e62a121980d60f06d5101037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf4cdf6588a7734d285582988281778f"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#abf4cdf6588a7734d285582988281778f">utils::operator new</a> (size_t size)</td></tr>
+<tr class="separator:abf4cdf6588a7734d285582988281778f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192b971e80b654f125b788f2238d42db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a192b971e80b654f125b788f2238d42db">utils::operator delete</a> (void *v, size_t size) noexcept</td></tr>
+<tr class="separator:a192b971e80b654f125b788f2238d42db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a035cb5b9596b2c5f54710bb614df6610"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a035cb5b9596b2c5f54710bb614df6610">utils::operator delete[]</a> (void *v, size_t size) noexcept</td></tr>
+<tr class="separator:a035cb5b9596b2c5f54710bb614df6610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbc03dfa1988bff2aaf47070ad69bde9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#acbc03dfa1988bff2aaf47070ad69bde9">utils::operator delete</a> (void *v) noexcept</td></tr>
+<tr class="separator:acbc03dfa1988bff2aaf47070ad69bde9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1591344cc1bd71fa83e15cc6e5c28ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#ad1591344cc1bd71fa83e15cc6e5c28ab">utils::operator delete[]</a> (void *v) noexcept</td></tr>
+<tr class="separator:ad1591344cc1bd71fa83e15cc6e5c28ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf27669dbcb6f27cf0f7563f36eb2808"><td class="memTemplParams" colspan="2">template&lt;typename To , typename From , typename std::enable_if_t&lt; sizeof(From)==sizeof(To) &amp;&amp;std::is_trivially_copyable_v&lt; From &gt; &amp;&amp;std::is_trivially_copyable_v&lt; To &gt;, bool &gt;  = false&gt; </td></tr>
+<tr class="memitem:acf27669dbcb6f27cf0f7563f36eb2808"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr To&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#acf27669dbcb6f27cf0f7563f36eb2808">utils::utils::memory::bit_cast</a> (const From &amp;value) noexcept</td></tr>
+<tr class="memdesc:acf27669dbcb6f27cf0f7563f36eb2808"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cast to value to the target type by copying its bytes.  <a href="namespaceutils_1_1utils_1_1memory.html#acf27669dbcb6f27cf0f7563f36eb2808">More...</a><br /></td></tr>
+<tr class="separator:acf27669dbcb6f27cf0f7563f36eb2808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08bb65701027888db926e4f4f7705a83"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
+<tr class="memitem:a08bb65701027888db926e4f4f7705a83"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a08bb65701027888db926e4f4f7705a83">utils::utils::memory::new_var</a> (Type &amp;&amp;... args)</td></tr>
+<tr class="memdesc:a08bb65701027888db926e4f4f7705a83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable.  <a href="namespaceutils_1_1utils_1_1memory.html#a08bb65701027888db926e4f4f7705a83">More...</a><br /></td></tr>
+<tr class="separator:a08bb65701027888db926e4f4f7705a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f5a25cf9ea85b6af2da3ac1a83d80f"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ad7f5a25cf9ea85b6af2da3ac1a83d80f"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#ad7f5a25cf9ea85b6af2da3ac1a83d80f">utils::utils::memory::delete_var</a> (T *v)</td></tr>
+<tr class="memdesc:ad7f5a25cf9ea85b6af2da3ac1a83d80f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an object of type T that was allocated using SysUtils::allocVar&lt;T&gt;().  <a href="namespaceutils_1_1utils_1_1memory.html#ad7f5a25cf9ea85b6af2da3ac1a83d80f">More...</a><br /></td></tr>
+<tr class="separator:ad7f5a25cf9ea85b6af2da3ac1a83d80f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a133a4bbf7ac2e77582921f9f3c05ff2a"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Args&gt; </td></tr>
+<tr class="memitem:a133a4bbf7ac2e77582921f9f3c05ff2a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a133a4bbf7ac2e77582921f9f3c05ff2a">utils::utils::memory::new_unique_var</a> (Args &amp;&amp;...args)</td></tr>
+<tr class="memdesc:a133a4bbf7ac2e77582921f9f3c05ff2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_t&lt;T&gt; variable that deletes itself.  <a href="namespaceutils_1_1utils_1_1memory.html#a133a4bbf7ac2e77582921f9f3c05ff2a">More...</a><br /></td></tr>
+<tr class="separator:a133a4bbf7ac2e77582921f9f3c05ff2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9305fb6eec5d7f2efd45a2554949545d"><td class="memTemplParams" colspan="2">template&lt;typename T , typename ... Args&gt; </td></tr>
+<tr class="memitem:a9305fb6eec5d7f2efd45a2554949545d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr shared_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a9305fb6eec5d7f2efd45a2554949545d">utils::utils::memory::new_shared_ref</a> (Args &amp;&amp;...args)</td></tr>
+<tr class="memdesc:a9305fb6eec5d7f2efd45a2554949545d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a shared_t&lt;T&gt; variable containing a reference.  <a href="namespaceutils_1_1utils_1_1memory.html#a9305fb6eec5d7f2efd45a2554949545d">More...</a><br /></td></tr>
+<tr class="separator:a9305fb6eec5d7f2efd45a2554949545d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5378d90854dc61f3d3a2545cbeebd500"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a5378d90854dc61f3d3a2545cbeebd500"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a5378d90854dc61f3d3a2545cbeebd500">utils::utils::memory::new_array</a> (size_t x)</td></tr>
+<tr class="memdesc:a5378d90854dc61f3d3a2545cbeebd500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arrays.  <a href="namespaceutils_1_1utils_1_1memory.html#a5378d90854dc61f3d3a2545cbeebd500">More...</a><br /></td></tr>
+<tr class="separator:a5378d90854dc61f3d3a2545cbeebd500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8249e5bc2cf80416a3f9f76d6d06e8f2"><td class="memTemplParams" colspan="2">template&lt;class T , typename ... size_t&gt; </td></tr>
+<tr class="memitem:a8249e5bc2cf80416a3f9f76d6d06e8f2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a8249e5bc2cf80416a3f9f76d6d06e8f2">utils::utils::memory::new_flat_array</a> (size_t... dims)</td></tr>
+<tr class="memdesc:a8249e5bc2cf80416a3f9f76d6d06e8f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate an array of objects of type T on the heap with a total length of all dims multiplied. Access elements in this array with e.g. <code>y * y_dim + x</code> ((x_dim, y_dim) alloced)  <a href="namespaceutils_1_1utils_1_1memory.html#a8249e5bc2cf80416a3f9f76d6d06e8f2">More...</a><br /></td></tr>
+<tr class="separator:a8249e5bc2cf80416a3f9f76d6d06e8f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef42d9f70b3d9d34f9be3872399d7b7"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8ef42d9f70b3d9d34f9be3872399d7b7"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a8ef42d9f70b3d9d34f9be3872399d7b7">utils::utils::memory::delete_array</a> (T *a)</td></tr>
+<tr class="memdesc:a8ef42d9f70b3d9d34f9be3872399d7b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an array of type T that was allocated using SysUtils::allocArray&lt;T&gt;(size_t).  <a href="namespaceutils_1_1utils_1_1memory.html#a8ef42d9f70b3d9d34f9be3872399d7b7">More...</a><br /></td></tr>
+<tr class="separator:a8ef42d9f70b3d9d34f9be3872399d7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef264104093965101cf40a3c77533b59"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:aef264104093965101cf40a3c77533b59"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#aef264104093965101cf40a3c77533b59">utils::utils::memory::realloc_array</a> (T *&amp;a, size_t &amp;old_size, size_t new_size)</td></tr>
+<tr class="memdesc:aef264104093965101cf40a3c77533b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reallocate the given array to a new array with different size. Elements will be copied to the new array.  <a href="namespaceutils_1_1utils_1_1memory.html#aef264104093965101cf40a3c77533b59">More...</a><br /></td></tr>
+<tr class="separator:aef264104093965101cf40a3c77533b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea631366c58bcb1302b2482f8f0c88e1"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:aea631366c58bcb1302b2482f8f0c88e1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> unique_arr_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#aea631366c58bcb1302b2482f8f0c88e1">utils::utils::memory::new_unique_array</a> (size_t x)</td></tr>
+<tr class="memdesc:aea631366c58bcb1302b2482f8f0c88e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_arr_t&lt;T&gt; variable that deletes itself.  <a href="namespaceutils_1_1utils_1_1memory.html#aea631366c58bcb1302b2482f8f0c88e1">More...</a><br /></td></tr>
+<tr class="separator:aea631366c58bcb1302b2482f8f0c88e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe1d5f9fc20f3501e5a766818fcd17e9"><td class="memTemplParams" colspan="2">template&lt;class T , typename ... size_t&gt; </td></tr>
+<tr class="memitem:afe1d5f9fc20f3501e5a766818fcd17e9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> unique_arr_t&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#afe1d5f9fc20f3501e5a766818fcd17e9">utils::utils::memory::new_unique_flat_array</a> (size_t ... dims)</td></tr>
+<tr class="memdesc:afe1d5f9fc20f3501e5a766818fcd17e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_arr_t&lt;T&gt; variable that deletes itself.  <a href="namespaceutils_1_1utils_1_1memory.html#afe1d5f9fc20f3501e5a766818fcd17e9">More...</a><br /></td></tr>
+<tr class="separator:afe1d5f9fc20f3501e5a766818fcd17e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0b49737740a0d947b35bf36157bba4f"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:aa0b49737740a0d947b35bf36157bba4f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T **&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#aa0b49737740a0d947b35bf36157bba4f">utils::utils::memory::new_array</a> (size_t x, size_t y)</td></tr>
+<tr class="memdesc:aa0b49737740a0d947b35bf36157bba4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate y arrays of objects of type T and length x on the heap.  <a href="namespaceutils_1_1utils_1_1memory.html#aa0b49737740a0d947b35bf36157bba4f">More...</a><br /></td></tr>
+<tr class="separator:aa0b49737740a0d947b35bf36157bba4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86b0fbd580124b5cad07354aa17de827"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a86b0fbd580124b5cad07354aa17de827"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a86b0fbd580124b5cad07354aa17de827">utils::utils::memory::delete_array</a> (T **a, size_t y)</td></tr>
+<tr class="memdesc:a86b0fbd580124b5cad07354aa17de827"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an array of type T that was allocated using SysUtils::allocArray&lt;T&gt;(size_t, size_t).  <a href="namespaceutils_1_1utils_1_1memory.html#a86b0fbd580124b5cad07354aa17de827">More...</a><br /></td></tr>
+<tr class="separator:a86b0fbd580124b5cad07354aa17de827"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dd7a19dcf1ba0dfb1e347b14e09f658"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a3dd7a19dcf1ba0dfb1e347b14e09f658"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> static HEDLEY_MALLOC T ***&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a3dd7a19dcf1ba0dfb1e347b14e09f658">utils::utils::memory::new_array</a> (size_t x, size_t y, size_t z)</td></tr>
+<tr class="memdesc:a3dd7a19dcf1ba0dfb1e347b14e09f658"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate z arrays of y arrays of objects of type T and length x on the heap.  <a href="namespaceutils_1_1utils_1_1memory.html#a3dd7a19dcf1ba0dfb1e347b14e09f658">More...</a><br /></td></tr>
+<tr class="separator:a3dd7a19dcf1ba0dfb1e347b14e09f658"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a796e79de76b713e83dcedf86206447"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a4a796e79de76b713e83dcedf86206447"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a4a796e79de76b713e83dcedf86206447">utils::utils::memory::delete_array</a> (T ***a, size_t y, size_t z)</td></tr>
+<tr class="memdesc:a4a796e79de76b713e83dcedf86206447"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deallocate an array of type T that was allocated using SysUtils::allocArray&lt;T&gt;(size_t, size_t, size_t).  <a href="namespaceutils_1_1utils_1_1memory.html#a4a796e79de76b713e83dcedf86206447">More...</a><br /></td></tr>
+<tr class="separator:a4a796e79de76b713e83dcedf86206447"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86bcc72bf9b10d42f6c87313d20d6f85"><td class="memTemplParams" colspan="2">template&lt;class Container , typename  = typename std::enable_if_t&lt;utils::traits::is_container&lt;Container&gt;::value&gt;&gt; </td></tr>
+<tr class="memitem:a86bcc72bf9b10d42f6c87313d20d6f85"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a86bcc72bf9b10d42f6c87313d20d6f85">utils::utils::memory::delete_container</a> (Container *container)</td></tr>
+<tr class="memdesc:a86bcc72bf9b10d42f6c87313d20d6f85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Containers.  <a href="namespaceutils_1_1utils_1_1memory.html#a86bcc72bf9b10d42f6c87313d20d6f85">More...</a><br /></td></tr>
+<tr class="separator:a86bcc72bf9b10d42f6c87313d20d6f85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44c8644132bb0abe847f1fde9e520633"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
+<tr class="memitem:a44c8644132bb0abe847f1fde9e520633"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#a44c8644132bb0abe847f1fde9e520633">utils::utils::memory::new_unique_container</a> (Type &amp;&amp;... args)</td></tr>
+<tr class="separator:a44c8644132bb0abe847f1fde9e520633"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad89ca77bedc63dac95b3d237128fc86"><td class="memTemplParams" colspan="2">template&lt;class T , class ... Type&gt; </td></tr>
+<tr class="memitem:aad89ca77bedc63dac95b3d237128fc86"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1utils_1_1memory.html#aad89ca77bedc63dac95b3d237128fc86">utils::utils::memory::new_unique_vector</a> (Type &amp;&amp;... args)</td></tr>
+<tr class="memdesc:aad89ca77bedc63dac95b3d237128fc86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a unique_vect_t&lt;T&gt; variable that deletes its contents and itself. The vector will contain T* items.  <a href="namespaceutils_1_1utils_1_1memory.html#aad89ca77bedc63dac95b3d237128fc86">More...</a><br /></td></tr>
+<tr class="separator:aad89ca77bedc63dac95b3d237128fc86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ad598c1d198f25299c2fb63015ae170f4"><td class="memItemLeft" align="right" valign="top">static Metrics_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1memory.html#ad598c1d198f25299c2fb63015ae170f4">utils::memory::Metrics</a></td></tr>
+<tr class="separator:ad598c1d198f25299c2fb63015ae170f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="afe5b26b09d17c330e62cb4a2a8a33a0b"></a>
@@ -224,6 +268,22 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00004">4</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aceb23a8ff22565c16286f28bf315c165"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aceb23a8ff22565c16286f28bf315c165">&#9670;&nbsp;</a></span>UTILS_MEMORY_NEW_LOG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define UTILS_MEMORY_NEW_LOG&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00005">5</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
 
 </div>
 </div>

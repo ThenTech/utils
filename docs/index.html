@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -75,15 +75,26 @@ $(document).ready(function(){initNavTree('index.html','');});
 </a> <a href="https://github.com/Wosser1sProductions/utils/commits/master"><object type="image/svg+xml" data="https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg" alt="GitHub last commit"></object>
 />
 </a> <img src="https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue" alt="License" class="inline"/>
-<p><a href="http://semver.org/"><object type="image/svg+xml" data="https://img.shields.io/badge/version-0.44.0--beta-brightgreen.svg" alt="version"></object>
+<p><a href="http://semver.org/"><object type="image/svg+xml" data="https://img.shields.io/badge/version-0.45.0--beta-brightgreen.svg" alt="version"></object>
 />
 </a> <object type="image/svg+xml" data="https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg" alt="c++-version"></object>
 />
- <a href="https://gcc.gnu.org/gcc-9/"><object type="image/svg+xml" data="https://img.shields.io/badge/tested%20with-g%2B%2B--9.1-orange.svg" alt="tested-unix"></object>
+ <a href="https://gcc.gnu.org/gcc-9/"><object type="image/svg+xml" data="https://img.shields.io/badge/tested%20with-g%2B%2B--9.2-orange.svg" alt="tested-unix"></object>
 />
 </a> <object type="image/svg+xml" data="https://img.shields.io/badge/tested%20with-MinGW--7.3-orange.svg" alt="tested-win"></object>
 />
-<p>Compile with: <code>-std=c++17</code> Link with <code>-lstdc++fs</code> to enable <code>std::experimental::filesystem</code>, and with <code>-pthread</code> to use threading with CSV files.</p>
+<p>Compile with: <code>-std=c++17</code></p>
+<p>Linker options:</p><ul>
+<li><code>-lstdc++fs</code> to enable <code>std::experimental::filesystem</code></li>
+<li><code>-pthread</code> to use threading with CSV files</li>
+<li><code>-lws2_32</code> for Windows socket support (in <code>utils::http</code>)</li>
+<li><code>-lsqlite3</code> to link with SQLite on Unix systems (SQLite source is also available as alternative) Install <code>sqlite3</code> and <code>libsqlite3-dev</code> to link automatically.</li>
+</ul>
+<p>For MSVC:</p>
+<ul>
+<li>For sanity sake, globally define <code>_CRT_SECURE_NO_WARNINGS</code> in Properties&gt;C/C++&gt;Preprocessor&gt;Preprocessor Definitions</li>
+<li>Change <code>#include &lt;sqlite3&gt;</code> to <code>#include "sqlite3.h"</code> inside <code>sqlite_orm</code> and add <code>sqlite3.c</code> to your build system.</li>
+</ul>
 <p><a href="https://wosser1sproductions.github.io/utils/docs/">Doxygen documentation can be found here.</a></p>
 <p><a href="https://wosser1sproductions.github.io/utils/docs/code_coverage">Code coverage (lcov) report can be found here.</a></p>
 <h2>Contents</h2>
@@ -95,15 +106,19 @@ $(document).ready(function(){initNavTree('index.html','');});
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_bits.hpp">utils_bits.hpp</a>  </td><td class="markdownTableBodyNone">Bit related extensions   </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/utils_catch.hpp">utils_catch.hpp</a>  </td><td class="markdownTableBodyNone">Extra's for Catch2 like custom ASSERT and std::abort() recoverable test   </td></tr>
-<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_colour.hpp">utils_colour.hpp</a>  </td><td class="markdownTableBodyNone">Colour class and LUTs for colour mappings from <a href="https://github.com/yuki-koyama/tinycolormap">tinycolormap</a>   </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/utils_crc.hpp">utils_crc.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for CRC calculations from <a href="https://github.com/d-bahr/CRCpp">CRCpp</a>   </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="utils_lib/utils_csv.hpp">utils_csv.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for CSV file IO from <a href="http://github.com/p-ranav/csv">p-ranav/csv</a>   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_compiler.hpp">utils_compiler.hpp</a>  </td><td class="markdownTableBodyNone">MACRO helpers   </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_control.hpp">utils_control.hpp</a>  </td><td class="markdownTableBodyNone">PIDController implementation from <a href="https://github.com/tekdemo/MiniPID">tekdemo</a>   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_crc.hpp">utils_crc.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for CRC calculations from <a href="https://github.com/d-bahr/CRCpp">CRCpp</a>   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_csv.hpp">utils_csv.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for CSV file IO from <a href="http://github.com/p-ranav/csv">p-ranav/csv</a>   </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_exceptions.hpp">utils_exceptions.hpp</a>  </td><td class="markdownTableBodyNone">Extra Exceptions   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_http.hpp">utils_http.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for HTTPRequest from <a href="http://github.com/elnormous/HTTPRequest">elnormous/HTTPRequest</a>   </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_ini.hpp">utils_ini.hpp</a>  </td><td class="markdownTableBodyNone">ConfigReader class commonly for <code>.ini</code> files   </td></tr>
 <tr class="markdownTableRowOdd">
@@ -117,49 +132,67 @@ $(document).ready(function(){initNavTree('index.html','');});
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_memory.hpp">utils_memory.hpp</a>  </td><td class="markdownTableBodyNone">Memory management   </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="utils_lib/utils_misc.hpp">utils_misc.hpp</a>  </td><td class="markdownTableBodyNone">Other   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_misc.hpp">utils_misc.hpp</a>  </td><td class="markdownTableBodyNone">Other (lexical_cast, scoped callback...)   </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_os.hpp">utils_os.hpp</a>  </td><td class="markdownTableBodyNone">OS extensions (console manipulation with colours etc.)   </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_print.hpp">utils_print.hpp</a>  </td><td class="markdownTableBodyNone">Generic pretty printer   </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_profiler.hpp">utils_profiler.hpp</a>  </td><td class="markdownTableBodyNone">Static Profiler singleton and macros for profiling function-/blocks in <code>chrome://tracing</code> format   </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_random.hpp">utils_random.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for <a href="https://github.com/effolkronium/random">effolkronium/random</a> and extra generators   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_sqlite.hpp">utils_sqlite.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for <a href="https://github.com/fnc12/sqlite_orm">fnc12/sqlite_orm</a>   </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_string.hpp">utils_string.hpp</a>  </td><td class="markdownTableBodyNone">String extensions   </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/utils_threading.hpp">utils_threading.hpp</a>  </td><td class="markdownTableBodyNone">Threadpool class   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_test.hpp">utils_test.hpp</a>  </td><td class="markdownTableBodyNone">Extra's for Doctest like custom ASSERT and std::abort() recoverable test   </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/utils_threading.hpp">utils_threading.hpp</a>  </td><td class="markdownTableBodyNone">Threadpool class and related things   </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_time.hpp">utils_time.hpp</a>  </td><td class="markdownTableBodyNone">Time measurement   </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_traits.hpp">utils_traits.hpp</a>  </td><td class="markdownTableBodyNone">Type traits and other macro helpers.   </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/utils_version.hpp">utils_version.hpp</a>  </td><td class="markdownTableBodyNone">Namespace wrapper for <a href="https://github.com/Neargye/semver">Neargye semver</a>   </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_xorstring.hpp">utils_xorstring.hpp</a>  </td><td class="markdownTableBodyNone">Compile time string obfuscation from <a href="https://github.com/JustasMasiulis/xorstr">JustasMasiulis</a> or <a href="https://github.com/qis/xorstr">qis</a>   </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="utils_lib/algo/algo_avltree.hpp">algo/algo_avltree.hpp</a>  </td><td class="markdownTableBodyNone">AVL Tree implementation   </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/algo/algo_bstree.hpp">algo/algo_bstree.hpp</a>  </td><td class="markdownTableBodyNone">Binary Search Tree implementation   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/algo/algo_avltree.hpp">algo/algo_avltree.hpp</a>  </td><td class="markdownTableBodyNone">AVL Tree implementation   </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/algo/algo_bstree.hpp">algo/algo_bstree.hpp</a>  </td><td class="markdownTableBodyNone">Binary Search Tree implementation   </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/algo/algo_huffman.hpp">algo/algo_huffman.hpp</a>  </td><td class="markdownTableBodyNone">Huffman compress/decompress   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/crypto/crypto_aes.hpp">crypto/crypto_aes.hpp</a>  </td><td class="markdownTableBodyNone">Basic AES implementation (WIP)   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/crypto/crypto_feistel.hpp">crypto/crypto_feistel.hpp</a>  </td><td class="markdownTableBodyNone">Basic Feistel cipher structure (WIP)   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/crypto/crypto_packager.hpp">crypto/crypto_packager.hpp</a>  </td><td class="markdownTableBodyNone">Basic functions to pack/unpack data (WIP)   </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/external/cppitertools/">external/cppitertools</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/ryanhaining/cppitertools">CPPItertools</a> by Ryan Haining   </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/external/crc">external/crc</a>  </td><td class="markdownTableBodyNone">CRC calculations from <a href="https://github.com/d-bahr/CRCpp">CRCpp</a>   </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/external/csv/">external/csv</a>  </td><td class="markdownTableBodyNone"><a href="http://github.com/p-ranav/csv">csv</a> library by p-ranav   </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/external/catch.hpp">external/catch.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/catchorg/Catch2">Catch2</a> C++ test framework   </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="utils_lib/external/CRC.hpp">external/CRC.hpp</a>  </td><td class="markdownTableBodyNone">CRC calculations from <a href="https://github.com/d-bahr/CRCpp">CRCpp</a>   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/external/hedley/">external/hedley</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/nemequ/hedley">Hedley</a> MACRO helpers   </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/external/HTTPRequest/">external/HTTPRequest</a>  </td><td class="markdownTableBodyNone"><a href="http://github.com/elnormous/HTTPRequest">HTTPRequest</a> library by elnormous   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_lib/external/sqlite_orm/">external/sqlite_orm</a>  </td><td class="markdownTableBodyNone"><a href="https://www.sqlite.org/index.html">SQLite3</a> wrapper by <a href="https://github.com/fnc12/sqlite_orm">fnc12</a>. Also contains sqlite3 amalgamation.   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="utils_lib/external/doctest.hpp">external/doctest.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/onqtam/doctest">Doctest</a> C++ test framework   </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><a href="utils_lib/external/json.hpp">external/json.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/nlohmann/json">JSON</a> library by Niels Lohmann   </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><a href="utils_lib/external/mio.hpp">external/mio.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://github.com/mandreyel/mio">mio</a> by Mabdreyel   </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_lib/external/random.hpp">external/random.hpp</a>  </td><td class="markdownTableBodyNone">Modern random utilities from <a href="https://github.com/effolkronium/random">effolkronium/random</a>   </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="utils_lib/external/semver.hpp">external/semver.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://semver.org/">Semantic versioning</a> library by <a href="https://github.com/Neargye/semver">Neargye</a>   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/external/random.hpp">external/random.hpp</a>  </td><td class="markdownTableBodyNone">Modern random utilities from <a href="https://github.com/effolkronium/random">effolkronium/random</a>   </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="utils_test/">/utils_test/</a>  </td><td class="markdownTableBodyNone">Unit tests for most functions with <a href="https://github.com/catchorg/Catch2">Catch2</a>   </td></tr>
+<td class="markdownTableBodyNone"><a href="utils_lib/external/semver.hpp">external/semver.hpp</a>  </td><td class="markdownTableBodyNone"><a href="https://semver.org/">Semantic versioning</a> library by <a href="https://github.com/Neargye/semver">Neargye</a>   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a href="utils_test/">/utils_test/</a>  </td><td class="markdownTableBodyNone">Unit tests for most functions with <a href="https://github.com/onqtam/doctest">Doctest</a>   </td></tr>
 </table>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->

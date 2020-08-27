@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -112,10 +112,22 @@ Functions</h2></td></tr>
 <tr class="memitem:a3f341d6578135c21c05f595389ba1c3a"><td class="memTemplParams" colspan="2">template&lt;typename A , typename B , typename ... Args, typename C  = typename std::common_type&lt;A, B, Args...&gt;::type&gt; </td></tr>
 <tr class="memitem:a3f341d6578135c21c05f595389ba1c3a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr C&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a3f341d6578135c21c05f595389ba1c3a">lcm_chain</a> (const A x, const B y, const Args... args)</td></tr>
 <tr class="separator:a3f341d6578135c21c05f595389ba1c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa1d6166d322ccea07bc50269ef87d96"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:afa1d6166d322ccea07bc50269ef87d96"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#afa1d6166d322ccea07bc50269ef87d96">epsilon_equals</a> (const T x, const T y, <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const double epsilon=1e-4)</td></tr>
-<tr class="memdesc:afa1d6166d322ccea07bc50269ef87d96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given values are equal. For integral types, <code>==</code> is used, while floating point types use a comparison with diff(x, y) and epsilon.  <a href="#afa1d6166d322ccea07bc50269ef87d96">More...</a><br /></td></tr>
-<tr class="separator:afa1d6166d322ccea07bc50269ef87d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af28a55b409930e7d41f59cf7d920648a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Largest  = typename std::common_type_t&lt;T, double&gt;&gt; </td></tr>
+<tr class="memitem:af28a55b409930e7d41f59cf7d920648a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#af28a55b409930e7d41f59cf7d920648a">epsilon_equals</a> (const T x, const T y, <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const Largest epsilon=1e-6)</td></tr>
+<tr class="memdesc:af28a55b409930e7d41f59cf7d920648a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given values are equal. For integral types, <code>==</code> is used, while floating point types use a comparison with diff(x, y) and epsilon.  <a href="#af28a55b409930e7d41f59cf7d920648a">More...</a><br /></td></tr>
+<tr class="separator:af28a55b409930e7d41f59cf7d920648a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68b67979a2407857dfc716d427324f2e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Largest  = typename std::common_type_t&lt;T, double&gt;&gt; </td></tr>
+<tr class="memitem:a68b67979a2407857dfc716d427324f2e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a68b67979a2407857dfc716d427324f2e">epsilon_rel_equals</a> (const T x, const T y, <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const Largest tolerance=1e-6)</td></tr>
+<tr class="memdesc:a68b67979a2407857dfc716d427324f2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the given values are equal. For integral types, <code>==</code> is used, while floating point types use a comparison with relative diff(x, y) and epsilon.  <a href="#a68b67979a2407857dfc716d427324f2e">More...</a><br /></td></tr>
+<tr class="separator:a68b67979a2407857dfc716d427324f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0219c4221e885b67d54f4b20262d240c"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a0219c4221e885b67d54f4b20262d240c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a0219c4221e885b67d54f4b20262d240c">within</a> (const T &amp;value, const T <a class="el" href="namespaceutils_1_1math.html#a0b9601e3c3e45a3aef025b81dbdb402c">min</a>, const T <a class="el" href="namespaceutils_1_1math.html#acb510b17104c1284914d97d02a16be30">max</a>)</td></tr>
+<tr class="memdesc:a0219c4221e885b67d54f4b20262d240c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>value</code> is withing the interval [min, max], exclusive.  <a href="#a0219c4221e885b67d54f4b20262d240c">More...</a><br /></td></tr>
+<tr class="separator:a0219c4221e885b67d54f4b20262d240c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac78f9c6326e99b6c97987c2b33f0980b"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:ac78f9c6326e99b6c97987c2b33f0980b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#ac78f9c6326e99b6c97987c2b33f0980b">within_inclusive</a> (const T &amp;value, const T <a class="el" href="namespaceutils_1_1math.html#a0b9601e3c3e45a3aef025b81dbdb402c">min</a>, const T <a class="el" href="namespaceutils_1_1math.html#acb510b17104c1284914d97d02a16be30">max</a>)</td></tr>
+<tr class="memdesc:ac78f9c6326e99b6c97987c2b33f0980b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>value</code> is withing the interval [min, max], inclusive.  <a href="#ac78f9c6326e99b6c97987c2b33f0980b">More...</a><br /></td></tr>
+<tr class="separator:ac78f9c6326e99b6c97987c2b33f0980b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a175502c003fd37e5430d1f2f7bde232c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a175502c003fd37e5430d1f2f7bde232c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a175502c003fd37e5430d1f2f7bde232c">mix</a> (const T x, const T y, const double factor)</td></tr>
 <tr class="memdesc:a175502c003fd37e5430d1f2f7bde232c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linearly mix <code>x</code> and <code>y</code> with a <code>factor</code>.  <a href="#a175502c003fd37e5430d1f2f7bde232c">More...</a><br /></td></tr>
@@ -128,15 +140,23 @@ Functions</h2></td></tr>
 <tr class="memitem:a209e661d97619ab8771c0d47dbb07006"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#a209e661d97619ab8771c0d47dbb07006">interpolate_hermite</a> (const T min_old, const T max_old, const T min_new, const T max_new, const T x_old)</td></tr>
 <tr class="memdesc:a209e661d97619ab8771c0d47dbb07006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a smooth interpolation in [<code>min_new</code>, <code>max_new</code>] depending on value <code>x_old</code> in the given range of [<code>min_old</code>, <code>max_old</code>]. Uses hermite interpolation.  <a href="#a209e661d97619ab8771c0d47dbb07006">More...</a><br /></td></tr>
 <tr class="separator:a209e661d97619ab8771c0d47dbb07006"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc9669ab7a0b3b24745d575446e61f0c"><td class="memTemplParams" colspan="2">template&lt;size_t precision = 2, typename Iterator , typename T  = typename std::iterator_traits&lt;Iterator&gt;::value_type, typename  = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;                                          &amp;&amp; std::is_floating_point_v&lt;T&gt;&gt;&gt; </td></tr>
+<tr class="memitem:adc9669ab7a0b3b24745d575446e61f0c"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#adc9669ab7a0b3b24745d575446e61f0c">rounded</a> (Iterator start, Iterator end)</td></tr>
+<tr class="memdesc:adc9669ab7a0b3b24745d575446e61f0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round every floating point value from <code>first</code> and <code>last</code>, to <code>precision</code> digits (default=2ull).  <a href="#adc9669ab7a0b3b24745d575446e61f0c">More...</a><br /></td></tr>
+<tr class="separator:adc9669ab7a0b3b24745d575446e61f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc8bd4b7e6815e1eb1de59e2d7c8bd62"><td class="memTemplParams" colspan="2">template&lt;int precision = 2, typename Container &gt; </td></tr>
+<tr class="memitem:afc8bd4b7e6815e1eb1de59e2d7c8bd62"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math.html#afc8bd4b7e6815e1eb1de59e2d7c8bd62">rounded</a> (Container &amp;cont)</td></tr>
+<tr class="memdesc:afc8bd4b7e6815e1eb1de59e2d7c8bd62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Round every floating point value from <code>first</code> and <code>last</code>, to <code>precision</code> digits.  <a href="#afc8bd4b7e6815e1eb1de59e2d7c8bd62">More...</a><br /></td></tr>
+<tr class="separator:afc8bd4b7e6815e1eb1de59e2d7c8bd62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="afa1d6166d322ccea07bc50269ef87d96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa1d6166d322ccea07bc50269ef87d96">&#9670;&nbsp;</a></span>epsilon_equals()</h2>
+<a id="af28a55b409930e7d41f59cf7d920648a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af28a55b409930e7d41f59cf7d920648a">&#9670;&nbsp;</a></span>epsilon_equals()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T , typename Largest  = typename std::common_type_t&lt;T, double&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -156,8 +176,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const double&#160;</td>
-          <td class="paramname"><em>epsilon</em> = <code>1e-4</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const Largest&#160;</td>
+          <td class="paramname"><em>epsilon</em> = <code>1e-6</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -177,13 +197,70 @@ template&lt;typename T &gt; </div>
   <table class="params">
     <tr><td class="paramname">x</td><td>The first value to compare. </td></tr>
     <tr><td class="paramname">y</td><td>The second value to compare. </td></tr>
-    <tr><td class="paramname">epsilon</td><td>The precision to compare with (standard deviation of 1e-4 or 0.0001).</td></tr>
+    <tr><td class="paramname">epsilon</td><td>The precision to compare with (standard deviation of 1e-6).</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool Returns whether x equals y within the given epsilon precision. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00200">200</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00204">204</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a68b67979a2407857dfc716d427324f2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68b67979a2407857dfc716d427324f2e">&#9670;&nbsp;</a></span>epsilon_rel_equals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Largest  = typename std::common_type_t&lt;T, double&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::math::epsilon_rel_equals </td>
+          <td>(</td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> const Largest&#160;</td>
+          <td class="paramname"><em>tolerance</em> = <code>1e-6</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the given values are equal. For integral types, <code>==</code> is used, while floating point types use a comparison with relative diff(x, y) and epsilon. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>The first value to compare. </td></tr>
+    <tr><td class="paramname">y</td><td>The second value to compare. </td></tr>
+    <tr><td class="paramname">epsilon</td><td>The precision to compare with (standard deviation of 1e-6).</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool Returns whether x equals y within the given epsilon precision. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00234">234</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -299,7 +376,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the value of x within the new interval. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00271">271</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00345">345</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -370,7 +447,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the value of x within the new interval. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00244">244</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00313">313</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -618,7 +695,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the linear mix of the two arguments. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00221">221</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00290">290</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -701,6 +778,93 @@ template&lt;typename... T&gt; </div>
 
 </div>
 </div>
+<a id="adc9669ab7a0b3b24745d575446e61f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc9669ab7a0b3b24745d575446e61f0c">&#9670;&nbsp;</a></span>rounded() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t precision = 2, typename Iterator , typename T  = typename std::iterator_traits&lt;Iterator&gt;::value_type, typename  = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;                                          &amp;&amp; std::is_floating_point_v&lt;T&gt;&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> constexpr void utils::math::rounded </td>
+          <td>(</td>
+          <td class="paramtype">Iterator&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Iterator&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Round every floating point value from <code>first</code> and <code>last</code>, to <code>precision</code> digits (default=2ull). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The iterator to start from. </td></tr>
+    <tr><td class="paramname">last</td><td>The end iterator. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00374">374</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afc8bd4b7e6815e1eb1de59e2d7c8bd62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc8bd4b7e6815e1eb1de59e2d7c8bd62">&#9670;&nbsp;</a></span>rounded() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int precision = 2, typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> constexpr void utils::math::rounded </td>
+          <td>(</td>
+          <td class="paramtype">Container &amp;&#160;</td>
+          <td class="paramname"><em>cont</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Round every floating point value from <code>first</code> and <code>last</code>, to <code>precision</code> digits. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cont</td><td>The container to round in. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00387">387</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a0c738738287d1584b3efe8136d9c4da0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0c738738287d1584b3efe8136d9c4da0">&#9670;&nbsp;</a></span>sign()</h2>
 
@@ -771,6 +935,120 @@ template&lt;typename... T&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>Returns arg1 + ... + argn </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00037">37</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0219c4221e885b67d54f4b20262d240c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0219c4221e885b67d54f4b20262d240c">&#9670;&nbsp;</a></span>within()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::math::within </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if <code>value</code> is withing the interval [min, max], exclusive. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to check. </td></tr>
+    <tr><td class="paramname">min</td><td>The lower bound. </td></tr>
+    <tr><td class="paramname">max</td><td>The upper bound. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if (min &lt; value) &amp;&amp; (value &lt; max). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00258">258</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac78f9c6326e99b6c97987c2b33f0980b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac78f9c6326e99b6c97987c2b33f0980b">&#9670;&nbsp;</a></span>within_inclusive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> constexpr bool utils::math::within_inclusive </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T&#160;</td>
+          <td class="paramname"><em>max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if <code>value</code> is withing the interval [min, max], inclusive. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>The value to check. </td></tr>
+    <tr><td class="paramname">min</td><td>The lower bound. </td></tr>
+    <tr><td class="paramname">max</td><td>The upper bound. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns true if (min &lt;= value) &amp;&amp; (value &lt;= max). </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00274">274</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>

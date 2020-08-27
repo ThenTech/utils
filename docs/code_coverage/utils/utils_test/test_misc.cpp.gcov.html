@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_misc.cpp<span style="font-size: 80%;"> (source / <a href="test_misc.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_misc.cpp<span style="font-size: 80%;"> (source / <a href="test_misc.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">33</td>
-            <td class="headerCovTableEntry">33</td>
+            <td class="headerCovTableEntry">41</td>
+            <td class="headerCovTableEntry">41</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">1</td>
-            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">5</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -63,59 +63,73 @@
 <a name="1"><span class="lineNum">       1 </span>            : #include &quot;test_settings.hpp&quot;</a>
 <span class="lineNum">       2 </span>            : 
 <span class="lineNum">       3 </span>            : #ifdef ENABLE_TESTS
-<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/utils_catch.hpp&quot;
+<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/external/doctest.hpp&quot;
 <span class="lineNum">       5 </span>            : 
 <span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_misc.hpp&quot;
 <a name="7"><span class="lineNum">       7 </span>            : </a>
 <span class="lineNum">       8 </span>            : 
-<span class="lineNum">       9 </span><span class="lineCov">          5 : TEST_CASE(&quot;Test utils::misc::lexical_cast&quot;, &quot;[utils][utils::misc]&quot;) {</span>
-<span class="lineNum">      10 </span><span class="lineCov">          6 :     SECTION(&quot;Normal&quot;) {</span>
-<span class="lineNum">      11 </span><span class="lineCov">          3 :         CHECK_THROWS_AS(utils::misc::lexical_cast&lt;int&gt;(&quot;&quot;), utils::exceptions::CastingException);</span>
-<span class="lineNum">      12 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;   (&quot;123&quot;) == 123);</span>
-<span class="lineNum">      13 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;float&gt; (&quot;1.3&quot;) == Approx(1.3));</span>
-<span class="lineNum">      14 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;double&gt;(&quot;1.3&quot;) == Approx(1.3));</span>
-<span class="lineNum">      15 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;   (&quot;1a&quot;)  == 1);</span>
+<span class="lineNum">       9 </span><span class="lineCov">          5 : TEST_CASE(&quot;Test utils::misc::lexical_cast&quot;) {</span>
+<span class="lineNum">      10 </span><span class="lineCov">          6 :     SUBCASE(&quot;Normal&quot;) {</span>
+<span class="lineNum">      11 </span><span class="lineCov">          2 :         CHECK_THROWS_AS(utils::misc::lexical_cast&lt;int&gt;(&quot;&quot;), utils::exceptions::CastingException);</span>
+<span class="lineNum">      12 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;   (&quot;123&quot;) == 123);</span>
+<span class="lineNum">      13 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;float&gt; (&quot;1.3&quot;) == doctest::Approx(1.3));</span>
+<span class="lineNum">      14 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;double&gt;(&quot;1.3&quot;) == doctest::Approx(1.3));</span>
+<span class="lineNum">      15 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;   (&quot;1a&quot;)  == 1);</span>
 <span class="lineNum">      16 </span>            : 
 <span class="lineNum">      17 </span>            :         // Defined behaviour, but probalby unintended
-<span class="lineNum">      18 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;char&gt;(&quot;256&quot;)      == '2');</span>
-<span class="lineNum">      19 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;uint8_t&gt;(&quot;0xFFF&quot;) == '0');</span>
+<span class="lineNum">      18 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;char&gt;(&quot;256&quot;)      == '2');</span>
+<span class="lineNum">      19 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;uint8_t&gt;(&quot;0xFFF&quot;) == '0');</span>
 <span class="lineNum">      20 </span>            : 
 <span class="lineNum">      21 </span><span class="lineCov">          1 :         const uint64_t too_large = std::numeric_limits&lt;int&gt;::max();</span>
-<span class="lineNum">      22 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;(std::to_string(too_large)) == too_large);</span>
-<span class="lineNum">      23 </span><span class="lineCov">          4 :         CHECK_THROWS_AS(utils::misc::lexical_cast&lt;int&gt;(std::to_string(too_large + 1)), utils::exceptions::CastingException);</span>
+<span class="lineNum">      22 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;(std::to_string(too_large)) == too_large);</span>
+<span class="lineNum">      23 </span><span class="lineCov">          3 :         CHECK_THROWS_AS(utils::misc::lexical_cast&lt;int&gt;(std::to_string(too_large + 1)), utils::exceptions::CastingException);</span>
 <span class="lineNum">      24 </span>            :     }
 <span class="lineNum">      25 </span>            : 
-<span class="lineNum">      26 </span><span class="lineCov">          6 :     SECTION(&quot;Hexadecimal&quot;) {</span>
-<span class="lineNum">      27 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0xAA&quot;)       == 0xAA);</span>
-<span class="lineNum">      28 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;0XDEADBEEF&quot;) == 0xDEADBEEF);</span>
-<span class="lineNum">      29 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;#FF55AA&quot;)    == 0xFF55AA);</span>
-<span class="lineNum">      30 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0xAAG&quot;)      == 0xAA);</span>
+<span class="lineNum">      26 </span><span class="lineCov">          6 :     SUBCASE(&quot;Hexadecimal&quot;) {</span>
+<span class="lineNum">      27 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0xAA&quot;)       == 0xAA);</span>
+<span class="lineNum">      28 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;0XDEADBEEF&quot;) == 0xDEADBEEF);</span>
+<span class="lineNum">      29 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;#FF55AA&quot;)    == 0xFF55AA);</span>
+<span class="lineNum">      30 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0xAAG&quot;)      == 0xAA);</span>
 <span class="lineNum">      31 </span>            :     }
 <span class="lineNum">      32 </span>            : 
-<span class="lineNum">      33 </span><span class="lineCov">          6 :     SECTION(&quot;Binary&quot;) {</span>
-<span class="lineNum">      34 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0b10101010&quot;) == 0xAA);</span>
-<span class="lineNum">      35 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;0B01010101&quot;) == 0x55);</span>
-<span class="lineNum">      36 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0b12&quot;)       == 1);</span>
-<span class="lineNum">      37 </span><span class="lineCov">          3 :         CHECK_THROWS_AS(utils::misc::lexical_cast&lt;int&gt;(&quot;0b2&quot;), utils::exceptions::CastingException);</span>
+<span class="lineNum">      33 </span><span class="lineCov">          6 :     SUBCASE(&quot;Binary&quot;) {</span>
+<span class="lineNum">      34 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0b10101010&quot;) == 0xAA);</span>
+<span class="lineNum">      35 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;0B01010101&quot;) == 0x55);</span>
+<span class="lineNum">      36 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;0b12&quot;)       == 1);</span>
+<span class="lineNum">      37 </span><span class="lineCov">          2 :         CHECK_THROWS_AS(utils::misc::lexical_cast&lt;int&gt;(&quot;0b2&quot;), utils::exceptions::CastingException);</span>
 <span class="lineNum">      38 </span>            :     }
 <span class="lineNum">      39 </span>            : 
-<span class="lineNum">      40 </span><span class="lineCov">          6 :     SECTION(&quot;Octal&quot;) {</span>
-<span class="lineNum">      41 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;01234567&quot;) == 342391);</span>
-<span class="lineNum">      42 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;0100&quot;)     == 64);</span>
-<span class="lineNum">      43 </span><span class="lineCov">          2 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;08&quot;)       == 0);</span>
+<span class="lineNum">      40 </span><span class="lineCov">          6 :     SUBCASE(&quot;Octal&quot;) {</span>
+<span class="lineNum">      41 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;01234567&quot;) == 342391);</span>
+<span class="lineNum">      42 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;uint32_t&gt;(&quot;0100&quot;)     == 64);</span>
+<span class="lineNum">      43 </span><span class="lineCov">          1 :         CHECK(utils::misc::lexical_cast&lt;int&gt;     (&quot;08&quot;)       == 0);</span>
 <span class="lineNum">      44 </span>            :     }
 <span class="lineNum">      45 </span>            : 
-<span class="lineNum">      46 </span><span class="lineCov">          6 :     SECTION(&quot;Nothrow&quot;) {</span>
+<span class="lineNum">      46 </span><span class="lineCov">          6 :     SUBCASE(&quot;Nothrow&quot;) {</span>
 <span class="lineNum">      47 </span><span class="lineCov">          1 :         const uint64_t too_large = std::numeric_limits&lt;int&gt;::max();</span>
 <span class="lineNum">      48 </span>            : 
-<span class="lineNum">      49 </span><span class="lineCov">          2 :         CHECK(utils::misc::try_lexical_cast&lt;int&gt;(&quot;2&quot;).has_value());</span>
-<span class="lineNum">      50 </span><span class="lineCov">          2 :         CHECK_FALSE(utils::misc::try_lexical_cast&lt;int&gt;(&quot;&quot;).has_value());</span>
-<span class="lineNum">      51 </span><span class="lineCov">          2 :         CHECK_FALSE(utils::misc::try_lexical_cast&lt;int&gt;(std::to_string(too_large + 1)).has_value());</span>
-<span class="lineNum">      52 </span><span class="lineCov">          2 :         CHECK_FALSE(utils::misc::try_lexical_cast&lt;int&gt;(&quot;0b2&quot;).has_value());</span>
+<span class="lineNum">      49 </span><span class="lineCov">          1 :         CHECK(utils::misc::try_lexical_cast&lt;int&gt;(&quot;2&quot;).has_value());</span>
+<span class="lineNum">      50 </span><span class="lineCov">          1 :         CHECK_FALSE(utils::misc::try_lexical_cast&lt;int&gt;(&quot;&quot;).has_value());</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 :         CHECK_FALSE(utils::misc::try_lexical_cast&lt;int&gt;(std::to_string(too_large + 1)).has_value());</span>
+<span class="lineNum">      52 </span><span class="lineCov">          1 :         CHECK_FALSE(utils::misc::try_lexical_cast&lt;int&gt;(&quot;0b2&quot;).has_value());</span>
 <span class="lineNum">      53 </span>            :     }
-<span class="lineNum">      54 </span><span class="lineCov">          5 : }</span>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">          5 : }</span></a>
 <span class="lineNum">      55 </span>            : 
-<span class="lineNum">      56 </span>            : #endif
+<span class="lineNum">      56 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::misc::Scoped&quot;) {</span>
+<span class="lineNum">      57 </span><span class="lineCov">          1 :     int test = 0;</span>
+<a name="58"><span class="lineNum">      58 </span>            : </a>
+<a name="59"><span class="lineNum">      59 </span>            :     {</a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">          2 :         auto scoped  = utils::misc::Scoped([&amp;](){ test++; });</span></a>
+<span class="lineNum">      61 </span><span class="lineCov">          2 :         auto scoped1 = utils::misc::MakeScoped([&amp;](){ test++; });</span>
+<span class="lineNum">      62 </span><span class="lineCov">          2 :         UTILS_MISC_MAKE_SCOPED([&amp;](){ test++; });</span>
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span><span class="lineCov">          1 :         REQUIRE(test == 0);</span>
+<span class="lineNum">      65 </span>            :     }
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span><span class="lineCov">          1 :     CHECK(test == 3);</span>
+<span class="lineNum">      68 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            : #endif
 </pre>
       </td>
     </tr>
@@ -124,7 +138,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

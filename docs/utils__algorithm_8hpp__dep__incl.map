@@ -1,11 +1,17 @@
 <map id="utils_lib/utils_algorithm.hpp" name="utils_lib/utils_algorithm.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="81,5,260,32"/>
-<area shape="rect" id="node2" href="$utils__math_8hpp.html" title=" " alt="" coords="160,80,315,107"/>
-<area shape="rect" id="node4" href="$utils__logger_8hpp.html" title=" " alt="" coords="7,229,169,256"/>
-<area shape="rect" id="node3" href="$utils__print_8hpp.html" title=" " alt="" coords="195,155,346,181"/>
-<area shape="rect" id="node6" href="$utils__misc_8hpp.html" title=" " alt="" coords="193,229,348,256"/>
-<area shape="rect" id="node8" href="$utils__ini_8hpp.html" title=" " alt="" coords="339,311,477,338"/>
-<area shape="rect" id="node9" href="$utils__csv_8hpp.html" title=" " alt="" coords="423,229,569,256"/>
-<area shape="rect" id="node5" href="$algo__huffman_8hpp.html" title=" " alt="" coords="5,304,128,345"/>
-<area shape="rect" id="node7" href="$utils__colour_8hpp.html" title=" " alt="" coords="153,311,314,338"/>
+<area shape="rect" id="node1" title=" " alt="" coords="133,5,312,32"/>
+<area shape="rect" id="node2" href="$utils__bits_8hpp.html" title=" " alt="" coords="35,80,181,107"/>
+<area shape="rect" id="node7" href="$utils__logger_8hpp.html" title=" " alt="" coords="145,304,306,331"/>
+<area shape="rect" id="node14" href="$utils__math_8hpp.html" title=" " alt="" coords="415,80,569,107"/>
+<area shape="rect" id="node3" href="$algo__huffman_8hpp.html" title=" " alt="" coords="55,379,177,420"/>
+<area shape="rect" id="node4" href="$crypto__packager_8hpp.html" title=" " alt="" coords="43,468,189,509"/>
+<area shape="rect" id="node5" href="$utils__os_8hpp.html" title=" " alt="" coords="311,155,451,181"/>
+<area shape="rect" id="node8" href="$crypto__feistel_8hpp.html" title=" " alt="" coords="201,379,348,420"/>
+<area shape="rect" id="node13" href="$utils__io_8hpp.html" title=" " alt="" coords="331,304,467,331"/>
+<area shape="rect" id="node6" href="$utils__print_8hpp.html" title=" " alt="" coords="431,229,582,256"/>
+<area shape="rect" id="node9" href="$utils__misc_8hpp.html" title=" " alt="" coords="712,304,867,331"/>
+<area shape="rect" id="node11" href="$utils__ini_8hpp.html" title=" " alt="" coords="575,386,713,413"/>
+<area shape="rect" id="node12" href="$utils__csv_8hpp.html" title=" " alt="" coords="491,304,637,331"/>
+<area shape="rect" id="node10" href="$utils__colour_8hpp.html" title=" " alt="" coords="738,386,899,413"/>
+<area shape="rect" id="node15" href="$utils__control_8hpp.html" title=" " alt="" coords="529,155,695,181"/>
 </map>

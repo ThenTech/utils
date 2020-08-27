@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -67,6 +67,7 @@ $(document).ready(function(){initNavTree('structutils_1_1string_1_1basic__string
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structutils_1_1string_1_1basic__string__view-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -140,8 +141,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adf6275f80c5b98ca6a2b550d0db14bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec22ef28c3a08b303d7fac4296a3d646"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1string_1_1basic__string__view.html#aec22ef28c3a08b303d7fac4296a3d646">basic_string_view</a> (const std::basic_string&lt; _CharT &gt; &amp;__str) noexcept</td></tr>
 <tr class="separator:aec22ef28c3a08b303d7fac4296a3d646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcc476b2b57763d174c2b495f8da132b"><td class="memTemplParams" colspan="2">template&lt;size_t N&gt; </td></tr>
+<tr class="memitem:afcc476b2b57763d174c2b495f8da132b"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structutils_1_1string_1_1basic__string__view.html#afcc476b2b57763d174c2b495f8da132b">basic_string_view</a> (const _CharT(&amp;__str)[N])</td></tr>
+<tr class="separator:afcc476b2b57763d174c2b495f8da132b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa964190f925a89a0fbd77f06f3da9672"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structutils_1_1string_1_1basic__string__view.html#aa964190f925a89a0fbd77f06f3da9672">operator=</a> (const <a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a> &amp;) noexcept=default</td></tr>
 <tr class="separator:aa964190f925a89a0fbd77f06f3da9672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a82302d42484aac2edaeb679548890155"><td class="memTemplParams" colspan="2">template&lt;size_t... N&gt; </td></tr>
+<tr class="memitem:a82302d42484aac2edaeb679548890155"><td class="memTemplItemLeft" align="right" valign="top">static constexpr std::array&lt; std::basic_string_view&lt; _CharT &gt;, sizeof...(N)&gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structutils_1_1string_1_1basic__string__view.html#a82302d42484aac2edaeb679548890155">array_from_args</a> (const char(&amp;...__strs)[N])</td></tr>
+<tr class="separator:a82302d42484aac2edaeb679548890155"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -154,7 +164,7 @@ struct utils::string::basic_string_view&lt; _CharT, _Traits &gt;</h3>
 
 <p>Struct to wrap a char in a std::string_view, and act as a string_view in all other cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00036">36</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00038">38</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a4acb291fdc2307dff3170cdbab662482"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4acb291fdc2307dff3170cdbab662482">&#9670;&nbsp;</a></span>const_iterator</h2>
@@ -170,7 +180,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00044">44</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00046">46</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -188,7 +198,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00041">41</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00043">43</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +216,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00043">43</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00045">45</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -224,7 +234,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00046">46</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00048">48</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -242,7 +252,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00049">49</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00051">51</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -260,7 +270,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00045">45</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00047">47</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -278,7 +288,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00040">40</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00042">42</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -296,7 +306,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00042">42</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00044">44</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -314,7 +324,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00047">47</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00049">49</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +342,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00048">48</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00050">50</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -350,7 +360,7 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00038">38</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00040">40</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
@@ -368,13 +378,13 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00039">39</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00041">41</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9937760257e2259dc3da9acb1c54cd81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9937760257e2259dc3da9acb1c54cd81">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[1/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9937760257e2259dc3da9acb1c54cd81">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[1/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -399,12 +409,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00052">52</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00054">54</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a213c3ae1229d7aa40f866693c094506d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a213c3ae1229d7aa40f866693c094506d">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[2/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a213c3ae1229d7aa40f866693c094506d">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[2/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,12 +439,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00054">54</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00056">56</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a63e07faeb1dc81a925db3336dcd94db9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63e07faeb1dc81a925db3336dcd94db9">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[3/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a63e07faeb1dc81a925db3336dcd94db9">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[3/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -458,12 +468,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00057">57</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00059">59</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ab3753e10981fc369755692932ffc8a30"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3753e10981fc369755692932ffc8a30">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[4/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3753e10981fc369755692932ffc8a30">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[4/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -488,12 +498,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00059">59</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00061">61</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ad42ca1da7e00982d77cdf29965dad2a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad42ca1da7e00982d77cdf29965dad2a5">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[5/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad42ca1da7e00982d77cdf29965dad2a5">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[5/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -518,12 +528,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00061">61</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00063">63</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="adf6275f80c5b98ca6a2b550d0db14bfb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf6275f80c5b98ca6a2b550d0db14bfb">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[6/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adf6275f80c5b98ca6a2b550d0db14bfb">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[6/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -558,12 +568,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00063">63</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00065">65</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <a id="aec22ef28c3a08b303d7fac4296a3d646"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec22ef28c3a08b303d7fac4296a3d646">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[7/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aec22ef28c3a08b303d7fac4296a3d646">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[7/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -588,11 +598,75 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00065">65</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00067">67</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afcc476b2b57763d174c2b495f8da132b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcc476b2b57763d174c2b495f8da132b">&#9670;&nbsp;</a></span>basic_string_view() <span class="overload">[8/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;&gt; </div>
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structutils_1_1string_1_1basic__string__view.html">utils::string::basic_string_view</a>&lt; _CharT, _Traits &gt;::<a class="el" href="structutils_1_1string_1_1basic__string__view.html">basic_string_view</a> </td>
+          <td>(</td>
+          <td class="paramtype">const _CharT(&amp;)&#160;</td>
+          <td class="paramname"><em>__str</em>[N]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00071">71</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a82302d42484aac2edaeb679548890155"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82302d42484aac2edaeb679548890155">&#9670;&nbsp;</a></span>array_from_args()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;&gt; </div>
+<div class="memtemplate">
+template&lt;size_t... N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr std::array&lt;std::basic_string_view&lt;_CharT&gt;, sizeof...(N)&gt; <a class="el" href="structutils_1_1string_1_1basic__string__view.html">utils::string::basic_string_view</a>&lt; _CharT, _Traits &gt;::array_from_args </td>
+          <td>(</td>
+          <td class="paramtype">const &#160;</td>
+          <td class="paramname"><em>char</em>(&amp;...__strs)[N]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00079">79</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aa964190f925a89a0fbd77f06f3da9672"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa964190f925a89a0fbd77f06f3da9672">&#9670;&nbsp;</a></span>operator=()</h2>
 
@@ -639,12 +713,12 @@ template&lt;typename _CharT , typename _Traits  = std::char_traits&lt;_CharT&gt;
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00050">50</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__string_8hpp_source.html#l00052">52</a> of file <a class="el" href="utils__string_8hpp_source.html">utils_string.hpp</a>.</p>
 
 </div>
 </div>

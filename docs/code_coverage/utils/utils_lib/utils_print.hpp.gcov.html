@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_print.hpp<span style="font-size: 80%;"> (source / <a href="utils_print.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_print.hpp<span style="font-size: 80%;"> (source / <a href="utils_print.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,18 +31,18 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">191</td>
-            <td class="headerCovTableEntry">196</td>
-            <td class="headerCovTableEntryHi">97.4 %</td>
+            <td class="headerCovTableEntry">193</td>
+            <td class="headerCovTableEntry">198</td>
+            <td class="headerCovTableEntryHi">97.5 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">91</td>
-            <td class="headerCovTableEntry">120</td>
-            <td class="headerCovTableEntryMed">75.8 %</td>
+            <td class="headerCovTableEntry">118</td>
+            <td class="headerCovTableEntryMed">77.1 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -74,7 +74,7 @@
 <span class="lineNum">      12 </span>            : 
 <span class="lineNum">      13 </span>            : #include &quot;utils_compiler.hpp&quot;
 <span class="lineNum">      14 </span>            : #include &quot;utils_traits.hpp&quot;
-<span class="lineNum">      15 </span>            : #include &quot;utils_catch.hpp&quot;
+<span class="lineNum">      15 </span>            : #include &quot;utils_test.hpp&quot;
 <span class="lineNum">      16 </span>            : #include &quot;utils_string.hpp&quot;
 <span class="lineNum">      17 </span>            : #include &quot;utils_time.hpp&quot;
 <span class="lineNum">      18 </span>            : #include &quot;utils_os.hpp&quot;
@@ -615,7 +615,7 @@
 <a name="553"><span class="lineNum">     553 </span>            : </a>
 <span class="lineNum">     554 </span>            :         public:
 <span class="lineNum">     555 </span><span class="lineCov">          2 :             Progressbar(const size_t max_iteration,</span>
-<span class="lineNum">     556 </span>            :                         const std::string_view&amp; prefix,
+<span class="lineNum">     556 </span>            :                         const std::string_view prefix,
 <span class="lineNum">     557 </span>            :                         const bool with_bar,
 <span class="lineNum">     558 </span>            :                         const bool with_percentage,
 <span class="lineNum">     559 </span>            :                         const bool with_elapsed,
@@ -726,7 +726,7 @@
 <span class="lineNum">     664 </span>            :                                  std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
 <span class="lineNum">     665 </span>            :                                  F&amp;&amp; f)
 <span class="lineNum">     666 </span>            :     {
-<span class="lineNum">     667 </span>            :         static_assert(std::is_invocable_v&lt;F, T&gt;,
+<span class="lineNum">     667 </span>            :         static_assert(utils::traits::is_invocable_v&lt;F, T&gt;,
 <span class="lineNum">     668 </span>            :                       &quot;utils::print::with_progressbar: Callable function required.&quot;);
 <span class="lineNum">     669 </span><span class="lineCov">          2 :         utils::print::Progressbar bar(std::distance(start, end));</span>
 <span class="lineNum">     670 </span>            : 
@@ -774,187 +774,186 @@
 <span class="lineNum">     712 </span>            : 
 <span class="lineNum">     713 </span>            :     // Prints a print_container_helper to the specified stream.
 <span class="lineNum">     714 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits, typename TDelimiters&gt;
-<span class="lineNum">     715 </span>            :     inline auto&amp; operator&lt;&lt;(
-<span class="lineNum">     716 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     717 </span>            :             const utils::print::print_container_helper&lt;T, TChar, TCharTraits, TDelimiters&gt;&amp; helper)
-<span class="lineNum">     718 </span>            :     {
-<span class="lineNum">     719 </span>            :         helper(stream);
-<span class="lineNum">     720 </span>            :         return stream;
-<span class="lineNum">     721 </span>            :     }
-<span class="lineNum">     722 </span>            : 
-<span class="lineNum">     723 </span>            :     // NOTE Redundant?
-<span class="lineNum">     724 </span>            :     template&lt;typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters&gt;
-<span class="lineNum">     725 </span>            :     inline auto&amp; operator&lt;&lt;(
-<span class="lineNum">     726 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     727 </span>            :             const utils::print::array_wrapper&lt;T, N&gt;&amp; helper)
-<span class="lineNum">     728 </span>            :     {
-<span class="lineNum">     729 </span>            :         stream &lt;&lt; utils::print::print_container_helper&lt;utils::print::array_wrapper&lt;T, N&gt;, TChar, TCharTraits&gt;(helper);
-<span class="lineNum">     730 </span>            :         return stream;
-<span class="lineNum">     731 </span>            :     }
-<span class="lineNum">     732 </span>            : 
-<a name="733"><span class="lineNum">     733 </span>            :     /// Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.</a>
-<span class="lineNum">     734 </span>            :     template&lt;typename T1, typename T2, typename TChar, typename TCharTraits&gt;
-<span class="lineNum">     735 </span><span class="lineCov">          6 :     auto&amp; operator&lt;&lt;(</span>
-<span class="lineNum">     736 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     737 </span>            :             const std::pair&lt;T1, T2&gt;&amp; value)
-<span class="lineNum">     738 </span>            :     {
-<span class="lineNum">     739 </span>            :         const auto delims = utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values;
-<span class="lineNum">     740 </span><span class="lineCov">          6 :         if (HEDLEY_LIKELY(delims.prefix != NULL))</span>
-<span class="lineNum">     741 </span><span class="lineCov">          6 :             stream &lt;&lt; delims.prefix;</span>
-<span class="lineNum">     742 </span>            : 
-<span class="lineNum">     743 </span><span class="lineCov">          6 :         utils::print::print_quoted_helper(stream, value.first);</span>
+<span class="lineNum">     715 </span>            :     inline auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     716 </span>            :                             const utils::print::print_container_helper&lt;T, TChar, TCharTraits, TDelimiters&gt;&amp; helper)
+<span class="lineNum">     717 </span>            :     {
+<span class="lineNum">     718 </span>            :         helper(stream);
+<span class="lineNum">     719 </span>            :         return stream;
+<span class="lineNum">     720 </span>            :     }
+<span class="lineNum">     721 </span>            : 
+<span class="lineNum">     722 </span>            :     // NOTE Redundant?
+<span class="lineNum">     723 </span>            :     template&lt;typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters&gt;
+<span class="lineNum">     724 </span>            :     inline auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
+<span class="lineNum">     725 </span>            :                             const utils::print::array_wrapper&lt;T, N&gt;&amp; helper)
+<span class="lineNum">     726 </span>            :     {
+<span class="lineNum">     727 </span>            :         stream &lt;&lt; utils::print::print_container_helper&lt;utils::print::array_wrapper&lt;T, N&gt;, TChar, TCharTraits&gt;(helper);
+<span class="lineNum">     728 </span>            :         return stream;
+<span class="lineNum">     729 </span>            :     }
+<span class="lineNum">     730 </span>            : 
+<a name="731"><span class="lineNum">     731 </span>            :     /// Prints a pair to the stream using delimiters from delimiters&lt;std::pair&lt;T1, T2&gt;&gt;.</a>
+<span class="lineNum">     732 </span>            :     template&lt;typename T1, typename T2, typename TChar, typename TCharTraits&gt;
+<span class="lineNum">     733 </span><span class="lineCov">          6 :     auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     734 </span>            :                      const std::pair&lt;T1, T2&gt;&amp; value)
+<span class="lineNum">     735 </span>            :     {
+<span class="lineNum">     736 </span>            :         const auto delims = utils::print::delimiters&lt;std::pair&lt;T1, T2&gt;, TChar&gt;::values;
+<span class="lineNum">     737 </span><span class="lineCov">          6 :         if (HEDLEY_LIKELY(delims.prefix != NULL))</span>
+<span class="lineNum">     738 </span><span class="lineCov">          6 :             stream &lt;&lt; delims.prefix;</span>
+<span class="lineNum">     739 </span>            : 
+<span class="lineNum">     740 </span><span class="lineCov">          6 :         utils::print::print_quoted_helper(stream, value.first);</span>
+<span class="lineNum">     741 </span>            : 
+<span class="lineNum">     742 </span><span class="lineCov">          6 :         if (HEDLEY_LIKELY(delims.delimiter != NULL))</span>
+<span class="lineNum">     743 </span><span class="lineCov">          6 :             stream &lt;&lt; delims.delimiter;</span>
 <span class="lineNum">     744 </span>            : 
-<span class="lineNum">     745 </span><span class="lineCov">          6 :         if (HEDLEY_LIKELY(delims.delimiter != NULL))</span>
-<span class="lineNum">     746 </span><span class="lineCov">          6 :             stream &lt;&lt; delims.delimiter;</span>
-<span class="lineNum">     747 </span>            : 
-<span class="lineNum">     748 </span><span class="lineCov">          6 :         utils::print::print_quoted_helper(stream, value.second);</span>
+<span class="lineNum">     745 </span><span class="lineCov">          6 :         utils::print::print_quoted_helper(stream, value.second);</span>
+<span class="lineNum">     746 </span>            : 
+<span class="lineNum">     747 </span><span class="lineCov">          6 :         if (HEDLEY_LIKELY(delims.postfix != NULL))</span>
+<span class="lineNum">     748 </span><span class="lineCov">          6 :             stream &lt;&lt; delims.postfix;</span>
 <span class="lineNum">     749 </span>            : 
-<span class="lineNum">     750 </span><span class="lineCov">          6 :         if (HEDLEY_LIKELY(delims.postfix != NULL))</span>
-<span class="lineNum">     751 </span><span class="lineCov">          6 :             stream &lt;&lt; delims.postfix;</span>
-<span class="lineNum">     752 </span>            : 
-<span class="lineNum">     753 </span><span class="lineCov">          6 :         return stream;</span>
-<span class="lineNum">     754 </span>            :     }
-<a name="755"><span class="lineNum">     755 </span>            : </a>
-<span class="lineNum">     756 </span>            :     template&lt;typename ...Args, typename TChar, typename TCharTraits, typename TDelimiters&gt;
-<span class="lineNum">     757 </span><span class="lineCov">          3 :     auto&amp; operator&lt;&lt;(</span>
-<span class="lineNum">     758 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     759 </span>            :             const utils::print::print_tuple_helper&lt;std::tuple&lt;Args...&gt;, sizeof...(Args), TChar, TDelimiters&gt;&amp; helper)
-<span class="lineNum">     760 </span>            :     {
-<span class="lineNum">     761 </span><span class="lineCov">          3 :         helper(stream);</span>
-<span class="lineNum">     762 </span><span class="lineCov">          3 :         return stream;</span>
-<span class="lineNum">     763 </span>            :     }
-<span class="lineNum">     764 </span>            : 
-<a name="765"><span class="lineNum">     765 </span>            :     /// Prints a tuple to the stream using delimiters from delimiters&lt;std::tuple&lt;Args...&gt;&gt;.</a>
-<span class="lineNum">     766 </span>            :     template&lt;typename ...Args, typename TChar, typename TCharTraits&gt;
-<span class="lineNum">     767 </span><span class="lineCov">          3 :     auto&amp; operator&lt;&lt;(</span>
-<span class="lineNum">     768 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     769 </span>            :             const std::tuple&lt;Args...&gt;&amp; value)
-<span class="lineNum">     770 </span>            :     {
-<span class="lineNum">     771 </span>            :         const auto delims = utils::print::delimiters&lt;std::tuple&lt;Args...&gt;, TChar&gt;::values;
-<span class="lineNum">     772 </span><span class="lineCov">          3 :         if (HEDLEY_LIKELY(delims.prefix != NULL))</span>
-<span class="lineNum">     773 </span><span class="lineCov">          3 :             stream &lt;&lt; delims.prefix;</span>
-<span class="lineNum">     774 </span>            : 
-<span class="lineNum">     775 </span><span class="lineCov">          3 :         stream &lt;&lt; utils::print::print_tuple_helper&lt;std::tuple&lt;Args...&gt;, sizeof...(Args), TChar, TCharTraits&gt;(value);</span>
-<span class="lineNum">     776 </span>            : 
-<span class="lineNum">     777 </span><span class="lineCov">          3 :         if (HEDLEY_LIKELY(delims.postfix != NULL))</span>
-<span class="lineNum">     778 </span><span class="lineCov">          3 :             stream &lt;&lt; delims.postfix;</span>
-<span class="lineNum">     779 </span>            : 
-<span class="lineNum">     780 </span><span class="lineCov">          3 :         return stream;</span>
-<span class="lineNum">     781 </span>            :     }
-<span class="lineNum">     782 </span>            : 
-<a name="783"><span class="lineNum">     783 </span>            :     /// Prints an optional to the stream using delimiters from delimiters&lt;std::optional&lt;T&gt;&gt;.</a>
-<span class="lineNum">     784 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits&gt;
-<span class="lineNum">     785 </span><span class="lineCov">          2 :     auto&amp; operator&lt;&lt;(</span>
-<span class="lineNum">     786 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     787 </span>            :             const std::optional&lt;T&gt;&amp; optional)
-<span class="lineNum">     788 </span>            :     {
-<span class="lineNum">     789 </span><span class="lineCov">          2 :         const auto delims = utils::print::delimiters&lt;std::optional&lt;T&gt;, TChar&gt;::values;</span>
-<span class="lineNum">     790 </span><span class="lineCov">          2 :         if (HEDLEY_UNLIKELY(delims.prefix != NULL))</span>
-<span class="lineNum">     791 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.prefix;</span>
+<span class="lineNum">     750 </span><span class="lineCov">          6 :         return stream;</span>
+<span class="lineNum">     751 </span>            :     }
+<a name="752"><span class="lineNum">     752 </span>            : </a>
+<span class="lineNum">     753 </span>            :     template&lt;typename ...Args, typename TChar, typename TCharTraits, typename TDelimiters&gt;
+<span class="lineNum">     754 </span><span class="lineCov">          3 :     inline auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     755 </span>            :                             const utils::print::print_tuple_helper&lt;std::tuple&lt;Args...&gt;,
+<span class="lineNum">     756 </span>            :                             sizeof...(Args), TChar, TDelimiters&gt;&amp; helper)
+<span class="lineNum">     757 </span>            :     {
+<span class="lineNum">     758 </span><span class="lineCov">          3 :         helper(stream);</span>
+<span class="lineNum">     759 </span><span class="lineCov">          3 :         return stream;</span>
+<span class="lineNum">     760 </span>            :     }
+<span class="lineNum">     761 </span>            : 
+<a name="762"><span class="lineNum">     762 </span>            :     /// Prints a tuple to the stream using delimiters from delimiters&lt;std::tuple&lt;Args...&gt;&gt;.</a>
+<span class="lineNum">     763 </span>            :     template&lt;typename ...Args, typename TChar, typename TCharTraits&gt;
+<span class="lineNum">     764 </span><span class="lineCov">          3 :     auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     765 </span>            :                      const std::tuple&lt;Args...&gt;&amp; value)
+<span class="lineNum">     766 </span>            :     {
+<span class="lineNum">     767 </span>            :         const auto delims = utils::print::delimiters&lt;std::tuple&lt;Args...&gt;, TChar&gt;::values;
+<span class="lineNum">     768 </span><span class="lineCov">          3 :         if (HEDLEY_LIKELY(delims.prefix != NULL))</span>
+<span class="lineNum">     769 </span><span class="lineCov">          3 :             stream &lt;&lt; delims.prefix;</span>
+<span class="lineNum">     770 </span>            : 
+<span class="lineNum">     771 </span><span class="lineCov">          3 :         stream &lt;&lt; utils::print::print_tuple_helper&lt;std::tuple&lt;Args...&gt;, sizeof...(Args), TChar, TCharTraits&gt;(value);</span>
+<span class="lineNum">     772 </span>            : 
+<span class="lineNum">     773 </span><span class="lineCov">          3 :         if (HEDLEY_LIKELY(delims.postfix != NULL))</span>
+<span class="lineNum">     774 </span><span class="lineCov">          3 :             stream &lt;&lt; delims.postfix;</span>
+<span class="lineNum">     775 </span>            : 
+<span class="lineNum">     776 </span><span class="lineCov">          3 :         return stream;</span>
+<span class="lineNum">     777 </span>            :     }
+<span class="lineNum">     778 </span>            : 
+<a name="779"><span class="lineNum">     779 </span>            :     /// Prints an optional to the stream using delimiters from delimiters&lt;std::optional&lt;T&gt;&gt;.</a>
+<span class="lineNum">     780 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits&gt;
+<span class="lineNum">     781 </span><span class="lineCov">          2 :     auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     782 </span>            :                      const std::optional&lt;T&gt;&amp; optional)
+<span class="lineNum">     783 </span>            :     {
+<span class="lineNum">     784 </span><span class="lineCov">          2 :         const auto delims = utils::print::delimiters&lt;std::optional&lt;T&gt;, TChar&gt;::values;</span>
+<span class="lineNum">     785 </span><span class="lineCov">          2 :         if (HEDLEY_UNLIKELY(delims.prefix != NULL))</span>
+<span class="lineNum">     786 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.prefix;</span>
+<span class="lineNum">     787 </span>            : 
+<span class="lineNum">     788 </span><span class="lineCov">          2 :         if (HEDLEY_LIKELY(optional.has_value()))</span>
+<span class="lineNum">     789 </span><span class="lineCov">          1 :             stream &lt;&lt; optional.value();</span>
+<span class="lineNum">     790 </span><span class="lineCov">          1 :         else if (HEDLEY_LIKELY(delims.delimiter != NULL))</span>
+<span class="lineNum">     791 </span><span class="lineCov">          1 :             stream &lt;&lt; delims.delimiter;</span>
 <span class="lineNum">     792 </span>            : 
-<span class="lineNum">     793 </span><span class="lineCov">          2 :         if (HEDLEY_LIKELY(optional.has_value()))</span>
-<span class="lineNum">     794 </span><span class="lineCov">          1 :             stream &lt;&lt; optional.value();</span>
-<span class="lineNum">     795 </span><span class="lineCov">          1 :         else if (HEDLEY_LIKELY(delims.delimiter != NULL))</span>
-<span class="lineNum">     796 </span><span class="lineCov">          1 :             stream &lt;&lt; delims.delimiter;</span>
-<span class="lineNum">     797 </span>            : 
-<span class="lineNum">     798 </span><span class="lineCov">          2 :         if (HEDLEY_UNLIKELY(delims.postfix != NULL))</span>
-<span class="lineNum">     799 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.postfix;</span>
-<span class="lineNum">     800 </span>            : 
-<span class="lineNum">     801 </span><span class="lineCov">          2 :         return stream;</span>
-<span class="lineNum">     802 </span>            :     }
-<span class="lineNum">     803 </span>            : 
-<a name="804"><span class="lineNum">     804 </span>            :     /// Prints a variant to the stream.</a>
-<span class="lineNum">     805 </span>            :     template&lt;typename Arg, typename ...Args, typename TChar, typename TCharTraits&gt;
-<span class="lineNum">     806 </span><span class="lineCov">         54 :     auto&amp; operator&lt;&lt;(</span>
-<span class="lineNum">     807 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     808 </span>            :             const std::variant&lt;Arg, Args...&gt;&amp; var)
-<span class="lineNum">     809 </span>            :     {
-<span class="lineNum">     810 </span><span class="lineCov">         54 :         const auto delims = utils::print::delimiters&lt;std::variant&lt;Arg, Args...&gt;, TChar&gt;::values;</span>
-<span class="lineNum">     811 </span><span class="lineCov">         54 :         if (HEDLEY_UNLIKELY(delims.prefix != NULL))</span>
-<a name="812"><span class="lineNum">     812 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.prefix;</span></a>
-<span class="lineNum">     813 </span>            : 
-<span class="lineNum">     814 </span><span class="lineCov">        162 :         std::visit([&amp;](const auto&amp; value) {</span>
-<span class="lineNum">     815 </span><span class="lineCov">         54 :             stream &lt;&lt; value;</span>
-<span class="lineNum">     816 </span>            :         }, var);
+<span class="lineNum">     793 </span><span class="lineCov">          2 :         if (HEDLEY_UNLIKELY(delims.postfix != NULL))</span>
+<span class="lineNum">     794 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.postfix;</span>
+<span class="lineNum">     795 </span>            : 
+<span class="lineNum">     796 </span><span class="lineCov">          2 :         return stream;</span>
+<span class="lineNum">     797 </span>            :     }
+<span class="lineNum">     798 </span>            : 
+<a name="799"><span class="lineNum">     799 </span>            :     /// Prints a variant to the stream.</a>
+<span class="lineNum">     800 </span>            :     template&lt;typename Arg, typename ...Args, typename TChar, typename TCharTraits&gt;
+<span class="lineNum">     801 </span><span class="lineCov">         54 :     auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     802 </span>            :                      const std::variant&lt;Arg, Args...&gt;&amp; var)
+<span class="lineNum">     803 </span>            :     {
+<span class="lineNum">     804 </span><span class="lineCov">         54 :         const auto delims = utils::print::delimiters&lt;std::variant&lt;Arg, Args...&gt;, TChar&gt;::values;</span>
+<span class="lineNum">     805 </span><span class="lineCov">         54 :         if (HEDLEY_UNLIKELY(delims.prefix != NULL))</span>
+<a name="806"><span class="lineNum">     806 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.prefix;</span></a>
+<span class="lineNum">     807 </span>            : 
+<span class="lineNum">     808 </span><span class="lineCov">        162 :         std::visit([&amp;](const auto&amp; value) {</span>
+<span class="lineNum">     809 </span><span class="lineCov">         54 :             stream &lt;&lt; value;</span>
+<span class="lineNum">     810 </span>            :         }, var);
+<span class="lineNum">     811 </span>            : 
+<span class="lineNum">     812 </span><span class="lineCov">         54 :         if (HEDLEY_UNLIKELY(delims.postfix != NULL))</span>
+<span class="lineNum">     813 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.postfix;</span>
+<span class="lineNum">     814 </span>            : 
+<span class="lineNum">     815 </span><span class="lineCov">         54 :         return stream;</span>
+<span class="lineNum">     816 </span>            :     }
 <span class="lineNum">     817 </span>            : 
-<span class="lineNum">     818 </span><span class="lineCov">         54 :         if (HEDLEY_UNLIKELY(delims.postfix != NULL))</span>
-<span class="lineNum">     819 </span><span class="lineNoCov">          0 :             stream &lt;&lt; delims.postfix;</span>
-<span class="lineNum">     820 </span>            : 
-<span class="lineNum">     821 </span><span class="lineCov">         54 :         return stream;</span>
-<span class="lineNum">     822 </span>            :     }
-<span class="lineNum">     823 </span>            : 
-<span class="lineNum">     824 </span>            :     /**
-<span class="lineNum">     825 </span>            :      *  \brief  Generic operator &lt;&lt;
-<span class="lineNum">     826 </span>            :      *
-<span class="lineNum">     827 </span>            :      *          if T == is_pointer&lt;T&gt;
-<span class="lineNum">     828 </span>            :      *              =&gt; prints %p format if void*, &quot;nullptr&quot; if nullptr or else dereference
-<span class="lineNum">     829 </span>            :      *          if T == __gnu_cxx::__normal_iterator&lt;T, Container&gt;
-<span class="lineNum">     830 </span>            :      *                  or another iterator type
-<span class="lineNum">     831 </span>            :      *              =&gt; prints dereference
-<span class="lineNum">     832 </span>            :      *          if T == is_array&lt;T&gt;
-<span class="lineNum">     833 </span>            :      *              =&gt; prints with array_wrapper
-<span class="lineNum">     834 </span>            :      *          if T == is_container&lt;T&gt;
-<span class="lineNum">     835 </span>            :      *              =&gt; prints print_container_helpter&lt;T&gt; using default delimiters
-<span class="lineNum">     836 </span>            :      *          else prints value itself.
-<span class="lineNum">     837 </span>            :      *              =&gt; prints &lt;Object type2name(value)&gt;
-<span class="lineNum">     838 </span>            :      *                 or ASSERT(false)
-<span class="lineNum">     839 </span>            :      *
-<span class="lineNum">     840 </span>            :      *  \param  stream
-<span class="lineNum">     841 </span>            :      *      The stream to write to.
-<span class="lineNum">     842 </span>            :      *  \param  value
-<span class="lineNum">     843 </span>            :      *      The possible pointer/iterator/array/container value.
-<span class="lineNum">     844 </span>            :      *  \return Returns the stream reference.
-<a name="845"><span class="lineNum">     845 </span>            :      */</a>
-<span class="lineNum">     846 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits&gt;
-<span class="lineNum">     847 </span><span class="lineCov">         12 :     auto&amp; operator&lt;&lt;(</span>
-<span class="lineNum">     848 </span>            :             std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,
-<span class="lineNum">     849 </span>            :             const T&amp; value)
-<span class="lineNum">     850 </span>            :     {
-<span class="lineNum">     851 </span>            :         if constexpr (std::is_pointer_v&lt;T&gt;) {
-<span class="lineNum">     852 </span>            :             if constexpr (std::is_void_v&lt;std::remove_pointer_t&lt;T&gt;&gt;) {
-<span class="lineNum">     853 </span><span class="lineCov">          2 :                 stream &lt;&lt; (value == nullptr ? &quot;nullptr&quot; : utils::string::format(&quot;%p&quot;, value));</span>
-<span class="lineNum">     854 </span>            :             } else {
-<span class="lineNum">     855 </span><span class="lineCov">          2 :                 stream &lt;&lt; *value;</span>
-<span class="lineNum">     856 </span>            :             }
-<span class="lineNum">     857 </span>            :         } else if constexpr (utils::traits::is_iterator_v&lt;T&gt;) {
-<span class="lineNum">     858 </span><span class="lineCov">          1 :             stream &lt;&lt; *value;</span>
-<span class="lineNum">     859 </span>            :         } else if constexpr (std::is_array_v&lt;T&gt;) {
-<span class="lineNum">     860 </span><span class="lineCov">          1 :             stream &lt;&lt; utils::print::array_wrapper(value);</span>
-<span class="lineNum">     861 </span>            :         } else if constexpr (utils::traits::is_container&lt;T&gt;::value) {
-<span class="lineNum">     862 </span><span class="lineCov">          5 :             (utils::print::print_container_helper&lt;T, TChar, TCharTraits&gt;(value))(stream);</span>
-<span class="lineNum">     863 </span>            :         } else {
-<span class="lineNum">     864 </span><span class="lineCov">          1 :             stream &lt;&lt; &quot;&lt;Object &quot; &lt;&lt; utils::print::type2name(value) &lt;&lt; &quot;&gt;&quot;;</span>
-<span class="lineNum">     865 </span>            :             // ASSERT(false &amp;&amp; &quot;Warning: Unprintable value&quot;);
-<span class="lineNum">     866 </span>            :         }
-<span class="lineNum">     867 </span>            : 
-<span class="lineNum">     868 </span><span class="lineCov">         12 :         return stream;</span>
-<span class="lineNum">     869 </span>            :     }
-<span class="lineNum">     870 </span>            : }
-<span class="lineNum">     871 </span>            : 
-<span class="lineNum">     872 </span>            : #if UTILS_PRINT_EXPORT_CONTAINER_FACTORIES == 0
-<span class="lineNum">     873 </span>            :     #undef UTILS_PRINT_MAKE_CONTAINER
-<span class="lineNum">     874 </span>            :     #undef UTILS_PRINT_MAKE_CONTAINER_NL
-<span class="lineNum">     875 </span>            :     #define UTILS_PRINT_MAKE_CONTAINER(...)
-<span class="lineNum">     876 </span>            :     #define UTILS_PRINT_MAKE_CONTAINER_NL(...)
-<span class="lineNum">     877 </span>            : 
-<span class="lineNum">     878 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_CONT
-<span class="lineNum">     879 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_CONT
-<span class="lineNum">     880 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_CONT_NL
-<span class="lineNum">     881 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_CONT_NL
-<span class="lineNum">     882 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_SET
-<span class="lineNum">     883 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_SET
-<span class="lineNum">     884 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_SET_NL
-<span class="lineNum">     885 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_SET_NL
-<span class="lineNum">     886 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_PAIR
-<span class="lineNum">     887 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_PAIR
-<span class="lineNum">     888 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_TUPLE
-<span class="lineNum">     889 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_TUPLE
-<span class="lineNum">     890 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_OPTIONAL
-<span class="lineNum">     891 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_OPTIONAL
-<span class="lineNum">     892 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_KEYVAL
-<span class="lineNum">     893 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_KEYVAL
-<span class="lineNum">     894 </span>            : #endif
-<span class="lineNum">     895 </span>            : #endif // UTILS_PRINT_HPP
+<span class="lineNum">     818 </span>            :     /**
+<span class="lineNum">     819 </span>            :      *  \brief  Generic operator &lt;&lt;
+<span class="lineNum">     820 </span>            :      *
+<span class="lineNum">     821 </span>            :      *          if T == is_pointer&lt;T&gt;
+<span class="lineNum">     822 </span>            :      *              =&gt; prints %p format if void*, &quot;nullptr&quot; if nullptr or else dereference
+<span class="lineNum">     823 </span>            :      *          if T == __gnu_cxx::__normal_iterator&lt;T, Container&gt;
+<span class="lineNum">     824 </span>            :      *                  or another iterator type
+<span class="lineNum">     825 </span>            :      *              =&gt; prints dereference
+<span class="lineNum">     826 </span>            :      *          if T == is_array&lt;T&gt;
+<span class="lineNum">     827 </span>            :      *              =&gt; prints with array_wrapper
+<span class="lineNum">     828 </span>            :      *          if T == is_container&lt;T&gt;
+<span class="lineNum">     829 </span>            :      *              =&gt; prints print_container_helpter&lt;T&gt; using default delimiters
+<span class="lineNum">     830 </span>            :      *          else prints value itself.
+<span class="lineNum">     831 </span>            :      *              =&gt; prints &lt;Object type2name(value)&gt;
+<span class="lineNum">     832 </span>            :      *                 or ASSERT(false)
+<span class="lineNum">     833 </span>            :      *
+<span class="lineNum">     834 </span>            :      *  \param  stream
+<span class="lineNum">     835 </span>            :      *      The stream to write to.
+<span class="lineNum">     836 </span>            :      *  \param  value
+<span class="lineNum">     837 </span>            :      *      The possible pointer/iterator/array/container value.
+<span class="lineNum">     838 </span>            :      *  \return Returns the stream reference.
+<a name="839"><span class="lineNum">     839 </span>            :      */</a>
+<span class="lineNum">     840 </span>            :     template&lt;typename T, typename TChar, typename TCharTraits&gt;
+<span class="lineNum">     841 </span><span class="lineCov">         12 :     auto&amp; operator&lt;&lt;(std::basic_ostream&lt;TChar, TCharTraits&gt;&amp; stream,</span>
+<span class="lineNum">     842 </span>            :                      const T&amp; value)
+<span class="lineNum">     843 </span>            :     {
+<span class="lineNum">     844 </span>            :         if constexpr (std::is_pointer_v&lt;T&gt;) {
+<span class="lineNum">     845 </span><span class="lineCov">          4 :             if (value == nullptr) {</span>
+<span class="lineNum">     846 </span><span class="lineCov">          1 :                 stream &lt;&lt; &quot;nullptr&quot;;</span>
+<span class="lineNum">     847 </span>            :             } else {
+<span class="lineNum">     848 </span>            :                 if constexpr (std::is_void_v&lt;std::remove_pointer_t&lt;T&gt;&gt;) {
+<span class="lineNum">     849 </span><span class="lineCov">          1 :                     stream &lt;&lt; utils::string::format(&quot;%p&quot;, value);</span>
+<span class="lineNum">     850 </span>            :                 } else {
+<span class="lineNum">     851 </span><span class="lineCov">          2 :                     stream &lt;&lt; *value;</span>
+<span class="lineNum">     852 </span>            :                 }
+<span class="lineNum">     853 </span>            :             }
+<span class="lineNum">     854 </span>            :         } else if constexpr (utils::traits::is_iterator_v&lt;T&gt;) {
+<span class="lineNum">     855 </span><span class="lineCov">          1 :             stream &lt;&lt; *value;</span>
+<span class="lineNum">     856 </span>            :         } else if constexpr (std::is_array_v&lt;T&gt;) {
+<span class="lineNum">     857 </span><span class="lineCov">          1 :             stream &lt;&lt; utils::print::array_wrapper(value);</span>
+<span class="lineNum">     858 </span>            :         } else if constexpr (utils::traits::is_container&lt;T&gt;::value) {
+<span class="lineNum">     859 </span><span class="lineCov">          5 :             (utils::print::print_container_helper&lt;T, TChar, TCharTraits&gt;(value))(stream);</span>
+<span class="lineNum">     860 </span>            :         } else {
+<span class="lineNum">     861 </span>            :             stream &lt;&lt; &quot;&lt;&quot;               &lt;&lt; utils::print::type2name(value)
+<span class="lineNum">     862 </span>            :                    &lt;&lt; &quot; instance at 0x&quot; &lt;&lt; utils::string::format(&quot;%p&quot;, &amp;value)
+<span class="lineNum">     863 </span><span class="lineCov">          1 :                    &lt;&lt; &quot;&gt;&quot;;</span>
+<span class="lineNum">     864 </span>            :             // ASSERT(false &amp;&amp; &quot;Warning: Unprintable value&quot;);
+<span class="lineNum">     865 </span>            :         }
+<span class="lineNum">     866 </span>            : 
+<span class="lineNum">     867 </span><span class="lineCov">         12 :         return stream;</span>
+<span class="lineNum">     868 </span>            :     }
+<span class="lineNum">     869 </span>            : }
+<span class="lineNum">     870 </span>            : 
+<span class="lineNum">     871 </span>            : #if UTILS_PRINT_EXPORT_CONTAINER_FACTORIES == 0
+<span class="lineNum">     872 </span>            :     #undef UTILS_PRINT_MAKE_CONTAINER
+<span class="lineNum">     873 </span>            :     #undef UTILS_PRINT_MAKE_CONTAINER_NL
+<span class="lineNum">     874 </span>            :     #define UTILS_PRINT_MAKE_CONTAINER(...)
+<span class="lineNum">     875 </span>            :     #define UTILS_PRINT_MAKE_CONTAINER_NL(...)
+<span class="lineNum">     876 </span>            : 
+<span class="lineNum">     877 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_CONT
+<span class="lineNum">     878 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_CONT
+<span class="lineNum">     879 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_CONT_NL
+<span class="lineNum">     880 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_CONT_NL
+<span class="lineNum">     881 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_SET
+<span class="lineNum">     882 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_SET
+<span class="lineNum">     883 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_SET_NL
+<span class="lineNum">     884 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_SET_NL
+<span class="lineNum">     885 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_PAIR
+<span class="lineNum">     886 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_PAIR
+<span class="lineNum">     887 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_TUPLE
+<span class="lineNum">     888 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_TUPLE
+<span class="lineNum">     889 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_OPTIONAL
+<span class="lineNum">     890 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_OPTIONAL
+<span class="lineNum">     891 </span>            :     #undef UTILS_PRINT_DELIM_CHAR_KEYVAL
+<span class="lineNum">     892 </span>            :     #undef UTILS_PRINT_DELIM_WCHAR_KEYVAL
+<span class="lineNum">     893 </span>            : #endif
+<span class="lineNum">     894 </span>            : #endif // UTILS_PRINT_HPP
 </pre>
       </td>
     </tr>
@@ -963,7 +962,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

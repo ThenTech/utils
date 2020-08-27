@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_random.hpp<span style="font-size: 80%;"> (source / <a href="utils_random.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_random.hpp<span style="font-size: 80%;"> (source / <a href="utils_random.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,17 +31,17 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">19</td>
-            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">61</td>
+            <td class="headerCovTableEntry">61</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">29</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
@@ -66,7 +66,7 @@
 <span class="lineNum">       4 </span>            : #include &quot;external/random.hpp&quot;
 <span class="lineNum">       5 </span>            : #include &quot;utils_compiler.hpp&quot;
 <span class="lineNum">       6 </span>            : #include &quot;utils_traits.hpp&quot;
-<span class="lineNum">       7 </span>            : #include &quot;utils_catch.hpp&quot;
+<span class="lineNum">       7 </span>            : #include &quot;utils_test.hpp&quot;
 <span class="lineNum">       8 </span>            : #include &quot;utils_string.hpp&quot;
 <span class="lineNum">       9 </span>            : 
 <span class="lineNum">      10 </span>            : #include &lt;sstream&gt;
@@ -95,202 +95,273 @@
 <span class="lineNum">      33 </span>            :     /**
 <span class="lineNum">      34 </span>            :      *  \brief  Pick a certain amount of items from the given container,
 <span class="lineNum">      35 </span>            :      *          and copy them to a new Container of the same type.
-<span class="lineNum">      36 </span>            :      *          Items are chosen at random.
+<span class="lineNum">      36 </span>            :      *          Items are chosen at random (does not preserve relative order).
 <span class="lineNum">      37 </span>            :      *
 <span class="lineNum">      38 </span>            :      *  \param  amount
 <span class="lineNum">      39 </span>            :      *      The amount of items to pick out.
 <span class="lineNum">      40 </span>            :      *  \param  container
 <span class="lineNum">      41 </span>            :      *      The container to pick items from.
 <span class="lineNum">      42 </span>            :      *      This class must have begin and end iterators, as well as
-<span class="lineNum">      43 </span>            :      *      the reserve and push_back methods implemented.
+<span class="lineNum">      43 </span>            :      *      the resize and push_back methods implemented.
 <span class="lineNum">      44 </span>            :      *  \return Returns a Container instance with the picked items.
 <span class="lineNum">      45 </span>            :      */
 <span class="lineNum">      46 </span>            :     template&lt;
 <span class="lineNum">      47 </span>            :         typename Container,
 <a name="48"><span class="lineNum">      48 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;</a>
 <span class="lineNum">      49 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      50 </span><span class="lineCov">          4 :     static auto pick_x_from(size_t amount, const Container&amp; container) {</span>
-<span class="lineNum">      51 </span><span class="lineCov">          4 :         Container picked;</span>
-<span class="lineNum">      52 </span><span class="lineCov">          4 :         picked.reserve(amount);</span>
-<span class="lineNum">      53 </span>            : 
-<span class="lineNum">      54 </span><span class="lineCov">          4 :         const auto size = std::distance(std::begin(container), std::end(container));</span>
-<span class="lineNum">      55 </span><span class="lineCov">          4 :         if(HEDLEY_UNLIKELY(0 == size)) return picked;</span>
+<span class="lineNum">      50 </span><span class="lineCov">          8 :     static auto pick_x_from(size_t amount, const Container&amp; container) {</span>
+<span class="lineNum">      51 </span><span class="lineCov">          8 :         Container picked;</span>
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span><span class="lineCov">          8 :         const auto size = std::distance(std::begin(container), std::end(container));</span>
+<span class="lineNum">      54 </span><span class="lineCov">          8 :         if(HEDLEY_UNLIKELY(0 == size)) return picked;</span>
+<span class="lineNum">      55 </span><span class="lineCov">          7 :         picked.resize(amount);</span>
 <span class="lineNum">      56 </span>            : 
 <span class="lineNum">      57 </span>            :         using diff_t = typename std::iterator_traits&lt;decltype(std::begin(container))&gt;::difference_type;
-<span class="lineNum">      58 </span>            : 
-<span class="lineNum">      59 </span><span class="lineCov">         29 :         for (size_t i = 0; i &lt; amount; ++i) {</span>
-<span class="lineNum">      60 </span><span class="lineCov">         25 :             picked.push_back(*std::next(std::begin(container), Random::get&lt;diff_t&gt;( 0, size - 1)));</span>
-<span class="lineNum">      61 </span>            :         }
-<span class="lineNum">      62 </span>            : 
-<span class="lineNum">      63 </span><span class="lineCov">          4 :         return picked;</span>
-<span class="lineNum">      64 </span>            :     }
-<span class="lineNum">      65 </span>            : 
-<span class="lineNum">      66 </span>            :     /**
-<span class="lineNum">      67 </span>            :      *  \brief  Generate a container (default: vector&lt;T&gt;) with \p amount items,
-<span class="lineNum">      68 </span>            :      *          randomly distributed between \p from and \p to.
-<span class="lineNum">      69 </span>            :      *
-<span class="lineNum">      70 </span>            :      *          Only fundamental data types are supported (numbers, chars and bools).
-<span class="lineNum">      71 </span>            :      *          These are randomly chosen between between \p from and \p to,
-<span class="lineNum">      72 </span>            :      *          while booleans are chosen with a 1/2 probability.
-<span class="lineNum">      73 </span>            :      *
-<span class="lineNum">      74 </span>            :      *          To generate booleans with other probabilities, use generate_bool,
-<span class="lineNum">      75 </span>            :      *          to generate a string (instead of vector) when choosing chars,
-<span class="lineNum">      76 </span>            :      *          use generate_string.
-<span class="lineNum">      77 </span>            :      *
-<span class="lineNum">      78 </span>            :      *          For other data types, the function will not be enabled.
-<span class="lineNum">      79 </span>            :      *
-<span class="lineNum">      80 </span>            :      *  \param  amount
-<span class="lineNum">      81 </span>            :      *      The amount of items to generate.
-<span class="lineNum">      82 </span>            :      *  \param  from
-<span class="lineNum">      83 </span>            :      *      The lower bound for the distribution. (default: min T)
-<span class="lineNum">      84 </span>            :      *  \param  to
-<span class="lineNum">      85 </span>            :      *      The upper bound for the destribution. (default: max T)
-<span class="lineNum">      86 </span>            :      *      If upper &lt; lower, these are swapped.
-<span class="lineNum">      87 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
-<span class="lineNum">      88 </span>            :      */
-<span class="lineNum">      89 </span>            :     template&lt;
-<span class="lineNum">      90 </span>            :         typename T,
-<span class="lineNum">      91 </span>            :         typename Container = std::vector&lt;T&gt;,
-<span class="lineNum">      92 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;
-<span class="lineNum">      93 </span>            :                                          &amp;&amp; (   effolkronium::details::is_supported_number&lt;T&gt;::value
-<span class="lineNum">      94 </span>            :                                              || effolkronium::details::is_supported_character&lt;T&gt;::value
-<span class="lineNum">      95 </span>            :                                              || std::is_same&lt;T, bool&gt;::value
-<a name="96"><span class="lineNum">      96 </span>            :                                             )&gt;</a>
-<span class="lineNum">      97 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">      98 </span><span class="lineCov">         20 :     static auto generate_x(const size_t amount,</span>
-<span class="lineNum">      99 </span>            :                            T from = std::numeric_limits&lt;T&gt;::min(),
-<span class="lineNum">     100 </span>            :                            T to   = std::numeric_limits&lt;T&gt;::max())
-<span class="lineNum">     101 </span>            :     {
-<span class="lineNum">     102 </span><span class="lineCov">         20 :         Container picked;</span>
-<span class="lineNum">     103 </span><span class="lineCov">         20 :         picked.reserve(amount);</span>
-<span class="lineNum">     104 </span>            : 
-<span class="lineNum">     105 </span><span class="lineCov">         20 :         if (HEDLEY_UNLIKELY(to &lt; from))  // Allow range from higher to lower</span>
-<span class="lineNum">     106 </span><span class="lineCov">          1 :             std::swap(from, to);</span>
-<span class="lineNum">     107 </span>            : 
-<span class="lineNum">     108 </span>            :         if constexpr (effolkronium::details::is_uniform_real&lt;T&gt;::value) {
-<span class="lineNum">     109 </span>            :             auto dist = Random::real_dist_t&lt;T&gt; {
-<span class="lineNum">     110 </span>            :                 static_cast&lt;T&gt;(from),
-<span class="lineNum">     111 </span>            :                 static_cast&lt;T&gt;(to)
-<span class="lineNum">     112 </span>            :             };
-<span class="lineNum">     113 </span>            : 
-<span class="lineNum">     114 </span>            :             for (size_t i = 0; i &lt; amount; ++i) {
-<span class="lineNum">     115 </span>            :                 picked.push_back(static_cast&lt;T&gt;(dist(Random::engine())));
-<span class="lineNum">     116 </span>            :             }
-<span class="lineNum">     117 </span>            :         } else if constexpr (std::is_same&lt;T, bool&gt;::value) {
-<span class="lineNum">     118 </span>            :             auto dist = Random::bool_dist_t{ 0.5 };
-<span class="lineNum">     119 </span>            : 
-<span class="lineNum">     120 </span>            :             for (size_t i = 0; i &lt; amount; ++i) {
-<span class="lineNum">     121 </span>            :                 picked.push_back(static_cast&lt;T&gt;(dist(Random::engine())));
-<span class="lineNum">     122 </span>            :             }
-<span class="lineNum">     123 </span>            :         } else {
-<span class="lineNum">     124 </span><span class="lineCov">         20 :             auto dist = Random::integer_dist_t&lt;int64_t&gt; {</span>
-<span class="lineNum">     125 </span>            :                 static_cast&lt;int64_t&gt;(from),
-<span class="lineNum">     126 </span>            :                 static_cast&lt;int64_t&gt;(to)
-<span class="lineNum">     127 </span>            :             };
-<span class="lineNum">     128 </span>            : 
-<span class="lineNum">     129 </span><span class="lineCov">       5228 :             for (size_t i = 0; i &lt; amount; ++i) {</span>
-<span class="lineNum">     130 </span><span class="lineCov">       5208 :                 picked.push_back(static_cast&lt;T&gt;(dist(Random::engine())));</span>
-<span class="lineNum">     131 </span>            :             }
-<span class="lineNum">     132 </span>            :         }
-<span class="lineNum">     133 </span>            : 
-<span class="lineNum">     134 </span><span class="lineCov">         20 :         return picked;</span>
-<span class="lineNum">     135 </span>            :     }
-<span class="lineNum">     136 </span>            : 
-<span class="lineNum">     137 </span>            :     /**
-<span class="lineNum">     138 </span>            :      *  \brief  Generate a random string with length \p amount and chars chosen
-<span class="lineNum">     139 </span>            :      *          between \p from and \p to.
-<span class="lineNum">     140 </span>            :      *          Every char-type is supported and will create a `std::basic_string&lt;T&gt;`
-<span class="lineNum">     141 </span>            :      *          containter.
-<span class="lineNum">     142 </span>            :      *
-<span class="lineNum">     143 </span>            :      *          Only enabled if T is a character type.
-<span class="lineNum">     144 </span>            :      *
-<span class="lineNum">     145 </span>            :      *  \param  amount
-<span class="lineNum">     146 </span>            :      *      The amount of items to generate.
-<span class="lineNum">     147 </span>            :      *  \param  from
-<span class="lineNum">     148 </span>            :      *      The lower bound for the distribution. (default: min T)
-<span class="lineNum">     149 </span>            :      *  \param  to
-<span class="lineNum">     150 </span>            :      *      The upper bound for the destribution. (default: max T)
-<span class="lineNum">     151 </span>            :      *      If upper &lt; lower, these are swapped.
-<span class="lineNum">     152 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
-<span class="lineNum">     153 </span>            :      */
-<span class="lineNum">     154 </span>            :     template&lt;
-<span class="lineNum">     155 </span>            :         typename T = char,
-<span class="lineNum">     156 </span>            :         typename Container = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;,
-<a name="157"><span class="lineNum">     157 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;</a>
-<span class="lineNum">     158 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     159 </span><span class="lineCov">         15 :     static inline Container generate_string(const size_t amount,</span>
-<span class="lineNum">     160 </span>            :                                             const T from = std::numeric_limits&lt;T&gt;::min(),
-<span class="lineNum">     161 </span>            :                                             const T to   = std::numeric_limits&lt;T&gt;::max())
-<span class="lineNum">     162 </span>            :     {
-<span class="lineNum">     163 </span><span class="lineCov">         15 :         return utils::random::generate_x&lt;T, Container&gt;(amount, from, to);</span>
-<span class="lineNum">     164 </span>            :     };
-<span class="lineNum">     165 </span>            : 
-<span class="lineNum">     166 </span>            :     /**
-<span class="lineNum">     167 </span>            :      *  \brief  Generate a random vector with length \p amount and containing
-<span class="lineNum">     168 </span>            :      *          booleans with the probability of them being true given by
-<span class="lineNum">     169 </span>            :      *          \p probability.
-<span class="lineNum">     170 </span>            :      *          Every char-type is supported and will create a `std::basic_string&lt;T&gt;`
-<span class="lineNum">     171 </span>            :      *          containter.
-<span class="lineNum">     172 </span>            :      *
-<span class="lineNum">     173 </span>            :      *          Only enabled if T is a boolean.
-<span class="lineNum">     174 </span>            :      *
-<span class="lineNum">     175 </span>            :      *  \param  amount
-<span class="lineNum">     176 </span>            :      *      The amount of items to generate.
-<span class="lineNum">     177 </span>            :      *  \param  probability
-<span class="lineNum">     178 </span>            :      *      The probability foor the boolean distribution,
-<span class="lineNum">     179 </span>            :      *      i.e. the chance of the generated bool being true. (default: 0.5)
-<span class="lineNum">     180 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
-<span class="lineNum">     181 </span>            :      */
-<span class="lineNum">     182 </span>            :     template&lt;
-<span class="lineNum">     183 </span>            :         typename T = bool,
-<span class="lineNum">     184 </span>            :         typename Container = typename std::enable_if&lt;std::is_same&lt;T, bool&gt;::value, std::vector&lt;T&gt;&gt;::type,
-<span class="lineNum">     185 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;
-<span class="lineNum">     186 </span>            :     &gt; ATTR_MAYBE_UNUSED
-<span class="lineNum">     187 </span>            :     static inline Container generate_bool(const size_t amount,
-<span class="lineNum">     188 </span>            :                                           const double probability = 0.5)
-<span class="lineNum">     189 </span>            :     {
-<span class="lineNum">     190 </span>            :         ASSERT(0 &lt;= probability &amp;&amp; 1 &gt;= probability);
-<span class="lineNum">     191 </span>            : 
-<span class="lineNum">     192 </span>            :         Container picked;
-<span class="lineNum">     193 </span>            :         picked.reserve(amount);
-<span class="lineNum">     194 </span>            : 
-<span class="lineNum">     195 </span>            :         auto dist = Random::bool_dist_t{ probability };
-<span class="lineNum">     196 </span>            : 
-<span class="lineNum">     197 </span>            :         for (size_t i = 0; i &lt; amount; ++i) {
-<span class="lineNum">     198 </span>            :             picked.push_back(static_cast&lt;T&gt;(dist(Random::engine())));
-<span class="lineNum">     199 </span>            :         }
-<span class="lineNum">     200 </span>            : 
-<span class="lineNum">     201 </span>            :         return picked;
-<span class="lineNum">     202 </span>            :     };
-<span class="lineNum">     203 </span>            : 
-<span class="lineNum">     204 </span>            :     /**
-<span class="lineNum">     205 </span>            :      *  \brief  Generate Universal Unique IDentifier v4 (UUID)
-<span class="lineNum">     206 </span>            :      *
-<span class="lineNum">     207 </span>            :      *  \return Returns a formatted string (groups with `-`) with a randon UUID.
-<span class="lineNum">     208 </span>            :      */
-<span class="lineNum">     209 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     210 </span>            :     static inline std::string generate_uuid(void) {
-<span class="lineNum">     211 </span>            :         auto dist = Random::integer_dist_t&lt;uint16_t&gt; {
-<span class="lineNum">     212 </span>            :             static_cast&lt;uint16_t&gt;(0x00),
-<span class="lineNum">     213 </span>            :             static_cast&lt;uint16_t&gt;(0xFF)
-<span class="lineNum">     214 </span>            :         };
-<span class="lineNum">     215 </span>            : 
-<span class="lineNum">     216 </span>            :         #define FX      &quot;%02X&quot;
-<span class="lineNum">     217 </span>            :         #define SEP     &quot;-&quot;
-<span class="lineNum">     218 </span>            :         #define GET_HEX (dist(Random::engine()))
-<span class="lineNum">     219 </span>            : 
-<span class="lineNum">     220 </span>            :         return utils::string::format(
-<span class="lineNum">     221 </span>            :             FX FX FX FX SEP FX FX SEP FX FX SEP FX FX SEP FX FX FX FX FX FX,
-<span class="lineNum">     222 </span>            :             GET_HEX, GET_HEX, GET_HEX, GET_HEX,
-<span class="lineNum">     223 </span>            :             GET_HEX, GET_HEX,
-<span class="lineNum">     224 </span>            :             static_cast&lt;uint8_t&gt;((GET_HEX &amp; 0x0F) | 0x40), GET_HEX,
-<span class="lineNum">     225 </span>            :             static_cast&lt;uint8_t&gt;((GET_HEX &amp; 0x3F) | 0x80), GET_HEX,
-<span class="lineNum">     226 </span>            :             GET_HEX, GET_HEX, GET_HEX, GET_HEX, GET_HEX, GET_HEX
-<span class="lineNum">     227 </span>            :         );
-<span class="lineNum">     228 </span>            :     }
-<span class="lineNum">     229 </span>            : }
-<span class="lineNum">     230 </span>            : 
-<span class="lineNum">     231 </span>            : #endif // UTILS_RANDOM_HPP
+<a name="58"><span class="lineNum">      58 </span>            : </a>
+<span class="lineNum">      59 </span><span class="lineCov">          7 :         std::generate_n(std::begin(picked), amount,</span>
+<span class="lineNum">      60 </span><span class="lineCov">         66 :         [&amp;container, &amp;size]() {</span>
+<span class="lineNum">      61 </span><span class="lineCov">         33 :             return *std::next(std::begin(container), Random::get&lt;diff_t&gt;( 0, size - 1 ));</span>
+<span class="lineNum">      62 </span>            :         });
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span><span class="lineCov">          7 :         return picked;</span>
+<span class="lineNum">      65 </span>            :     }
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            :     /**
+<span class="lineNum">      68 </span>            :      *  \brief  Sample a certain amount of items from the given container,
+<span class="lineNum">      69 </span>            :      *          and copy them to a new Container of the same type.
+<span class="lineNum">      70 </span>            :      *          Items are chosen by sampling (preserves relative order).
+<span class="lineNum">      71 </span>            :      *          The sample can contain at most \p container.size() values.
+<span class="lineNum">      72 </span>            :      *
+<span class="lineNum">      73 </span>            :      *  \param  amount
+<span class="lineNum">      74 </span>            :      *      The amount of items to sample.
+<span class="lineNum">      75 </span>            :      *  \param  container
+<span class="lineNum">      76 </span>            :      *      The container to sample items from.
+<span class="lineNum">      77 </span>            :      *      This class must have begin and end iterators, as well as
+<span class="lineNum">      78 </span>            :      *      the reserve and push_back methods implemented.
+<span class="lineNum">      79 </span>            :      *  \return Returns a Container instance with the sampled items.
+<span class="lineNum">      80 </span>            :      */
+<span class="lineNum">      81 </span>            :     template&lt;
+<span class="lineNum">      82 </span>            :         typename Container,
+<a name="83"><span class="lineNum">      83 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;</a>
+<span class="lineNum">      84 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">      85 </span><span class="lineCov">          6 :     static auto sample(size_t amount, const Container&amp; container) {</span>
+<span class="lineNum">      86 </span><span class="lineCov">          6 :         Container sampled;</span>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span><span class="lineCov">          6 :         const auto size = std::distance(std::begin(container), std::end(container));</span>
+<span class="lineNum">      89 </span><span class="lineCov">          6 :         if(HEDLEY_UNLIKELY(0 == size)) return sampled;</span>
+<span class="lineNum">      90 </span><span class="lineCov">          5 :         sampled.reserve(std::min(amount, size_t(size)));</span>
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span><span class="lineCov">          5 :         std::sample(std::begin(container), std::end(container),</span>
+<span class="lineNum">      93 </span>            :                     std::back_inserter(sampled), amount,
+<span class="lineNum">      94 </span>            :                     Random::engine());
+<span class="lineNum">      95 </span>            : 
+<span class="lineNum">      96 </span><span class="lineCov">          5 :         return sampled;</span>
+<span class="lineNum">      97 </span>            :     }
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span>            :     /**
+<span class="lineNum">     100 </span>            :      *  \brief  Generate a container (default: vector&lt;T&gt;) with \p amount items,
+<span class="lineNum">     101 </span>            :      *          randomly distributed between \p from and \p to.
+<span class="lineNum">     102 </span>            :      *
+<span class="lineNum">     103 </span>            :      *          Only fundamental data types are supported (numbers, chars and bools).
+<span class="lineNum">     104 </span>            :      *          These are randomly chosen between between \p from and \p to,
+<span class="lineNum">     105 </span>            :      *          while booleans are chosen with a 1/2 probability.
+<span class="lineNum">     106 </span>            :      *
+<span class="lineNum">     107 </span>            :      *          To generate booleans with other probabilities, use generate_bool,
+<span class="lineNum">     108 </span>            :      *          to generate a string (instead of vector) when choosing chars,
+<span class="lineNum">     109 </span>            :      *          use generate_string.
+<span class="lineNum">     110 </span>            :      *
+<span class="lineNum">     111 </span>            :      *          For other data types, the function will not be enabled.
+<span class="lineNum">     112 </span>            :      *
+<span class="lineNum">     113 </span>            :      *  \param  amount
+<span class="lineNum">     114 </span>            :      *      The amount of items to generate.
+<span class="lineNum">     115 </span>            :      *  \param  from
+<span class="lineNum">     116 </span>            :      *      The lower bound for the distribution. (default: min T)
+<span class="lineNum">     117 </span>            :      *  \param  to
+<span class="lineNum">     118 </span>            :      *      The upper bound for the destribution. (default: max T)
+<span class="lineNum">     119 </span>            :      *      If upper &lt; lower, these are swapped.
+<span class="lineNum">     120 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
+<span class="lineNum">     121 </span>            :      */
+<span class="lineNum">     122 </span>            :     template&lt;
+<span class="lineNum">     123 </span>            :         typename T,
+<span class="lineNum">     124 </span>            :         typename Container = std::vector&lt;T&gt;,
+<span class="lineNum">     125 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;
+<span class="lineNum">     126 </span>            :                                          &amp;&amp; (   effolkronium::details::is_supported_number&lt;T&gt;::value
+<span class="lineNum">     127 </span>            :                                              || effolkronium::details::is_supported_character&lt;T&gt;::value
+<span class="lineNum">     128 </span>            :                                              || std::is_same&lt;T, bool&gt;::value
+<a name="129"><span class="lineNum">     129 </span>            :                                             )&gt;</a>
+<span class="lineNum">     130 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     131 </span><span class="lineCov">         36 :     static auto generate_x(const size_t amount,</span>
+<span class="lineNum">     132 </span>            :                            T from = std::numeric_limits&lt;T&gt;::min(),
+<span class="lineNum">     133 </span>            :                            T to   = std::numeric_limits&lt;T&gt;::max())
+<span class="lineNum">     134 </span>            :     {
+<span class="lineNum">     135 </span><span class="lineCov">         36 :         Container picked;</span>
+<span class="lineNum">     136 </span><span class="lineCov">         36 :         picked.resize(amount);</span>
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span><span class="lineCov">         36 :         if (HEDLEY_UNLIKELY(to &lt; from))  // Allow range from higher to lower</span>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">          2 :             std::swap(from, to);</span></a>
+<span class="lineNum">     140 </span>            : 
+<a name="141"><span class="lineNum">     141 </span><span class="lineCov">        144 :         const auto dist_generate = [&amp;picked, &amp;amount](auto&amp; dist){</span></a>
+<span class="lineNum">     142 </span><span class="lineCov">         36 :             std::generate_n(std::begin(picked), amount,</span>
+<span class="lineNum">     143 </span><span class="lineCov">        318 :                 [&amp;dist, &amp;eng = Random::engine()]() {</span>
+<span class="lineNum">     144 </span><span class="lineCov">       5503 :                     return static_cast&lt;T&gt;(dist(eng));</span>
+<span class="lineNum">     145 </span>            :             });
+<span class="lineNum">     146 </span>            :         };
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span>            :         if constexpr (effolkronium::details::is_uniform_real&lt;T&gt;::value) {
+<span class="lineNum">     149 </span><span class="lineCov">          3 :             auto dist = Random::real_dist_t&lt;T&gt; {</span>
+<span class="lineNum">     150 </span>            :                 static_cast&lt;T&gt;(from),
+<span class="lineNum">     151 </span>            :                 static_cast&lt;T&gt;(to)
+<span class="lineNum">     152 </span>            :             };
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span><span class="lineCov">          3 :             dist_generate(dist);</span>
+<span class="lineNum">     155 </span>            :         } else if constexpr (std::is_same&lt;T, bool&gt;::value) {
+<span class="lineNum">     156 </span><span class="lineCov">          1 :             auto dist = Random::bool_dist_t{ 0.5 };</span>
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span><span class="lineCov">          1 :             dist_generate(dist);</span>
+<span class="lineNum">     159 </span>            :         } else {
+<span class="lineNum">     160 </span><span class="lineCov">         32 :             auto dist = Random::integer_dist_t&lt;int64_t&gt; {</span>
+<span class="lineNum">     161 </span>            :                 static_cast&lt;int64_t&gt;(from),
+<span class="lineNum">     162 </span>            :                 static_cast&lt;int64_t&gt;(to)
+<span class="lineNum">     163 </span>            :             };
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span><span class="lineCov">         32 :             dist_generate(dist);</span>
+<span class="lineNum">     166 </span>            :         }
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span><span class="lineCov">         72 :         return picked;</span>
+<span class="lineNum">     169 </span>            :     }
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            :     /**
+<span class="lineNum">     172 </span>            :      *  \brief  Generate a random string with length \p amount and chars chosen
+<span class="lineNum">     173 </span>            :      *          between \p from and \p to.
+<span class="lineNum">     174 </span>            :      *          Every char-type is supported and will create a `std::basic_string&lt;T&gt;`
+<span class="lineNum">     175 </span>            :      *          containter.
+<span class="lineNum">     176 </span>            :      *
+<span class="lineNum">     177 </span>            :      *          Only enabled if T is a character type.
+<span class="lineNum">     178 </span>            :      *
+<span class="lineNum">     179 </span>            :      *  \param  amount
+<span class="lineNum">     180 </span>            :      *      The amount of items to generate.
+<span class="lineNum">     181 </span>            :      *  \param  from
+<span class="lineNum">     182 </span>            :      *      The lower bound for the distribution. (default: min T)
+<span class="lineNum">     183 </span>            :      *  \param  to
+<span class="lineNum">     184 </span>            :      *      The upper bound for the destribution. (default: max T)
+<span class="lineNum">     185 </span>            :      *      If upper &lt; lower, these are swapped.
+<span class="lineNum">     186 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
+<span class="lineNum">     187 </span>            :      */
+<span class="lineNum">     188 </span>            :     template&lt;
+<span class="lineNum">     189 </span>            :         typename T = char,
+<span class="lineNum">     190 </span>            :         typename Container = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;,
+<a name="191"><span class="lineNum">     191 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;</a>
+<span class="lineNum">     192 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     193 </span><span class="lineCov">         18 :     static inline Container generate_string(const size_t length,</span>
+<span class="lineNum">     194 </span>            :                                             const T from = std::numeric_limits&lt;T&gt;::min(),
+<span class="lineNum">     195 </span>            :                                             const T to   = std::numeric_limits&lt;T&gt;::max())
+<span class="lineNum">     196 </span>            :     {
+<span class="lineNum">     197 </span><span class="lineCov">         18 :         return utils::random::generate_x&lt;T, Container&gt;(length, from, to);</span>
+<span class="lineNum">     198 </span>            :     };
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span>            :     /**
+<span class="lineNum">     201 </span>            :      *  \brief  Generate a random string with length \p amount and chars chosen
+<span class="lineNum">     202 </span>            :      *          in `utils::string::_base64_chars[0:62]` to make the name path safe.
+<span class="lineNum">     203 </span>            :      *          Every char-type is supported and will create a `std::basic_string&lt;T&gt;`
+<span class="lineNum">     204 </span>            :      *          containter.
+<span class="lineNum">     205 </span>            :      *
+<span class="lineNum">     206 </span>            :      *          Only enabled if T is a character type.
+<span class="lineNum">     207 </span>            :      *
+<span class="lineNum">     208 </span>            :      *  \param  amount
+<span class="lineNum">     209 </span>            :      *      The amount of items to generate.
+<span class="lineNum">     210 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
+<span class="lineNum">     211 </span>            :      */
+<span class="lineNum">     212 </span>            :     template&lt;
+<span class="lineNum">     213 </span>            :         typename T = char,
+<span class="lineNum">     214 </span>            :         typename Container = typename std::enable_if_t&lt;effolkronium::details::is_supported_character&lt;T&gt;::value, std::basic_string&lt;T&gt;&gt;,
+<a name="215"><span class="lineNum">     215 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;</a>
+<span class="lineNum">     216 </span>            :     &gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     217 </span><span class="lineCov">          4 :     static Container generate_safe_string(const size_t length)</span>
+<span class="lineNum">     218 </span>            :     {
+<span class="lineNum">     219 </span><span class="lineCov">          4 :         Container picked;</span>
+<span class="lineNum">     220 </span><span class="lineCov">          4 :         picked.resize(length);</span>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span><span class="lineCov">          4 :         auto dist = Random::integer_dist_t&lt;size_t&gt; {</span>
+<span class="lineNum">     223 </span><span class="lineCov">          4 :             0ull, utils::string::_base64_chars.size() - 3ull</span>
+<span class="lineNum">     224 </span>            :         };
+<a name="225"><span class="lineNum">     225 </span>            : </a>
+<span class="lineNum">     226 </span><span class="lineCov">          4 :         std::generate_n(std::begin(picked), length,</span>
+<span class="lineNum">     227 </span><span class="lineCov">        112 :         [&amp;dist]() {</span>
+<span class="lineNum">     228 </span><span class="lineCov">        112 :             const char gen = utils::string::_base64_chars[dist(Random::engine())];</span>
+<span class="lineNum">     229 </span><span class="lineCov">        112 :             return static_cast&lt;T&gt;(gen);</span>
+<span class="lineNum">     230 </span>            :         });
+<span class="lineNum">     231 </span>            : 
+<span class="lineNum">     232 </span><span class="lineCov">          8 :         return picked;</span>
+<span class="lineNum">     233 </span>            :     };
+<span class="lineNum">     234 </span>            : 
+<span class="lineNum">     235 </span>            :     /**
+<span class="lineNum">     236 </span>            :      *  \brief  Generate a random vector with length \p amount and containing
+<span class="lineNum">     237 </span>            :      *          booleans with the probability of them being true given by
+<span class="lineNum">     238 </span>            :      *          \p probability.
+<span class="lineNum">     239 </span>            :      *          Every boolean-type is supported and will create a `std::vector&lt;T&gt;`
+<span class="lineNum">     240 </span>            :      *          containter.
+<span class="lineNum">     241 </span>            :      *
+<span class="lineNum">     242 </span>            :      *          Only enabled if T is a boolean.
+<span class="lineNum">     243 </span>            :      *
+<span class="lineNum">     244 </span>            :      *  \param  amount
+<span class="lineNum">     245 </span>            :      *      The amount of items to generate.
+<span class="lineNum">     246 </span>            :      *  \param  probability
+<span class="lineNum">     247 </span>            :      *      The probability foor the boolean distribution,
+<span class="lineNum">     248 </span>            :      *      i.e. the chance of the generated bool being true. (default: 0.5)
+<span class="lineNum">     249 </span>            :      *  \return Returns a new Container containing \p amount items of type T.
+<span class="lineNum">     250 </span>            :      */
+<span class="lineNum">     251 </span>            :     template&lt;
+<span class="lineNum">     252 </span>            :         typename T = bool,
+<span class="lineNum">     253 </span>            :         typename Container = typename std::enable_if&lt;std::is_same&lt;T, bool&gt;::value, std::vector&lt;T&gt;&gt;::type,
+<a name="254"><span class="lineNum">     254 </span>            :         typename = typename std::enable_if_t&lt;utils::traits::is_iterable_v&lt;Container&gt;&gt;</a>
+<span class="lineNum">     255 </span>            :     &gt; ATTR_MAYBE_UNUSED
+<span class="lineNum">     256 </span><span class="lineCov">          4 :     static Container generate_bool(const size_t amount,</span>
+<span class="lineNum">     257 </span>            :                                    const double probability = 0.5)
+<span class="lineNum">     258 </span>            :     {
+<span class="lineNum">     259 </span><span class="lineCov">          4 :         ASSERT(0 &lt;= probability &amp;&amp; 1 &gt;= probability);</span>
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span><span class="lineCov">          4 :         Container picked;</span>
+<span class="lineNum">     262 </span><span class="lineCov">          4 :         picked.resize(amount);</span>
+<span class="lineNum">     263 </span>            : 
+<span class="lineNum">     264 </span><span class="lineCov">          4 :         auto dist = Random::bool_dist_t{ probability };</span>
+<a name="265"><span class="lineNum">     265 </span>            : </a>
+<span class="lineNum">     266 </span><span class="lineCov">          4 :         std::generate_n(std::begin(picked), amount,</span>
+<span class="lineNum">     267 </span><span class="lineCov">         30 :         [&amp;dist]() {</span>
+<span class="lineNum">     268 </span><span class="lineCov">         30 :             return static_cast&lt;T&gt;(dist(Random::engine()));</span>
+<span class="lineNum">     269 </span>            :         });
+<span class="lineNum">     270 </span>            : 
+<span class="lineNum">     271 </span><span class="lineCov">          8 :         return picked;</span>
+<span class="lineNum">     272 </span>            :     };
+<span class="lineNum">     273 </span>            : 
+<span class="lineNum">     274 </span>            :     /**
+<span class="lineNum">     275 </span>            :      *  \brief  Generate Universal Unique IDentifier v4 (UUID)
+<span class="lineNum">     276 </span>            :      *          In the form: 550e8400-e29b-41d4-a716-446655440000
+<span class="lineNum">     277 </span>            :      *
+<span class="lineNum">     278 </span>            :      *  \return Returns a formatted string (groups with `-`) with a randon UUID.
+<a name="279"><span class="lineNum">     279 </span>            :      */</a>
+<span class="lineNum">     280 </span>            :     ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     281 </span><span class="lineCov">          2 :     static std::string generate_uuid(void) {</span>
+<span class="lineNum">     282 </span>            :         static auto dist = Random::integer_dist_t&lt;uint16_t&gt; {
+<span class="lineNum">     283 </span>            :             static_cast&lt;uint16_t&gt;(0x00),
+<span class="lineNum">     284 </span>            :             static_cast&lt;uint16_t&gt;(0xFF)
+<span class="lineNum">     285 </span><span class="lineCov">          2 :         };</span>
+<span class="lineNum">     286 </span>            : 
+<span class="lineNum">     287 </span>            :         #define FX      &quot;%02X&quot;
+<span class="lineNum">     288 </span>            :         #define SEP     &quot;-&quot;
+<span class="lineNum">     289 </span>            :         #define GET_HEX (dist(Random::engine()))
+<span class="lineNum">     290 </span>            : 
+<span class="lineNum">     291 </span>            :         return utils::string::format(
+<span class="lineNum">     292 </span>            :             FX FX FX FX SEP FX FX SEP FX FX SEP FX FX SEP FX FX FX FX FX FX,
+<span class="lineNum">     293 </span><span class="lineCov">          2 :             GET_HEX, GET_HEX, GET_HEX, GET_HEX,</span>
+<span class="lineNum">     294 </span><span class="lineCov">          2 :             GET_HEX, GET_HEX,</span>
+<span class="lineNum">     295 </span><span class="lineCov">          2 :             static_cast&lt;uint8_t&gt;((GET_HEX &amp; 0x0F) | 0x40), GET_HEX,</span>
+<span class="lineNum">     296 </span><span class="lineCov">          2 :             static_cast&lt;uint8_t&gt;((GET_HEX &amp; 0x3F) | 0x80), GET_HEX,</span>
+<span class="lineNum">     297 </span><span class="lineCov">          2 :             GET_HEX, GET_HEX, GET_HEX, GET_HEX, GET_HEX, GET_HEX</span>
+<span class="lineNum">     298 </span><span class="lineCov">          2 :         );</span>
+<span class="lineNum">     299 </span>            :     }
+<span class="lineNum">     300 </span>            : }
+<span class="lineNum">     301 </span>            : 
+<span class="lineNum">     302 </span>            : #endif // UTILS_RANDOM_HPP
 </pre>
       </td>
     </tr>
@@ -299,7 +370,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

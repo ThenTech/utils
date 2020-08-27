@@ -1,10 +1,11 @@
 <map id="utils_lib/utils_memory.hpp" name="utils_lib/utils_memory.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="487,5,660,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="544,5,717,32"/>
 <area shape="rect" id="node2" href="$utils__compiler_8hpp.html" title=" " alt="" coords="23,155,150,181"/>
 <area shape="rect" id="node4" href="$utils__traits_8hpp.html" title=" " alt="" coords="520,80,627,107"/>
 <area shape="rect" id="node7" title=" " alt="" coords="175,155,231,181"/>
 <area shape="rect" id="node17" title=" " alt="" coords="651,80,725,107"/>
 <area shape="rect" id="node18" title=" " alt="" coords="749,80,819,107"/>
+<area shape="rect" id="node19" title=" " alt="" coords="843,80,904,107"/>
 <area shape="rect" id="node3" title=" " alt="" coords="5,229,168,256"/>
 <area shape="rect" id="node5" title=" " alt="" coords="713,155,796,181"/>
 <area shape="rect" id="node6" title=" " alt="" coords="821,155,883,181"/>

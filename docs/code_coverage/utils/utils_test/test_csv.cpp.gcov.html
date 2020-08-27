@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_csv.cpp<span style="font-size: 80%;"> (source / <a href="test_csv.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_csv.cpp<span style="font-size: 80%;"> (source / <a href="test_csv.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -63,32 +63,32 @@
 <a name="1"><span class="lineNum">       1 </span>            : #include &quot;test_settings.hpp&quot;</a>
 <span class="lineNum">       2 </span>            : 
 <span class="lineNum">       3 </span>            : #ifdef ENABLE_TESTS
-<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/utils_catch.hpp&quot;
+<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/external/doctest.hpp&quot;
 <span class="lineNum">       5 </span>            : 
 <span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_csv.hpp&quot;
 <a name="7"><span class="lineNum">       7 </span>            : </a>
 <span class="lineNum">       8 </span>            : 
-<span class="lineNum">       9 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::csv&quot;, &quot;[utils][utils::csv]&quot;) {</span>
+<span class="lineNum">       9 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::csv&quot;) {</span>
 <span class="lineNum">      10 </span><span class="lineCov">          2 :     utils::csv::Reader file;</span>
 <span class="lineNum">      11 </span><span class="lineCov">          1 :     file.use_dialect(&quot;excel&quot;);</span>
 <span class="lineNum">      12 </span><span class="lineCov">          1 :     file.read(&quot;./utils_lib/external/csv/tests/inputs/test_11_excel.csv&quot;);</span>
 <span class="lineNum">      13 </span>            : 
 <span class="lineNum">      14 </span><span class="lineCov">          1 :     int data = 1;</span>
 <span class="lineNum">      15 </span>            : 
-<span class="lineNum">      16 </span><span class="lineCov">       5307 :     while (file.busy()) {</span>
-<span class="lineNum">      17 </span><span class="lineCov">       5306 :         if (file.ready()) {</span>
+<span class="lineNum">      16 </span><span class="lineCov">       7046 :     while (file.busy()) {</span>
+<span class="lineNum">      17 </span><span class="lineCov">       7045 :         if (file.ready()) {</span>
 <span class="lineNum">      18 </span><span class="lineCov">          4 :             auto row = file.next_row();</span>
 <span class="lineNum">      19 </span>            :             // Each row is a csv::unordered_flat_map (github.com/martinus/robin-hood-hashing)
-<span class="lineNum">      20 </span><span class="lineCov">          4 :             CHECK(row[&quot;a&quot;] == std::to_string(data++));</span>
-<span class="lineNum">      21 </span><span class="lineCov">          4 :             CHECK(row[&quot;b&quot;] == std::to_string(data++));</span>
-<span class="lineNum">      22 </span><span class="lineCov">          4 :             CHECK(row[&quot;c&quot;] == std::to_string(data++));</span>
+<span class="lineNum">      20 </span><span class="lineCov">          2 :             CHECK(row[&quot;a&quot;] == std::to_string(data++));</span>
+<span class="lineNum">      21 </span><span class="lineCov">          2 :             CHECK(row[&quot;b&quot;] == std::to_string(data++));</span>
+<span class="lineNum">      22 </span><span class="lineCov">          2 :             CHECK(row[&quot;c&quot;] == std::to_string(data++));</span>
 <span class="lineNum">      23 </span>            :         }
 <span class="lineNum">      24 </span>            :     }
 <span class="lineNum">      25 </span>            : 
 <span class="lineNum">      26 </span><span class="lineCov">          2 :     const auto cols = file.cols();</span>
-<span class="lineNum">      27 </span><span class="lineCov">          2 :     CHECK(std::tie(cols[0], cols[1], cols[2]) == std::tie(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;));</span>
+<span class="lineNum">      27 </span><span class="lineCov">          1 :     CHECK(std::tie(cols[0], cols[1], cols[2]) == std::tie(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;));</span>
 <span class="lineNum">      28 </span>            : 
-<span class="lineNum">      29 </span><span class="lineCov">          2 :     CHECK(file.shape() == std::pair&lt;size_t, size_t&gt;{2, 3});</span>
+<span class="lineNum">      29 </span><span class="lineCov">          1 :     CHECK(file.shape() == std::pair&lt;size_t, size_t&gt;{2, 3});</span>
 <span class="lineNum">      30 </span><span class="lineCov">          1 : }</span>
 <span class="lineNum">      31 </span>            : 
 <span class="lineNum">      32 </span>            : #endif
@@ -100,7 +100,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

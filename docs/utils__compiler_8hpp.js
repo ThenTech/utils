@@ -17,8 +17,10 @@ var utils__compiler_8hpp =
     [ "UTILS_CPP_VERSION_14", "utils__compiler_8hpp.html#a31a8159631c7495a6e1da3a372d18e2b", null ],
     [ "UTILS_CPP_VERSION_17", "utils__compiler_8hpp.html#a0f6823f707557e4ee2e457cab63bf65b", null ],
     [ "UTILS_CPP_VERSION_20", "utils__compiler_8hpp.html#a61c7184a0c9a3b3eec2502dcedd5bd6f", null ],
+    [ "UTILS_FUNCTION_NAME", "utils__compiler_8hpp.html#ac5eb78449997a623f12ac9ef2b1a85c4", null ],
     [ "UTILS_HAS_INCLUDE", "utils__compiler_8hpp.html#aa668e387fadb692290b998ecaf00e5bf", null ],
     [ "UTILS_OS_BITS", "utils__compiler_8hpp.html#a0e4763eb20c3cca080e162d318f03057", null ],
+    [ "UTILS_PACK_BITS", "utils__compiler_8hpp.html#a1729d21f4f6402e060a41a897ecda5e4", null ],
     [ "UTILS_VAR_NAME_VALUE", "utils__compiler_8hpp.html#ada9034e8963671ba9212e9383bb8876f", null ],
     [ "unused_variable", "utils__compiler_8hpp.html#a64e36e450a41e7c9441b1f6d16a82b9b", null ]
 ];

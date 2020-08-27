@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -96,9 +96,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#a89aaf6bebc5c241cf89f6e328a43bcc7">SetScreenTitle</a> (const std::string_view &amp;title, std::basic_ostream&lt; TChar, TCharTraits &gt; &amp;out=std::cout)</td></tr>
 <tr class="memdesc:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the title of the current terminal window by calling the corresponding virtual code.  <a href="#a89aaf6bebc5c241cf89f6e328a43bcc7">More...</a><br /></td></tr>
 <tr class="separator:a89aaf6bebc5c241cf89f6e328a43bcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ab568f8b09a060dfaaeae4ca1d597d1"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#a1ab568f8b09a060dfaaeae4ca1d597d1">PromptChar</a> (const char expected='\n')</td></tr>
+<tr class="memdesc:a1ab568f8b09a060dfaaeae4ca1d597d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pause the console and wait for user input.  <a href="#a1ab568f8b09a060dfaaeae4ca1d597d1">More...</a><br /></td></tr>
+<tr class="separator:a1ab568f8b09a060dfaaeae4ca1d597d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7bd88cae21a98302047df066a0975a8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#ac7bd88cae21a98302047df066a0975a8">EnableVirtualConsole</a> ()</td></tr>
 <tr class="memdesc:ac7bd88cae21a98302047df066a0975a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable virtual commands processing for the default output handle on Windows. Unix is supported by default.  <a href="#ac7bd88cae21a98302047df066a0975a8">More...</a><br /></td></tr>
 <tr class="separator:ac7bd88cae21a98302047df066a0975a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fb39ae51feca8cb66bcd9ca3f57c6e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::optional&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#a9fb39ae51feca8cb66bcd9ca3f57c6e2">GetEnvironmentVar</a> (const std::string_view name)</td></tr>
+<tr class="memdesc:a9fb39ae51feca8cb66bcd9ca3f57c6e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of the variable <code>name</code> in the current calling environment.  <a href="#a9fb39ae51feca8cb66bcd9ca3f57c6e2">More...</a><br /></td></tr>
+<tr class="separator:a9fb39ae51feca8cb66bcd9ca3f57c6e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9b98450dddb150f42a75c0255065834"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::optional&lt; std::map&lt; std::string, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1os.html#af9b98450dddb150f42a75c0255065834">GetEnvironmentVars</a> ()</td></tr>
+<tr class="memdesc:af9b98450dddb150f42a75c0255065834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a std::map with every variable in the current calling environment with its key and value (or "" if no value). Works on Windows and Unix systems. (Unix uses the external <code>char **environ</code> symbol).  <a href="#af9b98450dddb150f42a75c0255065834">More...</a><br /></td></tr>
+<tr class="separator:af9b98450dddb150f42a75c0255065834"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a20293bf86960e58a102fb245f9decc23"></a>
@@ -115,7 +124,7 @@ Functions</h2></td></tr>
 
 <p>Public console command variable type. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00084">84</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00089">89</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -166,7 +175,7 @@ template&lt;typename TChar , typename TCharTraits &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00126">126</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00131">131</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -195,7 +204,110 @@ template&lt;typename TChar , typename TCharTraits &gt; </div>
 
 <p>Enable virtual commands processing for the default output handle on Windows. Unix is supported by default. </p>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00203">203</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00227">227</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9fb39ae51feca8cb66bcd9ca3f57c6e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fb39ae51feca8cb66bcd9ca3f57c6e2">&#9670;&nbsp;</a></span>GetEnvironmentVar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::optional&lt;std::string&gt; utils::os::GetEnvironmentVar </td>
+          <td>(</td>
+          <td class="paramtype">const std::string_view&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the value of the variable <code>name</code> in the current calling environment. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the variable to get. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Optionally returns the value as sts::string if it existed. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00270">270</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af9b98450dddb150f42a75c0255065834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9b98450dddb150f42a75c0255065834">&#9670;&nbsp;</a></span>GetEnvironmentVars()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> std::optional&lt;std::map&lt;std::string, std::string&gt; &gt; utils::os::GetEnvironmentVars </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a std::map with every variable in the current calling environment with its key and value (or "" if no value). Works on Windows and Unix systems. (Unix uses the external <code>char **environ</code> symbol). </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns the created std::map. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00321">321</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1ab568f8b09a060dfaaeae4ca1d597d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ab568f8b09a060dfaaeae4ca1d597d1">&#9670;&nbsp;</a></span>PromptChar()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::os::PromptChar </td>
+          <td>(</td>
+          <td class="paramtype">const char&#160;</td>
+          <td class="paramname"><em>expected</em> = <code>'\n'</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pause the console and wait for user input. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>The stream to write the virtual codes to. (default: std::cout) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00210">210</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>
@@ -244,7 +356,7 @@ template&lt;typename TChar , typename TCharTraits &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00188">188</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__os_8hpp_source.html#l00193">193</a> of file <a class="el" href="utils__os_8hpp_source.html">utils_os.hpp</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,7 @@
 var hierarchy =
 [
+    [ "utils::crypto::AES", "classutils_1_1crypto_1_1_a_e_s.html", null ],
+    [ "utils::algorithm::any_tie< Types >", "structutils_1_1algorithm_1_1any__tie.html", null ],
     [ "utils::print::array_wrapper< T, N >", "structutils_1_1print_1_1array__wrapper.html", null ],
     [ "utils::algo::AVLTree< T >", "classutils_1_1algo_1_1_a_v_l_tree.html", null ],
     [ "utils::algo::AVLTreeNodeBase< T >", "classutils_1_1algo_1_1_a_v_l_tree_node_base.html", null ],
@@ -45,7 +47,13 @@ var hierarchy =
       [ "utils::traits::is_iterable< T, U >", "structutils_1_1traits_1_1is__iterable.html", null ],
       [ "utils::traits::is_maplike< T, U >", "structutils_1_1traits_1_1is__maplike.html", null ]
     ] ],
+    [ "utils::crypto::FeistelCipher< rounds, Hasher >", "classutils_1_1crypto_1_1_feistel_cipher.html", null ],
     [ "utils::algo::Huffman< T >", "classutils_1_1algo_1_1_huffman.html", null ],
+    [ "utils::crypto::IPackageStrategy", "structutils_1_1crypto_1_1_i_package_strategy.html", [
+      [ "utils::crypto::EncipherAES< KeySize, KeyBytes >", "structutils_1_1crypto_1_1_encipher_a_e_s.html", null ],
+      [ "utils::crypto::HMCompress", "structutils_1_1crypto_1_1_h_m_compress.html", null ],
+      [ "utils::crypto::PackageJSON", "structutils_1_1crypto_1_1_package_j_s_o_n.html", null ]
+    ] ],
     [ "utils::traits::is_byte< T >", "structutils_1_1traits_1_1is__byte.html", null ],
     [ "utils::traits::is_iterator< T >", "structutils_1_1traits_1_1is__iterator.html", null ],
     [ "utils::traits::is_variant_member< T, VARIANT_T >", "structutils_1_1traits_1_1is__variant__member.html", null ],
@@ -53,13 +61,19 @@ var hierarchy =
       [ "utils::print::pretty_ostream_iterator< T, TChar, TCharTraits >", "classutils_1_1print_1_1pretty__ostream__iterator.html", null ]
     ] ],
     [ "utils::Logger", "classutils_1_1_logger.html", null ],
+    [ "utils::memory::Metrics_t", "structutils_1_1memory_1_1_metrics__t.html", null ],
     [ "utils::algo::Node< T >", "classutils_1_1algo_1_1_node.html", null ],
+    [ "utils::control::PIDController", "classutils_1_1control_1_1_p_i_d_controller.html", null ],
     [ "utils::print::print_tuple_helper< Tuple, N, TChar, TCharTraits, TDelimiters >", "structutils_1_1print_1_1print__tuple__helper.html", null ],
+    [ "utils::Profiler", "classutils_1_1_profiler.html", null ],
     [ "utils::utils::utils::print::Progressbar< FILL_CHAR, EMPTY_CHAR >", "classutils_1_1utils_1_1utils_1_1print_1_1_progressbar.html", null ],
     [ "utils::xostring::random_char< N >", "structutils_1_1xostring_1_1random__char.html", null ],
     [ "utils::xostring::random_generator< N >", "structutils_1_1xostring_1_1random__generator.html", null ],
     [ "utils::xostring::random_generator< 0 >", "structutils_1_1xostring_1_1random__generator_3_010_01_4.html", null ],
     [ "utils::xostring::random_int< N, M >", "structutils_1_1xostring_1_1random__int.html", null ],
+    [ "utils::traits::remove_cvref< T >", "structutils_1_1traits_1_1remove__cvref.html", null ],
+    [ "utils::misc::Scoped< F, typename >", "classutils_1_1misc_1_1_scoped.html", null ],
+    [ "utils::crypto::SimpleHash", "structutils_1_1crypto_1_1_simple_hash.html", null ],
     [ "utils::xostring::string< N, K >", "structutils_1_1xostring_1_1string.html", null ],
     [ "utils::threading::ThreadPool", "classutils_1_1threading_1_1_thread_pool.html", null ],
     [ "utils::time::Timer::time_ms", "structutils_1_1time_1_1_timer_1_1time__ms.html", null ],
@@ -78,7 +92,7 @@ var hierarchy =
       [ "utils::traits::is_container< std::unordered_set< T, THash, TPred, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1unordered__set_3_01_t_00_01_t_hash_00_01_t_pred_00_01_t_allocator_01_4_01_4.html", null ],
       [ "utils::traits::is_container< std::vector< T, TAllocator > >", "structutils_1_1traits_1_1is__container_3_01std_1_1vector_3_01_t_00_01_t_allocator_01_4_01_4.html", null ],
       [ "utils::traits::is_container< T[N]>", "structutils_1_1traits_1_1is__container_3_01_t[_n]_4.html", null ],
-      [ "utils::traits::is_container< utils::csv::detail::unordered_map< b, n, TKey, TValue, THash, KEqual > >", "structutils_1_1traits_1_1is__container_3_01utils_1_1csv_1_1detail_1_1unordered__map_3_01b_00_01n31c6f6ef03c7e2fd4f922c60b62be7d6.html", null ],
+      [ "utils::traits::is_container< utils::csv::detail::Table< b, n, TKey, TValue, THash, KEqual > >", "structutils_1_1traits_1_1is__container_3_01utils_1_1csv_1_1detail_1_1_table_3_01b_00_01n_00_01_ta5cefe477a427adf6b040e84ab06889c.html", null ],
       [ "utils::traits::is_iterable< T, std::void_t< utils::traits::is_iterator< decltype(std::begin(std::declval< T & >()))>, utils::traits::is_iterator< decltype(std::end(std::declval< T & >()))> > >", "structutils_1_1traits_1_1is__iterable_3_01_t_00_01std_1_1void__t_3_01utils_1_1traits_1_1is__iter0cdbe65c2b9abb099ee22b48cd2976af.html", null ],
       [ "utils::traits::is_maplike< T, std::void_t< typename T::key_type, typename T::mapped_type, decltype(std::declval< T & >()[std::declval< const typename T::key_type & >()])> >", "structutils_1_1traits_1_1is__maplike_3_01_t_00_01std_1_1void__t_3_01typename_01_t_1_1key__type_08cf2935ef276afed4a89e0bc9ef4f8b6.html", null ],
       [ "utils::utils::traits::is_container< utils::print::array_wrapper< T, N > >", "structutils_1_1utils_1_1traits_1_1is__container_3_01utils_1_1print_1_1array__wrapper_3_01_t_00_01_n_01_4_01_4.html", null ]

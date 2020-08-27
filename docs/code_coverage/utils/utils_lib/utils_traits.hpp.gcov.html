@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_traits.hpp<span style="font-size: 80%;"> (source / <a href="utils_traits.hpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_lib</a> - utils_traits.hpp<span style="font-size: 80%;"> (source / <a href="utils_traits.hpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -137,131 +137,156 @@
 <span class="lineNum">      75 </span>            :     inline constexpr bool is_iterable_v = is_iterable&lt;T&gt;::value;
 <span class="lineNum">      76 </span>            : 
 <span class="lineNum">      77 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">      78 </span>            :     /// True if type T is a member of the variant VARIANT_T
+<span class="lineNum">      78 </span>            :     /// True if F can be invoked with an argument type T, T&amp; or T&amp;&amp;
 <span class="lineNum">      79 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">      80 </span>            :     template&lt;typename T, typename VARIANT_T&gt;
-<span class="lineNum">      81 </span>            :     struct is_variant_member;
-<span class="lineNum">      82 </span>            : 
-<span class="lineNum">      83 </span>            :     template&lt;typename T, typename... ALL_T&gt;
-<span class="lineNum">      84 </span>            :     struct is_variant_member&lt;T, std::variant&lt;ALL_T...&gt;&gt;
-<span class="lineNum">      85 </span>            :         : public std::disjunction&lt;std::is_same&lt;T, ALL_T&gt;...&gt; {};
-<span class="lineNum">      86 </span>            : 
-<span class="lineNum">      87 </span>            :     template&lt;typename T, typename... ALL_T&gt;
-<span class="lineNum">      88 </span>            :     inline constexpr bool is_variant_member_v = is_variant_member&lt;T, ALL_T...&gt;::value;
-<span class="lineNum">      89 </span>            : 
-<span class="lineNum">      90 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">      91 </span>            :     /// True if type T is a std:: container type
-<span class="lineNum">      92 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">      93 </span>            :     // Basic is_container template; specialize to derive from std::true_type for all desired container types
-<span class="lineNum">      94 </span>            :     template&lt;typename T&gt;
-<span class="lineNum">      95 </span>            :     struct is_container : public std::false_type { };
-<span class="lineNum">      96 </span>            : 
-<span class="lineNum">      97 </span>            :     // Mark vector as a container
-<span class="lineNum">      98 </span>            :     template&lt;typename T, typename TAllocator&gt;
-<span class="lineNum">      99 </span>            :     struct is_container&lt;std::vector&lt;T, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     100 </span>            : 
-<span class="lineNum">     101 </span>            :     // Mark list as a container
-<span class="lineNum">     102 </span>            :     template&lt;typename T, typename TAllocator&gt;
-<span class="lineNum">     103 </span>            :     struct is_container&lt;std::list&lt;T, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     104 </span>            : 
-<span class="lineNum">     105 </span>            :     // Mark initializer_list as a container
-<span class="lineNum">     106 </span>            :     template&lt;typename T&gt;
-<span class="lineNum">     107 </span>            :     struct is_container&lt;std::initializer_list&lt;T&gt;&gt; : public std::true_type { };
-<span class="lineNum">     108 </span>            : 
-<span class="lineNum">     109 </span>            :     // Mark set as a container
-<span class="lineNum">     110 </span>            :     template&lt;typename T, typename TCompare, typename TAllocator&gt;
-<span class="lineNum">     111 </span>            :     struct is_container&lt;std::set&lt;T, TCompare, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     112 </span>            : 
-<span class="lineNum">     113 </span>            :     // Mark unordered_set as a container
-<span class="lineNum">     114 </span>            :     template&lt;typename T, typename THash, typename TPred, typename TAllocator&gt;
-<span class="lineNum">     115 </span>            :     struct is_container&lt;std::unordered_set&lt;T, THash, TPred, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     116 </span>            : 
-<span class="lineNum">     117 </span>            :     // Mark multiset as a container
-<span class="lineNum">     118 </span>            :     template&lt;typename T, typename TCompare, typename TAllocator&gt;
-<span class="lineNum">     119 </span>            :     struct is_container&lt;std::multiset&lt;T, TCompare, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     120 </span>            : 
-<span class="lineNum">     121 </span>            :     // Mark unordered_multiset as a container
-<span class="lineNum">     122 </span>            :     template&lt;typename T, typename THash, typename TPred, typename TAllocator&gt;
-<span class="lineNum">     123 </span>            :     struct is_container&lt;std::unordered_multiset&lt;T, THash, TPred, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     124 </span>            : 
-<span class="lineNum">     125 </span>            :     // Mark map as a container
-<span class="lineNum">     126 </span>            :     template&lt;typename TKey, typename TValue, typename TCompare, typename TAllocator&gt;
-<span class="lineNum">     127 </span>            :     struct is_container&lt;std::map&lt;TKey, TValue, TCompare, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     128 </span>            : 
-<span class="lineNum">     129 </span>            :     // Mark unordered_map as a container
-<span class="lineNum">     130 </span>            :     template&lt;typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator&gt;
-<span class="lineNum">     131 </span>            :     struct is_container&lt;std::unordered_map&lt;TKey, TValue, THash, TPred, TAllocator&gt;&gt; : public std::true_type { };
-<span class="lineNum">     132 </span>            : 
-<span class="lineNum">     133 </span>            :     // Mark std::array as a container
-<span class="lineNum">     134 </span>            :     template&lt;typename T, size_t N&gt;
-<span class="lineNum">     135 </span>            :     struct is_container&lt;std::array&lt;T, N&gt;&gt; : public std::true_type { };
-<span class="lineNum">     136 </span>            : 
-<span class="lineNum">     137 </span>            :     // Mark T[N] as a container
-<span class="lineNum">     138 </span>            :     template&lt;typename T, size_t N&gt;
-<span class="lineNum">     139 </span>            :     struct is_container&lt;T[N]&gt; : public std::true_type { };
-<span class="lineNum">     140 </span>            : 
-<span class="lineNum">     141 </span>            :     // Basic is maplike template
-<span class="lineNum">     142 </span>            :     template&lt;typename T, typename U = void&gt;
-<span class="lineNum">     143 </span>            :     struct is_maplike : public std::false_type { };
-<span class="lineNum">     144 </span>            : 
-<span class="lineNum">     145 </span>            :     // Mark type that has key_type, map_type and operator[key_type] as map
-<span class="lineNum">     146 </span>            :     template&lt;typename T&gt;
-<span class="lineNum">     147 </span>            :     struct is_maplike&lt;T, std::void_t&lt;typename T::key_type,
-<span class="lineNum">     148 </span>            :                                      typename T::mapped_type,
-<span class="lineNum">     149 </span>            :                                      decltype(std::declval&lt;T&amp;&gt;()[std::declval&lt;const typename T::key_type&amp;&gt;()])&gt;&gt;
-<span class="lineNum">     150 </span>            :       : public std::true_type { };
-<span class="lineNum">     151 </span>            : 
-<span class="lineNum">     152 </span>            :     template&lt;typename T&gt;
-<span class="lineNum">     153 </span>            :     inline constexpr bool is_maplike_v = is_maplike&lt;T&gt;::value;
-<span class="lineNum">     154 </span>            : 
-<span class="lineNum">     155 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">     156 </span>            :     /// Check if function can be called on Type
-<span class="lineNum">     157 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">     158 </span>            :     namespace internal {
-<span class="lineNum">     159 </span>            :         template&lt;template&lt;class...&gt; class, class, class...&gt;
-<span class="lineNum">     160 </span>            :         struct can_apply : std::false_type{};
-<span class="lineNum">     161 </span>            : 
-<span class="lineNum">     162 </span>            :         template&lt;template&lt;class...&gt;class Z, class...Ts&gt;
-<span class="lineNum">     163 </span>            :         struct can_apply&lt;Z, std::void_t&lt;Z&lt;Ts...&gt;&gt;, Ts...&gt; : std::true_type{};
-<span class="lineNum">     164 </span>            :     }
-<span class="lineNum">     165 </span>            : 
-<span class="lineNum">     166 </span>            :     template&lt;template&lt;class...&gt;class Z, class...Ts&gt;
-<span class="lineNum">     167 </span>            :     using can_apply = internal::can_apply&lt;Z, void, Ts...&gt;;
-<span class="lineNum">     168 </span>            : 
-<span class="lineNum">     169 </span>            :     /**
-<span class="lineNum">     170 </span>            :      *  Creates a `has_&lt;F&gt;_v` function that returns a boolean ::value
-<span class="lineNum">     171 </span>            :      *  to indicate if the given object has the function F.
-<span class="lineNum">     172 </span>            :      *
-<span class="lineNum">     173 </span>            :      *  e.g. CREATE_HAS_FUNCTION(find) creates:
-<span class="lineNum">     174 </span>            :      *      dot_find_r&lt;T, U&gt; that calls T.F()
-<span class="lineNum">     175 </span>            :      *      has_find that checks if dot_find can be applied on T
-<span class="lineNum">     176 </span>            :      *      has_find_t that returns has_find::value
-<span class="lineNum">     177 </span>            :      */
-<span class="lineNum">     178 </span>            :     #define UTILS_TRAITS_CREATE_HAS_FUNCTION(F) \
-<span class="lineNum">     179 </span>            :         template&lt;class T, class U&gt; \
-<span class="lineNum">     180 </span>            :         using dot_ ## F ## _r = decltype(std::declval&lt;T&gt;().F(U())); \
-<span class="lineNum">     181 </span>            :         template&lt;class T, class U&gt; \
-<span class="lineNum">     182 </span>            :         using has_ ## F = can_apply&lt;dot_ ## F ## _r, T, U&gt;; \
-<span class="lineNum">     183 </span>            :         template&lt;typename T, class U&gt; \
-<span class="lineNum">     184 </span>            :         inline constexpr bool has_ ## F ## _v = has_ ## F&lt;T, U&gt;::value;
-<span class="lineNum">     185 </span>            : 
-<span class="lineNum">     186 </span>            :     UTILS_TRAITS_CREATE_HAS_FUNCTION(find)
-<span class="lineNum">     187 </span>            : 
-<span class="lineNum">     188 </span>            :     ////////////////////////////////////////////////////////////////////////////
-<span class="lineNum">     189 </span>            :     /**
-<span class="lineNum">     190 </span>            :      *  \brief   Cast enum type to underlining data type.
-<span class="lineNum">     191 </span>            :      *  \param   e
-<span class="lineNum">     192 </span>            :      *      The enum value to cast.
-<a name="193"><span class="lineNum">     193 </span>            :      */</a>
-<span class="lineNum">     194 </span>            :     template &lt;typename E&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
-<span class="lineNum">     195 </span><span class="lineCov">         60 :     static inline constexpr auto to_underlying(const E e) noexcept {</span>
-<span class="lineNum">     196 </span><span class="lineCov">         60 :         return static_cast&lt;std::underlying_type_t&lt;E&gt;&gt;(e);</span>
-<span class="lineNum">     197 </span>            :     }
-<span class="lineNum">     198 </span>            : }
-<span class="lineNum">     199 </span>            : 
-<span class="lineNum">     200 </span>            : 
-<span class="lineNum">     201 </span>            : 
-<span class="lineNum">     202 </span>            : #endif // UTILS_TRAITS_HPP
+<span class="lineNum">      80 </span>            : 
+<span class="lineNum">      81 </span>            :     template&lt;typename F, typename... Args&gt;
+<span class="lineNum">      82 </span>            :     inline constexpr bool is_invocable_v = std::is_invocable_v&lt;F, Args...&gt;
+<span class="lineNum">      83 </span>            :                                         || std::is_invocable_v&lt;F, Args&amp;...&gt;
+<span class="lineNum">      84 </span>            :                                         || std::is_invocable_v&lt;F, Args&amp;&amp;...&gt;;
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      87 </span>            :     /// True if type T is a member of the variant VARIANT_T
+<span class="lineNum">      88 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">      89 </span>            :     template&lt;typename T, typename VARIANT_T&gt;
+<span class="lineNum">      90 </span>            :     struct is_variant_member;
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            :     template&lt;typename T, typename... ALL_T&gt;
+<span class="lineNum">      93 </span>            :     struct is_variant_member&lt;T, std::variant&lt;ALL_T...&gt;&gt;
+<span class="lineNum">      94 </span>            :         : public std::disjunction&lt;std::is_same&lt;T, ALL_T&gt;...&gt; {};
+<span class="lineNum">      95 </span>            : 
+<span class="lineNum">      96 </span>            :     template&lt;typename T, typename... ALL_T&gt;
+<span class="lineNum">      97 </span>            :     inline constexpr bool is_variant_member_v = is_variant_member&lt;T, ALL_T...&gt;::value;
+<span class="lineNum">      98 </span>            : 
+<span class="lineNum">      99 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     100 </span>            :     /// True if type T is a std:: container type
+<span class="lineNum">     101 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     102 </span>            :     // Basic is_container template; specialize to derive from std::true_type for all desired container types
+<span class="lineNum">     103 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     104 </span>            :     struct is_container : public std::false_type { };
+<span class="lineNum">     105 </span>            : 
+<span class="lineNum">     106 </span>            :     // Mark vector as a container
+<span class="lineNum">     107 </span>            :     template&lt;typename T, typename TAllocator&gt;
+<span class="lineNum">     108 </span>            :     struct is_container&lt;std::vector&lt;T, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     109 </span>            : 
+<span class="lineNum">     110 </span>            :     // Mark list as a container
+<span class="lineNum">     111 </span>            :     template&lt;typename T, typename TAllocator&gt;
+<span class="lineNum">     112 </span>            :     struct is_container&lt;std::list&lt;T, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span>            :     // Mark initializer_list as a container
+<span class="lineNum">     115 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     116 </span>            :     struct is_container&lt;std::initializer_list&lt;T&gt;&gt; : public std::true_type { };
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span>            :     // Mark set as a container
+<span class="lineNum">     119 </span>            :     template&lt;typename T, typename TCompare, typename TAllocator&gt;
+<span class="lineNum">     120 </span>            :     struct is_container&lt;std::set&lt;T, TCompare, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     121 </span>            : 
+<span class="lineNum">     122 </span>            :     // Mark unordered_set as a container
+<span class="lineNum">     123 </span>            :     template&lt;typename T, typename THash, typename TPred, typename TAllocator&gt;
+<span class="lineNum">     124 </span>            :     struct is_container&lt;std::unordered_set&lt;T, THash, TPred, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :     // Mark multiset as a container
+<span class="lineNum">     127 </span>            :     template&lt;typename T, typename TCompare, typename TAllocator&gt;
+<span class="lineNum">     128 </span>            :     struct is_container&lt;std::multiset&lt;T, TCompare, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     129 </span>            : 
+<span class="lineNum">     130 </span>            :     // Mark unordered_multiset as a container
+<span class="lineNum">     131 </span>            :     template&lt;typename T, typename THash, typename TPred, typename TAllocator&gt;
+<span class="lineNum">     132 </span>            :     struct is_container&lt;std::unordered_multiset&lt;T, THash, TPred, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span>            :     // Mark map as a container
+<span class="lineNum">     135 </span>            :     template&lt;typename TKey, typename TValue, typename TCompare, typename TAllocator&gt;
+<span class="lineNum">     136 </span>            :     struct is_container&lt;std::map&lt;TKey, TValue, TCompare, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     137 </span>            : 
+<span class="lineNum">     138 </span>            :     // Mark unordered_map as a container
+<span class="lineNum">     139 </span>            :     template&lt;typename TKey, typename TValue, typename THash, typename TPred, typename TAllocator&gt;
+<span class="lineNum">     140 </span>            :     struct is_container&lt;std::unordered_map&lt;TKey, TValue, THash, TPred, TAllocator&gt;&gt; : public std::true_type { };
+<span class="lineNum">     141 </span>            : 
+<span class="lineNum">     142 </span>            :     // Mark std::array as a container
+<span class="lineNum">     143 </span>            :     template&lt;typename T, size_t N&gt;
+<span class="lineNum">     144 </span>            :     struct is_container&lt;std::array&lt;T, N&gt;&gt; : public std::true_type { };
+<span class="lineNum">     145 </span>            : 
+<span class="lineNum">     146 </span>            :     // Mark T[N] as a container
+<span class="lineNum">     147 </span>            :     template&lt;typename T, size_t N&gt;
+<span class="lineNum">     148 </span>            :     struct is_container&lt;T[N]&gt; : public std::true_type { };
+<span class="lineNum">     149 </span>            : 
+<span class="lineNum">     150 </span>            :     // Basic is maplike template
+<span class="lineNum">     151 </span>            :     template&lt;typename T, typename U = void&gt;
+<span class="lineNum">     152 </span>            :     struct is_maplike : public std::false_type { };
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span>            :     // Mark type that has key_type, map_type and operator[key_type] as map
+<span class="lineNum">     155 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     156 </span>            :     struct is_maplike&lt;T, std::void_t&lt;typename T::key_type,
+<span class="lineNum">     157 </span>            :                                      typename T::mapped_type,
+<span class="lineNum">     158 </span>            :                                      decltype(std::declval&lt;T&amp;&gt;()[std::declval&lt;const typename T::key_type&amp;&gt;()])&gt;&gt;
+<span class="lineNum">     159 </span>            :       : public std::true_type { };
+<span class="lineNum">     160 </span>            : 
+<span class="lineNum">     161 </span>            :     template&lt;typename T&gt;
+<span class="lineNum">     162 </span>            :     inline constexpr bool is_maplike_v = is_maplike&lt;T&gt;::value;
+<span class="lineNum">     163 </span>            : 
+<span class="lineNum">     164 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     165 </span>            :     /// Check if function can be called on Type
+<span class="lineNum">     166 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     167 </span>            :     namespace internal {
+<span class="lineNum">     168 </span>            :         template&lt;template&lt;class...&gt; class, class, class...&gt;
+<span class="lineNum">     169 </span>            :         struct can_apply : std::false_type{};
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            :         template&lt;template&lt;class...&gt;class Z, class...Ts&gt;
+<span class="lineNum">     172 </span>            :         struct can_apply&lt;Z, std::void_t&lt;Z&lt;Ts...&gt;&gt;, Ts...&gt; : std::true_type{};
+<span class="lineNum">     173 </span>            :     }
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            :     template&lt;template&lt;class...&gt;class Z, class...Ts&gt;
+<span class="lineNum">     176 </span>            :     using can_apply = internal::can_apply&lt;Z, void, Ts...&gt;;
+<span class="lineNum">     177 </span>            : 
+<span class="lineNum">     178 </span>            :     /**
+<span class="lineNum">     179 </span>            :      *  Creates a `has_&lt;F&gt;_v` function that returns a boolean ::value
+<span class="lineNum">     180 </span>            :      *  to indicate if the given object has the function F.
+<span class="lineNum">     181 </span>            :      *
+<span class="lineNum">     182 </span>            :      *  e.g. CREATE_HAS_FUNCTION(find) creates:
+<span class="lineNum">     183 </span>            :      *      dot_find_r&lt;T, U&gt; that calls T.F()
+<span class="lineNum">     184 </span>            :      *      has_find that checks if dot_find can be applied on T
+<span class="lineNum">     185 </span>            :      *      has_find_v that returns has_find::value
+<span class="lineNum">     186 </span>            :      */
+<span class="lineNum">     187 </span>            :     #define UTILS_TRAITS_CREATE_HAS_FUNCTION(F) \
+<span class="lineNum">     188 </span>            :         template&lt;class T, class U&gt; \
+<span class="lineNum">     189 </span>            :         using dot_ ## F ## _r = decltype(std::declval&lt;T&gt;().F(U())); \
+<span class="lineNum">     190 </span>            :         template&lt;class T, class U&gt; \
+<span class="lineNum">     191 </span>            :         using has_ ## F = can_apply&lt;dot_ ## F ## _r, T, U&gt;; \
+<span class="lineNum">     192 </span>            :         template&lt;typename T, class U&gt; \
+<span class="lineNum">     193 </span>            :         inline constexpr bool has_ ## F ## _v = has_ ## F&lt;T, U&gt;::value;
+<span class="lineNum">     194 </span>            : 
+<span class="lineNum">     195 </span>            :     UTILS_TRAITS_CREATE_HAS_FUNCTION(find)
+<span class="lineNum">     196 </span>            :     UTILS_TRAITS_CREATE_HAS_FUNCTION(contains)
+<span class="lineNum">     197 </span>            : 
+<span class="lineNum">     198 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     199 </span>            :     /// If the type T is a reference type, provides the member typedef type
+<span class="lineNum">     200 </span>            :     /// which is the type referred to by T with its topmost cv-qualifiers removed.
+<span class="lineNum">     201 </span>            :     /// Otherwise type is T with its topmost cv-qualifiers removed.
+<span class="lineNum">     202 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     203 </span>            :     #if !UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+<span class="lineNum">     204 </span>            :         template&lt; class T &gt;
+<span class="lineNum">     205 </span>            :         struct remove_cvref {
+<span class="lineNum">     206 </span>            :             typedef std::remove_cv_t&lt;std::remove_reference_t&lt;T&gt;&gt; type;
+<span class="lineNum">     207 </span>            :         };
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span>            :         template&lt; class T &gt;
+<span class="lineNum">     210 </span>            :         using remove_cvref_t = typename remove_cvref&lt;T&gt;::type;
+<span class="lineNum">     211 </span>            :     #endif
+<span class="lineNum">     212 </span>            : 
+<span class="lineNum">     213 </span>            :     ////////////////////////////////////////////////////////////////////////////
+<span class="lineNum">     214 </span>            :     /**
+<span class="lineNum">     215 </span>            :      *  \brief   Cast enum type to underlining data type.
+<span class="lineNum">     216 </span>            :      *  \param   e
+<span class="lineNum">     217 </span>            :      *      The enum value to cast.
+<a name="218"><span class="lineNum">     218 </span>            :      */</a>
+<span class="lineNum">     219 </span>            :     template &lt;typename E&gt; ATTR_MAYBE_UNUSED ATTR_NODISCARD
+<span class="lineNum">     220 </span><span class="lineCov">        354 :     static inline constexpr auto to_underlying(const E e) noexcept {</span>
+<span class="lineNum">     221 </span><span class="lineCov">        354 :         return static_cast&lt;std::underlying_type_t&lt;E&gt;&gt;(e);</span>
+<span class="lineNum">     222 </span>            :     }
+<span class="lineNum">     223 </span>            : }
+<span class="lineNum">     224 </span>            : 
+<span class="lineNum">     225 </span>            : 
+<span class="lineNum">     226 </span>            : 
+<span class="lineNum">     227 </span>            : #endif // UTILS_TRAITS_HPP
 </pre>
       </td>
     </tr>
@@ -270,7 +295,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

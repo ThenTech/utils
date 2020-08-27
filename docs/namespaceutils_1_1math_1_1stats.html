@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -83,7 +83,7 @@ Functions</h2></td></tr>
 <tr class="separator:a5e8f125bef070b24a72475e781c1f07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1ba58101390c49d6032a93450d5808d"><td class="memTemplParams" colspan="2">template&lt;typename Iterator , typename DiffType  = typename std::iterator_traits&lt;Iterator&gt;::difference_type, typename  = typename std::enable_if_t&lt;utils::traits::is_iterator_v&lt;Iterator&gt;&gt;&gt; </td></tr>
 <tr class="memitem:ac1ba58101390c49d6032a93450d5808d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math_1_1stats.html#ac1ba58101390c49d6032a93450d5808d">variance</a> (Iterator first, Iterator last)</td></tr>
-<tr class="memdesc:ac1ba58101390c49d6032a93450d5808d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate sample variance between <code>first</code> and <code>last</code>. (<code>std::distance(first, last)</code> elements)  <a href="#ac1ba58101390c49d6032a93450d5808d">More...</a><br /></td></tr>
+<tr class="memdesc:ac1ba58101390c49d6032a93450d5808d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate sample variance between <code>first</code> and <code>last</code>. (<code>std::distance(first, last)</code> elements) (Without Bessel's correction)  <a href="#ac1ba58101390c49d6032a93450d5808d">More...</a><br /></td></tr>
 <tr class="separator:ac1ba58101390c49d6032a93450d5808d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a303757b44faa1f4a8e07eb7c05b025c3"><td class="memTemplParams" colspan="2">template&lt;typename Container &gt; </td></tr>
 <tr class="memitem:a303757b44faa1f4a8e07eb7c05b025c3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math_1_1stats.html#a303757b44faa1f4a8e07eb7c05b025c3">variance</a> (const Container &amp;cont)</td></tr>
@@ -97,6 +97,14 @@ Functions</h2></td></tr>
 <tr class="memitem:af0d58ebb6b9db9b4a303e6bfc85a3fab"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> static <a class="el" href="utils__compiler_8hpp.html#a9bc2a900aef6e1a9551718fd994a809c">ATTR_NODISCARD</a> double&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math_1_1stats.html#af0d58ebb6b9db9b4a303e6bfc85a3fab">stddev</a> (const Container &amp;cont)</td></tr>
 <tr class="memdesc:af0d58ebb6b9db9b4a303e6bfc85a3fab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate sample stddev of <code>cont</code>.  <a href="#af0d58ebb6b9db9b4a303e6bfc85a3fab">More...</a><br /></td></tr>
 <tr class="separator:af0d58ebb6b9db9b4a303e6bfc85a3fab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92922da02d782ca64fb60d0ae7afa465"><td class="memTemplParams" colspan="2">template&lt;typename Iterator , typename DiffType  = typename std::iterator_traits&lt;Iterator&gt;::difference_type, typename ValueType  = typename std::iterator_traits&lt;Iterator&gt;::value_type, typename  = typename std::enable_if_t&lt;                    utils::traits::is_iterator_v&lt;Iterator&gt; &amp;&amp; std::is_floating_point_v&lt;ValueType&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a92922da02d782ca64fb60d0ae7afa465"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math_1_1stats.html#a92922da02d782ca64fb60d0ae7afa465">normalise</a> (Iterator first, Iterator last)</td></tr>
+<tr class="memdesc:a92922da02d782ca64fb60d0ae7afa465"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalise the data between <code>first</code> and <code>last</code> in-place. Iterator::value_type must be a floating point value.  <a href="#a92922da02d782ca64fb60d0ae7afa465">More...</a><br /></td></tr>
+<tr class="separator:a92922da02d782ca64fb60d0ae7afa465"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4628a3ec8966d6d79f23814808e06277"><td class="memTemplParams" colspan="2">template&lt;typename Container &gt; </td></tr>
+<tr class="memitem:a4628a3ec8966d6d79f23814808e06277"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1math_1_1stats.html#a4628a3ec8966d6d79f23814808e06277">normalise</a> (Container &amp;cont)</td></tr>
+<tr class="memdesc:a4628a3ec8966d6d79f23814808e06277"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalise the contents of <code>cont</code> in-place.  <a href="#a4628a3ec8966d6d79f23814808e06277">More...</a><br /></td></tr>
+<tr class="separator:a4628a3ec8966d6d79f23814808e06277"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a1b721cda5b92e12d476c3e72e4750ce0"></a>
@@ -145,7 +153,7 @@ template&lt;typename Iterator , typename DiffType  = typename std::iterator_trai
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the mean of the items [first, ..., last]. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00295">295</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00409">409</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -184,7 +192,94 @@ template&lt;typename Container &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return the sample mean of <code>cont</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00310">310</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00424">424</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a92922da02d782ca64fb60d0ae7afa465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92922da02d782ca64fb60d0ae7afa465">&#9670;&nbsp;</a></span>normalise() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator , typename DiffType  = typename std::iterator_traits&lt;Iterator&gt;::difference_type, typename ValueType  = typename std::iterator_traits&lt;Iterator&gt;::value_type, typename  = typename std::enable_if_t&lt;                    utils::traits::is_iterator_v&lt;Iterator&gt; &amp;&amp; std::is_floating_point_v&lt;ValueType&gt;&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::math::stats::normalise </td>
+          <td>(</td>
+          <td class="paramtype">Iterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Iterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Normalise the data between <code>first</code> and <code>last</code> in-place. Iterator::value_type must be a floating point value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The iterator to start from. </td></tr>
+    <tr><td class="paramname">last</td><td>The end iterator. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00520">520</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4628a3ec8966d6d79f23814808e06277"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4628a3ec8966d6d79f23814808e06277">&#9670;&nbsp;</a></span>normalise() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="utils__compiler_8hpp.html#a2b2aadd2802a322676b7f31018f2814c">ATTR_MAYBE_UNUSED</a> void utils::math::stats::normalise </td>
+          <td>(</td>
+          <td class="paramtype">Container &amp;&#160;</td>
+          <td class="paramname"><em>cont</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Normalise the contents of <code>cont</code> in-place. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cont</td><td>The container to normalise. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00541">541</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -219,7 +314,7 @@ template&lt;typename Iterator , typename  = typename std::enable_if_t&lt;utils::
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -234,7 +329,7 @@ template&lt;typename Iterator , typename  = typename std::enable_if_t&lt;utils::
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the stddev of the items [first, ..., last]. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00371">371</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00486">486</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -273,7 +368,7 @@ template&lt;typename Container &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return the sample stddev of <code>cont</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00383">383</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00498">498</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -313,7 +408,7 @@ template&lt;typename Iterator , typename DiffType  = typename std::iterator_trai
 </table>
 </div><div class="memdoc">
 
-<p>Calculate sample variance between <code>first</code> and <code>last</code>. (<code>std::distance(first, last)</code> elements) </p>
+<p>Calculate sample variance between <code>first</code> and <code>last</code>. (<code>std::distance(first, last)</code> elements) (Without Bessel's correction) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">first</td><td>The iterator to start from. </td></tr>
@@ -323,7 +418,7 @@ template&lt;typename Iterator , typename DiffType  = typename std::iterator_trai
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the variance of the items [first, ..., last]. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00331">331</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00446">446</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>
@@ -362,7 +457,7 @@ template&lt;typename Container &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return the sample variance of <code>cont</code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00351">351</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utils__math_8hpp_source.html#l00466">466</a> of file <a class="el" href="utils__math_8hpp_source.html">utils_math.hpp</a>.</p>
 
 </div>
 </div>

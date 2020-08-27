@@ -19,7 +19,7 @@
         <table cellpadding=1 border=0 width="100%">
           <tr>
             <td width="10%" class="headerItem">Current view:</td>
-            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_json.cpp<span style="font-size: 80%;"> (source / <a href="test_json.cpp.func.html">functions</a>)</span></td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">utils/utils_test</a> - test_json.cpp<span style="font-size: 80%;"> (source / <a href="test_json.cpp.func-sort-c.html">functions</a>)</span></td>
             <td width="5%"></td>
             <td width="15%"></td>
             <td width="10%" class="headerCovTableHead">Hit</td>
@@ -31,13 +31,13 @@
             <td class="headerValue">report.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">13</td>
-            <td class="headerCovTableEntry">13</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">14</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2019-08-14</td>
+            <td class="headerValue">2020-08-27 21:54:57</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">1</td>
@@ -63,7 +63,7 @@
 <a name="1"><span class="lineNum">       1 </span>            : #include &quot;test_settings.hpp&quot;</a>
 <span class="lineNum">       2 </span>            : 
 <span class="lineNum">       3 </span>            : #ifdef ENABLE_TESTS
-<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/utils_catch.hpp&quot;
+<span class="lineNum">       4 </span>            : #include &quot;../utils_lib/external/doctest.hpp&quot;
 <span class="lineNum">       5 </span>            : 
 <span class="lineNum">       6 </span>            : #include &quot;../utils_lib/utils_json.hpp&quot;
 <span class="lineNum">       7 </span>            : 
@@ -73,61 +73,62 @@
 <span class="lineNum">      11 </span>            : //#define TEST_JSON_LOG_STEPS
 <a name="12"><span class="lineNum">      12 </span>            : </a>
 <span class="lineNum">      13 </span>            : 
-<span class="lineNum">      14 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::json::to_ubjson&quot;, &quot;[utils][utils::json]&quot; ) {</span>
-<span class="lineNum">      15 </span><span class="lineCov">          2 :     utils::json start = R&quot;(</span>
-<span class="lineNum">      16 </span>            :         {
-<span class="lineNum">      17 </span>            :             &quot;LABELS&quot;: {
-<span class="lineNum">      18 </span>            :                 &quot;YELLOW&quot;: {
-<span class="lineNum">      19 </span>            :                     &quot;DEFAULT&quot;: {
-<span class="lineNum">      20 </span>            :                         &quot;BM_HILLBOOST_ACTIVE__NAK&quot;: {
-<span class="lineNum">      21 </span>            :                             &quot;description&quot;: &quot;Bitmask to activate the hillboost functionality. Checks z_bc_hillboost__nak&quot;,
-<span class="lineNum">      22 </span>            :                             &quot;func&quot;: &quot;NAK_IO&quot;,
-<span class="lineNum">      23 </span>            :                             &quot;info_param_names&quot;: [&quot;Hill Boost&quot;],
-<span class="lineNum">      24 </span>            :                             &quot;name&quot;: &quot;BM_HILLBOOST_ACTIVE__NAK&quot;,
-<span class="lineNum">      25 </span>            :                             &quot;type&quot;: 0,
-<span class="lineNum">      26 </span>            :                             &quot;value&quot;: 0,
-<span class="lineNum">      27 </span>            :                             &quot;value_choices&quot;: [[&quot;no&quot;, 0], [&quot;yes&quot;, 16]],
-<span class="lineNum">      28 </span>            :                             &quot;value_unit&quot;: &quot;-&quot;
-<span class="lineNum">      29 </span>            :                         }
-<span class="lineNum">      30 </span>            :                     }
-<span class="lineNum">      31 </span>            :                 }
-<span class="lineNum">      32 </span>            :             }
-<span class="lineNum">      33 </span>            :         }
-<span class="lineNum">      34 </span>            :     )&quot;_json;
-<span class="lineNum">      35 </span>            : 
-<span class="lineNum">      36 </span><span class="lineCov">          2 :     REQUIRE(start.size() &gt; 0);</span>
-<span class="lineNum">      37 </span>            :     #ifdef TEST_JSON_LOG_STEPS
-<span class="lineNum">      38 </span>            :         utils::Logger::Stream(std::setw(4), start, utils::Logger::CRLF,
-<span class="lineNum">      39 </span>            :                               utils::Logger::LINE&lt;&gt;);
-<span class="lineNum">      40 </span>            :     #endif
-<span class="lineNum">      41 </span>            : 
-<span class="lineNum">      42 </span><span class="lineCov">          2 :     std::vector&lt;std::uint8_t&gt; bson = utils::json::to_ubjson(start);</span>
-<span class="lineNum">      43 </span><span class="lineCov">          2 :     std::string bson_str = utils::string::join(bson);</span>
-<span class="lineNum">      44 </span><span class="lineCov">          2 :     REQUIRE(bson.size() &gt; 0);</span>
-<span class="lineNum">      45 </span>            :     #ifdef TEST_JSON_LOG_STEPS
-<span class="lineNum">      46 </span>            :         utils::Logger::Stream(bson_str, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
-<span class="lineNum">      47 </span>            :     #endif
-<span class="lineNum">      48 </span>            : 
-<span class="lineNum">      49 </span><span class="lineCov">          2 :     std::string encoded = utils::string::to_base64(bson.data(), bson.size());</span>
-<span class="lineNum">      50 </span><span class="lineCov">          2 :     CHECK(utils::string::is_base64(encoded));</span>
-<span class="lineNum">      51 </span>            :     #ifdef TEST_JSON_LOG_STEPS
-<span class="lineNum">      52 </span>            :         utils::Logger::Stream(encoded, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
-<span class="lineNum">      53 </span>            :     #endif
-<span class="lineNum">      54 </span>            : 
-<span class="lineNum">      55 </span><span class="lineCov">          2 :     std::string decoded = utils::string::from_base64(encoded);</span>
-<span class="lineNum">      56 </span><span class="lineCov">          2 :     CHECK(decoded == bson_str);</span>
-<span class="lineNum">      57 </span>            :     #ifdef TEST_JSON_LOG_STEPS
-<span class="lineNum">      58 </span>            :         utils::Logger::Stream(decoded, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
-<span class="lineNum">      59 </span>            :     #endif
-<span class="lineNum">      60 </span>            : 
-<span class="lineNum">      61 </span><span class="lineCov">          2 :     auto jsbson = utils::json::from_ubjson(decoded);</span>
-<span class="lineNum">      62 </span><span class="lineCov">          2 :     CHECK(jsbson == start);</span>
-<span class="lineNum">      63 </span>            :     #ifdef TEST_JSON_LOG_STEPS
-<span class="lineNum">      64 </span>            :         utils::Logger::Stream(std::setw(4), jsbson, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
-<span class="lineNum">      65 </span>            :     #endif
-<span class="lineNum">      66 </span><span class="lineCov">          1 : }</span>
-<span class="lineNum">      67 </span>            : 
-<span class="lineNum">      68 </span>            : #endif
+<span class="lineNum">      14 </span><span class="lineCov">          1 : TEST_CASE(&quot;Test utils::json::to_ubjson&quot;) {</span>
+<span class="lineNum">      15 </span><span class="lineCov">          2 :     UTILS_PROFILE_SCOPE(&quot;utils::json::to_ubjson&quot;);</span>
+<span class="lineNum">      16 </span><span class="lineCov">          2 :     utils::json start = R&quot;(</span>
+<span class="lineNum">      17 </span>            :         {
+<span class="lineNum">      18 </span>            :             &quot;LABELS&quot;: {
+<span class="lineNum">      19 </span>            :                 &quot;YELLOW&quot;: {
+<span class="lineNum">      20 </span>            :                     &quot;DEFAULT&quot;: {
+<span class="lineNum">      21 </span>            :                         &quot;BM_HILLBOOST_ACTIVE__NAK&quot;: {
+<span class="lineNum">      22 </span>            :                             &quot;description&quot;: &quot;Bitmask to activate the hillboost functionality. Checks z_bc_hillboost__nak&quot;,
+<span class="lineNum">      23 </span>            :                             &quot;func&quot;: &quot;NAK_IO&quot;,
+<span class="lineNum">      24 </span>            :                             &quot;info_param_names&quot;: [&quot;Hill Boost&quot;],
+<span class="lineNum">      25 </span>            :                             &quot;name&quot;: &quot;BM_HILLBOOST_ACTIVE__NAK&quot;,
+<span class="lineNum">      26 </span>            :                             &quot;type&quot;: 0,
+<span class="lineNum">      27 </span>            :                             &quot;value&quot;: 0,
+<span class="lineNum">      28 </span>            :                             &quot;value_choices&quot;: [[&quot;no&quot;, 0], [&quot;yes&quot;, 16]],
+<span class="lineNum">      29 </span>            :                             &quot;value_unit&quot;: &quot;-&quot;
+<span class="lineNum">      30 </span>            :                         }
+<span class="lineNum">      31 </span>            :                     }
+<span class="lineNum">      32 </span>            :                 }
+<span class="lineNum">      33 </span>            :             }
+<span class="lineNum">      34 </span>            :         }
+<span class="lineNum">      35 </span>            :     )&quot;_json;
+<span class="lineNum">      36 </span>            : 
+<span class="lineNum">      37 </span><span class="lineCov">          1 :     REQUIRE(start.size() &gt; 0);</span>
+<span class="lineNum">      38 </span>            :     #ifdef TEST_JSON_LOG_STEPS
+<span class="lineNum">      39 </span>            :         utils::Logger::Stream(std::setw(4), start, utils::Logger::CRLF,
+<span class="lineNum">      40 </span>            :                               utils::Logger::LINE&lt;&gt;);
+<span class="lineNum">      41 </span>            :     #endif
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span><span class="lineCov">          2 :     std::vector&lt;std::uint8_t&gt; bson = utils::json::to_ubjson(start);</span>
+<span class="lineNum">      44 </span><span class="lineCov">          2 :     std::string bson_str = utils::string::join(bson);</span>
+<span class="lineNum">      45 </span><span class="lineCov">          1 :     REQUIRE(bson.size() &gt; 0);</span>
+<span class="lineNum">      46 </span>            :     #ifdef TEST_JSON_LOG_STEPS
+<span class="lineNum">      47 </span>            :         utils::Logger::Stream(bson_str, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
+<span class="lineNum">      48 </span>            :     #endif
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span><span class="lineCov">          2 :     std::string encoded = utils::string::to_base64(bson.data(), bson.size());</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 :     CHECK(utils::string::is_base64(encoded));</span>
+<span class="lineNum">      52 </span>            :     #ifdef TEST_JSON_LOG_STEPS
+<span class="lineNum">      53 </span>            :         utils::Logger::Stream(encoded, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
+<span class="lineNum">      54 </span>            :     #endif
+<span class="lineNum">      55 </span>            : 
+<span class="lineNum">      56 </span><span class="lineCov">          2 :     std::string decoded = utils::string::from_base64(encoded);</span>
+<span class="lineNum">      57 </span><span class="lineCov">          1 :     CHECK(decoded == bson_str);</span>
+<span class="lineNum">      58 </span>            :     #ifdef TEST_JSON_LOG_STEPS
+<span class="lineNum">      59 </span>            :         utils::Logger::Stream(decoded, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
+<span class="lineNum">      60 </span>            :     #endif
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span><span class="lineCov">          2 :     auto jsbson = utils::json::from_ubjson(decoded);</span>
+<span class="lineNum">      63 </span><span class="lineCov">          1 :     CHECK(jsbson == start);</span>
+<span class="lineNum">      64 </span>            :     #ifdef TEST_JSON_LOG_STEPS
+<span class="lineNum">      65 </span>            :         utils::Logger::Stream(std::setw(4), jsbson, utils::Logger::CRLF, utils::Logger::LINE&lt;&gt;);
+<span class="lineNum">      66 </span>            :     #endif
+<span class="lineNum">      67 </span><span class="lineCov">          1 : }</span>
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span>            : #endif
 </pre>
       </td>
     </tr>
@@ -136,7 +137,7 @@
 
   <table width="100%" border=0 cellspacing=0 cellpadding=0>
     <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
-    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.13</a></td></tr>
   </table>
   <br>
 

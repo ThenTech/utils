@@ -19,6 +19,8 @@ var structutils_1_1string_1_1basic__string__view =
     [ "basic_string_view", "structutils_1_1string_1_1basic__string__view.html#ad42ca1da7e00982d77cdf29965dad2a5", null ],
     [ "basic_string_view", "structutils_1_1string_1_1basic__string__view.html#adf6275f80c5b98ca6a2b550d0db14bfb", null ],
     [ "basic_string_view", "structutils_1_1string_1_1basic__string__view.html#aec22ef28c3a08b303d7fac4296a3d646", null ],
+    [ "basic_string_view", "structutils_1_1string_1_1basic__string__view.html#afcc476b2b57763d174c2b495f8da132b", null ],
+    [ "array_from_args", "structutils_1_1string_1_1basic__string__view.html#a82302d42484aac2edaeb679548890155", null ],
     [ "operator=", "structutils_1_1string_1_1basic__string__view.html#aa964190f925a89a0fbd77f06f3da9672", null ],
     [ "npos", "structutils_1_1string_1_1basic__string__view.html#a2814731cf45114dc67466bee7ceb8eb4", null ]
 ];

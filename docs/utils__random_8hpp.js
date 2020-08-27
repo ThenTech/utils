@@ -7,8 +7,10 @@ var utils__random_8hpp =
     [ "RandomLocal", "utils__random_8hpp.html#a8a74cbd89d185881d9319664baefd2ec", null ],
     [ "RandomThreadLocal", "utils__random_8hpp.html#a822ef38d03a755239fef430df9dc8e11", null ],
     [ "generate_bool", "utils__random_8hpp.html#a2d074695e5ab84506a2785f0be8ba9ad", null ],
-    [ "generate_string", "utils__random_8hpp.html#a7e26b40961f00cc0f7d7e6565029e911", null ],
+    [ "generate_safe_string", "utils__random_8hpp.html#af7424e6ca65320a1756c4731ad754901", null ],
+    [ "generate_string", "utils__random_8hpp.html#a9865ebd407b3844733b5440b34accd41", null ],
     [ "generate_uuid", "utils__random_8hpp.html#a603938b2a067f9b267c026b95d764f8b", null ],
     [ "generate_x", "utils__random_8hpp.html#a50e58f2308866725f81e106d4a2756f0", null ],
-    [ "pick_x_from", "utils__random_8hpp.html#a40670afb865eeb55417ecf00090e3692", null ]
+    [ "pick_x_from", "utils__random_8hpp.html#a40670afb865eeb55417ecf00090e3692", null ],
+    [ "sample", "utils__random_8hpp.html#a61b3ac78310d118c5dbba1161a603e42", null ]
 ];

@@ -28,7 +28,7 @@
   <td id="projectlogo"><img alt="Logo" src="icon.ico"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">C++ Utility library
-   &#160;<span id="projectnumber">0.43.0-beta</span>
+   &#160;<span id="projectnumber">0.45.0-beta</span>
    </div>
   </td>
  </tr>
@@ -67,7 +67,8 @@ $(document).ready(function(){initNavTree('namespaceutils.html','');});
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">utils Namespace Reference</div>  </div>
 </div><!--header-->
@@ -81,11 +82,13 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1bits"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1bits.html">bits</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceutils_1_1_catch"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1_catch.html">Catch</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1colour"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1colour.html">colour</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1compiler"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1compiler.html">compiler</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceutils_1_1control"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1control.html">control</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceutils_1_1crypto"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1crypto.html">crypto</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1exceptions"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1exceptions.html">exceptions</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,6 +112,8 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1string"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1string.html">string</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceutils_1_1test"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1test.html">test</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1threading"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1threading.html">threading</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceutils_1_1time"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils_1_1time.html">time</a></td></tr>
@@ -127,15 +132,32 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classutils_1_1_logger.html">Logger</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class with static methods for logging to std::cout and a log file. Create the Loging instance with <a class="el" href="classutils_1_1_logger.html#a0d09319100e806ad8bb0d592b2ad2a3d" title="Create the Logger instance from a filename. If the file does not exist, it will be created,...">Logger::Create()</a>, and destroy it by calling Logger::Destroy()  <a href="classutils_1_1_logger.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classutils_1_1_profiler.html">Profiler</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classutils_1_1_profiler.html" title="The Profiler class to provide Chromium performance trace json output. Use chrome://tracing/ to load t...">Profiler</a> class to provide Chromium performance trace json output. Use chrome://tracing/ to load these files and see a timeline with the starts and durations of scopes.  <a href="classutils_1_1_profiler.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a709900c335ad624bf7f8acbec6cdeab4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a709900c335ad624bf7f8acbec6cdeab4">Version</a> = semver::version</td></tr>
 <tr class="separator:a709900c335ad624bf7f8acbec6cdeab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:abf4cdf6588a7734d285582988281778f"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#abf4cdf6588a7734d285582988281778f">operator new</a> (size_t size)</td></tr>
+<tr class="separator:abf4cdf6588a7734d285582988281778f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192b971e80b654f125b788f2238d42db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a192b971e80b654f125b788f2238d42db">operator delete</a> (void *v, size_t size) noexcept</td></tr>
+<tr class="separator:a192b971e80b654f125b788f2238d42db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a035cb5b9596b2c5f54710bb614df6610"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a035cb5b9596b2c5f54710bb614df6610">operator delete[]</a> (void *v, size_t size) noexcept</td></tr>
+<tr class="separator:a035cb5b9596b2c5f54710bb614df6610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbc03dfa1988bff2aaf47070ad69bde9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#acbc03dfa1988bff2aaf47070ad69bde9">operator delete</a> (void *v) noexcept</td></tr>
+<tr class="separator:acbc03dfa1988bff2aaf47070ad69bde9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1591344cc1bd71fa83e15cc6e5c28ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#ad1591344cc1bd71fa83e15cc6e5c28ab">operator delete[]</a> (void *v) noexcept</td></tr>
+<tr class="separator:ad1591344cc1bd71fa83e15cc6e5c28ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>AVL Tree Reference: <a href="https://github.com/xorz57/forest">https://github.com/xorz57/forest</a> (22/05/2019)</p>
 <p>Binary Search Tree Reference: <a href="https://github.com/xorz57/forest">https://github.com/xorz57/forest</a> (22/05/2019)</p>
+<p>TODO: <a href="https://github.com/SergeyBel/AES">https://github.com/SergeyBel/AES</a></p>
 <p>Function with varying number of arguments to avoid "unused variable" warnings. Use as <a class="el" href="utils__compiler_8hpp.html#a9b58a1294d89c976dfbe4dc480e9dfb8">UNUSED(var list)</a> or add ATTR_MAYBE_UNUSED to args</p>
 <p>Enable FileSystem Currently only included when linking with -lstdc++fs. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
@@ -152,6 +174,159 @@ Typedefs</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="utils__version_8hpp_source.html#l00010">10</a> of file <a class="el" href="utils__version_8hpp_source.html">utils_version.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a192b971e80b654f125b788f2238d42db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a192b971e80b654f125b788f2238d42db">&#9670;&nbsp;</a></span>operator delete() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void utils::operator delete </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00057">57</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acbc03dfa1988bff2aaf47070ad69bde9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc03dfa1988bff2aaf47070ad69bde9">&#9670;&nbsp;</a></span>operator delete() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void utils::operator delete </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00079">79</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a035cb5b9596b2c5f54710bb614df6610"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a035cb5b9596b2c5f54710bb614df6610">&#9670;&nbsp;</a></span>operator delete[]() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void utils::operator delete[] </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00068">68</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad1591344cc1bd71fa83e15cc6e5c28ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1591344cc1bd71fa83e15cc6e5c28ab">&#9670;&nbsp;</a></span>operator delete[]() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void utils::operator delete[] </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00086">86</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abf4cdf6588a7734d285582988281778f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf4cdf6588a7734d285582988281778f">&#9670;&nbsp;</a></span>operator new()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* utils::operator new </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utils__memory_8hpp_source.html#l00046">46</a> of file <a class="el" href="utils__memory_8hpp_source.html">utils_memory.hpp</a>.</p>
 
 </div>
 </div>

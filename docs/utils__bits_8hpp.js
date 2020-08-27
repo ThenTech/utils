@@ -28,7 +28,9 @@ var utils__bits_8hpp =
     [ "set_msb", "utils__bits_8hpp.html#ad892eee4bfe646081da1dcb9b6215ab2", null ],
     [ "set_one", "utils__bits_8hpp.html#a192c5e2493226ef87ccd4266fcf0ab74", null ],
     [ "shift_signed", "utils__bits_8hpp.html#af3078a81bf43e2b047b143d0db7aac81", null ],
-    [ "size_of", "utils__bits_8hpp.html#ae13cebecb70ce1106e368f1da6907c18", null ],
+    [ "size_of", "utils__bits_8hpp.html#a7dc6e68d3a6ceeaf96ea2bbeaab26267", null ],
     [ "to_binary", "utils__bits_8hpp.html#a6b14ee4b07752a1465e5bb49ddbfb6e2", null ],
+    [ "to_string", "utils__bits_8hpp.html#a2ef2e1194447c857e7cbe438fcbf68d6", null ],
+    [ "to_string_lsb", "utils__bits_8hpp.html#a8eab84a564cf1658140b831346e88404", null ],
     [ "xor_all", "utils__bits_8hpp.html#a1fde0ee9d5a491297a28896d47519595", null ]
 ];
