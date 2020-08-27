@@ -2,6 +2,7 @@
 #define UTILS_MEMORY_HPP
 
 #define UTILS_MEMORY_ALLOC_LOG 0
+#define UTILS_MEMORY_NEW_LOG   1
 
 #include "utils_compiler.hpp"
 #include "utils_traits.hpp"
@@ -9,12 +10,113 @@
 #include <algorithm>
 #include <vector>
 #include <memory>
+#include <cstring>
 
 #if UTILS_MEMORY_ALLOC_LOG
     #include <cstdio>
 #endif
 
 namespace utils::memory {
+    struct Metrics_t {
+        size_t TotalAllocated = 0;
+        size_t TotalFreed = 0;
+
+        inline size_t CurrentUsage() {
+            return TotalAllocated - TotalFreed;
+        }
+
+        template<typename TChar, typename TCharTraits>
+        friend auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream, Metrics_t m) {
+            stream << "Current memory usage: "
+
+            #if UTILS_MEMORY_NEW_LOG
+                << m.CurrentUsage() << " bytes";
+            #else
+                << "unavailable, set UTILS_MEMORY_ALLOC_LOG macro first"
+            #endif
+
+            return stream;
+        }
+    };
+
+    static inline Metrics_t Metrics;
+}
+
+#if UTILS_MEMORY_NEW_LOG && !defined(ENABLE_TESTS)
+    void* operator new(size_t size) {
+        utils::memory::Metrics.TotalAllocated += size;
+        void* v = std::malloc(size);
+
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[new] at 0x%p (len=%lld bytes)\n", v, size);
+        #endif
+
+        return v;
+    }
+
+    void operator delete(void *v, size_t size) noexcept {
+        utils::memory::Metrics.TotalFreed += size;
+
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[delete] at 0x%p (len=%lld bytes)\n", v, size);
+        #else
+            UNUSED(size);
+        #endif
+        std::free(v);
+    }
+
+    void operator delete[](void *v, size_t size) noexcept {
+        utils::memory::Metrics.TotalFreed += size;
+
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[delete[]] at 0x%p (len=%lld bytes)\n", v, size);
+        #else
+            UNUSED(size);
+        #endif
+        std::free(v);
+    }
+
+    void operator delete(void *v) noexcept {
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[delete] at 0x%p (len=? bytes)\n", v);
+        #endif
+        std::free(v);
+    }
+
+    void operator delete[](void *v) noexcept {
+        #if UTILS_MEMORY_ALLOC_LOG
+            std::fprintf(stderr, "[delete[]] at 0x%p (len=? bytes)\n", v);
+        #endif
+        std::free(v);
+    }
+#endif
+
+namespace utils::memory {
+    /**
+     *  \brief  Cast to value to the target type by copying its bytes.
+     *
+     *  \param  value
+     *      A pointer to the given value.
+     *  \return Returns To with the bytes from \p value copied in.
+     */
+    template<
+        typename To,
+        typename From,
+        typename std::enable_if_t<sizeof(From) == sizeof(To)
+                                  && std::is_trivially_copyable_v<From>
+                                  && std::is_trivially_copyable_v<To>
+                                  , bool> = false
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr To bit_cast(const From& value) noexcept {
+        #if UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+            return std::bit_cast<To>(value);
+        #else
+            To target;
+            std::memcpy(&target, &value, sizeof(To));
+            return target;
+        #endif
+    }
+
     /*
      *	Overloaded methods to allocate an array of T of size x, y, z.
      */
@@ -65,12 +167,30 @@ namespace utils::memory {
      *  \param  args
      *      Variable argument list passed down to ctor of T.
      */
-    template <class T, class ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline auto new_unique_var(Type &&... args) {
+    template <class T, class ...Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr auto new_unique_var(Args&& ...args) {
         return unique_t<T, decltype(&delete_var<T>)>(
-            new_var<T>(std::forward<Type>(args)...),
+            new_var<T>(std::forward<Args>(args)...),
             &delete_var<T>
         );
+    }
+
+    /**
+     *  std::shared_ptr that contains a pointer to T,
+     *  possibly referencing this object multiple times.
+     */
+    template <class T>
+    using shared_t = std::shared_ptr<T>;
+
+    /**
+     *  \brief  Create a shared_t<T> variable containing a reference.
+     *
+     *  \param  args
+     *      Variable argument list passed down to ctor of T.
+     */
+    template<typename T, typename ...Args> ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr shared_t<T> new_shared_ref(Args&& ...args) {
+        return std::make_shared<T>(std::forward<Args>(args)...);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -342,5 +462,8 @@ namespace utils::memory {
 
 #ifdef UTILS_MEMORY_ALLOC_LOG
     #undef UTILS_MEMORY_ALLOC_LOG
+#endif
+#ifdef UTILS_MEMORY_NEW_LOG
+    #undef UTILS_MEMORY_NEW_LOG
 #endif
 #endif // UTILS_MEMORY_HPP

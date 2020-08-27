@@ -20,16 +20,18 @@ HEDLEY_DIAGNOSTIC_PUSH
 HEDLEY_DIAGNOSTIC_DISABLE_UNKNOWN_PRAGMAS
 #if HEDLEY_MSVC_VERSION_CHECK(15,0,0)
     // TODO Ignore MSVC warnings
-    #pragma warning(disable:xxxx)
+    //#pragma warning(disable:xxxx)
 #else
     #pragma GCC diagnostic ignored "-Wpragmas"
     #pragma GCC diagnostic ignored "-Wreorder"
     #pragma GCC diagnostic ignored "-Wpessimizing-move"
     #pragma GCC diagnostic ignored "-Warray-bounds"
+    #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #endif
 
 #include "external/csv/include/csv/reader.hpp"
 #include "external/csv/include/csv/writer.hpp"
+#include "external/csv/include/csv/robin_hood.hpp"
 
 HEDLEY_DIAGNOSTIC_POP
 
@@ -45,7 +47,7 @@ namespace utils {
 namespace utils::traits {
     // Mark csv::detail::unordered_map as a container
     template<bool b, size_t n, typename TKey, typename TValue, typename THash, typename KEqual>
-    struct is_container<utils::csv::detail::unordered_map<b, n, TKey, TValue, THash, KEqual>> : public std::true_type { };
+    struct is_container<utils::csv::detail::Table<b, n, TKey, TValue, THash, KEqual>> : public std::true_type { };
 }
 
 #include "utils_print.hpp"
@@ -58,7 +60,7 @@ namespace utils::print {
     // Delimiters for csv map
     UTILS_PRINT_MAKE_CONTAINER(SET_NL,
         UTILS_ARGS(bool b, size_t n, typename TKey, typename TVal, typename THash, typename KEqual),
-        utils::csv::detail::unordered_map<UTILS_ARGS(b, n, TKey, TVal, THash, KEqual)>)
+        utils::csv::detail::Table<UTILS_ARGS(b, n, TKey, TVal, THash, KEqual)>)
 }
 
 namespace std {

@@ -15,7 +15,7 @@
 
 
 #ifdef ENABLE_TESTS
-#define DOCTEST_CONFIG_VOID_CAST_EXPRESSIONS
+    #define DOCTEST_CONFIG_VOID_CAST_EXPRESSIONS
     #include "external/doctest.hpp"
 
     /**
@@ -39,34 +39,46 @@
 
 
 /**
- *  Macro to insert demangled function signature at compile time.
- */
-#if defined(UTILS_COMPILER_MSVC)
-    #define UTILS_TEST_FUNCTION_NAME __FUNCDNAME__  // or __FUNCSIG__?
-#else
-    #define UTILS_TEST_FUNCTION_NAME __PRETTY_FUNCTION__
-#endif
-
-/**
  *  Macro to insert current file, line and function at compile time.
+ *
+ *  TODO Change to std::source_location::current() in c++20
  */
-#define UTILS_TRACE_LOCATION __FILE__,__LINE__,UTILS_TEST_FUNCTION_NAME
+#define UTILS_TRACE_LOCATION __FILE__,__LINE__,UTILS_FUNCTION_NAME
 
 /**
  *  Macro to print an error trace.
  */
-#define LOG_ERROR_TRACE(E) \
-    do {                                                                     \
-        std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  " \
-                  << E.what()                                                \
-                  << "\033[0m" "\n    at " "\033[36;1m"                      \
-                  << __FILE__                                                \
-                  << "\033[0m" ":" "\033[36;1m"                              \
-                  << __LINE__                                                \
-                  << "\033[0m" "\n    inside: " "\033[35;1m"                 \
-                  << UTILS_TEST_FUNCTION_NAME                               \
-                  << "\033[0m" << std::flush << std::endl;                   \
-    } while (false)
+#ifndef LOG_ERROR_TRACE
+    #define LOG_ERROR_TRACE(E) \
+        do {                                                                     \
+            std::cerr << "\033[31;1m" "[ERROR] Exception thrown:\n" "\033[33m  " \
+                      << E.what()                                                \
+                      << "\033[0m" "\n    at " "\033[36;1m"                      \
+                      << __FILE__                                                \
+                      << "\033[0m" ":" "\033[36;1m"                              \
+                      << __LINE__                                                \
+                      << "\033[0m" "\n    inside: " "\033[35;1m"                 \
+                      << UTILS_FUNCTION_NAME                                     \
+                      << "\033[0m\n";                                            \
+        } while (false)
+#endif
+
+/**
+ *  Whether to insert a breakpoint for the debugger with UTILS_DEBUGBREAK() macro.
+ */
+#define UTILS_USE_DEBUGBREAK 0
+
+#if (defined(UTILS_USE_DEBUGBREAK) && UTILS_USE_DEBUGBREAK) && (defined(ENABLE_TESTS) || !defined(NDEBUG))
+    #if defined(UTILS_OS_WIN)
+        #define UTILS_DEBUGBREAK()  __debugbreak()
+    #elif defined(UTILS_OS_LINUX)
+        #define UTILS_DEBUGBREAK()  raise(SIGTRAP)
+    #else
+        #error "Platform doesn't support debugbreak!"
+    #endif
+#else
+    #define UTILS_DEBUGBREAK()
+#endif
 
 /**
  *  Macro to catch an exception, print an error trace
@@ -75,14 +87,15 @@
 #if defined(ENABLE_TESTS)
     #define CATCH_AND_LOG_ERROR_TRACE(...)                                     \
         catch (const std::exception& e) {                                      \
-            __VA_ARGS__                                                        \
+            __VA_ARGS__;                                                       \
             throw e;                                                           \
         }
 #else
     #define CATCH_AND_LOG_ERROR_TRACE(...)                                     \
         catch (const std::exception& e) {                                      \
             LOG_ERROR_TRACE(e);                                                \
-            __VA_ARGS__                                                        \
+            __VA_ARGS__;                                                       \
+            {UTILS_DEBUGBREAK();}                                              \
         }
 #endif
 
@@ -90,8 +103,10 @@
  *  Assertion macro.
  */
 #if defined(ENABLE_TESTS)
+    // When running tests
     #define ASSERT(condition) do { if (HEDLEY_UNLIKELY(!(condition))) std::abort(); } while (false)
 #elif !defined(NDEBUG)
+    // When debugging
     #define ASSERT(condition) \
         do {                                                                     \
             if (HEDLEY_UNLIKELY(!(condition))) {                                 \
@@ -101,12 +116,14 @@
                           << __FILE__                                            \
                           << "\033[0m" ":" "\033[36;1m"                          \
                           << __LINE__ << "\033[0m" "\n    inside: " "\033[35;1m" \
-                          << UTILS_TEST_FUNCTION_NAME                           \
-                          << "\033[0m" << std::endl;                             \
+                          << UTILS_FUNCTION_NAME                                 \
+                          << "\033[0m\n";                                        \
+                {UTILS_DEBUGBREAK();}                                            \
                 std::abort();                                                    \
             }                                                                    \
         } while (false)
 #else
+    // When explicitly not debugging
     #define ASSERT(condition) do { } while (false)
 #endif
 

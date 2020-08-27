@@ -142,6 +142,8 @@ namespace utils::time {
     /**
      *  \brief  Sleep the current thread with the given time period.
      *
+     *          Use as sleep(utils::time::seconds(1))
+     *
      *  \param  period
      *      The period to sleep from utils::time:: ranges aliases.
      */
@@ -179,7 +181,7 @@ namespace utils::time {
                                   ? std::time(nullptr)
                                   : *epoch_time);
 
-        #ifdef UTILS_COMPILER_MSVC
+        #if defined(UTILS_COMPILER_MSVC)
             tm tm_l;
             localtime_s(&tm_l, &stamp);
             tm *tm = &tm_l;

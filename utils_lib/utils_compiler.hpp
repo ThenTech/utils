@@ -25,6 +25,7 @@
 
     #if defined(_MSVC_LANG)
         #define UTILS_COMPILER_MSVC 1
+        #define _CRT_SECURE_NO_WARNINGS
     #endif
 #elif defined(__APPLE__) || defined(__MACH__)
     #define UTILS_OS_MAC 1
@@ -52,7 +53,7 @@
  *  Abort when current C++ version < c++17
  */
 #if !UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_17)
-    #error A C++17 compiler is required!
+    #error A C++17 compiler or higher is required!
 #endif
 
 /**
@@ -104,6 +105,30 @@
  */
 #define UTILS_HAS_INCLUDE(S) __has_include(S)
 
+/**
+ *  Macro to insert demangled function signature at compile time.
+ *  Adapted from: https://stackoverflow.com/a/48229856/6608855
+ */
+#if defined(HEDLEY_GNUC_VERSION) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__) || HEDLEY_DMC_VERSION_CHECK(0, 2, 64)
+    #define UTILS_FUNCTION_NAME __PRETTY_FUNCTION__
+#elif defined(UTILS_COMPILER_MSVC) || defined(HEDLEY_MSVC_VERSION)
+    #if defined(__FUNCDNAME__)
+        // TODO Test if existence of __FUNCDNAME__ is testable MSVC, else default to this branch on MSVC.
+        #define UTILS_FUNCTION_NAME __FUNCDNAME__
+    #elif defined(__FUNCSIG__)
+        #define UTILS_FUNCTION_NAME __FUNCSIG__
+    #else
+        #define UTILS_FUNCTION_NAME "(unknown)"
+    #endif
+#elif HEDLEY_INTEL_VERSION_CHECK(0, 0, 600)
+    #define UTILS_FUNCTION_NAME __FUNCTION__
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+    #define UTILS_FUNCTION_NAME __func__
+#elif UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_11)
+    #define UTILS_FUNCTION_NAME __func__
+#else
+    #define UTILS_FUNCTION_NAME "(unknown)"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////
 /// Attributes
@@ -162,7 +187,7 @@ namespace utils::compiler {
     #define UNUSED(...) ((void)(__VA_ARGS__));
 #else
     // Macro with varying number of arguments to avoid "unused variable" warnings.
-    #define UNUSED(...) (decltype(utils::compiler::unused_variable(__VA_ARGS__))());
+    #define UNUSED(...) (decltype(utils::compiler::unused_variable(__VA_ARGS__))())
 #endif
 
 

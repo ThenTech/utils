@@ -75,7 +75,7 @@ namespace utils::exceptions {
         public:
             DivideByZeroException(const std::string& msg)
                 : Exception("DivideByZeroException",
-                            "Tried to devide by zero in " + msg)
+                            "Tried to divide by zero in " + msg)
             {}
     };
 

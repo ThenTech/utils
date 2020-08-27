@@ -12,6 +12,7 @@
 
 
 TEST_CASE("Test utils::json::to_ubjson") {
+    UTILS_PROFILE_SCOPE("utils::json::to_ubjson");
     utils::json start = R"(
         {
             "LABELS": {

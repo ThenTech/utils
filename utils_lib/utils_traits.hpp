@@ -182,7 +182,7 @@ namespace utils::traits {
      *  e.g. CREATE_HAS_FUNCTION(find) creates:
      *      dot_find_r<T, U> that calls T.F()
      *      has_find that checks if dot_find can be applied on T
-     *      has_find_t that returns has_find::value
+     *      has_find_v that returns has_find::value
      */
     #define UTILS_TRAITS_CREATE_HAS_FUNCTION(F) \
         template<class T, class U> \
@@ -193,6 +193,22 @@ namespace utils::traits {
         inline constexpr bool has_ ## F ## _v = has_ ## F<T, U>::value;
 
     UTILS_TRAITS_CREATE_HAS_FUNCTION(find)
+    UTILS_TRAITS_CREATE_HAS_FUNCTION(contains)
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// If the type T is a reference type, provides the member typedef type
+    /// which is the type referred to by T with its topmost cv-qualifiers removed.
+    /// Otherwise type is T with its topmost cv-qualifiers removed.
+    ////////////////////////////////////////////////////////////////////////////
+    #if !UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+        template< class T >
+        struct remove_cvref {
+            typedef std::remove_cv_t<std::remove_reference_t<T>> type;
+        };
+
+        template< class T >
+        using remove_cvref_t = typename remove_cvref<T>::type;
+    #endif
 
     ////////////////////////////////////////////////////////////////////////////
     /**

@@ -44,3 +44,5 @@ make.bat
 docs
 Doxyfile
 icon.ico
+compile_commands.json
+*profile.json

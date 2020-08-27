@@ -7,7 +7,8 @@
 HEDLEY_DIAGNOSTIC_PUSH
 #if HEDLEY_MSVC_VERSION_CHECK(15,0,0)
     // TODO Ignore MSVC warnings
-    #pragma warning(disable:xxxx)
+    //#pragma warning(disable:xxxx)
+    #pragma comment(lib, "ws2_32")
 #else
     #pragma GCC diagnostic ignored "-Wcpp"
 #endif
@@ -18,7 +19,7 @@ HEDLEY_DIAGNOSTIC_POP
 
 namespace utils {
     /*
-     *  Reference: https://github.com/elnormous/HTTPRequest (2019-08-16)
+     *  Reference: https://github.com/elnormous/HTTPRequest (2020-08-18)
      */
 //    using namespace http;
     namespace http = ::http;

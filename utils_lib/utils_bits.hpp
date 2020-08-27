@@ -4,6 +4,7 @@
 #include "utils_compiler.hpp"
 #include "utils_test.hpp"
 #include "utils_traits.hpp"
+#include "utils_algorithm.hpp"
 
 #include <cstdint>
 #include <limits>
@@ -14,9 +15,7 @@
  */
 #ifdef UTILS_COMPILER_MSVC
     #include <intrin.h>
-    #define UTILS_BITS_CLZ_ULL  __lzcnt64  // ?
-
-//  #define UTILS_BITS_CLZ_ULL  utils::bits::internal::_clz_template
+    #define UTILS_BITS_CLZ_ULL  utils::bits::internal::_clz_template
     #define UTILS_BITS_FFS_LL   utils::bits::internal::_ffs_template
     #define UTILS_BITS_CNT_LL   utils::bits::internal::_cnt_template
 #else
@@ -32,12 +31,30 @@ namespace utils::bits {
     namespace internal {
         #ifdef UTILS_COMPILER_MSVC
             template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_PRIVATE
-                static inline constexpr uint_fast32_t _clz_template(T x) {
-                if (HEDLEY_UNLIKELY(x == 0)) return 0u;
-                uint_fast32_t r = 0;
-                while (x)
-                    x >>= 1, ++r;
-                return 64 - r;
+            static inline constexpr uint_fast32_t _clz_template(T x) {
+                if constexpr (sizeof(T) * 8 == 32) {
+                    #if defined(__lzcnt32)
+                        return static_cast<uint_fast32_t>(__lzcnt32(x));
+                    #elif defined(_BitScanReverse)
+                        unsigned long ret;
+                        _BitScanReverse(&ret, x);
+                        return (int)(31 ^ ret);
+                    #endif
+                } else if constexpr (sizeof(T) * 8 == 64) {
+                    #if defined(__lzcnt64)
+                        return static_cast<uint_fast32_t>(__lzcnt64(x));
+                    #elif defined(_BitScanReverse64)
+                        unsigned long ret;
+                        _BitScanReverse64(&ret, x);
+                        return (int)(63 ^ ret);
+                    #endif
+                } else {
+                    if (HEDLEY_UNLIKELY(x == 0)) return 0u;
+                    uint_fast32_t r = 0;
+                    while (x)
+                        x >>= 1, ++r;
+                    return (sizeof(T) * 8) - r;
+                }
             }
 
             template <typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD HEDLEY_PRIVATE
@@ -66,7 +83,7 @@ namespace utils::bits {
      *          std::numeric_limits<uint8_t>::digits
      */
     template<class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    inline constexpr size_t size_of(void) {
+    inline constexpr size_t size_of(void) noexcept {
         return sizeof(T) * std::numeric_limits<uint8_t>::digits;
     }
 
@@ -281,7 +298,11 @@ namespace utils::bits {
     static inline constexpr uint_fast32_t msb(const T value) {
         static_assert(std::is_integral_v<T>, "utils::bits::msb: Integral required.");
         using uT = typename std::make_unsigned<T>::type;
-        return uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uT(value) | 1)) - (value == 0);
+        #ifdef UTILS_COMPILER_MSVC
+            return uint_fast32_t(utils::bits::size_of<uT>() - UTILS_BITS_CLZ_ULL(uT(value) | 1)) - (value == 0);
+        #else
+            return uint_fast32_t(64 - UTILS_BITS_CLZ_ULL(uT(value) | 1)) - (value == 0);
+        #endif
     }
 
     /**
@@ -523,7 +544,7 @@ namespace utils::bits {
     }
 
     /**
-     *  \brief  Create a string representation of the bits in \p value.
+     *  \brief  Create a string representation of the bits in \p value, from MSB to LSB.
      *
      *          TODO In C++20, is_integral_v can be left out and
      *          std::bit_cast<T> can be used as new value.
@@ -545,6 +566,23 @@ namespace utils::bits {
                 *it = '1';
         }
 
+        return out;
+    }
+
+    /**
+     *  \brief  Create a string representation of the bits in \p value, from LSB to MSB.
+     *
+     *  \param  value
+     *      The value to create a string for.
+     *  \return Returns a string representation consisting of '0's and '1's.
+     */
+    template<
+        typename T,
+        typename = typename std::enable_if_t<std::is_integral_v<T>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::string to_string_lsb(T value) {
+        std::string out{utils::bits::to_string(value)};
+        utils::algorithm::reverse(out);
         return out;
     }
 }

@@ -658,35 +658,34 @@ TEST_CASE("Test utils::string::quoted") {
 }
 
 TEST_CASE("Test utils::string::extract_quoted") {
-    std::vector<std::string_view> list;
     std::string quoted;
 
     quoted = "'Hello', 'World'";
-    utils::string::extract_quoted(list, quoted, '\'');
+    auto list = utils::string::extract_quoted(quoted, '\'');
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "World"));
 
     quoted = "'Hello', 'Wo\'rld'";
-    utils::string::extract_quoted(list, quoted, '\'');
+    list = utils::string::extract_quoted(quoted, '\'');
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "Wo"));
 
     quoted = "''";
-    utils::string::extract_quoted(list, quoted, '\'');
+    list = utils::string::extract_quoted(quoted, '\'');
     REQUIRE(list.size() == 1);
     REQUIRE(list[0] == "");
 
     quoted = "' '";
-    utils::string::extract_quoted(list, quoted, '\'');
+    list = utils::string::extract_quoted(quoted, '\'');
     REQUIRE(list.size() == 1);
     REQUIRE(list[0] == " ");
 
     quoted = "abcdef";
-    utils::string::extract_quoted(list, quoted, '\'');
+    list = utils::string::extract_quoted(quoted, '\'');
     REQUIRE(list.size() == 0);
 
     quoted = "\"Hello\", \"World\"";
-    utils::string::extract_quoted(list, quoted);
+    list = utils::string::extract_quoted(quoted);
     REQUIRE(list.size() == 2);
     REQUIRE((list[0] == "Hello" && list[1] == "World"));
 
@@ -723,33 +722,31 @@ TEST_CASE("Test utils::string::join") {
 }
 
 TEST_CASE("Test utils::string::split") {
-    std::vector<std::string_view> splitted;
-
-    utils::string::split(splitted, "");
+    auto splitted = utils::string::split("");
     REQUIRE(splitted.size() == 1);
 
-    utils::string::split(splitted, "a,b,c", ',');
+    splitted = utils::string::split("a,b,c", ',');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
-    utils::string::split(splitted, "a,b,c,", ',');
+    splitted = utils::string::split("a,b,c,", ',');
     REQUIRE(splitted.size() == 4);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c" && splitted[3] == ""));
-    utils::string::split(splitted, ",a,b,c,", ',');
+    splitted = utils::string::split(",a,b,c,", ',');
     REQUIRE(splitted.size() == 5);
     REQUIRE((splitted[0] == "" && splitted[1] == "a" && splitted[2] == "b" && splitted[3] == "c" && splitted[4] == ""));
 
-    utils::string::split(splitted, "a\\b\\c", '\\');
+    splitted = utils::string::split("a\\b\\c", '\\');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
 
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ','); // char
+    splitted = utils::string::split(",,a ,\tb\n, c ;", ','); // char
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
     CHECK(splitted[2] == "a ");
     CHECK(splitted[3] == "\tb\n");
     CHECK(splitted[4] == " c ;");
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ","); // char*
+    splitted = utils::string::split(",,a ,\tb\n, c ;", ","); // char*
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
@@ -757,28 +754,28 @@ TEST_CASE("Test utils::string::split") {
     CHECK(splitted[3] == "\tb\n");
     CHECK(splitted[4] == " c ;");
 
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ',', 4);
+    splitted = utils::string::split(",,a ,\tb\n, c ;", ',', 4);
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[4] == " c ;");
 
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ',', 0);
+    splitted = utils::string::split(",,a ,\tb\n, c ;", ',', 0);
     REQUIRE(splitted.size() == 1);
     CHECK(splitted[0] == ",,a ,\tb\n, c ;");
 
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ',', 1);
+    splitted = utils::string::split(",,a ,\tb\n, c ;", ',', 1);
     REQUIRE(splitted.size() == 2);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == ",a ,\tb\n, c ;");
 
-    utils::string::split(splitted, ",,a ,\tb\n, c ;", ',', 3);
+    splitted = utils::string::split(",,a ,\tb\n, c ;", ',', 3);
     REQUIRE(splitted.size() == 4);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
     CHECK(splitted[2] == "a ");
     CHECK(splitted[3] == "\tb\n, c ;");
 
-    utils::string::split(splitted, "**1****2**", "**"); // char*
+    splitted = utils::string::split("**1****2**", "**"); // char*
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "1");
@@ -794,33 +791,31 @@ TEST_CASE("Test utils::string::split") {
 }
 
 TEST_CASE("Test utils::string::rsplit") {
-    std::vector<std::string_view> splitted;
-
-    utils::string::rsplit(splitted, "");
+    auto splitted = utils::string::rsplit("");
     REQUIRE(splitted.size() == 1);
 
-    utils::string::rsplit(splitted, "a,b,c", ',');
+    splitted = utils::string::rsplit("a,b,c", ',');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
-    utils::string::rsplit(splitted, "a,b,c,", ',');
+    splitted = utils::string::rsplit("a,b,c,", ',');
     REQUIRE(splitted.size() == 4);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c" && splitted[3] == ""));
-    utils::string::rsplit(splitted, ",a,b,c,", ',');
+    splitted = utils::string::rsplit(",a,b,c,", ',');
     REQUIRE(splitted.size() == 5);
     REQUIRE((splitted[0] == "" && splitted[1] == "a" && splitted[2] == "b" && splitted[3] == "c" && splitted[4] == ""));
 
-    utils::string::rsplit(splitted, "a\\b\\c", '\\');
+    splitted = utils::string::rsplit("a\\b\\c", '\\');
     REQUIRE(splitted.size() == 3);
     REQUIRE((splitted[0] == "a" && splitted[1] == "b" && splitted[2] == "c"));
 
-    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ','); // char
+    splitted = utils::string::rsplit(",,a ,\tb\n, c ;", ','); // char
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
     CHECK(splitted[2] == "a ");
     CHECK(splitted[3] == "\tb\n");
     CHECK(splitted[4] == " c ;");
-    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ","); // char*
+    splitted = utils::string::rsplit(",,a ,\tb\n, c ;", ","); // char*
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "");
@@ -828,27 +823,27 @@ TEST_CASE("Test utils::string::rsplit") {
     CHECK(splitted[3] == "\tb\n");
     CHECK(splitted[4] == " c ;");
 
-    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 4);
+    splitted = utils::string::rsplit(",,a ,\tb\n, c ;", ',', 4);
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == ",");
 
-    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 0);
+    splitted = utils::string::rsplit(",,a ,\tb\n, c ;", ',', 0);
     REQUIRE(splitted.size() == 1);
     CHECK(splitted[0] == ",,a ,\tb\n, c ;");
 
-    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 1);
+    splitted = utils::string::rsplit(",,a ,\tb\n, c ;", ',', 1);
     REQUIRE(splitted.size() == 2);
     CHECK(splitted[0] == ",,a ,\tb\n");
     CHECK(splitted[1] == " c ;");
 
-    utils::string::rsplit(splitted, ",,a ,\tb\n, c ;", ',', 3);
+    splitted = utils::string::rsplit(",,a ,\tb\n, c ;", ',', 3);
     REQUIRE(splitted.size() == 4);
     CHECK(splitted[0] == ",");
     CHECK(splitted[1] == "a ");
     CHECK(splitted[2] == "\tb\n");
     CHECK(splitted[3] == " c ;");
 
-    utils::string::rsplit(splitted, "**1****2**", "**"); // char*
+    splitted = utils::string::rsplit("**1****2**", "**"); // char*
     REQUIRE(splitted.size() == 5);
     CHECK(splitted[0] == "");
     CHECK(splitted[1] == "1");

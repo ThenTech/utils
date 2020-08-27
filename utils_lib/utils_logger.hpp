@@ -35,6 +35,11 @@ namespace utils {
      */
     class Logger {
         public:
+            /**
+             *  \brief  Log level enum.
+             *          Note: Prefixed with `LOG_` to mitigate MACRO
+             *                clash in windows related headers...
+             */
             enum class Level {
                 LOG_EMERGENCY = 0, // Emergency     - A "panic" condition usually affecting multiple apps/servers/sites. At this level it would usually notify all tech staff on call.
                 LOG_ALERT     = 1, // Alert         - Should be corrected immediately, therefore notify staff who can fix the problem. An example would be the loss of a primary ISP connection.
@@ -79,7 +84,7 @@ namespace utils {
                 return this->canLogScreen(level) || this->canLogFile(level);
             }
 
-            inline void write_to_screen(const std::string_view& text) {
+            inline void write_to_screen(const std::string_view text) {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
 
                 if (HEDLEY_LIKELY(this->canLogScreen())) {
@@ -87,18 +92,18 @@ namespace utils {
                 }
             }
 
-            inline void write_to_file(const std::string_view& text) {
+            inline void write_to_file(const std::string_view text) {
                 LOCK_BLOCK(utils::Logger::get().file_mutex);
 
                 if (HEDLEY_LIKELY(this->canLogFile())) {
                     try {
-                        if (HEDLEY_LIKELY(this->GetFileTimestamp())) {
+                        if (HEDLEY_LIKELY(this->IsFileTimestampEnabled())) {
                             this->log_file << utils::time::Timestamp("[%Y-%m-%d %H:%M:%S] ");
                         }
 
                         this->log_file << text;
                     } catch (std::exception const& e) {
-                        std::cerr << "[Logger][ERROR] " << e.what() << std::endl;
+                        std::cerr << "[Logger][ERROR] " << e.what() << '\n';
                         utils::Logger::DestroyFile();
                     }
                 }
@@ -107,14 +112,14 @@ namespace utils {
             template<typename ...Type>
             void hdr_colour_format(const Logger::Level level,
                                    const utils::os::command_t hdr_colour,
-                                   const std::string_view& hdr_str,
-                                   const std::string_view& format,
+                                   const std::string_view hdr_str,
+                                   const std::string_view format,
                                    const Type& ...args)
             {
                 LOCK_BLOCK(utils::Logger::get().logger_mutex);
 
                 if (HEDLEY_LIKELY(this->canLog(level))) {
-                    const bool stamp = this->GetFileTimestamp();
+                    const bool stamp = this->IsFileTimestampEnabled();
                     this->Command(  utils::os::Console::FG
                                   | utils::os::Console::BOLD
                                   | hdr_colour);
@@ -129,7 +134,6 @@ namespace utils {
                 }
             }
 
-        public:
             Logger()
                 : screen_enabled(true)
                 , screen_paused(false)
@@ -144,14 +148,9 @@ namespace utils {
 
                 if (HEDLEY_UNLIKELY(this->screen_output.bad())) {
                     this->screen_enabled = false;
-                    std::cerr << "[Logger][ERROR] Bad screen output stream!" << std::endl;
+                    std::cerr << "[Logger][ERROR] Bad screen output stream!\n";
                 }
             }
-
-            Logger(Logger const&)         = delete;
-            Logger(Logger&&)              = delete;
-            void operator=(Logger const&) = delete;
-            Logger& operator=(Logger&&)   = delete;
 
             /**
              *  Dtor: write line to outputs and close streams.
@@ -160,6 +159,7 @@ namespace utils {
                 const std::string end_line =
                         utils::Logger::CRLF
                       + utils::Logger::LINE<>
+                      + utils::Logger::CRLF
                       + utils::Logger::CRLF;
 
                 if (this->file_enabled) {
@@ -171,6 +171,12 @@ namespace utils {
 
                 this->write_to_screen(end_line);
             }
+
+        public:
+            Logger(Logger const&)         = delete;
+            Logger(Logger&&)              = delete;
+            void operator=(Logger const&) = delete;
+            Logger& operator=(Logger&&)   = delete;
 
             static void InitFile(const std::string& fileName = "",
                                  const utils::Logger::Level level = utils::Logger::Level::LOG_INFO)
@@ -185,7 +191,7 @@ namespace utils {
                         utils::Logger::get().log_file.open(fileName, std::ios_base::app | std::ios_base::out);
                         enable_file = true;
                     } catch (std::exception const& e) {
-                        std::cerr << "[Logger][ERROR] " << e.what() << std::endl;
+                        std::cerr << "[Logger][ERROR] " << e.what() << '\n';
                         enable_file = false;
                     }
                 }
@@ -202,11 +208,12 @@ namespace utils {
 
                 if (HEDLEY_UNLIKELY(console_stream.bad())) {
                     utils::Logger::get().screen_output.tie(&std::cerr);
-                    utils::Logger::get().screen_output << "[Logger][ERROR] Bad screen output stream!" << std::endl;
+                    utils::Logger::get().screen_output << "[Logger][ERROR] Bad screen output stream!\n";
                 } else {
                     utils::Logger::get().screen_output.tie(&console_stream);
                 }
 
+                utils::os::EnableVirtualConsole();
                 utils::Logger::get().screen_enabled = true;
             }
 
@@ -263,10 +270,10 @@ namespace utils {
             }
 
             /**
-             *  \brief  Write a seperator (line) to the stream.
+             *  \brief  Write a separator (line) to the stream.
              */
             static void Separator(void) {
-                utils::Logger::Write(utils::Logger::LINE<>);
+                utils::Logger::WriteLn(utils::Logger::LINE<>);
             }
 
             /**
@@ -277,11 +284,11 @@ namespace utils {
              *  @param  args
              */
             template<typename ...Type>
-            static void Writef(const std::string& format, const Type& ...args) {
+            static void Writef(const std::string_view format, const Type& ...args) {
                 if constexpr (sizeof...(args) > 0) {
-                    utils::Logger::Write(utils::string::format(format, args...), utils::Logger::GetFileTimestamp());
+                    utils::Logger::Write(utils::string::format(format, args...), utils::Logger::IsFileTimestampEnabled());
                 } else {
-                    utils::Logger::Write(format, utils::Logger::GetFileTimestamp());
+                    utils::Logger::Write(format, utils::Logger::IsFileTimestampEnabled());
                 }
             }
 
@@ -291,9 +298,9 @@ namespace utils {
              *  @param  text
              *      The text to write.
              */
-            static void Write(const std::string_view& text, const bool timestamp = false) {
+            static void Write(const std::string_view text, const bool timestamp = false) {
                 if (HEDLEY_LIKELY(utils::Logger::get().canLog())) {
-                    const bool stamp = utils::Logger::GetFileTimestamp();
+                    const bool stamp = utils::Logger::IsFileTimestampEnabled();
                     utils::Logger::SetFileTimestamp(timestamp);
 
                     utils::Logger::get().write_to_screen(text);
@@ -303,12 +310,13 @@ namespace utils {
                 }
             }
 
-            static inline void WriteLn(const std::string& text, const bool timestamp = false) {
-                utils::Logger::Write(text + utils::Logger::CRLF, timestamp);
+            static inline void WriteLn(const std::string_view text, const bool timestamp = false) {
+                utils::Logger::Write(text, timestamp);
+                utils::Logger::Write(utils::Logger::CRLF, false);
             }
 
             template<typename ...Type>
-            static void Debug(const std::string_view& format, const Type& ...args) {
+            static void Debug(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_DEBUG,
                     utils::os::Console::BG | utils::os::Console::BLUE, "DEBUG",
@@ -317,7 +325,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Success(const std::string_view& format, const Type& ...args) {
+            static void Success(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_INFO,
                     utils::os::Console::GREEN, "Success",
@@ -326,7 +334,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Info(const std::string_view& format, const Type& ...args) {
+            static void Info(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_INFO,
                     utils::os::Console::CYAN, "Info",
@@ -335,7 +343,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Notice(const std::string_view& format, const Type& ...args) {
+            static void Notice(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_NOTICE,
                     utils::os::Console::BG |
@@ -347,7 +355,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Warn(const std::string_view& format, const Type& ...args) {
+            static void Warn(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_WARNING,
                     utils::os::Console::YELLOW, "Warning",
@@ -356,7 +364,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Error(const std::string_view& format, const Type& ...args) {
+            static void Error(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_ERROR,
                     utils::os::Console::RED, "Error",
@@ -365,7 +373,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Critical(const std::string_view& format, const Type& ...args) {
+            static void Critical(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_CRITICAL,
                     utils::os::Console::BG | utils::os::Console::RED, "Critical",
@@ -374,7 +382,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Alert(const std::string_view& format, const Type& ...args) {
+            static void Alert(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_ALERT,
                     utils::os::Console::MAGENTA, "Alert",
@@ -383,7 +391,7 @@ namespace utils {
             }
 
             template<typename ...Type>
-            static void Emergency(const std::string_view& format, const Type& ...args) {
+            static void Emergency(const std::string_view format, const Type& ...args) {
                 utils::Logger::get().hdr_colour_format(
                     utils::Logger::Level::LOG_EMERGENCY,
                     utils::os::Console::BG |
@@ -405,13 +413,14 @@ namespace utils {
                     utils::Logger::Command(  utils::os::Console::FG
                                            | utils::os::Console::BRIGHT
                                            | utils::os::Console::WHITE);
-                    utils::Logger::Write(utils::Logger::CRLF
-                                       + utils::Logger::LINE<'-'>, false);
+                    utils::Logger::Write(    utils::Logger::CRLF
+                                           + utils::Logger::LINE<'-'>, false);
 
                     utils::Logger::Command(  utils::os::Console::RESET
                                            | utils::os::Console::FG
                                            | utils::os::Console::BOLD
                                            | utils::os::Console::RED);
+                    utils::Logger::WriteLn("");
                     utils::Logger::Write("[ERROR] Exception thrown:\n  ", true);
 
                     utils::Logger::Command(  utils::os::Console::FG
@@ -452,7 +461,7 @@ namespace utils {
                                        + utils::Logger::LINE<'-'>, false);
 
                     utils::Logger::Command(  utils::os::Console::RESET);
-                    utils::Logger::Write(utils::Logger::CRLF);
+                    utils::Logger::WriteLn(utils::Logger::CRLF);
                 } else {
                     std::cerr << ( utils::os::Console::RESET
                                  | utils::os::Console::FG | utils::os::Console::BRIGHT
@@ -476,7 +485,7 @@ namespace utils {
                               << ( utils::os::Console::FG | utils::os::Console::BRIGHT
                                  | utils::os::Console::MAGENTA)
                               << function
-                              << utils::os::Console::RESET << std::flush << std::endl;
+                              << utils::os::Console::RESET << '\n';
                 }
             }
 
@@ -547,7 +556,7 @@ namespace utils {
                 }
             }
 
-            static inline void SetScreenTitle(const std::string_view& title) {
+            static inline void SetScreenTitle(const std::string_view title) {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::os::SetScreenTitle(title, utils::Logger::GetConsoleStream());
             }
@@ -556,9 +565,17 @@ namespace utils {
                 LOCK_BLOCK(utils::Logger::get().screen_mutex);
                 utils::Logger::get().screen_paused = true;
             }
+            static inline bool IsPausedScreen(void) {
+                LOCK_BLOCK(utils::Logger::get().screen_mutex);
+                return utils::Logger::get().screen_paused;
+            }
             static inline void PauseFile(void) {
                 LOCK_BLOCK(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_paused = true;
+            }
+            static inline bool IsPausedFile(void) {
+                LOCK_BLOCK(utils::Logger::get().file_mutex);
+                return utils::Logger::get().file_paused;
             }
             static inline void Pause(void) {
                 utils::Logger::get().PauseScreen();
@@ -582,7 +599,7 @@ namespace utils {
                 LOCK_BLOCK(utils::Logger::get().file_mutex);
                 utils::Logger::get().file_timestamp = stamp;
             }
-            static inline bool GetFileTimestamp(void) {
+            static inline bool IsFileTimestampEnabled(void) {
                 return utils::Logger::get().file_timestamp;
             }
 
@@ -611,12 +628,10 @@ namespace utils {
             static inline constexpr size_t  CONSOLE_WIDTH = 79;
             static inline const std::string FILL  = "#";
             static inline const std::string EMPTY = " ";
-            static inline const std::string CRLF  = "\r\n";
+            static inline const std::string CRLF  = "\n";
             template<char line_char = '-'>
             static inline const std::string LINE
-                = std::string(utils::Logger::CONSOLE_WIDTH,
-                              line_char)
-                    + utils::Logger::CRLF;
+                = std::string(utils::Logger::CONSOLE_WIDTH, line_char);
     };
 }
 

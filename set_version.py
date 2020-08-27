@@ -6,7 +6,7 @@ import os
 
 LF = "\n" if os.name == "nt" else "\r\n"
     
-OFFSET = 40
+OFFSET = 41
 
 MAIN         = "./main.cpp"
 MAIN_MATCH   = "VERSION("

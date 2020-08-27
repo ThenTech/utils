@@ -7,6 +7,22 @@
 #include <numeric>
 
 
+TEST_CASE("Test utils::memory::bit_cast") {
+    const int test = 0x40080000;
+
+    struct Bytes { std::byte arr[4]; };
+    Bytes b = {std::byte(0x00), std::byte(0x00), std::byte(0x08), std::byte(0x40)};
+
+    REQUIRE(int(b.arr[3]) == 0x40);
+    REQUIRE(int(b.arr[2]) == 0x08);
+    REQUIRE(int(b.arr[1]) == 0x00);
+    REQUIRE(int(b.arr[0]) == 0x00);
+
+    REQUIRE(test == utils::memory::bit_cast<int>(test));
+    REQUIRE(doctest::Approx(2.125) == double(utils::memory::bit_cast<float>(test)));
+    REQUIRE(doctest::Approx(2.125) == double(utils::memory::bit_cast<float>(b)));
+}
+
 TEST_CASE("Test utils::memory::allocVar") {
     int *test     = utils::memory::new_var<int>();
     int *test_val = utils::memory::new_var<int>(0xDEADBEEF);

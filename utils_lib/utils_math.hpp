@@ -191,18 +191,55 @@ namespace utils::math {
      *	\param	y
      *		The second value to compare.
      *	\param	epsilon
-     *		The precision to compare with (standard deviation of 1e-4 or 0.0001).
+     *		The precision to compare with (standard deviation of 1e-6).
      *
      *	\return	bool
      *		Returns whether x equals y within the given epsilon precision.
      */
-    template<typename T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool epsilon_equals(const T x, const T y, ATTR_MAYBE_UNUSED const double epsilon = 1e-4) {
+    template<
+        typename T,
+        typename Largest = typename std::common_type_t<T, double>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool
+        epsilon_equals(const T x, const T y,
+                       ATTR_MAYBE_UNUSED const Largest epsilon = 1e-6)
+    {
         if constexpr (std::is_integral_v<T>) {
             return x == y;
         } else {
-            // TODO Use std::numeric_limits<T>::epsilon() ?
-            return std::abs(x - y) < epsilon;
+            constexpr auto eps = std::numeric_limits<T>::epsilon();
+            return std::fabs(x - y) < std::max(Largest{eps}, Largest{epsilon});
+        }
+    }
+
+    /**	\brief	Check if the given values are equal.
+     *          For integral types, `==` is used, while floating point types
+     *          use a comparison with relative diff(x, y) and epsilon.
+     *
+     *	\param	x
+     *		The first value to compare.
+     *	\param	y
+     *		The second value to compare.
+     *	\param	epsilon
+     *		The precision to compare with (standard deviation of 1e-6).
+     *
+     *	\return	bool
+     *		Returns whether x equals y within the given epsilon precision.
+     */
+    template<
+        typename T,
+        typename Largest = typename std::common_type_t<T, double>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline constexpr bool
+        epsilon_rel_equals(const T x, const T y,
+                           ATTR_MAYBE_UNUSED const Largest tolerance = 1e-6)
+    {
+        if constexpr (std::is_integral_v<T>) {
+            return x == y;
+        } else {
+            constexpr auto eps = std::numeric_limits<T>::epsilon();
+            return std::fabs(x - y) < std::max(Largest{tolerance}, Largest{eps})
+                                    * std::max(std::fabs(x), std::fabs(y));
         }
     }
 
@@ -277,8 +314,13 @@ namespace utils::math {
                                                  const T min_new, const T max_new,
                                                  const T x_old)
     {
-        const auto old_x_ratio = std::clamp(double(x_old - min_old) / (max_old - min_old), 0.0, 1.0);
-        return min_new + old_x_ratio * double(max_new - min_new);
+        const auto old_x_ratio = std::clamp(static_cast<long double>(x_old - min_old) / (max_old - min_old), 0.0l, 1.0l);
+
+        #if UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+            return std::lerp(min_new, max_new, old_x_ratio)
+        #else
+            return min_new + old_x_ratio * static_cast<long double>(max_new - min_new);
+        #endif
     }
 
     /**
@@ -304,8 +346,13 @@ namespace utils::math {
                                                   const T min_new, const T max_new,
                                                   const T x_old)
     {
-        const auto old_x_ratio = std::clamp(double(x_old - min_old) / (max_old - min_old), 0.0, 1.0);
-        return min_new + (old_x_ratio * old_x_ratio * (3.0 - 2.0 * old_x_ratio)) * double(max_new - min_new);
+        const auto old_x_ratio = std::clamp(static_cast<long double>(x_old - min_old) / (max_old - min_old), 0.0l, 1.0l);
+
+        #if UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+            return std::lerp(min_new, max_new, (old_x_ratio * old_x_ratio * (3.0l - 2.0l * old_x_ratio)))
+        #else
+            return min_new + (old_x_ratio * old_x_ratio * (3.0l - 2.0l * old_x_ratio)) * static_cast<long double>(max_new - min_new);
+        #endif
     }
 
     /**
@@ -326,7 +373,7 @@ namespace utils::math {
     > ATTR_MAYBE_UNUSED
     static constexpr void rounded(Iterator start, Iterator end) {
         constexpr double factor = utils::math::pow<precision>(10.0);
-        std::for_each(start, end, [](T& x) { x = std::round(x * factor) / factor; });
+        std::for_each(start, end, [&](T& x) { x = std::round(x * factor) / factor; });
     }
 
     /**

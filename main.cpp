@@ -1,9 +1,10 @@
+#define UTILS_PROFILER_ENABLE 1
 #include "utils_test/test_settings.hpp"
 #include "utils_lib/utils_compiler.hpp"
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::beta);
+static constexpr utils::Version VERSION(0, 45, 0, utils::version::prerelease::beta);
 
 #ifdef ENABLE_TESTS
     HEDLEY_WARNING("Warning: TESTS ENABLED")
@@ -13,6 +14,7 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
 
     #include "utils_lib/utils_logger.hpp"
     #include "utils_lib/utils_time.hpp"
+    #include "utils_lib/utils_profiler.hpp"
 #else
     HEDLEY_WARNING("Warning: TESTS DISABLED")
 
@@ -35,6 +37,7 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
     #include "utils_lib/utils_misc.hpp"
     #include "utils_lib/utils_os.hpp"
     #include "utils_lib/utils_print.hpp"
+    #include "utils_lib/utils_profiler.hpp"
     #include "utils_lib/utils_random.hpp"
     #include "utils_lib/utils_sqlite.hpp"
     #include "utils_lib/utils_string.hpp"
@@ -47,6 +50,8 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
     #include "utils_lib/algo/algo_huffman.hpp"
     #include "utils_lib/algo/algo_bstree.hpp"
     #include "utils_lib/algo/algo_avltree.hpp"
+    #include "utils_lib/crypto/crypto_feistel.hpp"
+    #include "utils_lib/crypto/crypto_aes.hpp"
 #endif
 
 /*
@@ -71,6 +76,9 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
  *  https://github.com/hosseinmoein/Matrix
  *  https://github.com/fengwang/matrix
  *  Eigen
+ *
+ *  More containers (like the bs tree)
+ *  Common algorithms? (Dijkstra/A* etc)
  *
  *  Args:
  *      https://github.com/p-ranav/argparse
@@ -106,16 +114,23 @@ static constexpr utils::Version VERSION(0, 44, 0, utils::version::prerelease::be
  *      https://github.com/arun11299/cpp-subprocess
  *      https://github.com/sheredom/process.h
  *
+ *      https://github.com/jfalcou/spy
+ *
+ *      https://github.com/dpilger26/NumCpp
+ *      https://github.com/skypjack/uvw
+ *
  *  GCC >= 9:
  *      https://github.com/Neargye/magic_enum
  *
  *  Resources:
+ *      https://github.com/caiorss/C-Cpp-Notes
  *      https://stackoverflow.com/Questions/4158900/embedding-resources-in-executable-using-gcc
  */
 int main(int argc, char *argv[]) {
 
 #ifdef ENABLE_TESTS
-#ifdef UTILS_COMPILER_MSVC
+    UTILS_PROFILE_BEGIN_SESSION("utils_test_profile.json");
+#if defined(UTILS_COMPILER_MSVC)
     // Disable breaking on std::abort(), CATCH must handle this instead.
     _set_abort_behavior(0, _WRITE_ABORT_MSG);
 #endif
@@ -125,14 +140,13 @@ int main(int argc, char *argv[]) {
 
     int status = 0;
     const auto test_duration = utils::time::Timer::time<utils::time::Timer::time_ms>([&]() {
-//        status = Catch::Session().run(argc, argv);
          status = doctest::Context(argc, argv).run();
     });
 
     utils::Logger::Notice("Tests completed in %.3f ms (%d)", test_duration, status);
-
     return status;
 #else
+    UTILS_PROFILE_BEGIN_SESSION("utils_profile.json");
     UNUSED(argc, argv);
     utils::Logger::Create("test.log", utils::Logger::Level::LOG_DEBUG);
     utils::Logger::SetScreenTitle("C++ Utility library " + VERSION.to_string());
@@ -149,23 +163,15 @@ int main(int argc, char *argv[]) {
     utils::Logger::Alert("Alert");
     utils::Logger::Emergency("Emergency");
 
-    /* 0x06 => 4
-     * 0xFFFFFFF0 => 5
-     * 0x10 => 6
-     * 0x08 => 5
-     */
-    utils::Logger::Writef("0x%02X => %d\n", 6  , utils::bits::bits_needed(6));
-    utils::Logger::Writef("0x%02X => %d\n", -16, utils::bits::bits_needed<int8_t>(-16));
-    utils::Logger::Writef("0x%02X => %d\n", 16 , utils::bits::bits_needed(16));
-    utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::bits_needed(8));
-    utils::Logger::Writef("0x%02X => %d\n", 8  , utils::bits::ffs(8));
-
     utils::Logger::Command(utils::os::Console::BRIGHT | utils::os::Console::CYAN);
     utils::Logger::WriteLn(utils::print::type2name(std::string() /*, "std::"*/));
     utils::Logger::Command(utils::os::Console::RESET);
 
 //    utils::algo::Huffman<>::encode("README.md", "enc.txt");
 //    utils::algo::Huffman<>::decode("enc.txt", "dec.txt");
+
+//    utils::crypto::FeistelCipher<>::encode("README.md", "enc.txt");
+//    utils::crypto::FeistelCipher<>::decode("enc.txt", "dec.txt");
 
 //    auto vec2 = utils::memory::new_unique_vector<utils::algo::Node<>>();
 //    vec2->emplace_back(utils::memory::allocVar<utils::algo::Node<>>(0));
@@ -185,7 +191,7 @@ int main(int argc, char *argv[]) {
 
     try {
         throw utils::exceptions::FileReadException("log.txt");
-    } CATCH_AND_LOG_ERROR_TRACE();
+    } CATCH_AND_LOG_ERROR_TRACE()
 
     utils::Logger::Writef("UUID: %s\n", utils::random::generate_uuid().c_str());
 
@@ -199,6 +205,8 @@ int main(int argc, char *argv[]) {
 
 //    utils::Logger::WriteProgress(utils::algorithm::iter::range<size_t>(0, 400),
 //                                 [](size_t){ utils::time::sleep(utils::time::milliseconds(1)); });
+
+    utils::Logger::Stream("\n\n", utils::memory::Metrics, "\n");
 
     return 0;
 #endif  // ENABLE_TESTS

@@ -250,13 +250,14 @@ namespace utils::algo {
              *      ending withe a Node that has the data T.
              */
             void treeAddLeaf(const KeyPair& pair) {
-                const size_t mask = utils::bits::mask_one(pair.second.len);  // Mask the pair.second.len'th bit
-                      size_t dirs = pair.second.word;              // The directions to follow in the tree
+                const auto& [key, word_value] = pair;
+                const size_t mask = utils::bits::mask_one(word_value.len);  // Mask the word_value.len'th bit
+                      size_t dirs = word_value.word;                        // The directions to follow in the tree
 
                 algo::Node<T> *current = this->tree_root;
 
                 // Grow the tree according to the dirs path, starting from MSB, except for last dir
-                for (size_t bits = pair.second.len; --bits; dirs <<= 1) {
+                for (size_t bits = word_value.len; --bits; dirs <<= 1) {
                     // Follow the direction and create a dummy Node if none exists
                     if (dirs & mask) {
                         if (current->right == nullptr)
@@ -271,9 +272,9 @@ namespace utils::algo {
 
                 // Create a new Node at the correct position (the last one in dirs)
                 if (dirs & mask) {
-                    current->right = utils::memory::new_var<algo::Node<T>>(pair.first);
+                    current->right = utils::memory::new_var<algo::Node<T>>(key);
                 } else {
-                    current->left  = utils::memory::new_var<algo::Node<T>>(pair.first);
+                    current->left  = utils::memory::new_var<algo::Node<T>>(key);
                 }
             }
 
@@ -429,7 +430,7 @@ namespace utils::algo {
 
                 // Encode
                 reader.reset();
-                while(reader.get_position() < length) {
+                while (reader.get_position() < length) {
                     const T word = T(reader.get(algo::Huffman<T>::KEY_BITS));
                     const auto& pair = this->dict[word];
                     writer->put(pair.len, pair.word);
@@ -547,8 +548,8 @@ namespace utils::algo {
 
                     if (writer) {
                         utils::io::bytes_to_file(encfile,
-                                                   writer->get_buffer(),
-                                                   writer->get_last_byte_position());
+                                                 writer->get_buffer(),
+                                                 writer->get_last_byte_position());
                     } else {
                         utils::Logger::Warn("[Huffman] Nothing to encode! Check contents of '%s'" + utils::Logger::CRLF, rawfile.c_str());
                         return false;
@@ -577,8 +578,8 @@ namespace utils::algo {
 
                     if (writer) {
                         utils::io::bytes_to_file(decfile,
-                                                   writer->get_buffer(),
-                                                   writer->get_size());
+                                                 writer->get_buffer(),
+                                                 writer->get_size());
                     } else {
                         utils::Logger::Warn("[Huffman] Nothing to decode! Check contents of '%s'" + utils::Logger::CRLF, encfile.c_str());
                         return false;
@@ -595,9 +596,9 @@ namespace utils::algo {
             void printDict(void)  {
                 utils::Logger::Info("[Huffman] Dictionary:");
 
-                for (const auto& pair : this->dict) {
+                for (const auto& [key, word_value] : this->dict) {
                     utils::Logger::Writef("%02X: %8X (%d bits)\n",
-                                          pair.first, pair.second.word,pair.second.len);
+                                          key, word_value.word, word_value.len);
                 }
             }
 

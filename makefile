@@ -16,6 +16,7 @@ LIBS = -lstdc++fs -pthread -lsqlite3
 #       sudo apt update
 #       sudo apt install g++-9 -y
 #       sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-9 
+#       pip3 install git+https://github.com/rpgillespie6/fastcov.git
 # CXX = g++
 # LD = ld
 
@@ -23,7 +24,7 @@ LIBS = -lstdc++fs -pthread -lsqlite3
 # Debug
 # CFLAGS = $(ECFLAGS) -std=c++17 -Wall -Og
 # Release
-CFLAGS = $(ECFLAGS) -std=c++17 -Wall -O3 -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections
+CFLAGS = $(ECFLAGS) -std=c++17 -Wall -O3 -Wl,--strip-all,--gc-sections -fdata-sections -ffunction-sections -Wno-unknown-pragmas
 
 # Default target
 TARGET      = utils
@@ -38,13 +39,18 @@ ifndef fastcoverage
 fastcoverage  = @fastcov
 endif
 
+CPUCOUNT = $(grep -c "^processor" /proc/cpuinfo)
+
 ##################################################################
 
-.PHONY: all default $(TARGET) test clean
+.PHONY: all default $(TARGET) test multi clean
 
 all:
 	@$(MAKE) --no-print-directory $(TARGET)
 	@$(MAKE) --no-print-directory test
+
+multi:
+	@$(MAKE) -j ${CPUCOUNT} --no-print-directory $(TARGET)
 
 pre: clean
 	$(createout)
@@ -55,13 +61,13 @@ default: pre compile
 test: CFLAGS := -DENABLE_TESTS $(CFLAGS)
 test: TARGET  = $(TARGET_TEST)
 test: default
-	@./$(OUTPUT)/$(TARGET_TEST)
+	@$(OUTPUT)/$(TARGET_TEST)
     
-coverage: CFLAGS := -DENABLE_TESTS -coverage -std=c++17 -Wall -O0
+coverage: CFLAGS := -DENABLE_TESTS -coverage -std=c++17 -Wall -O0 -Wno-unknown-pragmas
 coverage: TARGET  = $(TARGET_GCOV)
 coverage: default
 	$(fastcoverage) --zerocounters
-	@./$(OUTPUT)/$(TARGET_GCOV)
+	@$(OUTPUT)/$(TARGET_GCOV)
 	$(fastcoverage) --exclude $(COV_IGNORE) --lcov -o $(OUTPUT_GCOV)/report.info
 	@genhtml -o $(OUTPUT_GCOV) $(OUTPUT_GCOV)/report.info
 
@@ -83,6 +89,9 @@ RESOURCES = $(patsubst %.rc,%.o, $(wildcard *.rc **/*.rc))
 %.o: %.rc
 	@echo "Compile" $< "->" $@
 	@$(LD) -r -b binary $< -o $@
+ifeq ($(OS),Windows_NT)
+	@shell command -v windres 1> /dev/null && windres $< -o $@
+endif
 
 .PRECIOUS: $(TARGET) $(OBJECTS) $(RESOURCES)
 

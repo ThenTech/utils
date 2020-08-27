@@ -553,7 +553,7 @@ namespace utils::print {
 
         public:
             Progressbar(const size_t max_iteration,
-                        const std::string_view& prefix,
+                        const std::string_view prefix,
                         const bool with_bar,
                         const bool with_percentage,
                         const bool with_elapsed,
@@ -712,9 +712,8 @@ namespace std {
 
     // Prints a print_container_helper to the specified stream.
     template<typename T, typename TChar, typename TCharTraits, typename TDelimiters>
-    inline auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::print::print_container_helper<T, TChar, TCharTraits, TDelimiters>& helper)
+    inline auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                            const utils::print::print_container_helper<T, TChar, TCharTraits, TDelimiters>& helper)
     {
         helper(stream);
         return stream;
@@ -722,9 +721,8 @@ namespace std {
 
     // NOTE Redundant?
     template<typename T, size_t N, typename TChar, typename TCharTraits, typename TDelimiters>
-    inline auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::print::array_wrapper<T, N>& helper)
+    inline auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                            const utils::print::array_wrapper<T, N>& helper)
     {
         stream << utils::print::print_container_helper<utils::print::array_wrapper<T, N>, TChar, TCharTraits>(helper);
         return stream;
@@ -732,9 +730,8 @@ namespace std {
 
     /// Prints a pair to the stream using delimiters from delimiters<std::pair<T1, T2>>.
     template<typename T1, typename T2, typename TChar, typename TCharTraits>
-    auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const std::pair<T1, T2>& value)
+    auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                     const std::pair<T1, T2>& value)
     {
         const auto delims = utils::print::delimiters<std::pair<T1, T2>, TChar>::values;
         if (HEDLEY_LIKELY(delims.prefix != NULL))
@@ -754,9 +751,9 @@ namespace std {
     }
 
     template<typename ...Args, typename TChar, typename TCharTraits, typename TDelimiters>
-    auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const utils::print::print_tuple_helper<std::tuple<Args...>, sizeof...(Args), TChar, TDelimiters>& helper)
+    inline auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                            const utils::print::print_tuple_helper<std::tuple<Args...>,
+                            sizeof...(Args), TChar, TDelimiters>& helper)
     {
         helper(stream);
         return stream;
@@ -764,9 +761,8 @@ namespace std {
 
     /// Prints a tuple to the stream using delimiters from delimiters<std::tuple<Args...>>.
     template<typename ...Args, typename TChar, typename TCharTraits>
-    auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const std::tuple<Args...>& value)
+    auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                     const std::tuple<Args...>& value)
     {
         const auto delims = utils::print::delimiters<std::tuple<Args...>, TChar>::values;
         if (HEDLEY_LIKELY(delims.prefix != NULL))
@@ -782,9 +778,8 @@ namespace std {
 
     /// Prints an optional to the stream using delimiters from delimiters<std::optional<T>>.
     template<typename T, typename TChar, typename TCharTraits>
-    auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const std::optional<T>& optional)
+    auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                     const std::optional<T>& optional)
     {
         const auto delims = utils::print::delimiters<std::optional<T>, TChar>::values;
         if (HEDLEY_UNLIKELY(delims.prefix != NULL))
@@ -803,9 +798,8 @@ namespace std {
 
     /// Prints a variant to the stream.
     template<typename Arg, typename ...Args, typename TChar, typename TCharTraits>
-    auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const std::variant<Arg, Args...>& var)
+    auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                     const std::variant<Arg, Args...>& var)
     {
         const auto delims = utils::print::delimiters<std::variant<Arg, Args...>, TChar>::values;
         if (HEDLEY_UNLIKELY(delims.prefix != NULL))
@@ -844,15 +838,18 @@ namespace std {
      *  \return Returns the stream reference.
      */
     template<typename T, typename TChar, typename TCharTraits>
-    auto& operator<<(
-            std::basic_ostream<TChar, TCharTraits>& stream,
-            const T& value)
+    auto& operator<<(std::basic_ostream<TChar, TCharTraits>& stream,
+                     const T& value)
     {
         if constexpr (std::is_pointer_v<T>) {
-            if constexpr (std::is_void_v<std::remove_pointer_t<T>>) {
-                stream << (value == nullptr ? "nullptr" : utils::string::format("%p", value));
+            if (value == nullptr) {
+                stream << "nullptr";
             } else {
-                stream << *value;
+                if constexpr (std::is_void_v<std::remove_pointer_t<T>>) {
+                    stream << utils::string::format("%p", value);
+                } else {
+                    stream << *value;
+                }
             }
         } else if constexpr (utils::traits::is_iterator_v<T>) {
             stream << *value;
@@ -861,7 +858,9 @@ namespace std {
         } else if constexpr (utils::traits::is_container<T>::value) {
             (utils::print::print_container_helper<T, TChar, TCharTraits>(value))(stream);
         } else {
-            stream << "<Object " << utils::print::type2name(value) << ">";
+            stream << "<"               << utils::print::type2name(value)
+                   << " instance at 0x" << utils::string::format("%p", &value)
+                   << ">";
             // ASSERT(false && "Warning: Unprintable value");
         }
 

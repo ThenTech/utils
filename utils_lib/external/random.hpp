@@ -2,7 +2,7 @@
 ______  ___   _   _______ ________  __
 | ___ \/ _ \ | \ | |  _  \  _  |  \/  | Random for modern C++
 | |_/ / /_\ \|  \| | | | | | | | .  . |
-|    /|  _  || . ` | | | | | | | |\/| | version 1.3.0
+|    /|  _  || . ` | | | | | | | |\/| | version 1.3.1
 | |\ \| | | || |\  | |/ /\ \_/ / |  | |
 \_| \_\_| |_/\_| \_/___/  \___/\_|  |_/ https://github.com/effolkronium/random
 
@@ -47,7 +47,7 @@ namespace effolkronium {
 
     namespace details {
         /// Key type for getting common type numbers or objects
-        struct common{ }; 
+        struct common{ };
 
         /// True if type T is applicable by a std::uniform_int_distribution
         template<typename T>
@@ -89,15 +89,15 @@ namespace effolkronium {
                 || is_uniform_int <T>::value;
         };
 
-		/// True if type T is character type
-		template<typename T>
-		struct is_supported_character {
-			static constexpr bool value =
-				   std::is_same<T, char>::value
-				|| std::is_same<T, wchar_t>::value
-				|| std::is_same<T, char16_t>::value
-				|| std::is_same<T, char32_t>::value;
-		};
+        /// True if type T is character type
+        template<typename T>
+        struct is_supported_character {
+            static constexpr bool value =
+                   std::is_same<T, char>::value
+                || std::is_same<T, wchar_t>::value
+                || std::is_same<T, char16_t>::value
+                || std::is_same<T, char32_t>::value;
+        };
 
         /// True if type T is iterator
         template<typename T>
@@ -136,12 +136,12 @@ namespace effolkronium {
     };
 
     /**
-    * \brief Base template class for random 
+    * \brief Base template class for random
     *        with static API and static internal member storage
-    * \note it is NOT thread safe but more efficient then 
+    * \note it is NOT thread safe but more efficient then
     *                           basic_random_thread_local
     * \param Engine A random engine with interface like in the std::mt19937
-    * \param Seeder A seeder type which return seed for internal engine 
+    * \param Seeder A seeder type which return seed for internal engine
     *                                             through operator()
     */
     template<
@@ -205,7 +205,7 @@ namespace effolkronium {
         /**
         * \brief Reinitializes the internal state
         * of the random-number engine using new seed value
-        * \param value The seed value to use 
+        * \param value The seed value to use
         *        in the initialization of the internal state
         */
         static void seed( const typename Engine::result_type value =
@@ -216,7 +216,7 @@ namespace effolkronium {
         /**
         * \brief Reinitializes the internal state
         * of the random-number engine using new seed value
-        * \param seq The seed sequence 
+        * \param seq The seed sequence
         *        to use in the initialization of the internal state
         */
         template<typename Sseq>
@@ -279,7 +279,7 @@ namespace effolkronium {
         * \param to The second limit number of a random range
         * \return A random integer number in a [from; to] range
         * \note Allow both: 'from' <= 'to' and 'from' >= 'to'
-		* \note Prevent implicit type conversion
+        * \note Prevent implicit type conversion
         */
         template<typename T>
         static typename std::enable_if<details::is_uniform_int<T>::value
@@ -345,7 +345,7 @@ namespace effolkronium {
         template<
             typename Key,
             typename A,
-            typename B, 
+            typename B,
             typename C = typename std::common_type<A, B>::type
         >
         static typename std::enable_if<
@@ -359,23 +359,23 @@ namespace effolkronium {
             return get( static_cast<C>( from ), static_cast<C>( to ) );
         }
 
-		/**
-		* \brief Generate a random character in a [from; to] range
-		*        by std::uniform_int_distribution
-		* \param from The first limit number of a random range
-		* \param to The second limit number of a random range
-		* \return A random character in a [from; to] range
-		* \note Allow both: 'from' <= 'to' and 'from' >= 'to'
-		* \note Prevent implicit type conversion
-		*/
-		template<typename T>
-		static typename std::enable_if<details::is_supported_character<T>::value
-			, T>::type get(T from = std::numeric_limits<T>::min(),
-				T to = std::numeric_limits<T>::max()) {
-			if (from < to) // Allow range from higher to lower
-				return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(from), static_cast<std::int64_t>(to) }(engine_instance()));
-			return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(to), static_cast<std::int64_t>(from) }(engine_instance()));
-		}
+        /**
+        * \brief Generate a random character in a [from; to] range
+        *        by std::uniform_int_distribution
+        * \param from The first limit number of a random range
+        * \param to The second limit number of a random range
+        * \return A random character in a [from; to] range
+        * \note Allow both: 'from' <= 'to' and 'from' >= 'to'
+        * \note Prevent implicit type conversion
+        */
+        template<typename T>
+        static typename std::enable_if<details::is_supported_character<T>::value
+            , T>::type get(T from = std::numeric_limits<T>::min(),
+                T to = std::numeric_limits<T>::max()) {
+            if (from < to) // Allow range from higher to lower
+                return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(from), static_cast<std::int64_t>(to) }(engine_instance()));
+            return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(to), static_cast<std::int64_t>(from) }(engine_instance()));
+        }
 
         /**
         * \brief Generate a bool value with specific probability
@@ -427,7 +427,7 @@ namespace effolkronium {
         * \note If container is empty return std::end( container ) iterator
         */
         template<typename Container>
-        static auto get( Container& container ) -> 
+        static auto get( Container& container ) ->
             typename std::enable_if<details::is_iterator<
                 decltype(std::begin(container))>::value
                 , decltype(std::begin(container))
@@ -475,7 +475,7 @@ namespace effolkronium {
         * \brief Reorders the elements in the given range [first, last)
         *        such that each possible permutation of those elements
         *        has equal probability of appearance.
-        * \param first, last - the range of elements to shuffle randomly       
+        * \param first, last - the range of elements to shuffle randomly
         */
         template<typename RandomIt>
         static void shuffle( RandomIt first, RandomIt last ) {
@@ -505,19 +505,18 @@ namespace effolkronium {
     protected:
         /// get reference to the static engine instance
         static Engine& engine_instance( ) {
-            Seeder seeder{ };
-            static Engine engine{ seeder( ) };
+            static Engine engine{ Seeder{ }( ) };
             return engine;
         }
     };
 
     /**
-    * \brief Base template class for random 
+    * \brief Base template class for random
     *        with thread_local API and thread_local internal member storage
-    * \note it IS thread safe but less efficient then 
+    * \note it IS thread safe but less efficient then
     *                           basic_random_static
     * \param Engine A random engine with interface like in the std::mt19937
-    * \param Seeder A seeder type which return seed for internal engine 
+    * \param Seeder A seeder type which return seed for internal engine
     *                                             through operator()
     */
     template<
@@ -581,7 +580,7 @@ namespace effolkronium {
         /**
         * \brief Reinitializes the internal state
         * of the random-number engine using new seed value
-        * \param value The seed value to use 
+        * \param value The seed value to use
         *        in the initialization of the internal state
         */
         static void seed( const typename Engine::result_type value =
@@ -592,7 +591,7 @@ namespace effolkronium {
         /**
         * \brief Reinitializes the internal state
         * of the random-number engine using new seed value
-        * \param seq The seed sequence 
+        * \param seq The seed sequence
         *        to use in the initialization of the internal state
         */
         template<typename Sseq>
@@ -655,7 +654,7 @@ namespace effolkronium {
         * \param to The second limit number of a random range
         * \return A random integer number in a [from; to] range
         * \note Allow both: 'from' <= 'to' and 'from' >= 'to'
-		* \note Prevent implicit type conversion
+        * \note Prevent implicit type conversion
         */
         template<typename T>
         static typename std::enable_if<details::is_uniform_int<T>::value
@@ -721,7 +720,7 @@ namespace effolkronium {
         template<
             typename Key,
             typename A,
-            typename B, 
+            typename B,
             typename C = typename std::common_type<A, B>::type
         >
         static typename std::enable_if<
@@ -735,23 +734,23 @@ namespace effolkronium {
             return get( static_cast<C>( from ), static_cast<C>( to ) );
         }
 
-		/**
-		* \brief Generate a random character in a [from; to] range
-		*        by std::uniform_int_distribution
-		* \param from The first limit number of a random range
-		* \param to The second limit number of a random range
-		* \return A random character in a [from; to] range
-		* \note Allow both: 'from' <= 'to' and 'from' >= 'to'
-		* \note Prevent implicit type conversion
-		*/
-		template<typename T>
-		static typename std::enable_if<details::is_supported_character<T>::value
-			, T>::type get(T from = std::numeric_limits<T>::min(),
-				T to = std::numeric_limits<T>::max()) {
-			if (from < to) // Allow range from higher to lower
-				return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(from), static_cast<std::int64_t>(to) }(engine_instance()));
-			return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(to), static_cast<std::int64_t>(from) }(engine_instance()));
-		}
+        /**
+        * \brief Generate a random character in a [from; to] range
+        *        by std::uniform_int_distribution
+        * \param from The first limit number of a random range
+        * \param to The second limit number of a random range
+        * \return A random character in a [from; to] range
+        * \note Allow both: 'from' <= 'to' and 'from' >= 'to'
+        * \note Prevent implicit type conversion
+        */
+        template<typename T>
+        static typename std::enable_if<details::is_supported_character<T>::value
+            , T>::type get(T from = std::numeric_limits<T>::min(),
+                T to = std::numeric_limits<T>::max()) {
+            if (from < to) // Allow range from higher to lower
+                return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(from), static_cast<std::int64_t>(to) }(engine_instance()));
+            return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(to), static_cast<std::int64_t>(from) }(engine_instance()));
+        }
 
         /**
         * \brief Generate a bool value with specific probability
@@ -803,7 +802,7 @@ namespace effolkronium {
         * \note If container is empty return std::end( container ) iterator
         */
         template<typename Container>
-        static auto get( Container& container ) -> 
+        static auto get( Container& container ) ->
             typename std::enable_if<details::is_iterator<
                 decltype(std::begin(container))>::value
                 , decltype(std::begin(container))
@@ -851,7 +850,7 @@ namespace effolkronium {
         * \brief Reorders the elements in the given range [first, last)
         *        such that each possible permutation of those elements
         *        has equal probability of appearance.
-        * \param first, last - the range of elements to shuffle randomly       
+        * \param first, last - the range of elements to shuffle randomly
         */
         template<typename RandomIt>
         static void shuffle( RandomIt first, RandomIt last ) {
@@ -881,19 +880,18 @@ namespace effolkronium {
     protected:
         /// get reference to the thread local engine instance
         static Engine& engine_instance( ) {
-	    Seeder seeder{ };
-            thread_local Engine engine{ seeder( ) };
+            thread_local Engine engine{ Seeder{ }( ) };
             return engine;
         }
     };
 
     /**
-    * \brief Base template class for random 
+    * \brief Base template class for random
     *        with local API and local internal member storage
-    * \note it IS thread safe but less efficient then 
+    * \note it IS thread safe but less efficient then
     *                           basic_random_static
     * \param Engine A random engine with interface like in the std::mt19937
-    * \param Seeder A seeder type which return seed for internal engine 
+    * \param Seeder A seeder type which return seed for internal engine
     *                                             through operator()
     */
     template<
@@ -955,7 +953,7 @@ namespace effolkronium {
         /**
         * \brief Reinitializes the internal state
         * of the random-number engine using new seed value
-        * \param value The seed value to use 
+        * \param value The seed value to use
         *        in the initialization of the internal state
         */
         void seed( const typename Engine::result_type value =
@@ -966,7 +964,7 @@ namespace effolkronium {
         /**
         * \brief Reinitializes the internal state
         * of the random-number engine using new seed value
-        * \param seq The seed sequence 
+        * \param seq The seed sequence
         *        to use in the initialization of the internal state
         */
         template<typename Sseq>
@@ -1029,7 +1027,7 @@ namespace effolkronium {
         * \param to The second limit number of a random range
         * \return A random integer number in a [from; to] range
         * \note Allow both: 'from' <= 'to' and 'from' >= 'to'
-		* \note Prevent implicit type conversion
+        * \note Prevent implicit type conversion
         */
         template<typename T>
         typename std::enable_if<details::is_uniform_int<T>::value
@@ -1095,7 +1093,7 @@ namespace effolkronium {
         template<
             typename Key,
             typename A,
-            typename B, 
+            typename B,
             typename C = typename std::common_type<A, B>::type
         >
         typename std::enable_if<
@@ -1109,23 +1107,23 @@ namespace effolkronium {
             return get( static_cast<C>( from ), static_cast<C>( to ) );
         }
 
-		/**
-		* \brief Generate a random character in a [from; to] range
-		*        by std::uniform_int_distribution
-		* \param from The first limit number of a random range
-		* \param to The second limit number of a random range
-		* \return A random character in a [from; to] range
-		* \note Allow both: 'from' <= 'to' and 'from' >= 'to'
-		* \note Prevent implicit type conversion
-		*/
-		template<typename T>
-		typename std::enable_if<details::is_supported_character<T>::value
-			, T>::type get(T from = std::numeric_limits<T>::min(),
-				T to = std::numeric_limits<T>::max()) {
-			if (from < to) // Allow range from higher to lower
-				return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(from), static_cast<std::int64_t>(to) }(m_engine));
-			return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(to), static_cast<std::int64_t>(from) }(m_engine));
-		}
+        /**
+        * \brief Generate a random character in a [from; to] range
+        *        by std::uniform_int_distribution
+        * \param from The first limit number of a random range
+        * \param to The second limit number of a random range
+        * \return A random character in a [from; to] range
+        * \note Allow both: 'from' <= 'to' and 'from' >= 'to'
+        * \note Prevent implicit type conversion
+        */
+        template<typename T>
+        typename std::enable_if<details::is_supported_character<T>::value
+            , T>::type get(T from = std::numeric_limits<T>::min(),
+                T to = std::numeric_limits<T>::max()) {
+            if (from < to) // Allow range from higher to lower
+                return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(from), static_cast<std::int64_t>(to) }(m_engine));
+            return static_cast<T>(IntegerDist<std::int64_t>{ static_cast<std::int64_t>(to), static_cast<std::int64_t>(from) }(m_engine));
+        }
 
         /**
         * \brief Generate a bool value with specific probability
@@ -1177,7 +1175,7 @@ namespace effolkronium {
         * \note If container is empty return std::end( container ) iterator
         */
         template<typename Container>
-        auto get( Container& container ) -> 
+        auto get( Container& container ) ->
             typename std::enable_if<details::is_iterator<
                 decltype(std::begin(container))>::value
                 , decltype(std::begin(container))
@@ -1225,7 +1223,7 @@ namespace effolkronium {
         * \brief Reorders the elements in the given range [first, last)
         *        such that each possible permutation of those elements
         *        has equal probability of appearance.
-        * \param first, last - the range of elements to shuffle randomly       
+        * \param first, last - the range of elements to shuffle randomly
         */
         template<typename RandomIt>
         void shuffle( RandomIt first, RandomIt last ) {
@@ -1256,15 +1254,14 @@ namespace effolkronium {
         /// return engine seeded by Seeder
         static Engine make_seeded_engine( ) {
             // Make seeder instance for seed return by reference like std::seed_seq
-            Seeder seeder;
-            return Engine{ seeder( ) };
+            return Engine{ Seeder{ }( ) };
         }
     protected:
         /// The random number engine
         Engine m_engine{ make_seeded_engine( ) };
     };
 
-    /** 
+    /**
     * \brief The basic static random alias based on a std::mt19937
     * \note It uses static methods API and data with static storage
     * \note Not thread safe but more prefomance

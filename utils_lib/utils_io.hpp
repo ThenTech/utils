@@ -1,7 +1,6 @@
 #ifndef UTILS_IO_HPP
 #define UTILS_IO_HPP
 
-#include "external/mio.hpp"
 #include "utils_compiler.hpp"
 #include "utils_exceptions.hpp"
 #include "utils_bits.hpp"
@@ -15,14 +14,24 @@
 #include <chrono>
 #include <cstdio>
 
+// Ignore warnings
+HEDLEY_DIAGNOSTIC_PUSH
+#if HEDLEY_MSVC_VERSION_CHECK(15,0,0)
+    #pragma warning(disable:4244)
+#endif
+
+#include "external/mio.hpp"
+
+HEDLEY_DIAGNOSTIC_POP
+
 /**
  *  Enable FileSystem
  *  Currently only included when linking with -lstdc++fs.
  */
-#if __has_include(<filesystem>)
+#if UTILS_HAS_INCLUDE(<filesystem>)
     #include <filesystem>
     #define UTILS_IO_FS_SUPPORTED
-#elif __has_include(<experimental/filesystem>)
+#elif UTILS_HAS_INCLUDE(<experimental/filesystem>)
     #include <experimental/filesystem>
     #define UTILS_IO_FS_SUPPORTED
 #endif
@@ -38,8 +47,10 @@ namespace utils::io {
     #ifdef UTILS_IO_FS_SUPPORTED
         #ifdef __cpp_lib_experimental_filesystem
             namespace fs = std::experimental::filesystem;
+            static constexpr std::chrono::seconds _S_epoch_diff{0};
         #else
             namespace fs = std::filesystem;
+            static constexpr std::chrono::seconds _S_epoch_diff{6437664000};
         #endif
 
         namespace filter {
@@ -67,7 +78,7 @@ namespace utils::io {
         template <
             typename TFilter = filter::filter_t
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents(const std::string_view& folder,
+        static auto list_contents(const std::string_view folder,
                                   TFilter predicate = utils::io::filter::all())
         {
             static_assert(utils::traits::is_invocable_v<decltype(predicate), fs::directory_entry&>,
@@ -87,7 +98,7 @@ namespace utils::io {
         template <
             typename TFilter = filter::filter_t
         > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static auto list_contents_recur(const std::string_view& folder,
+        static auto list_contents_recur(const std::string_view folder,
                                         TFilter predicate = utils::io::filter::all())
         {
             static_assert(utils::traits::is_invocable_v<decltype(predicate), fs::directory_entry&>,
@@ -105,17 +116,17 @@ namespace utils::io {
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static inline auto list_files(const std::string_view& folder) {
+        static inline auto list_files(const std::string_view folder) {
             return list_contents(folder, utils::io::filter::file());
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static inline auto list_folders(const std::string_view& folder) {
+        static inline auto list_folders(const std::string_view folder) {
             return list_contents(folder, utils::io::filter::directory());
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static uint64_t file_size(const std::string_view& filename) {
+        static uint64_t file_size(const std::string_view filename) {
             const fs::path path{ filename.begin(), filename.end() };
 
             if (fs::exists(path) && fs::is_regular_file(path)) {
@@ -126,7 +137,7 @@ namespace utils::io {
         }
 
         ATTR_MAYBE_UNUSED ATTR_NODISCARD
-        static std::time_t file_last_modified(const std::string_view& filename) {
+        static std::time_t file_last_modified(const std::string_view filename) {
             const fs::path path{ filename.begin(), filename.end() };
 
             if (fs::exists(path)) {
@@ -134,11 +145,13 @@ namespace utils::io {
 
                 // FIXME: No clock casting possible
                 // Could use:
-                //      decltype(modified)::clock::to_time_t(modified);
+                //      return decltype(modified)::clock::to_time_t(modified);
                 // instead, but clocks are different.
                 // C++20 will provide clock_cast to fix this.
 
-                return std::chrono::duration_cast<std::chrono::seconds>(modified.time_since_epoch()).count();
+                return std::chrono::duration_cast<std::chrono::seconds>(
+                    modified.time_since_epoch() + utils::io::_S_epoch_diff
+                ).count();
             }
 
             return std::time_t(0);
@@ -167,7 +180,7 @@ namespace utils::io {
     #endif  // UTILS_IO_FS_SUPPORTED
 
     ATTR_MAYBE_UNUSED
-    static void safe_filename(std::string& filename) {
+    static void make_safe_filename(std::string& filename) {
         static constexpr std::string_view invalid_chars = "\"<>?*|/:\\\n";
 
         for (const char& c : invalid_chars) {
@@ -176,9 +189,9 @@ namespace utils::io {
     }
 
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string safe_filename(const std::string_view& filename) {
+    static std::string make_safe_filename(const std::string_view filename) {
         std::string str(filename);
-        utils::io::safe_filename(str);
+        utils::io::make_safe_filename(str);
         return str;
     }
 
@@ -224,9 +237,11 @@ namespace utils::io {
                 }
 
                 if (name.empty()) {
-                    utils::io::safe_filename(prefix);
-                    utils::io::safe_filename(suffix);
+                    utils::io::make_safe_filename(prefix);
+                    utils::io::make_safe_filename(suffix);
                     this->name /= prefix + "tmp_" + utils::random::generate_safe_string(6) + suffix;
+                } else {
+                    this->name /= name;
                 }
 
                 if (create) {
@@ -299,7 +314,8 @@ namespace utils::io {
             }
 
             template<typename ...Type>
-            inline int printf(const std::string_view& format, const Type& ...args) {
+            inline int printf(const std::string_view format, const Type& ...args) {
+                // WARNING Possible lack of null terminator in format
                 return std::fprintf(this->file, format.data(), args...);
             }
 
@@ -355,7 +371,7 @@ namespace utils::io {
      *	\param str
      */
     ATTR_MAYBE_UNUSED
-    static void string_to_file(const std::string& filename, const std::string_view& str) {
+    static void string_to_file(const std::string& filename, const std::string_view str) {
         std::ofstream file;
 
         try {

@@ -182,6 +182,18 @@ TEST_CASE("Test utils::math::epsilon_equals") {
     REQUIRE_FALSE(utils::math::epsilon_equals(1     , 0     , eps));
     REQUIRE_FALSE(utils::math::epsilon_equals(0.0   , 1.0   , eps));
     REQUIRE_FALSE(utils::math::epsilon_equals(0.0001, 0.0002, eps));
+
+    REQUIRE(utils::math::epsilon_rel_equals(1.0   , 1.0    , eps));
+    REQUIRE(utils::math::epsilon_rel_equals(1     , 1      , eps));
+    REQUIRE(utils::math::epsilon_rel_equals(0.0001, 0.0001 , eps));
+
+    REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0f  , 0.0f   , eps));
+    REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0001, 0.00015, eps));
+    REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0001, 0.0002 , 1e-3));
+    REQUIRE_FALSE(utils::math::epsilon_rel_equals(1     , 0     , eps));
+    REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0   , 1.0   , eps));
+    REQUIRE_FALSE(utils::math::epsilon_rel_equals(0.0001, 0.0002, eps));
+    REQUIRE(utils::math::epsilon_rel_equals(0.0001, 0.0002, 1.0));
 }
 
 TEST_CASE("Test utils::math::within") {

@@ -9,6 +9,7 @@
 #include <functional>
 #include <numeric>
 #include <optional>
+#include <tuple>
 
 
 namespace utils::algorithm {
@@ -33,13 +34,19 @@ namespace utils::algorithm {
      *      The item to look for.
      *  \return Returns an `std:optional<size_t>` holding the offset from
      *          std::begin(container) if the item was found, or nothing if not.
+     *          If \p container has `.constains` size_t(-1) is returned if found
+     *          or std::nullopt othertwise.
      */
     template<
         typename C, typename T,
         typename = typename std::enable_if_t<utils::traits::is_container<C>::value>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline constexpr utils::traits::found_t contains(const C& container, const T& item) {
-        if constexpr (utils::traits::has_find_v<C, T>) {
+        if constexpr (utils::traits::has_contains_v<C, T>) {
+            if (const auto check = container.contains(item)) {
+                return { -1 };
+            }
+        } else if constexpr (utils::traits::has_find_v<C, T>) {
             if (const auto idx = container.find(item); std::end(container) != idx) {
                 return { std::distance(std::begin(container), idx) };
             }
@@ -226,6 +233,38 @@ namespace utils::algorithm {
     }
 
     /**
+     *  \brief  Reverse all elements between \p start and \p end.
+     *
+     *  \param  start
+     *      The start iterator to begin from.
+     *  \param  end
+     *      The end iterator to stop at.
+     */
+    template <
+        typename Iterator,
+        typename T = typename std::iterator_traits<Iterator>::value_type,
+        typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
+    > ATTR_MAYBE_UNUSED
+    static inline constexpr void reverse(Iterator start, Iterator end) {
+        if (start != end) {
+            std::reverse(start, end);
+        }
+    }
+
+    /**
+     *  \brief  Reverse all elements inside the container \p cont.
+     *
+     *  \param cont
+     *      The container to reverse.
+     */
+    template <typename Container> ATTR_MAYBE_UNUSED
+    static inline constexpr void reverse(Container& cont) {
+        static_assert(utils::traits::is_iterable_v<Container>,
+                      "utils::algorithm::reverse: Container must have iterator support.");
+        utils::algorithm::reverse(std::begin(cont), std::end(cont));
+    }
+
+    /**
      *  \brief  Generic repaet Action a certain amount of times.
      *          Call std::invoke on fn with the given arguments, \p times times.
      *          (default: 1 time)
@@ -301,7 +340,7 @@ namespace utils::algorithm {
         typename F = typename std::less<T>,
         typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto min_element(Iterator start, Iterator end, F&& fn_compare = std::less<T>()) {
+    static inline constexpr auto min_element(Iterator start, Iterator end, F&& fn_compare = F{}) {
         static_assert(utils::traits::is_invocable_v<F, T, T>,
                       "utils::algorithm::min_element: Callable function required.");
         return std::min_element(start, end, std::forward<F>(fn_compare));
@@ -321,7 +360,7 @@ namespace utils::algorithm {
         typename T = typename Container::value_type,
         typename F = typename std::less<T>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto min_element(const Container& cont, F&& fn_compare = std::less<T>()) {
+    static inline constexpr auto min_element(const Container& cont, F&& fn_compare = F{}) {
         static_assert(utils::traits::is_iterable_v<Container>,
                       "utils::algorithm::min_element: Container must have iterator support.");
         return utils::algorithm::min_element(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
@@ -344,7 +383,7 @@ namespace utils::algorithm {
         typename F = typename std::less<T>,
         typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto max_element(Iterator start, Iterator end, F&& fn_compare = std::less<T>()) {
+    static inline constexpr auto max_element(Iterator start, Iterator end, F&& fn_compare = F{}) {
         static_assert(utils::traits::is_invocable_v<F, T, T>,
                       "utils::algorithm::max_element: Callable function required.");
         return std::max_element(start, end, std::forward<F>(fn_compare));
@@ -364,7 +403,7 @@ namespace utils::algorithm {
         typename T = typename Container::value_type,
         typename F = typename std::less<T>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr auto max_element(const Container& cont, F&& fn_compare = std::less<T>()) {
+    static inline constexpr auto max_element(const Container& cont, F&& fn_compare = F{}) {
         static_assert(utils::traits::is_iterable_v<Container>,
                       "utils::algorithm::max_element: Container must have iterator support.");
         return utils::algorithm::max_element(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
@@ -387,7 +426,7 @@ namespace utils::algorithm {
         typename F = typename std::less<T>,
         typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool is_ascending(Iterator start, Iterator end, F&& fn_compare = std::less<T>()) {
+    static inline constexpr bool is_ascending(Iterator start, Iterator end, F&& fn_compare = F{}) {
         return std::is_sorted(start, end, std::forward<F>(fn_compare));
     }
 
@@ -408,7 +447,7 @@ namespace utils::algorithm {
         typename T = typename Container::value_type,
         typename F = typename std::less<T>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool is_ascending(const Container& cont, F&& fn_compare = std::less<T>()) {
+    static inline constexpr bool is_ascending(const Container& cont, F&& fn_compare = F{}) {
         static_assert(utils::traits::is_iterable_v<Container>,
                       "utils::algorithm::is_ascending: Container must have iterator support.");
         return std::is_sorted(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
@@ -431,7 +470,7 @@ namespace utils::algorithm {
         typename F = typename std::greater<T>,
         typename = typename std::enable_if_t<utils::traits::is_iterator_v<Iterator>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool is_descending(Iterator start, Iterator end, F&& fn_compare = std::greater<T>()) {
+    static inline constexpr bool is_descending(Iterator start, Iterator end, F&& fn_compare = F{}) {
         return std::is_sorted(start, end, std::forward<F>(fn_compare));
     }
 
@@ -452,10 +491,52 @@ namespace utils::algorithm {
         typename T = typename Container::value_type,
         typename F = typename std::greater<T>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool is_descending(const Container& cont, F&& fn_compare = std::greater<T>()) {
+    static inline constexpr bool is_descending(const Container& cont, F&& fn_compare = F{}) {
         static_assert(utils::traits::is_iterable_v<Container>,
                       "utils::algorithm::is_descending: Container must have iterator support.");
         return std::is_sorted(std::begin(cont), std::end(cont), std::forward<F>(fn_compare));
+    }
+
+    namespace sort {
+        /**
+         *  \brief  Basic insertion sort with iterators.
+         *
+         *  \param  start
+         *      The start iterator to begin from.
+         *  \param  end
+         *      The end iterator to stop at.
+         */
+        template <typename Iterator> ATTR_MAYBE_UNUSED
+        static inline constexpr void insertion(Iterator start, Iterator end) {
+            for (auto it = start; it != end; ++it) {
+                std::rotate(std::upper_bound(start, it, *it), it, std::next(it));
+            }
+        }
+
+        /**
+         *  \brief  Quicksort using STL algos, with iterators.
+         *
+         *  \param  start
+         *      The start iterator to begin from.
+         *  \param  end
+         *      The end iterator to stop at.
+         *  \param  fn_compare
+         *      The compare function to call. Must be invocable with Iterator::value_type.
+         */
+        template <
+            typename Iterator,
+            typename T = typename std::iterator_traits<Iterator>::value_type,
+            typename F = typename std::less<T>
+        > ATTR_MAYBE_UNUSED
+        static constexpr void quick(Iterator start, Iterator end, F&& fn_compare = F{}) {
+            const auto length = std::distance(start, end);
+            if (HEDLEY_UNLIKELY(length <= 1)) return;
+
+            const auto pivot = std::next(start, length / 2);
+            std::nth_element(start, pivot, end, fn_compare);
+            utils::algorithm::sort::quick(start, pivot, fn_compare);
+            utils::algorithm::sort::quick(pivot, end, fn_compare);
+        }
     }
 
     /**
@@ -503,6 +584,38 @@ namespace utils::algorithm {
 
         return iterable_wrapper{ std::forward<T>(iterable), start_i };
     }
+
+    /**
+     *  \brief  The any_tie struct. Use to tie a result back into itself
+     *          for any type that supports structured bindings access.
+     *
+     *          Example:
+     *              any_tie(value1, value2) = value2;
+     *
+     *          because this does not work:
+     *              auto& [value1, value2] = value2;
+     *
+     *  \ref    Structured bindings uncovered - Dawid Zalewski [ C++ on Sea 2020 ]
+     */
+    template<typename ...Types>
+    struct any_tie {
+        std::tuple<Types&...> _tuple;
+
+        any_tie(Types&... values) noexcept : _tuple{values...} {}
+
+        template<typename TupleLike>
+        any_tie& operator=(TupleLike&& tl) {
+            constexpr auto size = std::tuple_size_v<utils::traits::remove_cvref_t<TupleLike>>;
+            this->assign(std::forward<TupleLike>(tl), std::make_index_sequence<size>());
+            return *this;
+        }
+
+        private:
+            template<typename TupleLike, size_t... Idx>
+            void assign(TupleLike&& tl, std::index_sequence<Idx...>) {
+                this->_tuple = std::forward_as_tuple(std::get<Idx>(std::forward<TupleLike>(tl))...);
+            }
+    };
 }
 
 #endif // UTILS_ALGORITHM_HPP

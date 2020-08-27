@@ -24,7 +24,7 @@ namespace utils::misc {
      *      Returns a variable of type T with the value as given in buffer.
      */
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static T lexical_cast(const std::string_view& buffer) {
+    static T lexical_cast(const std::string_view buffer) {
         T out;
 
         if (HEDLEY_UNLIKELY(buffer.size() == 0))
@@ -32,7 +32,7 @@ namespace utils::misc {
 
         std::stringstream cast;
 
-        if (buffer[0] == '0' && buffer[1] != '.') {
+        if (buffer.size() > 1 && buffer[0] == '0' && buffer[1] != '.') {
             if (buffer[1] == 'x' || buffer[1] == 'X') {
                 // Hex literal
                 cast << std::hex << buffer;
@@ -62,7 +62,7 @@ namespace utils::misc {
     }
 
     template <class T> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::optional<T> try_lexical_cast(const std::string_view& buffer, utils::exceptions::Exception *error = nullptr) {
+    static std::optional<T> try_lexical_cast(const std::string_view buffer, utils::exceptions::Exception *error = nullptr) {
         std::optional<T> value;
 
         try {
@@ -75,6 +75,23 @@ namespace utils::misc {
         return value;
     }
 
+    /**
+     *  Create a RAII (Resource Acquisition Is Initialization) scoped functor.
+     *  This will call the given function or lambda when the Scoped object
+     *  goes out of scope.
+     *
+     *  Useful for delayed deletion of objects or restoring settings after the
+     *  scope ends.
+     *
+     *  e.g.
+     *  {
+     *      auto finally = utils::misc::MakeScoped([]{ std::cout << "done"; });
+     *      // ...
+     *      //~finally() calls the lambda at scope exit.
+     *  }
+     *
+     *  or use `UTILS_MISC_MAKE_SCOPED([]{})` for a generated unique name.
+     */
     template<
         typename F,
         typename = typename std::enable_if_t<utils::traits::is_invocable_v<F>>

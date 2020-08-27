@@ -365,7 +365,7 @@ public:
      * handle (which is closed when the object destructs or `unmap` is called), which is
      * then used to memory map the requested region. Upon failure, `error` is set to
      * indicate the reason and the object remains in an unmapped state.
-     * 
+     *
      * The entire file is mapped.
      */
     template<typename String>
@@ -404,7 +404,7 @@ public:
      * `handle`, which must be a valid file handle, which is used to memory map the
      * requested region. Upon failure, `error` is set to indicate the reason and the
      * object remains in an unmapped state.
-     * 
+     *
      * The entire file is mapped.
      */
     void map(const handle_type handle, std::error_code& error)
@@ -876,7 +876,7 @@ inline size_t query_file_size(file_handle_type handle, std::error_code& error)
         error = detail::last_error();
         return 0;
     }
-	return static_cast<int64_t>(file_size.QuadPart);
+    return static_cast<int64_t>(file_size.QuadPart);
 #else // POSIX
     struct stat sbuf;
     if(::fstat(handle, &sbuf) == -1)
@@ -925,6 +925,8 @@ inline mmap_context memory_map(const file_handle_type file_handle, const int64_t
             length_to_map));
     if(mapping_start == nullptr)
     {
+        // Close file handle if mapping it failed.
+        ::CloseHandle(file_mapping_handle);
         error = detail::last_error();
         return {};
     }
@@ -1180,14 +1182,14 @@ void basic_mmap<AccessMode, ByteT>::swap(basic_mmap& other)
     if(this != &other)
     {
         using std::swap;
-        swap(data_, other.data_); 
-        swap(file_handle_, other.file_handle_); 
+        swap(data_, other.data_);
+        swap(file_handle_, other.file_handle_);
 #ifdef _WIN32
-        swap(file_mapping_handle_, other.file_mapping_handle_); 
+        swap(file_mapping_handle_, other.file_mapping_handle_);
 #endif
-        swap(length_, other.length_); 
-        swap(mapped_length_, other.mapped_length_); 
-        swap(is_handle_internal_, other.is_handle_internal_); 
+        swap(length_, other.length_);
+        swap(mapped_length_, other.mapped_length_);
+        swap(is_handle_internal_, other.is_handle_internal_);
     }
 }
 

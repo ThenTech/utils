@@ -33,14 +33,14 @@ namespace utils::random {
     /**
      *  \brief  Pick a certain amount of items from the given container,
      *          and copy them to a new Container of the same type.
-     *          Items are chosen at random.
+     *          Items are chosen at random (does not preserve relative order).
      *
      *  \param  amount
      *      The amount of items to pick out.
      *  \param  container
      *      The container to pick items from.
      *      This class must have begin and end iterators, as well as
-     *      the reserve and push_back methods implemented.
+     *      the resize and push_back methods implemented.
      *  \return Returns a Container instance with the picked items.
      */
     template<
@@ -49,10 +49,10 @@ namespace utils::random {
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static auto pick_x_from(size_t amount, const Container& container) {
         Container picked;
-        picked.resize(amount);
 
         const auto size = std::distance(std::begin(container), std::end(container));
         if(HEDLEY_UNLIKELY(0 == size)) return picked;
+        picked.resize(amount);
 
         using diff_t = typename std::iterator_traits<decltype(std::begin(container))>::difference_type;
 
@@ -62,6 +62,38 @@ namespace utils::random {
         });
 
         return picked;
+    }
+
+    /**
+     *  \brief  Sample a certain amount of items from the given container,
+     *          and copy them to a new Container of the same type.
+     *          Items are chosen by sampling (preserves relative order).
+     *          The sample can contain at most \p container.size() values.
+     *
+     *  \param  amount
+     *      The amount of items to sample.
+     *  \param  container
+     *      The container to sample items from.
+     *      This class must have begin and end iterators, as well as
+     *      the reserve and push_back methods implemented.
+     *  \return Returns a Container instance with the sampled items.
+     */
+    template<
+        typename Container,
+        typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
+    > ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static auto sample(size_t amount, const Container& container) {
+        Container sampled;
+
+        const auto size = std::distance(std::begin(container), std::end(container));
+        if(HEDLEY_UNLIKELY(0 == size)) return sampled;
+        sampled.reserve(std::min(amount, size_t(size)));
+
+        std::sample(std::begin(container), std::end(container),
+                    std::back_inserter(sampled), amount,
+                    Random::engine());
+
+        return sampled;
     }
 
     /**
@@ -158,11 +190,11 @@ namespace utils::random {
         typename Container = typename std::enable_if_t<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>,
         typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline Container generate_string(const size_t amount,
+    static inline Container generate_string(const size_t length,
                                             const T from = std::numeric_limits<T>::min(),
                                             const T to   = std::numeric_limits<T>::max())
     {
-        return utils::random::generate_x<T, Container>(amount, from, to);
+        return utils::random::generate_x<T, Container>(length, from, to);
     };
 
     /**
@@ -182,16 +214,16 @@ namespace utils::random {
         typename Container = typename std::enable_if_t<effolkronium::details::is_supported_character<T>::value, std::basic_string<T>>,
         typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
     > ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline Container generate_safe_string(const size_t amount)
+    static Container generate_safe_string(const size_t length)
     {
         Container picked;
-        picked.resize(amount);
+        picked.resize(length);
 
         auto dist = Random::integer_dist_t<size_t> {
             0ull, utils::string::_base64_chars.size() - 3ull
         };
 
-        std::generate_n(std::begin(picked), amount,
+        std::generate_n(std::begin(picked), length,
         [&dist]() {
             const char gen = utils::string::_base64_chars[dist(Random::engine())];
             return static_cast<T>(gen);
@@ -221,8 +253,8 @@ namespace utils::random {
         typename Container = typename std::enable_if<std::is_same<T, bool>::value, std::vector<T>>::type,
         typename = typename std::enable_if_t<utils::traits::is_iterable_v<Container>>
     > ATTR_MAYBE_UNUSED
-    static inline Container generate_bool(const size_t amount,
-                                          const double probability = 0.5)
+    static Container generate_bool(const size_t amount,
+                                   const double probability = 0.5)
     {
         ASSERT(0 <= probability && 1 >= probability);
 
@@ -241,12 +273,13 @@ namespace utils::random {
 
     /**
      *  \brief  Generate Universal Unique IDentifier v4 (UUID)
+     *          In the form: 550e8400-e29b-41d4-a716-446655440000
      *
      *  \return Returns a formatted string (groups with `-`) with a randon UUID.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string generate_uuid(void) {
-        auto dist = Random::integer_dist_t<uint16_t> {
+    static std::string generate_uuid(void) {
+        static auto dist = Random::integer_dist_t<uint16_t> {
             static_cast<uint16_t>(0x00),
             static_cast<uint16_t>(0xFF)
         };

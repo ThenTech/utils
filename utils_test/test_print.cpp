@@ -15,7 +15,7 @@
 #include <sstream>
 
 
-#define PUT_SS(V)       std::stringstream().swap(test_op); test_op << V;
+#define PUT_SS(V)       std::stringstream().swap(test_op); test_op << V
 
 TEST_CASE("Test utils::print") {
     std::stringstream test_op;
@@ -222,9 +222,10 @@ TEST_CASE("Test utils::print") {
 
     SUBCASE("Test object printing") {
         PUT_SS(formatter);
-        CHECK(utils::string::starts_with(test_op.str(), "<Object"));
+        CHECK(utils::string::starts_with(test_op.str(), "<"));
         CHECK(utils::string::ends_with(test_op.str(), ">"));
         CHECK(utils::string::contains(test_op.str(), "stringstream"));
+        CHECK(utils::string::contains(test_op.str(), "instance at"));
 
         PUT_SS("test");
         CHECK(test_op.str() == "test");
@@ -303,10 +304,10 @@ TEST_CASE("Test utils::print::type2name") {
 
 TEST_CASE("Test utils::print::hexDump") {
     std::ostringstream test_op;
-    #define STR_TEST(DATA, LEN, RESULT) \
-        utils::print::hexdump(test_op, DATA, LEN); \
-        CHECK(test_op.str() == RESULT); \
-        std::ostringstream().swap(test_op);
+    #define STR_TEST(DATA, LEN, RESULT)             \
+        utils::print::hexdump(test_op, DATA, LEN);  \
+        CHECK(test_op.str() == RESULT);             \
+        std::ostringstream().swap(test_op)
 
     STR_TEST(nullptr, 0, "");
     STR_TEST(nullptr, 1, "");

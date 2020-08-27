@@ -187,6 +187,30 @@ TEST_CASE("Test utils::algorithm::product") {
     REQUIRE(utils::algorithm::product(y.begin(), y.end()) == doctest::Approx(prod));
 }
 
+TEST_CASE("Test utils::algorithm::reverse") {
+    std::vector<int>    e{};
+    std::vector<int>    x{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<double> y{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+    utils::algorithm::reverse(e);
+    utils::algorithm::reverse(x);
+    utils::algorithm::reverse(y);
+
+    REQUIRE(e.size() ==  0);
+    REQUIRE(x.size() == 10);
+    REQUIRE(y.size() == 10);
+
+    for (size_t i = 0; i < 10; i++) {
+        CHECK(x[i] == (10-i));
+        CHECK(y[i] == doctest::Approx(10.0-i));
+    }
+
+    utils::algorithm::reverse(x.begin(), x.end());
+    for (size_t i = 0; i < 10; i++) {
+        CHECK(x[i] == (i+1));
+    }
+}
+
 static void __test_func(int& x) { x /= 5; }
 
 TEST_CASE("Test utils::algorithm::repeat") {
@@ -277,6 +301,27 @@ TEST_CASE("Test utils::algorithm::is_descending") {
     REQUIRE(utils::algorithm::is_descending(test));
     REQUIRE(utils::algorithm::is_descending(test.begin(), test.end()));
     REQUIRE_FALSE(utils::algorithm::is_descending(test.rbegin(), test.rend()));
+}
+
+TEST_CASE("Test utils::algorithm::sort") {
+    std::vector<int> test(10);
+    std::iota(test.begin(), test.end(), 0);
+
+    REQUIRE(utils::algorithm::is_ascending(test));
+    utils::algorithm::sort::insertion(test.begin(), test.end());
+    REQUIRE(utils::algorithm::is_ascending(test));
+
+    REQUIRE(utils::algorithm::is_ascending(test));
+    utils::algorithm::sort::quick(test.begin(), test.end());
+    REQUIRE(utils::algorithm::is_ascending(test));
+
+    utils::random::Random::shuffle(test.begin(), test.end());
+    utils::algorithm::sort::insertion(test.begin(), test.end());
+    REQUIRE(utils::algorithm::is_ascending(test));
+
+    utils::random::Random::shuffle(test.begin(), test.end());
+    utils::algorithm::sort::quick(test.begin(), test.end());
+    REQUIRE(utils::algorithm::is_ascending(test));
 }
 
 TEST_CASE("Test utils::algorithm::enumerate") {

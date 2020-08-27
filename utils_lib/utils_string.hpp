@@ -14,6 +14,7 @@
 #include <functional>
 #include <sstream>
 #include <vector>
+#include <array>
 
 
 namespace utils::string {
@@ -36,19 +37,19 @@ namespace utils::string {
     template<typename _CharT, typename _Traits = std::char_traits<_CharT>>
     struct basic_string_view : public std::basic_string_view<_CharT, _Traits> {
         public:
-            using traits_type = _Traits;
-            using value_type = _CharT;
-            using pointer = const _CharT*;
-            using const_pointer = const _CharT*;
-            using reference = const _CharT&;
-            using const_reference = const _CharT&;
-            using const_iterator = const _CharT*;
-            using iterator = const_iterator;
+            using traits_type            = _Traits;
+            using value_type             = _CharT;
+            using pointer                = const _CharT*;
+            using const_pointer          = const _CharT*;
+            using reference              = const _CharT&;
+            using const_reference        = const _CharT&;
+            using const_iterator         = const _CharT*;
+            using iterator               = const_iterator;
             using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-            using reverse_iterator = const_reverse_iterator;
-            using size_type = size_t;
-            using difference_type = ptrdiff_t;
-            static constexpr size_type npos = size_type(-1);
+            using reverse_iterator       = const_reverse_iterator;
+            using size_type              = size_t;
+            using difference_type        = ptrdiff_t;
+            static inline constexpr size_type npos = size_type(-1);
 
         constexpr basic_string_view(const _CharT& __ch) noexcept
             : std::basic_string_view<_CharT>{&__ch, 1} { }
@@ -66,11 +67,21 @@ namespace utils::string {
         constexpr basic_string_view(const std::basic_string<_CharT>& __str) noexcept
             : std::basic_string_view<_CharT>{__str} { }
 
+        template <size_t N>
+        constexpr basic_string_view(const _CharT (&__str)[N])
+            : std::basic_string_view<_CharT>{__str, N - 1} { }
+
         constexpr basic_string_view&
         operator=(const basic_string_view&) noexcept = default;
+
+        template <size_t... N>
+        static inline constexpr std::array<std::basic_string_view<_CharT>, sizeof...(N)>
+        array_from_args(const char (&...__strs)[N]) {
+            return {{basic_string_view{__strs}...}};
+        }
     };
 
-    using string_view = basic_string_view<char>;
+    using string_view  = basic_string_view<char>;
     using wstring_view = basic_string_view<wchar_t>;
 
     /**
@@ -86,9 +97,10 @@ namespace utils::string {
      *          `str.begin()` if the part was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr utils::traits::found_t contains(const std::string_view& str,
-                                                            const utils::string::string_view& part,
-                                                            const size_t start = 0)
+    static inline constexpr utils::traits::found_t
+        contains(const std::string_view str,
+                 const utils::string::string_view part,
+                 const size_t start = 0)
     {
         if (const size_t pos = str.find(part, start);
             pos != std::string::npos)
@@ -111,9 +123,10 @@ namespace utils::string {
      *          `str.begin()` if the part was found, or nothing if not.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr utils::traits::found_t rcontains(const std::string_view& str,
-                                                             const utils::string::string_view& part,
-                                                             const size_t start = std::string_view::npos)
+    static inline constexpr utils::traits::found_t
+        rcontains(const std::string_view str,
+                  const utils::string::string_view part,
+                  const size_t start = std::string_view::npos)
     {
         if (const size_t pos = str.rfind(part, start);
             pos != std::string::npos)
@@ -133,11 +146,17 @@ namespace utils::string {
      *  \return Returns true if str[0:start.size()] == start.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool starts_with(const utils::string::string_view& str, const utils::string::string_view& start) {
-        return !start.size() || str.size() < start.size()
-             ? false
-             : std::equal(start.begin(), start.end(),
-                          str.begin());
+    static inline constexpr bool starts_with(const utils::string::string_view str,
+                                             const utils::string::string_view start)
+    {
+        #if UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+            return str.starts_with(start);
+        #else
+            return !start.size() || str.size() < start.size()
+                 ? false
+                 : std::equal(start.begin(), start.end(),
+                              str.begin());
+        #endif
     }
 
     /**
@@ -150,11 +169,17 @@ namespace utils::string {
      *  \return Returns true if str[-end.size():] == end.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline constexpr bool ends_with(const utils::string::string_view& str, const utils::string::string_view& end) {
-        return !end.size() || str.size() < end.size()
-             ? false
-             : std::equal(end.begin(), end.end(),
-                          str.end() - static_cast<std::string::difference_type>(end.size()));
+    static inline constexpr bool ends_with(const utils::string::string_view str,
+                                           const utils::string::string_view end)
+    {
+        #if UTILS_CPP_LANG_CHECK(UTILS_CPP_VERSION_20)
+            return str.ends_with(end);
+        #else
+            return !end.size() || str.size() < end.size()
+                 ? false
+                 : std::equal(end.begin(), end.end(),
+                              str.end() - static_cast<std::string::difference_type>(end.size()));
+        #endif
     }
 
     /**	\brief	Trim whitespace from the start of the given string (in-place).
@@ -210,7 +235,7 @@ namespace utils::string {
      *      The substring to look for and start erasing from.
      */
     ATTR_MAYBE_UNUSED
-    static inline void erase_from(std::string& str, const utils::string::string_view& erasefrom) {
+    static inline void erase_from(std::string& str, const utils::string::string_view erasefrom) {
         if (const auto found = utils::string::contains(str, erasefrom)) {
             str = str.substr(0, found.value());
         }
@@ -226,7 +251,7 @@ namespace utils::string {
      *      The substring to look for and erase to.
      */
     ATTR_MAYBE_UNUSED
-    static inline void erase_to(std::string& str, const utils::string::string_view& eraseto) {
+    static inline void erase_to(std::string& str, const utils::string::string_view eraseto) {
         if (const auto found = utils::string::contains(str, eraseto)) {
             str = str.substr(found.value());
         }
@@ -242,7 +267,7 @@ namespace utils::string {
      *  \return Returns a copy where the appropriate parts were erased.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string erased_from(std::string str, const utils::string::string_view& erasefrom) {
+    static inline std::string erased_from(std::string str, const utils::string::string_view erasefrom) {
         erase_from(str, erasefrom);
         return str;
     }
@@ -257,7 +282,7 @@ namespace utils::string {
      *      The substring to look for and erase to.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string erased_to(std::string str, const utils::string::string_view& eraseto) {
+    static inline std::string erased_to(std::string str, const utils::string::string_view eraseto) {
         erase_to(str, eraseto);
         return str;
     }
@@ -335,7 +360,10 @@ namespace utils::string {
      *		A reference to a string to replace with.
      */
     ATTR_MAYBE_UNUSED
-    static inline void replace_all(std::string& str, const utils::string::string_view& from, const utils::string::string_view& to = "") {
+    static inline void replace_all(std::string& str,
+                                   const utils::string::string_view from,
+                                   const utils::string::string_view to = "")
+    {
         if (HEDLEY_UNLIKELY(from.size() == 0)) return;
 
         utils::traits::found_t found = 0ull;
@@ -353,7 +381,9 @@ namespace utils::string {
      *		A string to erase.
      */
     ATTR_MAYBE_UNUSED
-    static inline void erase_all(std::string& str, const utils::string::string_view& erase) {
+    static inline void erase_all(std::string& str,
+                                 const utils::string::string_view erase)
+    {
         if (HEDLEY_UNLIKELY(erase.size() == 0)) return;
 
         utils::traits::found_t found = 0ull;
@@ -371,7 +401,7 @@ namespace utils::string {
      *      Returns the converted data as an std::wstring.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::wstring to_wstring(const std::string_view& str) {
+    static inline std::wstring to_wstring(const std::string_view str) {
         return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t>().from_bytes(str.data());
     }
 
@@ -399,7 +429,7 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED
     static inline void quote(std::string& str, const
-                             utils::string::string_view& quote='\"')
+                             utils::string::string_view quote='\"')
     {
         if (HEDLEY_UNLIKELY(utils::string::starts_with(str, quote)
                          && utils::string::ends_with(str, quote)))
@@ -424,7 +454,7 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static inline std::string quoted(std::string str,
-                                     const utils::string::string_view& quote='\"')
+                                     const utils::string::string_view quote='\"')
     {
         utils::string::quote(str, quote);
         return str;
@@ -446,8 +476,8 @@ namespace utils::string {
      */
     template<typename F> ATTR_MAYBE_UNUSED
     static void for_each_quoted(F&& callback,
-                                const std::string_view& s,
-                                const utils::string::string_view& quote='\"')
+                                const std::string_view s,
+                                const utils::string::string_view quote='\"')
     {
         static_assert(utils::traits::is_invocable_v<F, const std::string_view>,
                       "utils::string::for_each_quoted: Callable function required.");
@@ -469,28 +499,27 @@ namespace utils::string {
     }
 
     /**
-     *  \brief  Extract a vector of strings from the given string \p s that have
+     *  \brief  Extract a vector of string views from the given string \p s that have
      *          been quoted with char \p quote.
      *
      *          e.g. 'str1', 'str2' => extract every string between 2 `'`
      *                  => results in v = [ "str1", "str2" ]
      *
-     *  \param  v
-     *      The vector to add the strings to. Will be cleared on start.
      *  \param  s
      *      The string to look for quoted strings in.
      *  \param  quote
      *      The char the strings are quoted in.
+     *  \return A vector with string views for each quoted string from \p s.
      */
     ATTR_MAYBE_UNUSED
-    static void extract_quoted(std::vector<std::string_view>& v,
-                               const std::string_view& s,
-                               const utils::string::string_view& quote='\"')
+    static auto extract_quoted(const std::string_view s,
+                               const utils::string::string_view quote='\"')
     {
-        v.clear();
-        utils::string::for_each_quoted([&](const std::string_view& sv){
-            v.emplace_back(sv);
+        std::vector<std::string_view> extracted;
+        utils::string::for_each_quoted([&](const std::string_view sv){
+            extracted.emplace_back(sv);
         }, s, quote);
+        return extracted;
     }
 
     /**
@@ -505,7 +534,7 @@ namespace utils::string {
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
     static std::string join(const std::vector<std::string>& v,
-                            const utils::string::string_view& join_with = ",")
+                            const utils::string::string_view join_with = ",")
     {
         std::string joined;
         const auto end = v.end();
@@ -595,8 +624,8 @@ namespace utils::string {
      */
     template<typename F> ATTR_MAYBE_UNUSED
     static void for_each_splitted(F&& callback,
-                                  const std::string_view& s,
-                                  const utils::string::string_view& delim = ',',
+                                  const std::string_view s,
+                                  const utils::string::string_view delim = ',',
                                   int max_splits = -1)
     {
         static_assert(utils::traits::is_invocable_v<F, const std::string_view>,
@@ -629,8 +658,6 @@ namespace utils::string {
      *  \brief  Split the given string \p s into parts delimited by \p delim,
      *          and put them in \p v as std::string_views.
      *
-     *  \param  v
-     *      The vector to add the splitted strings to.
      *  \param  s
      *      The string to split.
      *  \param  delim
@@ -641,17 +668,18 @@ namespace utils::string {
      *      `0`     don't split: vector will contain the original string \p s
      *      `1`     vector has the first splitted element,
      *              and the rest of the string as second element.
+     *  \return A vector with string views for each splitted string from \p s.
      */
     ATTR_MAYBE_UNUSED
-    static void split(std::vector<std::string_view> &v,
-                      const std::string_view& s,
-                      const utils::string::string_view& delim = ',',
+    static auto split(const std::string_view s,
+                      const utils::string::string_view delim = ',',
                       int max_splits = -1)
     {
-        v.clear();
-        utils::string::for_each_splitted([&](const std::string_view& sv){
-            v.emplace_back(sv);
+        std::vector<std::string_view> splitted;
+        utils::string::for_each_splitted([&](const std::string_view sv){
+            splitted.emplace_back(sv);
         }, s, delim, max_splits);
+        return splitted;
     }
 
     /**
@@ -675,8 +703,8 @@ namespace utils::string {
      */
     template<typename F> ATTR_MAYBE_UNUSED
     static void for_each_rsplitted(F&& callback,
-                                  const std::string_view& s,
-                                  const utils::string::string_view& delim = ',',
+                                  const std::string_view s,
+                                  const utils::string::string_view delim = ',',
                                   int max_splits = -1)
     {
         static_assert(utils::traits::is_invocable_v<F, const std::string_view>,
@@ -711,8 +739,6 @@ namespace utils::string {
      *  \brief  Split the given string \p s into parts delimited by \p delim,
      *          but start from the end.
      *
-     *  \param  v
-     *      The vector to add the splitted strings to.
      *  \param  s
      *      The string to split.
      *  \param  delim
@@ -723,19 +749,19 @@ namespace utils::string {
      *      `0`     don't split: vector will contain the original string \p s
      *      `1`     vector has the first splitted element (at its end),
      *              and the rest of the string as previous elements.
-     *  \return Returns a list of seperate strings that were delimited by \p delim.
+     *  \return A vector with string views for each splitted string from \p s.
      */
     ATTR_MAYBE_UNUSED
-    static void rsplit(std::vector<std::string_view> &v,
-                       const std::string_view& s,
+    static auto rsplit(const std::string_view s,
                        const utils::string::string_view delim = ',',
                        int max_splits = -1)
     {
-        v.clear();
-        utils::string::for_each_rsplitted([&](const std::string_view& sv){
-            v.emplace_back(sv);
+        std::vector<std::string_view> splitted;
+        utils::string::for_each_rsplitted([&](const std::string_view sv){
+            splitted.emplace_back(sv);
         }, s, delim, max_splits);
-        std::reverse(v.begin(), v.end());
+        std::reverse(splitted.begin(), splitted.end());
+        return splitted;
     }
 
     /**
@@ -753,7 +779,7 @@ namespace utils::string {
      *      Returns the format expanded with the args.
      */
     template<typename ... Type> ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static std::string format(const std::string_view& format, Type&& ...args) {
+    static std::string format(const std::string_view format, Type&& ...args) {
         if constexpr (sizeof...(Type) != 0) {
             const size_t size = std::snprintf(nullptr, 0, format.data(), args...); // Extra space for '\0'
             std::string out; out.resize(size);
@@ -832,7 +858,7 @@ namespace utils::string {
      *      Returns true if string contains a valid base64 encoded string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline bool is_base64(const std::string_view& str) {
+    static inline bool is_base64(const std::string_view str) {
         return utils::string::is_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 
@@ -892,7 +918,7 @@ namespace utils::string {
      *  \return Return an std::string containing the encoded string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string to_base64(const std::string_view& str) {
+    static inline std::string to_base64(const std::string_view str) {
         return utils::string::to_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 
@@ -970,7 +996,7 @@ namespace utils::string {
      *  \return Return an std::string containing the decoded string.
      */
     ATTR_MAYBE_UNUSED ATTR_NODISCARD
-    static inline std::string from_base64(const std::string_view& str) {
+    static inline std::string from_base64(const std::string_view str) {
         return utils::string::from_base64(reinterpret_cast<const uint8_t*>(str.data()), str.length());
     }
 }

@@ -9,14 +9,19 @@
 #if defined(UTILS_OS_WIN)
     #include <windows.h>
     #define UTILS_OS_ENABLE_VIRTUAL_TERMINAL 0x0004
+#else
+    extern char **environ;
 #endif
 
 #include <iostream>
+#include <map>
+#include <cstdlib>
 
 
 namespace utils::os {
     namespace internal {
-        static volatile bool _virtual_console_enabled = false;
+        // Make inline instead of static, else every translation unit has a different one...
+        inline bool _virtual_console_enabled = false;
 
         enum _Console_commands {
             _CC_CLS       = 1L << 0,
@@ -252,6 +257,111 @@ namespace utils::os {
         } else {
             utils::os::internal::_virtual_console_enabled = true;
         }
+    }
+
+    /**
+     *  \brief  Get the value of the variable \p name in the current
+     *          calling environment.
+     *  \param  name
+     *      The name of the variable to get.
+     *  \return Optionally returns the value as sts::string if it existed.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::optional<std::string> GetEnvironmentVar(const std::string_view name) {
+        if (const auto res = std::getenv(name.data())) {
+            return res;
+        } else {
+            return {};
+        }
+    }
+
+#ifdef setenv
+    /**
+     *  \brief  Set the value of the variable \p name in the current
+     *          calling environment. If it does not exist, it will be created,
+     *          else it will be overwritten if \p overwrite == true.
+     *  \param  name
+     *      The name of the variable to set.
+     *  \param  value
+     *      The new value to set the variable to.
+     *  \param  overwrite
+     *      Whether to overwrite an existing variable.
+     *  \return Returns true on success.
+     */
+    ATTR_MAYBE_UNUSED
+    static inline bool SetEnvironmentVar(const std::string_view name, const std::string_view value, bool overwrite=true) {
+        return std::setenv(name.data(), value.data(), int(overwrite)) == 0;
+    }
+#endif
+
+#ifdef unsetenv
+    /**
+     *  \brief  Delete the variable \p name in the current calling environment.
+     *
+     *  \param  name
+     *      The name of the variable to delete.
+     *  \return Returns true on success.
+     */
+    ATTR_MAYBE_UNUSED
+    static inline bool DelEnvironmentVar(const std::string_view name) {
+        return std::unsetenv(name.data()) == 0;
+    }
+#endif
+
+    /**
+     *  \brief  Get a std::map with every variable in the current
+     *          calling environment with its key and value (or "" if no value).
+     *          Works on Windows and Unix systems.
+     *          (Unix uses the external `char **environ` symbol).
+     *
+     *  \return Returns the created std::map.
+     */
+    ATTR_MAYBE_UNUSED ATTR_NODISCARD
+    static inline std::optional<std::map<std::string, std::string>>
+        GetEnvironmentVars()
+    {
+        #if defined(UTILS_OS_WIN)
+            using VarType = LPTSTR;
+            #define GET_STRINGS()   GetEnvironmentStrings()
+            #define GET_VAL()       var
+            #define NEXT()          var += key.size()
+            #define FREE()          FreeEnvironmentStrings(static_cast<VarType>(env_strings))
+        #else
+            using VarType = char**;
+            #define GET_STRINGS()   environ
+            #define GET_VAL(V)      *var
+            #define NEXT()
+            #define FREE()
+        #endif
+
+        if (void* env_strings = GET_STRINGS()) {
+            std::map<std::string, std::string> envmap;
+
+            for (VarType var = static_cast<VarType>(env_strings); *var; var++) {
+                std::string key;
+
+                if constexpr (std::is_same_v<std::decay_t<VarType>, wchar_t*>) {
+                    const std::wstring_view wsv{reinterpret_cast<wchar_t*>(GET_VAL())};
+                    key = utils::string::to_string(wsv);
+                } else {
+                    key = std::string{reinterpret_cast<char*>(GET_VAL())};
+                }
+
+                if (const auto equals_idx = utils::string::contains(key, '=')) {
+                    envmap.emplace(std::string{key, 0, *equals_idx},
+                                   std::string{key, *equals_idx + 1});
+                } else {
+                    envmap.emplace(key, "");
+                }
+
+                NEXT();
+            }
+
+            FREE();
+            return { envmap };
+        }
+
+        return {};
     }
 }
 

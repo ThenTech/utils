@@ -16,10 +16,17 @@ struct Entry {
 };
 
 TEST_CASE("Test utils::sqlite") {
-    static constexpr std::string_view dbfile = "test_db.sqlite";
+    UTILS_PROFILE_SCOPE("utils::sqlite");
+    static const std::string dbfile = "test_db.sqlite";
+
+    // Delete to be sure
+    bool db_file_exists = utils::io::fs::exists(dbfile);
+    if (db_file_exists) {
+        utils::io::fs::remove(dbfile);
+    }
 
     auto storage = utils::sqlite::make_storage(std::string(dbfile),
-        sqlite_orm::make_table("items",
+        utils::sqlite::make_table("items",
             utils::sqlite::make_column("id", &Entry::id,
                                        utils::sqlite::autoincrement(),
                                        utils::sqlite::primary_key()),
@@ -30,7 +37,7 @@ TEST_CASE("Test utils::sqlite") {
 
     // Check if saved
     storage.sync_schema();
-    const bool db_file_exists = utils::io::fs::exists(dbfile);
+    db_file_exists = utils::io::fs::exists(dbfile);
     REQUIRE(db_file_exists);
 
     REQUIRE(utils::algorithm::contains(storage.table_names(), "items"));

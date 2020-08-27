@@ -15,8 +15,9 @@
 #include <functional>
 
 
-#define LOCK_BLOCK(MTX)         std::lock_guard<std::mutex> __lock(MTX)
-#define LOCK_UNIQUE_BLOCK(MTX)  std::unique_lock<std::mutex> __lock(MTX)
+#define LOCK_BLOCK(MTX)         std::lock_guard<std::mutex>   HEDLEY_CONCAT(__lock, __LINE__) (MTX)
+#define LOCK_UNIQUE_BLOCK(MTX)  std::unique_lock<std::mutex>  __lock(MTX)
+#define LOCK_SCOPED(...)        std::scoped_lock <std::mutex> HEDLEY_CONCAT(__lock, __LINE__) (__VA_ARGS__)
 
 
 namespace utils::threading {
@@ -49,6 +50,8 @@ namespace utils::threading {
             inline explicit ThreadPool(size_t threads)
                 : stop(false)
             {
+                this->workers.reserve(threads);
+
                 for (size_t i = 0; i < threads; ++i) {
                     this->workers.emplace_back( [this] {
                             while(true) {
@@ -74,6 +77,8 @@ namespace utils::threading {
                     );
                 }
             }
+
+            ThreadPool() : ThreadPool(std::thread::hardware_concurrency()) {}
 
             inline ~ThreadPool() {
                 {

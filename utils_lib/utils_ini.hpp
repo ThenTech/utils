@@ -75,7 +75,7 @@ namespace utils::ini {
                 // Empty
             }
 
-            ConfigReader(const std::string_view& filename)
+            ConfigReader(const std::string_view filename)
                 : read_from_file(true)
                 , filename(filename)
             {
@@ -83,7 +83,7 @@ namespace utils::ini {
                     auto contents = utils::io::file_to_string(this->filename);
                     this->inifile << *contents;
                     this->parse();
-                } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false;);
+                } CATCH_AND_LOG_ERROR_TRACE(read_from_file = false)
             }
 
             ConfigReader(const std::istream& input)
@@ -111,7 +111,7 @@ namespace utils::ini {
 
                 try {
                     utils::io::string_to_file(name, this->inifile.str());
-                } CATCH_AND_LOG_ERROR_TRACE();
+                } CATCH_AND_LOG_ERROR_TRACE()
             }
 
             template<class F>
