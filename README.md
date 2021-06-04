@@ -1,9 +1,9 @@
 # C++ Utility library
 
-[![codecov](https://codecov.io/gh/Wosser1sProductions/utils/branch/master/graph/badge.svg)](https://codecov.io/gh/Wosser1sProductions/utils)
-[![Travis (.org)](https://img.shields.io/travis/wosser1sproductions/utils.svg)](https://travis-ci.org/Wosser1sProductions/utils)
-[![GitHub last commit](https://img.shields.io/github/last-commit/Wosser1sProductions/utils.svg)](https://github.com/Wosser1sProductions/utils/commits/master)
-![License](https://img.shields.io/github/license/Wosser1sProductions/utils.svg?color=blue)
+[![codecov](https://codecov.io/gh/ThenTech/utils/branch/master/graph/badge.svg)](https://codecov.io/gh/ThenTech/utils)
+[![Travis (.org)](https://img.shields.io/travis/Wosser1sProductions/utils.svg)](https://travis-ci.org/Wosser1sProductions/utils)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ThenTech/utils.svg)](https://github.com/ThenTech/utils/commits/master)
+![License](https://img.shields.io/github/license/ThenTech/utils.svg?color=blue)
 
 [![version](https://img.shields.io/badge/version-0.45.0--beta-brightgreen.svg)](http://semver.org/)
 ![c++-version](https://img.shields.io/badge/std-%3E%3D%20c%2B%2B17-brightgreen.svg)
