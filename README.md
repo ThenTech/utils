@@ -23,9 +23,9 @@ For MSVC:
 - For sanity sake, globally define `_CRT_SECURE_NO_WARNINGS` in Properties>C/C++>Preprocessor>Preprocessor Definitions
 - Change `#include <sqlite3>` to `#include "sqlite3.h"` inside `sqlite_orm` and add `sqlite3.c` to your build system.
 
-[Doxygen documentation can be found here.](https://wosser1sproductions.github.io/utils/docs/)
+[Doxygen documentation can be found here.](https://ThenTech.github.io/utils/docs/)
 
-[Code coverage (lcov) report can be found here.](https://wosser1sproductions.github.io/utils/docs/code_coverage)
+[Code coverage (lcov) report can be found here.](https://ThenTech.github.io/utils/docs/code_coverage)
 
 ## Contents
 
