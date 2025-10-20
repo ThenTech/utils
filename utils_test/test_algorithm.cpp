@@ -311,8 +311,10 @@ TEST_CASE("Test utils::algorithm::sort") {
     utils::algorithm::sort::insertion(test.begin(), test.end());
     REQUIRE(utils::algorithm::is_ascending(test));
 
-    REQUIRE(utils::algorithm::is_ascending(test));
     utils::algorithm::sort::quick(test.begin(), test.end());
+    REQUIRE(utils::algorithm::is_ascending(test));
+
+    utils::algorithm::sort::radix(test.data(), test.size());
     REQUIRE(utils::algorithm::is_ascending(test));
 
     utils::random::Random::shuffle(test.begin(), test.end());
@@ -321,6 +323,10 @@ TEST_CASE("Test utils::algorithm::sort") {
 
     utils::random::Random::shuffle(test.begin(), test.end());
     utils::algorithm::sort::quick(test.begin(), test.end());
+    REQUIRE(utils::algorithm::is_ascending(test));
+
+    utils::random::Random::shuffle(test.begin(), test.end());
+    utils::algorithm::sort::radix(test.data(), test.size());
     REQUIRE(utils::algorithm::is_ascending(test));
 }
 

@@ -158,7 +158,7 @@ namespace utils::math {
      *  brief   Least Common Multiple
      *          Find the LCM of \p x, \p y and every other argument
      *          by calling `utils::math::lcm` on the first two and
-     *          chining that result with the other arguments.
+     *          chaining that result with the other arguments.
      *
      *  param   x
      *      The first number to check.

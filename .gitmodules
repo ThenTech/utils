@@ -3,7 +3,7 @@
 	url = https://github.com/ryanhaining/cppitertools.git
 [submodule "utils_lib/external/csv"]
 	path = utils_lib/external/csv
-	url = https://github.com/Wosser1sProductions/csv.git
+	url = https://github.com/ThenTech/csv.git
 [submodule "utils_lib/external/hedley"]
 	path = utils_lib/external/hedley
 	url = https://github.com/nemequ/hedley.git

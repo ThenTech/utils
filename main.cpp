@@ -4,7 +4,7 @@
 #include "utils_lib/utils_version.hpp"
 
 // Minor version is git commit count: git rev-list --all --count
-static constexpr utils::Version VERSION(0, 45, 0, utils::version::prerelease::beta);
+static constexpr utils::Version VERSION(0, 46, 0, utils::version::prerelease::beta);
 
 #ifdef ENABLE_TESTS
     HEDLEY_WARNING("Warning: TESTS ENABLED")
@@ -107,6 +107,7 @@ static constexpr utils::Version VERSION(0, 45, 0, utils::version::prerelease::be
  *      https://github.com/seomoz/url-cpp
  *      https://github.com/chmike/CxxUrl
  *      https://github.com/jwerle/url.h
+ *      https://www.youtube.com/watch?v=2hNdkYInj4g  (ASIO without Boost)
  *
  *      https://github.com/troldal/OpenXLSX
  *      https://github.com/tfussell/xlnt
@@ -119,12 +120,18 @@ static constexpr utils::Version VERSION(0, 45, 0, utils::version::prerelease::be
  *      https://github.com/dpilger26/NumCpp
  *      https://github.com/skypjack/uvw
  *
+ *      https://github.com/alandefreitas/matplotplusplus
+ *
+ *      https://github.com/JochenKalmbach/StackWalker
+ *
  *  GCC >= 9:
  *      https://github.com/Neargye/magic_enum
  *
  *  Resources:
  *      https://github.com/caiorss/C-Cpp-Notes
  *      https://stackoverflow.com/Questions/4158900/embedding-resources-in-executable-using-gcc
+ *
+ *      https://github.com/OpenCppCoverage/OpenCppCoverage
  */
 int main(int argc, char *argv[]) {
 

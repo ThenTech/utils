@@ -66,7 +66,7 @@ namespace utils {
             Profiler() : session_active{false} {}
 
             ~Profiler() {
-                utils::Profiler::get().EndSession();
+                this->EndSession();
             }
 
             void CloseOutput() {

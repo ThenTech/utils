@@ -38,6 +38,7 @@ Debug
 *.qbs.user
 *.qbs.user.*
 *.log
+.qtc_clangd
 .vscode
 bin
 make.bat
